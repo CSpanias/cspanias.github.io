@@ -192,3 +192,7 @@ jekyll-archives:
   permalinks:
     tag: /tags/:name/
     category: /categories/:name/
+
+ - name: Debugging with tmate
+uses: mxschmitt/action-tmate@v3.17
+            
