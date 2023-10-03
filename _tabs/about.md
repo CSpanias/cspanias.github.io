@@ -7,7 +7,9 @@ order: 4
 
 [LinkedIn](https://www.linkedin.com/in/charalamposspanias/) \| [TryHackMe](https://tryhackme.com/p/Cspanias) \| [Chess](https://www.chess.com/member/spaniasch) \| [BJJ](https://smoothcomp.com/en/profile/101916) \| spaniascharalampos@gmail.com  
 
-A __Strength & Conditioning coach__ turned __Software Engineer__ turned __Pentester__ ?
+After having studied most of [TryHackMe](https://tryhackme.com/)’s learning paths, I decided to focus on putting what I have been learning to practice and try my hand on its CTF challenges. Having said that, take what I write with a grain (or many grains) of salt, as I am completely new to all these concepts and tools, and I will be writing write ups mostly to learn myself.
+
+Hopefully, aside from my own learning, people who are complete beginners, like myself, might find these posts helpful. Feel free to contact me if you have any questions or fancy a team CTF challenge!
 
 Feel free to grab a copy of my __[resume](https://drive.google.com/file/d/10_o6X0mdp6ivJW7FZl-7LnuP01U0OtPI/view?usp=sharing)__ while you are here!
 ## __Interests__ 
