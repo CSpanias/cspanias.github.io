@@ -7,7 +7,7 @@ order: 4
 
 [LinkedIn](https://www.linkedin.com/in/charalamposspanias/) \| [TryHackMe](https://tryhackme.com/p/Cspanias) \| [Chess](https://www.chess.com/member/spaniasch) \| [BJJ](https://smoothcomp.com/en/profile/101916) \| spaniascharalampos@gmail.com  
 
-A __Strength & Conditioning coach__ turned __Software Engineer__ who loves challenges and is commited to life-long learning. Highly motivated and resourceful, educated to postgraduate level with 10+ years of work experience in a variety of sectors. Currently venturing on the exciting field of __PenTesting__!
+A __Strength & Conditioning coach__ turned __Software Engineer__ turned __Pentester__ ?
 
 Feel free to grab a copy of my __[resume](https://drive.google.com/file/d/10_o6X0mdp6ivJW7FZl-7LnuP01U0OtPI/view?usp=sharing)__ while you are here!
 ## __Interests__ 
