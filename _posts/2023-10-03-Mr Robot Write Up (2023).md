@@ -1,13 +1,14 @@
 ---
 title: Mr Robot CTF Walkthrough (2023)
 date: 2023-10-03 10:00:00 +0100
-categories: [CaptureTheFlag Walkthroughs, TryHackMe Walkthroughs]
+categories: [CTF Walkthroughs] # up to 2 categories
 tags: [thm, ctf] # TAG names should always be lowercase
+img_path: /main/assets/mr_robot/
 ---
 
 # Mr Robot CTF Walkthrough (2023)
 
-![mrrobot_banner](https://github.com/CSpanias/pentesting/blob/main/thm/mrrobot/media/mr-robot-logo.jpg?raw=true)
+![mrrobot_banner](mr-robot-logo.jpg)
 
 The goal of [Mr. Robot's room](https://tryhackme.com/room/mrrobot) is to find 3 hidden keys. Let's crack on!
 
