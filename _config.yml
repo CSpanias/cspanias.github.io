@@ -41,7 +41,7 @@ social:
   email: spaniascharalampos@gmail.com # change to your email address
   links:
     # The first element serves as the copyright owner's link
-    - https://tryhackme.com/p/Cspanias # change to your twitter homepage
+    # - https://twitter.com/username # change to your twitter homepage
     - https://github.com/cspanias # change to your github homepage
     # Uncomment below to add more social links
     - https://www.linkedin.com/in/charalamposspanias/
@@ -65,7 +65,7 @@ google_analytics:
 #     light  - Use the light color scheme
 #     dark   - Use the dark color scheme
 #
-theme_mode: dark # [light|dark]
+theme_mode: # [light|dark]
 
 # The CDN endpoint for images.
 # Notice that once it is assigned, the CDN url
@@ -182,9 +182,8 @@ exclude:
   - CHANGELOG.md
   - LICENSE
   - rollup.config.js
+  - node_modules
   - package*.json
-
-exclude: [vendor]
 
 jekyll-archives:
   enabled: [categories, tags]
@@ -194,7 +193,3 @@ jekyll-archives:
   permalinks:
     tag: /tags/:name/
     category: /categories/:name/
-
- - name: Debugging with tmate
-uses: mxschmitt/action-tmate@v3.17
-            
