@@ -5,6 +5,8 @@ categories: [CTF Walkthroughs] # up to 2 categories
 tags: [thm, ctf] # TAG names should always be lowercase
 img_path: /assets/mr_robot/
 ---
+![mrrobot_banner](mr-robot-logo.jpg)
+
 # Summary
 
 1. **Enumeration** with _nmap_, _gobuster_
@@ -12,11 +14,9 @@ img_path: /assets/mr_robot/
 4. **Hash Cracking** with _CrackStation_, _john_, _hashcat_
 5. **Exploiting SUIDs** with _GTFOBins_
 
-![mrrobot_banner](mr-robot-logo.jpg)
+# CTF Process
 
 The goal of [Mr. Robot's room](https://tryhackme.com/room/mrrobot) is to find 3 hidden keys. Let's crack on!
-
-# CTF Process
 
 ## 1. Port-scanning with nmap
 
