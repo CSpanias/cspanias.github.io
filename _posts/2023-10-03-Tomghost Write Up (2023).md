@@ -1,8 +1,8 @@
 ---
 title: Tomghost CTF Write Up (2023)
 date: 2023-10-03 10:00:00 +0100
-categories: [CTF Walkthroughs] # up to 2 categories
-tags: [thm, ctf] # TAG names should always be lowercase
+categories: [CTF Write Up, THM] # up to 2 categories
+tags: [nmap, exploitdb, metasploit, hash, gpg, john, encryption, gtfobins, sudo, ajp] # TAG names should always be lowercase
 img_path: /assets/tomghost/
 ---
 ![tomghost banner](tomghost_banner.png)
