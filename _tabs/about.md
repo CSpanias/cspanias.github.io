@@ -12,20 +12,10 @@ A __Strength & Conditioning coach__ turned __Software Engineer__ who loves chall
 Feel free to grab a copy of my __[resume](https://drive.google.com/file/d/10_o6X0mdp6ivJW7FZl-7LnuP01U0OtPI/view?usp=sharing)__ while you are here!
 
 ## __Interests__ 
-Offensive CyberSecurity \| Data Science \| Weightlifting \| Combat Sports \| Chess \| Research
+Offensive CyberSecurity \| Weightlifting \| Combat Sports \| Chess \| Research
 
 ## __Current Ventures__ 
-[Cyber Security (BSc)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60) \| [THM Learning Paths](https://tryhackme.com/hacktivities#learning-paths) \| [THM's CTFs Walkthroughs](https://cspanias.github.io/pentesting.io/)
-
-## __Recommended Practical Courses__ 
-[TryHackMe](https://tryhackme.com/) \| [HackTheBox](https://academy.hackthebox.com/) \| [Hackers Academy](https://hackersacademy.com/) \| [Cisco Networking Academy](https://skillsforall.com/) \| [Codecademy](https://www.codecademy.com/) \| [Omdena](https://omdena.com/)
+[Cyber Security (BSc)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60) \| [THM Learning Paths](https://tryhackme.com/hacktivities#learning-paths) \|
 
 ## __Recommended Learning Resources__ 
-[Open University](https://www.open.ac.uk/) \| [Python Crash Course](https://nostarch.com/pythoncrashcourse2e) \| [Darknet Diaries](https://darknetdiaries.com/) \| [ML Guide](https://ocdevel.com/mlg) \| [Data Analysis with Python and PySpark](https://www.goodreads.com/book/show/53660755-data-analysis-with-python-and-pyspark)
-
-## __Publications__
-1. [Position before submission? Techniques and tactics in competitive no-gi Brazilian jiu-jitsu](https://revpubli.unileon.es/ojs/index.php/artesmarciales/article/view/7410) (2022)
-2. [Anthropometric and Physiological Profile of Mixed Martial Art Athletes: A Brief Review](https://www.mdpi.com/2075-4663/7/6/146) (2019)
-
-> Add Markdown syntax content to file `_tabs/about.md`{: .filepath } and it will show up on this page.
-{: .prompt-tip }
+[THM](https://tryhackme.com/dashboard) | [OU](https://www.open.ac.uk/) \| [Python Crash Course](https://nostarch.com/pythoncrashcourse2e) \| [Darknet Diaries](https://darknetdiaries.com/) \| [Cisco Networking Academy](https://skillsforall.com/)
