@@ -7,9 +7,17 @@ img_path: /assets/tomghost/
 ---
 ![tomghost banner](tomghost_banner.png)
 
+# Summary
+
+- **Enumeration** with _nmap_, _Exploit-DB_
+- **AJP Exploitation** with _Metasploit_
+- **Horizotal PrivEsc via Decryption & Hash Cracking** with _GPG_, _john_
+- **Vertical PrivEsc via SUDO** with _GTFOBins_
+
+# Background Information
+
 [Tomghost's CTF room](https://tryhackme.com/room/tomghost)'s goal is to "_identify recent vulnerabilities to try exploit the system or read files that you should not have access to_". Let's first start with gaining an understanding what we are actually trying to do on this room.
 
-## Background Information
 As a beginner, I was using the terms **Apache** and **Apache Tomcat** interchangeably, but they are not really the same thing. According to this short [GeeksForGeeks article](https://www.geeksforgeeks.org/difference-between-apache-tomcat-server-and-apache-web-server/):
 
 >_**Apache web server**_ is designed to create the web-servers and it can host one or more HTTP based web-servers, while _**Apache Tomcat**_ is a web container that allows the users to run Servlet and JAVA Server Pages that are based on the web-applications and it can also be used as the HTTP server. 
@@ -25,9 +33,9 @@ Based on the above information, we kind of know what we should expect:
 2. Find an **existing exploit** to leverage, gain non-privileged access and snath our first 🚩.
 3. Find a way to **escalate our privileges** to root and snatch our second 🚩.
 
-## CTF Process
+# CTF Process
 
-### 1. Nmap port-scanning
+## 1. Nmap port-scanning
 
 Let's start enumerating our target with a **port-scanning** using `nmap`:
 ```bash
@@ -43,7 +51,7 @@ nmap <target-ip> -sV -T4 -oA nmap-scan -open
 
 As expected, the results include **port 8009** using the **_AJP protocol_** !
 
-### 2. Exploit-DB & Metasploit
+## 2. Exploit-DB & Metasploit
 
 Searching [**_Exploit-db_**](www.exploit-db.com) for an existing vulnerability related to "_apache tomcat ajp_", we find [**CVE-2020–1938**](https://www.exploit-db.com/exploits/49039), which conveniently let us know that it's included in **Metasploit**:
 ![CVE-2020–19383](exploit-db.png)
@@ -58,7 +66,7 @@ As we can see using by using the `options` command, everything but `RHOSTS` is a
 
 By exploiting the Ghostcast vulnerability we were expecting to find and read sensitive files in the Tomcat directories. The exploit managed to successfully do that, providing us with a pair of credentials to use 👏.
 
-### 3. Initial Foothold via SSH 
+## 3. Initial Foothold via SSH 
 
 The nmap results (step 1) included an **SSH server**, which we can now utilise by try connecting using the obtained credentials:
 
@@ -74,7 +82,7 @@ We know that we are searching for a file called `user.txt`, so let's just search
 `-type f` Search only for files.  
 `2>/dev/null` Suppress any errors.  
 
-### 4. GPG Encryption & Horizontal PrivEsc
+## 4. GPG Encryption & Horizontal PrivEsc
 
 The only thing left is to find the `root.txt` file which, as the name suggests, would require **escalating our privileges** to a root account.
 
@@ -102,7 +110,7 @@ Now, we can use this passphrase when importing `tryhackme.asc` as a key to **GPG
 
 ![ImportING a key and decrypting a GPG-encrypted file](gpg_decryption_hidden.jpg)
 
-### 5. Sudo & Vertical PrivEsc
+## 5. Sudo & Vertical PrivEsc
 We have now obtained the credentials of another low-privileged user, what is called **horizontal privilege escalation**. We can try switching to that user and find out if there is anything that we can leverage that will allows us to gain a privileged account, that is, perform **vertical privilege escalation**.
 
 By checking if there is any program that the user `merlin` could run as sudo, by typing `sudo -l`, we find out that the `zip` program is on that list:
