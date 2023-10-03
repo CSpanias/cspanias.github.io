@@ -1,8 +1,8 @@
 ---
 title: Tomghost CTF Write Up (2023)
-date: 2023-10-03 10:00:00 +0100
-categories: [CTF Write Up, THM] # up to 2 categories
-tags: [nmap, exploitdb, metasploit, hash, gpg, john, encryption, gtfobins, sudo, ajp] # TAG names should always be lowercase
+date: 2023-10-03
+categories: [CTF Write Up, THM]
+tags: [nmap, exploitdb, metasploit, hash, gpg, john, encryption, gtfobins, sudo, ajp]
 img_path: /assets/tomghost/
 ---
 ![tomghost banner](tomghost_banner.png)
@@ -53,7 +53,7 @@ As expected, the results include **port 8009** using the **_AJP protocol_** !
 
 ## 2. Exploit-DB & Metasploit
 
-Searching [**_Exploit-db_**](www.exploit-db.com) for an existing vulnerability related to "_apache tomcat ajp_", we find [**CVE-2020–1938**](https://www.exploit-db.com/exploits/49039), which conveniently let us know that it's included in **Metasploit**:
+Searching [**_Exploit-db_**](https://www.exploit-db.com/) for an existing vulnerability related to "_apache tomcat ajp_", we find [**CVE-2020–1938**](https://www.exploit-db.com/exploits/49039), which conveniently let us know that it's included in **Metasploit**:
 ![CVE-2020–19383](exploit-db.png)
 
 Launching **Metasploit** (using the  `msfconsole` command) and searching for **CVE-2020–1938**, confirms that there is an existing module which we can directly use as follows:
