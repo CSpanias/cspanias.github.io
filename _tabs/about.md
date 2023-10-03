@@ -16,4 +16,4 @@ Offensive CyberSecurity \| Weightlifting \| Combat Sports \| Chess \| Research
 [Cyber Security (BSc)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60) \| [THM Learning Paths](https://tryhackme.com/hacktivities#learning-paths) \|
 ## __Recommended Learning Resources__ 
 [THM](https://tryhackme.com/dashboard) | [OU](https://www.open.ac.uk/) \| [Python Crash Course](https://nostarch.com/pythoncrashcourse2e) \| [Darknet Diaries](https://darknetdiaries.com/) \| [Cisco Networking Academy](https://skillsforall.com/)
-![homepage_banner](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/general/site_banner.png?raw=true)
+![homepage_banner](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/general/site_banner.png?raw=true){: .left }
