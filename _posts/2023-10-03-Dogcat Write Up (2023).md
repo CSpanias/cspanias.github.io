@@ -1,7 +1,7 @@
 ---
 title: Dogcat CTF Write Up (2023)
 date: 2023-10-03 10:00:00 +0100
-categories: [CTF Walkthroughs] # up to 2 categories
+categories: [CTF Write Up, THM] # up to 2 categories
 tags: [nmap, lfi, burp, metasploit, directorytraversal, gtfobins, containerescape] # TAG names should always be lowercase
 img_path: /assets/dogcat/
 ---
