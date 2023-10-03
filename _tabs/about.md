@@ -5,8 +5,6 @@ order: 4
 ---
 <script src="https://tryhackme.com/badge/2134791"></script>
 
-<img src="https://tryhackme-badges.s3.amazonaws.com/Cspanias.png" alt="TryHackMe">
-
 [LinkedIn](https://www.linkedin.com/in/charalamposspanias/) \| [TryHackMe](https://tryhackme.com/p/Cspanias) \| [Chess](https://www.chess.com/member/spaniasch) \| [BJJ](https://smoothcomp.com/en/profile/101916) \| spaniascharalampos@gmail.com  
 
 A __Strength & Conditioning coach__ turned __Software Engineer__ who loves challenges and is commited to life-long learning. Highly motivated and resourceful, educated to postgraduate level with 10+ years of work experience in a variety of sectors. Currently venturing on the exciting field of __PenTesting__!
