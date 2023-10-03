@@ -1,6 +1,6 @@
 ---
 title: Mr Robot CTF Write Up (2023)
-date: 2023-10-03 23:30:00 +0100
+date: 2023-10-03
 categories: [CTF Write Up, THM] # up to 2 categories
 tags: [nmap, gobuster, hydra, burp, wpscan, crackstation, hash, john, hashcat, gtfobins, suid] # TAG names should always be lowercase
 img_path: /assets/mr_robot/
