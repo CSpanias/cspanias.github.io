@@ -5,14 +5,20 @@ categories: [CTF Walkthroughs] # up to 2 categories
 tags: [thm, ctf] # TAG names should always be lowercase
 img_path: /assets/mr_robot/
 ---
+# Summary
+
+1. **Enumeration** with _nmap_, _gobuster_
+2. **Dictionary attack** with _hydra_, _Burp Suite (Proxy, Intruder)_, _wpscan_
+4. **Hash Cracking** with _CrackStation_, _john_, _hashcat_
+5. **Exploiting SUIDs** with _GTFOBins_
 
 ![mrrobot_banner](mr-robot-logo.jpg)
 
 The goal of [Mr. Robot's room](https://tryhackme.com/room/mrrobot) is to find 3 hidden keys. Let's crack on!
 
-## CTF Process
+# CTF Process
 
-### 1. Port-scanning with nmap
+## 1. Port-scanning with nmap
 
 Let's start by **scanning for open ports with nmap** (_[nmap switches](https://www.stationx.net/nmap-cheat-sheet/)_):
 ```bash
@@ -32,7 +38,7 @@ Typing the commands listed there or viewing the page source does not provide any
 
 ![mrrobot_homepage](homepage.png)
 
-### 2. Subdirectory Enumeration with gobuster
+## 2. Subdirectory Enumeration with gobuster
 
 Next, we can **search for subdirectories using gobuster**:
 ```bash
@@ -57,7 +63,7 @@ By visiting the former a file will be downloaded, while visiting the latter will
 
 ![fsocity.dic file](fsocity.png)
 
-### 3. Dictionary Attack with hydra
+## 3. Dictionary Attack with hydra
 
 Let's focus on **obtaining the credentials** needed to login to the wordpress portal. The high level plan here is the following:
     1. Check the **error message** of a failed login attempt. We will need this message for performing a dictionary attack using hydra.
@@ -134,7 +140,7 @@ We can now used the obtained credentials to login (_[perform this step using Bur
 
 We are in 🎉!
 
-### 4. Gaining Remote Code Execution
+## 4. Gaining Remote Code Execution
 
 User `elliot` seems to be an **administrator account**. This means that it has access to the **Editor's tab**:
 
@@ -158,7 +164,7 @@ By visiting `http://<target-ip>/wp-content/themes/twentyfifteen/archive.php` a s
 
 ![Reverse shell using netcat.](rce1.png)
 
-### 5. Cracking Hashes using CrackStation
+## 5. Cracking Hashes using CrackStation
 
 After a bit of searching, we can find two interesting files: `key-2-of-3.txt`, which can be read only by its owner (user `robot`), and `password.raw-md5`, robot's **MD5 hashed password**:
 
@@ -176,7 +182,7 @@ A message appears letting us know that we need to use an **interactive terminal*
 
 ![Launching bash using Python.](python_shell_hidden.jpg)
 
-### 6. Vertical PrivEsc through SUID files and GTFOBins
+## 6. Vertical PrivEsc through SUID files and GTFOBins
 
 With only the last key left and based on a hint from the room's initial question: "_Can you **root** this Mr. Robot styled machine?_", we will probably need to **escalate our privileges** and get a root account.
 
@@ -203,9 +209,9 @@ After some searching, we can find and read the third and **final key** 👏:
 
 ![Finding and getting the final key!](root_key.jpg)
 
-## Extra
+# Extra
 
-### Dictionary Attack Alternative 1
+## Dictionary Attack Alternative 1
 
 After having created our wordlist containing valid usernames, we can use **wpscan**, a security scanner designed for testing the security of websites built using WordPress, to obtain elliot's password. We just need to provide the URL and a valid username ( `-t 50` is used to speed up the process):
 ```bash
@@ -214,7 +220,7 @@ wpscan --url http://10.10.208.204 -t 50 -U elliot -P fs-list
 
 ![Dictionary attack using wpscan.](wpscan_dict_attack_hidden.jpg)
 
-### Dictionary Attack Alternative 2
+## Dictionary Attack Alternative 2
 
 We have the option to continue using the **Burp Suite** after capturing the failed login attempt with **Proxy** and finding a valid username, by sending the request to **Intruder** and performing the attack there (_right-click_ and then _Send to Intruder_, or hit `CTRL+I`):
 
@@ -232,7 +238,7 @@ Finally, we are ready to click the **Start attack** button at the top right-hand
 
 ![Dictionary attack with Intruder.](intruder_success_hidden.jpg)
 
-### Hash Cracking Alternative 1
+## Hash Cracking Alternative 1
 
 For the hash cracking part, we can use **John The Ripper** in order to obtain the **plaintext password**.
 
@@ -242,7 +248,7 @@ Except from the file and the wordlist, we can also **specify the hash format** s
 
 ![Cracking hashes with john.](jtr_hash_hidden.jpg)
 
-### Hash Cracking Alternative 2
+## Hash Cracking Alternative 2
 
 We can also use **hashcat** as shown below, where we pass the exact same arguments as john: the **file containing the hash**, a **wordlist**, and the **hash format**. The only difference is that we need to specify the MD5 format with `-m 0` instead of `-format=Raw-MD5`:
 ```bash
