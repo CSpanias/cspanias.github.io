@@ -4,8 +4,8 @@ order: 4
 img_path: /assets/general/
 ---
 <script src="https://tryhackme.com/badge/2134791"></script>
-## Profiles
-<a href="https://tryhackme.com/p/Cspanias"><img src='thm.jpg' alt="THM profile" width=15% height=15% />{: .left}
+## Profiles  
+<a href="https://tryhackme.com/p/Cspanias"><img src='thm.jpg' alt="THM profile" style="width:15%;height:15%"></a>  
 [LinkedIn](https://www.linkedin.com/in/charalamposspanias/)    
 [Chess](https://www.chess.com/member/spaniasch)  
 [BJJ](https://smoothcomp.com/en/profile/101916)  
