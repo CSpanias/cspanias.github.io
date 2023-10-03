@@ -5,15 +5,16 @@ categories: [CTF Walkthroughs] # up to 2 categories
 tags: [thm, ctf] # TAG names should always be lowercase
 img_path: /assets/dogcat/
 ---
+![dogcat banner](https://github.com/CSpanias/pentesting.io/blob/main/thm/dogcat/media/dogcatbanner.png)
+
 # Summary
+
 - **Enumeration** with _nmap_
 - **LFI exploitation** and **Directory Traversal** with _Burp Suite (Proxy, Repeater)_, _Metasploit_
 - **Vertical PrivEsc via SUDO** with _GTFOBins_
 - **Container Escape** via _Scheduled Scripts_
 
-![dogcat banner](https://github.com/CSpanias/pentesting.io/blob/main/thm/dogcat/media/dogcatbanner.png)
-
-# Background
+# Background Information
 
 [Dogcat](https://tryhackme.com/room/dogcat) is considered a **medium difficulty** room, and I couldn't agree more with that. Thus far, I have only worked on **easy difficulty** rooms, and this was sure a level above that. I seriously struggled getting an **intial foothold** and I felt lost while searching for the fourth 🚩! 
 
