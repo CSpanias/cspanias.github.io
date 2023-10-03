@@ -23,7 +23,7 @@ title: Pentesting Notes # the main title
 tagline: Cybersecurity (BSc) at OU | CTF Player # it will display as the sub-title
 
 description: >- # used by seo meta and the atom feed
-  A minimal, responsive and feature-rich Jekyll theme for technical writing.
+  Learning through CTF practice.
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
 url: "https://cspanias.github.io"
@@ -76,7 +76,7 @@ theme_mode: # [light|dark]
 img_cdn:
 
 # the avatar on sidebar, support local or CORS resources
-avatar: 'https://github.com/CSpanias/cspanias.github.io/blob/main/assets/general/kuvaz_hacker.jpg'
+avatar: https://github.com/CSpanias/cspanias.github.io/blob/main/assets/general/kuvaz_hacker.jpg
 
 # boolean type, the global switch for TOC in posts.
 toc: true
