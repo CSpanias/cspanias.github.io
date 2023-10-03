@@ -7,7 +7,13 @@ img_path: /assets/git_happens/
 ---
 ![room_banner](git_happens_banner.png)
 
-## Background Information
+# Summary
+
+- **Enumeration** with _nmap_
+- **Subdirectory Enumeration** with _Nikto_
+- **Git Repository Manipulation** with _GitTools_
+
+# Background Information
 
 The [Git Happens room](https://tryhackme.com/room/githappens), as the name suggests, focuses on **Git**. Thus, some basic knowledege about **Git**, as well as some **familiarity with Git's functionality**, would greatly help in solving this challenge. 
 
@@ -23,9 +29,9 @@ As [GitHub's documentation](https://github.com/git-guides/git-commit) perfectly 
 
 Keep this last line in mind, as it's extremely relevant to this room!
 
-## CTF Process
+# CTF Process
 
-### 1. Port-scanning with nmap
+## 1. Port-scanning with nmap
 
 As usual, let's start with an **nmap port-scanning**:
 ```shell
@@ -42,7 +48,7 @@ Not much there, just an **nginx web server** on port 80. Vising the site via our
 
 ![homepage](homepage.png)
 
-### 2. Subdirectory enumeration with Nikto
+## 2. Subdirectory enumeration with Nikto
 
 We can use various tools for searching subdirectories, such as **gobuster** and **Nikto**, but let's go with Nikto this time:
 
@@ -52,7 +58,7 @@ It looks like Nikto found a **public-facing git repository**: `/.git` !
 
 ![git_dir](git_dir.png)
 
-### 3. Git Repositories and GitTools
+## 3. Git Repositories and GitTools
 
 We can download the whole repository on our machine using [**GitTools**](https://github.com/internetwache/GitTools). We just need to:
 1. Go to the desired directory and clone **GitTools** with `git clone https://github.com/internetwache/GitTools`.
