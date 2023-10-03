@@ -18,15 +18,15 @@ timezone: Europe/London
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: CTF Adventures # the main title
+title: PenTesting Adventures # the main title
 
-tagline: A text-focused Jekyll theme # it will display as the sub-title
+tagline: CTF Walkthroughs # it will display as the sub-title
 
 description: >- # used by seo meta and the atom feed
   A minimal, responsive and feature-rich Jekyll theme for technical writing.
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
-url: ""
+url: "https://cspanias.github.io"
 
 github:
   username: cspanias # change to your github username
@@ -41,10 +41,10 @@ social:
   email: spaniascharalampos@gmail.com # change to your email address
   links:
     # The first element serves as the copyright owner's link
-    - https://twitter.com/username # change to your twitter homepage
-    - https://github.com/username # change to your github homepage
+    - https://tryhackme.com/p/Cspanias # change to your twitter homepage
+    - https://github.com/cspanias # change to your github homepage
     # Uncomment below to add more social links
-    # - https://www.facebook.com/username
+    - https://www.linkedin.com/in/charalamposspanias/
     # - https://www.linkedin.com/in/username
 
 google_site_verification: # fill in to your verification string
