@@ -6,8 +6,6 @@ tags: [thm, ctf] # TAG names should always be lowercase
 img_path: /main/assets/mr_robot/
 ---
 
-# Mr Robot CTF Walkthrough (2023)
-
 ![mrrobot_banner](mr-robot-logo.jpg)
 
 The goal of [Mr. Robot's room](https://tryhackme.com/room/mrrobot) is to find 3 hidden keys. Let's crack on!
