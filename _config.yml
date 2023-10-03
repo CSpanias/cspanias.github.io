@@ -20,7 +20,7 @@ timezone: Europe/London
 
 title: Pentesting Notes # the main title
 
-tagline: Cybersecurity (BSc) at OU | CTF Player # it will display as the sub-title
+tagline: Cybersecurity (BSc) at OU | CTF N4b # it will display as the sub-title
 
 description: >- # used by seo meta and the atom feed
   Learning through CTF practice.
@@ -31,8 +31,8 @@ url: "https://cspanias.github.io"
 github:
   username: cspanias # change to your github username
 
-twitter:
-  username: twitter_username # change to your twitter username
+# twitter:
+#   username: twitter_username # change to your twitter username
 
 social:
   # Change to your full name.
@@ -45,7 +45,6 @@ social:
     - https://github.com/cspanias # change to your github homepage
     # Uncomment below to add more social links
     - https://www.linkedin.com/in/charalamposspanias/
-    # - https://www.linkedin.com/in/username
 
 google_site_verification: # fill in to your verification string
 
@@ -66,7 +65,7 @@ google_analytics:
 #     light  - Use the light color scheme
 #     dark   - Use the dark color scheme
 #
-theme_mode: # [light|dark]
+theme_mode: light # [light|dark]
 
 # The CDN endpoint for images.
 # Notice that once it is assigned, the CDN url
