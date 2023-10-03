@@ -2,7 +2,7 @@
 title: Git Happens CTF Write Up (2023)
 date: 2023-10-03 10:00:00 +0100
 categories: [CTF Walkthroughs] # up to 2 categories
-tags: [thm, ctf] # TAG names should always be lowercase
+tags: [nmap, nikto, git, gittools] # TAG names should always be lowercase
 img_path: /assets/git_happens/
 ---
 ![room_banner](git_happens_banner.png)
