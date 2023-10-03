@@ -1,11 +1,10 @@
 ---
 icon: fas fa-info-circle
 order: 4
-img_path: /assets/general/
 ---
 <script src="https://tryhackme.com/badge/2134791"></script>
 ## Profiles  
-<a href="https://tryhackme.com/p/Cspanias"><img src='thm.jpg' alt="THM profile" style="width:15%;height:15%"></a>  
+<a href="https://tryhackme.com/p/Cspanias"><img src='https://github.com/CSpanias/cspanias.github.io/blob/main/assets/general/thm.jpg?raw=true' alt="THM profile" style="width:15%;height:15%"></a>  
 [LinkedIn](https://www.linkedin.com/in/charalamposspanias/)    
 [Chess](https://www.chess.com/member/spaniasch)  
 [BJJ](https://smoothcomp.com/en/profile/101916)  
@@ -20,4 +19,4 @@ Feel free to grab a copy of my __[resume](https://drive.google.com/file/d/10_o6X
 [Cyber Security (BSc)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60) \| [THM Learning Paths](https://tryhackme.com/hacktivities#learning-paths) \|
 ## __Recommended Learning Resources__ 
 [THM](https://tryhackme.com/dashboard) | [OU](https://www.open.ac.uk/) \| [Python Crash Course](https://nostarch.com/pythoncrashcourse2e) \| [Darknet Diaries](https://darknetdiaries.com/) \| [Cisco Networking Academy](https://skillsforall.com/)
-![homepage_banner](site_banner.png?raw=true){: .left }
+![homepage_banner](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/general/site_banner.png?raw=true){: .left }
