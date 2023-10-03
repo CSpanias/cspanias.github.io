@@ -3,7 +3,7 @@ title: Mr Robot CTF Walkthrough (2023)
 date: 2023-10-03 10:00:00 +0100
 categories: [CTF Walkthroughs] # up to 2 categories
 tags: [thm, ctf] # TAG names should always be lowercase
-img_path: /main/assets/mr_robot/
+img_path: /assets/mr_robot/
 ---
 
 ![mrrobot_banner](mr-robot-logo.jpg)
@@ -30,7 +30,7 @@ We can see from nmap's output that there is a **web server at port 80**. Let's o
 
 Typing the commands listed there or viewing the page source does not provide any useful hints, but feel free to play around as they are quite entertaining!
 
-![mrrobot_homepage](https://github.com/CSpanias/pentesting/blob/main/thm/mrrobot/media/homepage.png)
+![mrrobot_homepage](homepage.png)
 
 ### 2. Subdirectory Enumeration with gobuster
 
