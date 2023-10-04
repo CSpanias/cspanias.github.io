@@ -6,6 +6,8 @@ order: 4
 
 # Profiles
  
+[<i class="fa-thin fa-chess"></i>](https://www.chess.com/member/spaniasch)
+
 [LinkedIn](https://www.linkedin.com/in/charalamposspanias/) \| [THM](https://tryhackme.com/p/Cspanias) \| [Chess](https://www.chess.com/member/spaniasch) \| [BJJ](https://smoothcomp.com/en/profile/101916)  
 
 After having studied most of [TryHackMe](https://tryhackme.com/)’s amazing learning paths, I decided to focus on putting what I have been learning to practice, trying its CTF challenges. Having said that, take what I write with a grain (or many grains) of salt, as I am completely new to all these concepts and tools, and I will be writing write ups mostly to learn myself.
