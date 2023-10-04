@@ -10,6 +10,8 @@ img_path: /assets/git_happens/
 
 # Summary
 
+*Replace text-summary with graph*
+
 - **Enumeration** with _nmap_
 - **Subdirectory Enumeration** with _Nikto_
 - **Git Repository Manipulation** with _GitTools_

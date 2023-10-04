@@ -9,6 +9,8 @@ img_path: /assets/tomghost/
 
 # Summary
 
+*Replace text-summary with graph*
+
 - **Enumeration** with _nmap_, _Exploit-DB_
 - **AJP Exploitation** with _Metasploit_
 - **Horizotal PrivEsc via Decryption & Hash Cracking** with _GPG_, _john_

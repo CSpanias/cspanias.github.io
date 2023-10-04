@@ -10,6 +10,8 @@ img_path: /assets/dogcat/
 
 # Summary
 
+*Replace text-summary with graph*
+
 - **Enumeration** with _nmap_
 - **LFI exploitation** and **Directory Traversal** with _Burp Suite (Proxy, Repeater)_, _Metasploit_
 - **Vertical PrivEsc via SUDO** with _GTFOBins_
