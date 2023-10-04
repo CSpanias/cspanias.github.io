@@ -9,16 +9,15 @@ mermaid: true
 
 ![dogcat banner](dogcatbanner.png)
 
-# Summary
+## 1 Summary
 
-*Replace text-summary with graph*
-
+<!-- Replace text-summary with graph -->
 - **Enumeration** with _nmap_
 - **LFI exploitation** and **Directory Traversal** with _Burp Suite (Proxy, Repeater)_, _Metasploit_
 - **Vertical PrivEsc via SUDO** with _GTFOBins_
 - **Container Escape** via _Scheduled Scripts_
 
-# Background Information
+## 2 Background Information
 
 [Dogcat](https://tryhackme.com/room/dogcat) is considered a **medium difficulty** room, and I couldn't agree more with that. Thus far, I have only worked on **easy difficulty** rooms, and this was sure a level above that. I seriously struggled getting an **intial foothold** and I felt lost while searching for the fourth 🚩! 
 
@@ -30,9 +29,9 @@ I would suggest to anyone unfamiliar with the aforementioned concepts, to go thr
 2. The [Local File Inclusion](https://tryhackme.com/room/fileinc) module from _TryHackMe_.
 3. An excellent article/lab about [Apache Log Poisoning](https://www.hackingarticles.in/apache-log-poisoning-through-lfi/?ref=fr33s0ul.tech) from _Hacking Articles_.
 
-# CTF Process
+## 3 CTF Process
 
-## 1. Port-scanning with nmap
+### 3.1 Port-scanning with nmap
 
 Let's start by **port-scanning** our target with `nmap`:
 ```bash
@@ -48,24 +47,19 @@ The results include an **Apache Web Server** and an **SSH server**:
 
 ![nmap_scan](nmap-scan.png)
 
-## 2. Directory Traversal with Burp Suite's Repeater
+### 3.2 Directory Traversal with Burp Suite's Repeater
 
 Upon visiting the web server we come across a page where we can select and view various images of cats and dogs:
 
-<img src="https://github.com/CSpanias/pentesting.io/blob/main/thm/dogcat/media/homepage.png" 
-     width="500" 
-     height="300" />
+![homepage](homepage.png){: width:"500px" height:"300px"}
 
 If we notice the address bar on our browser, it becomes like this when selecting:
-- A dog: http://10.10.123.178/?view=dog
-- A cat: http://10.10.123.178/?view=cat
+- A dog: `http://10.10.123.178/?view=dog`
+- A cat: `http://10.10.123.178/?view=cat`
 
-This is where some background knowledge on LFI will come handy. The last part of the aforementioned URLs, e.g. `?view=dog`, are called **parameters**. These can be manipulated and exploited, given that the web app lacks proper **input validation**.
+This is where some background knowledge on LFI will come handy. The last part of the aforementioned URLs are called **parameters**. These can be manipulated and exploited, given that the web app lacks proper **input validation**.
 
-<img src="https://github.com/CSpanias/pentesting.io/blob/main/thm/dogcat/media/url_parts.png" 
-  width="500"
-  height="200"
-  />
+![url_parts](url_parts.png){: width:"500px" height:"200px"}
 
 We can attempt a **Directory Traversal attack** by manipulating the URL's parameters for finding files located outside the web app's root directory. **Burp Suite's Repeater** is the perfect tool for this kind of attack, as it is mostly based on trial and error.
 
@@ -79,7 +73,7 @@ So let's try that, by replacing the `dog` value with `/../../etc/passwd`:
 
 ![intruder_error1](intruder_error1.png)
 
-We get back the message "_Sorry, only dogs or cats allowed._". So let's keep the word `dog` instead of replacing the whole string:
+We get back the message `Sorry, only dogs or cats allowed.`. So let's keep the word `dog` instead of replacing the whole string:
 
 ![intruder_error2](intruder_error2_path.png)
 
@@ -98,7 +92,7 @@ We can get around this by using a [**NULL BYTE**](https://www.thehacker.recipes/
 
 ![dot_dot_slash_attack](intruder_passwd.png)
 
-## 3. Log Poisoning with Burp Suite's Repeater and Metasploit
+### 3.3 Log Poisoning with Burp Suite's Repeater and Metasploit
 
 Instead of accessing `/etc/passwd`, we can try accessing **Apache's log file** and try to poison it. The default location of the log file is `/var/log/apache2/access.log`, so let's try that:
 
@@ -133,7 +127,7 @@ We can also find our second 🚩 by just searching for a file that includes `fla
 
 ![second_flag](flag2.png)
 
-## 4. PrivEsc with SUDO and GTFOBins
+### 3.4 PrivEsc with SUDO and GTFOBins
 
 Now that we managed to get an **initial foothold**, we should look for a way to **escalate our privileges**. We can check if the current user can run any program with SUDO:
 
@@ -147,7 +141,7 @@ Following GTFOBins's instructions, we can get ourselves a **root shell** and get
 
 ![root_shell](root_shell_flag_3.png)
 
-## 5. Container Escape
+### 3.5 Container Escape
 
 The room's description mentioned two things: **exploiting a PHP application via LFI**, which we did, and **break out of a docker container**, which we did not. We are missing our last 🚩, thus, we can safely assume that we are inside a container from which we must break out in order to get it. To confirm this, we can check our `hostname`. Under "normal" circumstances it would give us something like `dogcat` or the machine's IP address, but in this case we get a "weird" response:
 
