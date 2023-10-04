@@ -7,7 +7,7 @@ img_path: /assets/mr_robot/
 mermaid: true
 ---
 
-![mrrobot_banner](mr-robot-logo.jpg){: width="50%" height="50%" .w77 .normal}
+![mrrobot_banner](mr-robot-logo.jpg){: width="70%" height="70%" .w77 .normal}
 
 # Summary
 
@@ -81,7 +81,7 @@ First things first. Let's try to login with random credentials:
 
 When trying to login using _Admin_ as both the username and password, it comes back with an `ERROR: Invalid username.` message. Note that down!
 
-Next, let's capture a failed login request using Burp Suite's Proxy (_if you are unfamiliar with Burp Suite, I would highly recommend going through THM's excellent [Burp Suite module](https://tryhackme.com/module/learn-burp-suite)_):
+Next, let's capture a failed login request using **Burp Suite's Proxy** (_if you are unfamiliar with Burp Suite, I would highly recommend going through THM's excellent [Burp Suite module](https://tryhackme.com/module/learn-burp-suite)_):
 
 ![Captured failed login attempt with Proxy.](burp_proxy.png)
 
@@ -260,4 +260,4 @@ We can also use **hashcat** as shown below, where we pass the exact same argumen
 hashcat -m 0 hash /usr/share/wordlists/rockyou.txt
 ```
 
-![Cracking hashes with hashcat.](https://github.com/CSpanias/pentesting/blob/main/thm/mrrobot/media/hashcat_hidden.jpg)
+![Cracking hashes with hashcat.](hashcat_hidden.jpg)
