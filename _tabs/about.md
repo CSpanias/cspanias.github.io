@@ -4,7 +4,7 @@ order: 4
 ---
 <script src="https://tryhackme.com/badge/2134791"></script>
 
-## Profiles
+# Profiles
  
 [LinkedIn](https://www.linkedin.com/in/charalamposspanias/) \| [THM](https://tryhackme.com/p/Cspanias) \| [Chess](https://www.chess.com/member/spaniasch) \| [BJJ](https://smoothcomp.com/en/profile/101916)  
 
@@ -14,14 +14,14 @@ Hopefully, aside from my own learning, people who are complete beginners, like m
 
 Feel free to grab a copy of my __[resume](https://drive.google.com/file/d/10_o6X0mdp6ivJW7FZl-7LnuP01U0OtPI/view?usp=sharing)__ while you are here!
 
-## Current Ventures
+# Current Ventures
 
 [Cyber Security (BSc)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60) \| [THM Learning Paths](https://tryhackme.com/hacktivities#learning-paths)
 
-## Recommended Learning Resources 
+# Recommended Learning Resources 
 
 [THM](https://tryhackme.com/dashboard) \| [OU](https://www.open.ac.uk/) \| [Python Crash Course](https://nostarch.com/pythoncrashcourse2e) \| [Darknet Diaries](https://darknetdiaries.com/) \| [Cisco Networking Academy](https://skillsforall.com/)
 
-## Contact
+# Contact
 
 Feel free to contact me via [LinkedIn](https://www.linkedin.com/in/charalamposspanias/) or [email](javascript:location.href = 'mailto:' + ['spaniascharalampos','gmail.com'].join('@') if you have any questions or fancy a team CTF challenge!  
