@@ -6,11 +6,9 @@ order: 4
 
 ### Who Am I?
 
-A former [Strength & Conditioning (MSc)](https://scholar.google.com/citations?user=NEcbEUYAAAAJ&hl=en) coach and a current [Cybersecurity (BSc)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60) student working as a **Software Engineer** at the FinTech domain.
+A former [Strength & Conditioning (MSc)](https://scholar.google.com/citations?user=NEcbEUYAAAAJ&hl=en) coach and a current [Cybersecurity (BSc)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60) student working as a **Software Engineer**. Venturing in the **Penetration Testing** space through [TryHackMe](https://tryhackme.com/), [CISCO Networking Academy](https://www.netacad.com/), and [Open University](https://www.open.ac.uk/), currently focusing on **putting the theory into practice** by grinding through THM's **Capture The Flag** rooms. 
 
-Venturing in the **Penetration Testing** space through [TryHackMe](https://tryhackme.com/), [CISCO Networking Academy](https://www.netacad.com/), and [Open University](https://www.open.ac.uk/), currently focusing on **putting the theory into practice** by grinding through THM's **Capture The Flag** rooms. 
-
-You can find more about me reading my up-to-date resume [<i class="fa-solid fa-file"></i>](https://drive.google.com/file/d/10_o6X0mdp6ivJW7FZl-7LnuP01U0OtPI/view?usp=sharing).
+You can find more about me by reading my up-to-date resume [<i class="fa-solid fa-file"></i>](https://drive.google.com/file/d/10_o6X0mdp6ivJW7FZl-7LnuP01U0OtPI/view?usp=sharing).
 
 I am always game for a game of chess [<i class="fa-solid fa-chess"></i>](https://www.chess.com/member/spaniasch) or its human version [<i class="fa-solid fa-user-ninja"></i>](https://smoothcomp.com/en/profile/101916) !
 
