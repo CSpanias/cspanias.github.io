@@ -12,9 +12,9 @@ I will be writing write ups for all the completed CTFs for reviewing the process
 
 Additionally, I plan to sit for the TMC's [PJPT](https://certifications.tcm-sec.com/pjpt/) and [PNPT](https://certifications.tcm-sec.com/pnpt/) certifications in the near future, so I aim to document my experience through TMC's training, and how it compares with THM's learning paths in terms of quality, difficulty, subjects covered, and, of course, enjoyment.
 # Recommended Learning Resources 
-<i class="fa-brands fa-python"></i> [Python Basics](https://nostarch.com/python-crash-course-3rd-edition)  | <i class="fa-brands fa-html5"></i> HTML Basics | <i class="fa-brands fa-js"></i> JavaScript Basics | <i class="fa-solid fa-network-wired"></i> [Networking](https://skillsforall.com/career-path/cybersecurity?courseLang=en-US) | <i class="fa-solid fa-headphones"></i> [Darknet Diaries](https://darknetdiaries.com/) 
+<i class="fa-brands fa-python"></i> [Python Basics](https://nostarch.com/python-crash-course-3rd-edition)  \| <i class="fa-brands fa-html5"></i> HTML Basics \| <i class="fa-brands fa-js"></i> JavaScript Basics | <i class="fa-solid fa-network-wired"></i> [Networking](https://skillsforall.com/career-path/cybersecurity?courseLang=en-US) \| <i class="fa-solid fa-headphones"></i> [Darknet Diaries](https://darknetdiaries.com/) 
 # More
-<i class="fa-solid fa-file"></i>(https://drive.google.com/file/d/10_o6X0mdp6ivJW7FZl-7LnuP01U0OtPI/view?usp=sharing) Up-to-date resume.  | [<i class="fa-solid fa-chess"></i>](https://www.chess.com/member/spaniasch)  Fancy a game of chess? | [<i class="fa-solid fa-user-ninja"></i>](https://smoothcomp.com/en/profile/101916) Maybe a game of human chess?  
+<i class="fa-solid fa-file"></i>(https://drive.google.com/file/d/10_o6X0mdp6ivJW7FZl-7LnuP01U0OtPI/view?usp=sharing) Up-to-date resume.  \| [<i class="fa-solid fa-chess"></i>](https://www.chess.com/member/spaniasch)  Fancy a game of chess? \| [<i class="fa-solid fa-user-ninja"></i>](https://smoothcomp.com/en/profile/101916) Maybe a game of human chess?  
 
 
 <!-- 
