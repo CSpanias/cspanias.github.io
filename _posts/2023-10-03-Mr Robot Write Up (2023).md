@@ -69,16 +69,17 @@ By visiting the former a file will be downloaded, while visiting the latter will
 ## 3. Dictionary Attack with hydra
 
 Let's focus on **obtaining the credentials** needed to login to the wordpress portal. The high level plan here is the following:
-    1. Check the **error message** of a failed login attempt. We will need this message for performing a dictionary attack using hydra.
-    2. Capture the packet of the failed login attempt with Burp Suite's Proxy to find its **parameters**. We will also need these for performing the dictionary attack with hydra.
-    3. Perform a dictionary attack with hydra to **build a wordlist containing valid usernames**.
-    4. Perform a second dictionary attack using the newly-created username wordlist to **find passwords**, again, using hydra.
+
+1. Check the **error message** of a failed login attempt. We will need this message for performing a dictionary attack using hydra.
+2. Capture the packet of the failed login attempt with Burp Suite's Proxy to find its **parameters**. We will also need these for performing the dictionary attack with hydra.
+3. Perform a dictionary attack with hydra to **build a wordlist containing valid usernames**.
+4. Perform a second dictionary attack using the newly-created username wordlist to **find passwords**, again, using hydra.
 
 First things first. Let's try to login with random credentials:
 
 ![WordPress error message when trying to login with an invalid username.](wp-login-error1.jpg)
 
-When trying to login using _Admin_ as both the username and password, it comes back with an "_ERROR: Invalid username. message_". Note that down!
+When trying to login using _Admin_ as both the username and password, it comes back with an `ERROR: Invalid username.` message. Note that down!
 
 Next, let's capture a failed login request using Burp Suite's Proxy (_if you are unfamiliar with Burp Suite, I would highly recommend going through THM's excellent [Burp Suite module](https://tryhackme.com/module/learn-burp-suite)_):
 
@@ -101,17 +102,18 @@ sort fsocity.dic | uniq -u >> fs-list # append the unique words on fs-list
 wc -w fs-list # check wordcount
 # 11451
 ```
-Now, we are ready to pass the new wordlist on hydra and create the list with the valid usernames:
+Now, we are ready to pass the new wordlist on **hydra** and create the list with the valid usernames:
 ```bash
 hydra -L fs-list -p test <target-ip> http-post-form "/wp-login.php:log=^USER^&pwd=^PASS^:F=Invalid username" -t 30
 ```
-`-L fs-list` Passing the de-duplicated username list to hydra to check if any valid usernames are in there.
-`-p test` Passing a static password to pair these usernames with (no need to be "test", anything will work, such as admin, 123, etc.).
+`-L fs-list` Passing the de-duplicated username list to hydra to check if any valid usernames are in there.  
+`-p test` Passing a static password to pair these usernames with (no need to be "test", anything will work, such as admin, 123, etc.).  
 `<target-ip>` The target's machine IP address.
 
-Let's break down the next part, which might be seen a bit complicated to begin with, but it's really not:  
-`http-post-form` Telling hydra that the website is using a POST form to log in, which we know from our captured HTTP request via Burp Suite's Proxy (first line of the captured packet).  
-`/wp-login.php` The subdirectory leading to the login portal.  
+Let's break down the next part, which might be seen a bit complicated to begin with, but it's really not:
+
+`http-post-form` Telling hydra that the website is using a POST form to log in, which we know from our captured HTTP request via Burp Suite's Proxy (first line of the captured packet).    
+`/wp-login.php` The subdirectory leading to the login portal.   
 `log=^USER^&pwd=^PASS^:` This is where we use the parameters found in Burp's Proxy, i.e. log and pwd. We are telling hydra to use the words included in our provided list (fs-list) for the log parameter, and the static password provided (test) for the pwd parameter. Think ^USER^ and ^PASS^ as placeholder variables that will be replaced by what we are passing to hydra. As a result, it will try every word included in the fs-list file as username with the password test.  
 `F=Invalid username` This is the error message that WordPress outputs when we make a login attempt with a username that does not exist. By providing the error message, Hydra will ignore any username that results in this error, thus, will not show us invalid usernames. On the other hand, if it finds a valid username that does not match this error message, it will show it us!  
 `-t 30` This is used to speed up the task, i.e. to run 30 tasks of connects in parallel per target (the default is 16).  
@@ -124,7 +126,7 @@ We are almost done here! Now that we have a valid username, we can try to use it
 
 ![WordPress error message when trying to login with a valid username.](wp-login-error2.jpg)
 
-We see that the **error message has changed**. We can now do the reverse to find out elliot's password: use hydra with a valid static username (in our case `elliot`) and pass the wordlist (`fs-list`) as our password list (_[perform this step with **wpscan**](https://github.com/CSpanias/pentesting/edit/main/thm/mrrobot/mrrobot.md#dictionary-attack-alternative-1)_):
+We see that the **error message has changed**. We can now do the reverse to find out elliot's password: use hydra with a valid static username (in our case `elliot`) and pass the wordlist (`fs-list`) as our password list (_[perform this step with **wpscan**](https://cspanias.github.io/posts/Mr-Robot-Write-Up-(2023)/#dictionary-attack-alternative-1)_):
 ```bash
 hydra -l elliot -P fs-list <target-ip> http-post-form "/wp-login.php:log=^USER^&pwd=^PASS^:F=The password you entered for the username" -t 30
 ```
@@ -137,7 +139,7 @@ The output of the above command is shown below:
 
 ![Hydra's second successful dictionary attack.](hydra_pass_hidden.jpg)
 
-We can now used the obtained credentials to login (_[perform this step using Burp Suite's Intruder](https://github.com/CSpanias/pentesting/edit/main/thm/mrrobot/mrrobot.md#dictionary-attack-alternative-2)_):
+We can now used the obtained credentials to login (_[perform this step using Burp Suite's Intruder](https://cspanias.github.io/posts/Mr-Robot-Write-Up-(2023)/#dictionary-attack-alternative-2)_):
 
 ![Logged in as Elliot Alderson at the WordPress dashboard.](wp-dashboard.png)
 
@@ -173,7 +175,7 @@ After a bit of searching, we can find two interesting files: `key-2-of-3.txt`, w
 
 ![Files and permissions in the /home/robot directory.](rce_files.png)
 
-Since we are given user's robot MD5 hash, we can try cracking it, and then switch user to `robot` and read the second key. The easiest way to do that is using [CrackStation](https://crackstation.net/) (_we can also use [John The Ripper](https://github.com/CSpanias/pentesting/edit/main/thm/mrrobot/mrrobot.md#hash-cracking-alternative-1) or [Hashcat](https://github.com/CSpanias/pentesting/edit/main/thm/mrrobot/mrrobot.md#hash-cracking-alternative-2)_):
+Since we are given user's robot MD5 hash, we can try cracking it, and then switch user to `robot` and read the second key. The easiest way to do that is using [CrackStation](https://crackstation.net/) (_we can also use [John The Ripper](https://cspanias.github.io/posts/Mr-Robot-Write-Up-(2023)/#hash-cracking-alternative-1) or [Hashcat](https://cspanias.github.io/posts/Mr-Robot-Write-Up-(2023)/#hash-cracking-alternative-2)_):
 
 ![Cracking hashes with CrackStation!](crackstation_hidden.jpg)
 
