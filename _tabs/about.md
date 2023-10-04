@@ -21,9 +21,9 @@ I also plan to take the [PJPT](https://certifications.tcm-sec.com/pjpt/) and [PN
 
 [<i class="fa-solid fa-headphones"></i>](https://darknetdiaries.com/) Darknet Diaries
 
-[<i class="fa-brands fa-html5"></i>]() HTML  
+<i class="fa-brands fa-html5"></i> HTML  
 
-[<i class="fa-brands fa-js"></i>]() JavaScript 
+<i class="fa-brands fa-js"></i> JavaScript 
 
 # More
  
