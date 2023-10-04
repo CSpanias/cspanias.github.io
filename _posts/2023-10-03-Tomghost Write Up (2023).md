@@ -6,6 +6,7 @@ tags: [nmap, exploitdb, metasploit, hash, gpg, john, encryption, gtfobins, sudo,
 img_path: /assets/tomghost/
 mermaid: true
 ---
+
 ![tomghost banner](tomghost_banner.png)
 
 # Summary
