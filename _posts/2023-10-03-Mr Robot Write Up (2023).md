@@ -9,19 +9,19 @@ mermaid: true
 
 ![mrrobot_banner](mr-robot-logo.jpg){: width="70%" height="70%" .w77 .normal}
 
-## 1-Process Summary
+## 1 Process Summary
 
 [![](https://mermaid.ink/img/pako:eNpdks1OAjEUhV-lqZsxKQkCAunCxDAYWJgYUVezubQdpjLTkvaOBIHncGV8RR_BzgwhI7ubc76T3L89FVYqymma263IwCF5iROTGJGD97FKiVOSeHR2rfhV2u2SlrXMS3X2ut20yml5E01NWSgHqK255pxXWGX0oliLSgS3u0cEsW67_WgGPpu4IGuzajuDaPE6j9vKbfT78_VdKaG7ShhGc6NRQ04erMXM5pITETzPyPNkysgFPopm1ulPazAknpz-mHpxDlyw4-hNOdSiTf5D6pk7HRvaOpWdu4MpYMNWdll6VO4QZm-4Xs0NT2Xgsp10wJal27Dtxgswge03bL9mR6cysKLajcd6r-zdZoZlYWMCMGQGTWZQZ8aU0XCAArQMl90nhpCEYqYKlVAeSglundDEHAMHJdrFzgjK0ZWK0XIjAVWsYeWgoDyF3AdVSY3WPTavUn_M8Q-Tz8oH?type=png)](https://mermaid.live/edit#pako:eNpdks1OAjEUhV-lqZsxKQkCAunCxDAYWJgYUVezubQdpjLTkvaOBIHncGV8RR_BzgwhI7ubc76T3L89FVYqymma263IwCF5iROTGJGD97FKiVOSeHR2rfhV2u2SlrXMS3X2ut20yml5E01NWSgHqK255pxXWGX0oliLSgS3u0cEsW67_WgGPpu4IGuzajuDaPE6j9vKbfT78_VdKaG7ShhGc6NRQ04erMXM5pITETzPyPNkysgFPopm1ulPazAknpz-mHpxDlyw4-hNOdSiTf5D6pk7HRvaOpWdu4MpYMNWdll6VO4QZm-4Xs0NT2Xgsp10wJal27Dtxgswge03bL9mR6cysKLajcd6r-zdZoZlYWMCMGQGTWZQZ8aU0XCAArQMl90nhpCEYqYKlVAeSglundDEHAMHJdrFzgjK0ZWK0XIjAVWsYeWgoDyF3AdVSY3WPTavUn_M8Q-Tz8oH)
 
-## 2-Background information
+## 2 Background information
 
 *TBA*
 
-## 3-CTF Process
+## 3 CTF Process
 
 The goal of [Mr. Robot's room](https://tryhackme.com/room/mrrobot) is to find 3 hidden keys. Let's crack on!
 
-### 3.1-Port-scanning with nmap
+### 3.1 Port-scanning with nmap
 
 Let's start by **scanning for open ports with nmap** (_[nmap switches](https://www.stationx.net/nmap-cheat-sheet/)_):
 ```bash
@@ -41,7 +41,7 @@ Typing the commands listed there or viewing the page source does not provide any
 
 ![mrrobot_homepage](homepage.png)
 
-### 3.2-Subdirectory Enumeration with gobuster
+### 3.2 Subdirectory Enumeration with gobuster
 
 Next, we can **search for subdirectories using gobuster**:
 ```bash
@@ -66,7 +66,7 @@ By visiting the former a file will be downloaded, while visiting the latter will
 
 ![fsocity.dic file](fsocity.png)
 
-### 3.3-Dictionary Attack with hydra
+### 3.3 Dictionary Attack with hydra
 
 Let's focus on **obtaining the credentials** needed to login to the wordpress portal. The high level plan here is the following:
 
@@ -145,7 +145,7 @@ We can now used the obtained credentials to login (_[perform this step using Bur
 
 We are in 🎉!
 
-### 3.4-Gaining Remote Code Execution
+### 3.4 Gaining Remote Code Execution
 
 User `elliot` seems to be an **administrator account**. This means that it has access to the **Editor's tab**:
 
@@ -169,7 +169,7 @@ By visiting `http://<target-ip>/wp-content/themes/twentyfifteen/archive.php` a s
 
 ![Reverse shell using netcat.](rce1.png)
 
-### 3.5-Cracking Hashes using CrackStation
+### 3.5 Cracking Hashes using CrackStation
 
 After a bit of searching, we can find two interesting files: `key-2-of-3.txt`, which can be read only by its owner (user `robot`), and `password.raw-md5`, robot's **MD5 hashed password**:
 
@@ -187,7 +187,7 @@ A message appears letting us know that we need to use an **interactive terminal*
 
 ![Launching bash using Python.](python_shell_hidden.jpg)
 
-### 3.6-Vertical PrivEsc through SUID files and GTFOBins
+### 3.6 Vertical PrivEsc through SUID files and GTFOBins
 
 With only the last key left and based on a hint from the room's initial question: "_Can you **root** this Mr. Robot styled machine?_", we will probably need to **escalate our privileges** and get a root account.
 
@@ -214,9 +214,9 @@ After some searching, we can find and read the third and **final key** 👏:
 
 ![Finding and getting the final key!](root_key.jpg)
 
-## 4-Extra
+## 4 Extra
 
-### 4.1-Dictionary Attack Alternative 1
+### 4.1 Dictionary Attack Alternative 1
 
 After having created our wordlist containing valid usernames, we can use **wpscan**, a security scanner designed for testing the security of websites built using WordPress, to obtain elliot's password. We just need to provide the URL and a valid username ( `-t 50` is used to speed up the process):
 ```bash
@@ -225,7 +225,7 @@ wpscan --url http://10.10.208.204 -t 50 -U elliot -P fs-list
 
 ![Dictionary attack using wpscan.](wpscan_dict_attack_hidden.jpg)
 
-### 4.2-Dictionary Attack Alternative 2
+### 4.2 Dictionary Attack Alternative 2
 
 We have the option to continue using the **Burp Suite** after capturing the failed login attempt with **Proxy** and finding a valid username, by sending the request to **Intruder** and performing the attack there (_right-click_ and then _Send to Intruder_, or hit `CTRL+I`):
 
@@ -243,7 +243,7 @@ Finally, we are ready to click the **Start attack** button at the top right-hand
 
 ![Dictionary attack with Intruder.](intruder_success_hidden.jpg)
 
-### 4.3-Hash Cracking Alternative 1
+### 4.3 Hash Cracking Alternative 1
 
 For the hash cracking part, we can use **John The Ripper** in order to obtain the **plaintext password**.
 
@@ -253,7 +253,7 @@ Except from the file and the wordlist, we can also **specify the hash format** s
 
 ![Cracking hashes with john.](jtr_hash_hidden.jpg)
 
-### 4.4-Hash Cracking Alternative 2
+### 4.4 Hash Cracking Alternative 2
 
 We can also use **hashcat** as shown below, where we pass the exact same arguments as john: the **file containing the hash**, a **wordlist**, and the **hash format**. The only difference is that we need to specify the MD5 format with `-m 0` instead of `-format=Raw-MD5`:
 ```bash
