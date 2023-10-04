@@ -10,14 +10,16 @@ Currently venturing in the **Penetration Testing** space, mostly, through the [T
 # Why Pentest Journeys?
 I will be writing write ups for all the completed CTFs for reviewing the process myself as well as digging into the nitty-gritty of each room. Hopefully, aside from my own benefit, people who are complete beginners, like me, might find these posts helpful.
 
-Additionally, I plan to sit for the [PJPT](https://certifications.tcm-sec.com/pjpt/) and [PNPT](https://certifications.tcm-sec.com/pnpt/) certifications in the near future, so I aim to document my experience through TCM Security's training, and how it compares with THM's learning paths in terms of quality, difficulty, and, of course, enjoyment.
+Additionally, I plan to sit for the TMC's [PJPT](https://certifications.tcm-sec.com/pjpt/) and [PNPT](https://certifications.tcm-sec.com/pnpt/) certifications in the near future, so I aim to document my experience through TMC's training, and how it compares with THM's learning paths in terms of quality, difficulty, subjects covered, and, of course, enjoyment.
 # Recommended Learning Resources 
-[<i class="fa-brands fa-python"></i>](https://nostarch.com/pythoncrashcourse2e) Python Crash Course | <i class="fa-brands fa-html5"></i> HTML  | <i class="fa-brands fa-js"></i> JavaScript | [<i class="fa-solid fa-certificate"></i>](https://skillsforall.com/) Cisco Networking Academy  | [<i class="fa-solid fa-headphones"></i>](https://darknetdiaries.com/) Darknet Diaries
+<i class="fa-brands fa-python"></i> [Python Basics](https://nostarch.com/python-crash-course-3rd-edition)  | <i class="fa-brands fa-html5"></i> HTML Basics | <i class="fa-brands fa-js"></i> JavaScript Basics | <i class="fa-solid fa-network-wired"></i> [Networking](https://skillsforall.com/career-path/cybersecurity?courseLang=en-US) | <i class="fa-solid fa-headphones"></i> [Darknet Diaries](https://darknetdiaries.com/) 
 # More
-[<i class="fa-solid fa-file"></i>](https://drive.google.com/file/d/10_o6X0mdp6ivJW7FZl-7LnuP01U0OtPI/view?usp=sharing) Up-to-date resume.  | [<i class="fa-solid fa-chess"></i>](https://www.chess.com/member/spaniasch)  Fancy a game of chess? | [<i class="fa-solid fa-user-ninja"></i>](https://smoothcomp.com/en/profile/101916) Maybe a game of human chess?  
+<i class="fa-solid fa-file"></i>(https://drive.google.com/file/d/10_o6X0mdp6ivJW7FZl-7LnuP01U0OtPI/view?usp=sharing) Up-to-date resume.  | [<i class="fa-solid fa-chess"></i>](https://www.chess.com/member/spaniasch)  Fancy a game of chess? | [<i class="fa-solid fa-user-ninja"></i>](https://smoothcomp.com/en/profile/101916) Maybe a game of human chess?  
 
 
-
-
+<!-- 
+[Python Crash Course](https://nostarch.com/pythoncrashcourse2e)
+[Cisco Networking Academy](https://skillsforall.com/)
+-->
 
 
