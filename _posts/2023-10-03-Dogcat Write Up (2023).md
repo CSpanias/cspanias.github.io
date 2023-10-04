@@ -5,7 +5,8 @@ categories: [CTF Write Up, THM] # up to 2 categories
 tags: [nmap, lfi, burp, metasploit, directorytraversal, gtfobins, containerescape] # TAG names should always be lowercase
 img_path: /assets/dogcat/
 ---
-![dogcat banner](https://github.com/CSpanias/pentesting.io/blob/main/thm/dogcat/media/dogcatbanner.png)
+
+![dogcat banner](dogcatbanner.png)
 
 # Summary
 
@@ -42,7 +43,7 @@ nmap <target-ip> -sV -T4 -oA nmap-scan -open
 
 The results include an **Apache Web Server** and an **SSH server**:
 
-![nmap_scan](https://github.com/CSpanias/pentesting.io/blob/main/thm/dogcat/media/nmap-scan.png)
+![nmap_scan](nmap-scan.png)
 
 ## 2. Directory Traversal with Burp Suite's Repeater
 
@@ -67,17 +68,17 @@ We can attempt a **Directory Traversal attack** by manipulating the URL's parame
 
 If we use **Burp Suite's Proxy** to capture an HTTP request while choosing to see a dog, and then send it to **Repeater**, it looks like this:
 
-![intruder_request](https://github.com/CSpanias/pentesting.io/blob/main/thm/dogcat/media/proxy2intruder.png)
+![intruder_request](proxy2intruder.png)
 
 On the first line, we can see the URL's parameter `?view=` assigned the value `dog`. The dog image we get as a response is located somewhere inside the Apache's directory, such as `/var/www/html/photos/dogs/5.jpg`. As the name suggests, the **dot-dot-slash attack**, a more fun name for the Directory Traversal attack, is based on using the `../` to eventually get out of the Apache's root directory and try accessing other files, such as `/etc/passwd`. 
 
 So let's try that, by replacing the `dog` value with `/../../etc/passwd`:
 
-![intruder_error1](https://github.com/CSpanias/pentesting.io/blob/main/thm/dogcat/media/intruder_error1.png)
+![intruder_error1](intruder_error1.png)
 
 We get back the message "_Sorry, only dogs or cats allowed._". So let's keep the word `dog` instead of replacing the whole string:
 
-![intruder_error2](https://github.com/CSpanias/pentesting.io/blob/main/thm/dogcat/media/intruder_error2_path.png)
+![intruder_error2](intruder_error2_path.png)
 
 Now, we are getting a Warning that includes Apache's homepage directory `/var/www/html/index.html`. Using this info, we know that we need at least 3 `../` to get out of that:
 1. With the first `../` will be moving from `/var/www/html/` to `/var/www/`.
@@ -88,29 +89,29 @@ We will probably need more than three `../` as the photo will be one or two subd
 
 We can also see that the app is adding the `.php` extension to our values:
 
-![php_ext](https://github.com/CSpanias/pentesting.io/blob/main/thm/dogcat/media/php_ext.png)
+![php_ext](php_ext.png)
 
 We can get around this by using a [**NULL BYTE**](https://www.thehacker.recipes/web/inputs/null-byte-injection) at the end of our string, such as `%00` or `&`, tricking the web application into ignoring whatever comes after it, in this case the `.php` extension. After some trial and error, it seems that we need six `../` to successfully get out of the Apache's root directory:
 
-![dot_dot_slash_attack](https://github.com/CSpanias/pentesting.io/blob/main/thm/dogcat/media/intruder_passwd.png)
+![dot_dot_slash_attack](intruder_passwd.png)
 
 ## 3. Log Poisoning with Burp Suite's Repeater and Metasploit
 
 Instead of accessing `/etc/passwd`, we can try accessing **Apache's log file** and try to poison it. The default location of the log file is `/var/log/apache2/access.log`, so let's try that:
 
-![log_file](https://github.com/CSpanias/pentesting.io/blob/main/thm/dogcat/media/intruder_logfile.png)
+![log_file](intruder_logfile.png)
 
 We can use the `User-Agent` part of the request, by replacing the agent part, `(X11; Ubuntu; Linux x86_64; rv:109.0)`, with PHP code that will accept commands, such as `<?php system($_GET['c']); ?>`:
 
-![log-poisoning](https://github.com/CSpanias/pentesting.io/blob/main/thm/dogcat/media/user_agent1.png)
+![log-poisoning](user_agent1.png)
 
 If we now add `&c=` to our URL, we can pass any command of our choosing, such as `ps`, and see the output included in the HTTP response:
 
-![ps](https://github.com/CSpanias/pentesting.io/blob/main/thm/dogcat/media/log_ps.png)
+![ps](log_ps.png)
 
 We can exploit this type of vulnerability with **Metasploit's web devivery script** as follows:
 
-![metasploit_webdelivery](https://github.com/CSpanias/pentesting.io/blob/main/thm/dogcat/media/metasploit_payload1.png)
+![metasploit_webdelivery](metasploit_payload1.png)
 
 `LHOST <IP>` Your machine's IP address.  
 `SRVPORT <PORT>` An available port to start an HTTP server to host the payload file.  
@@ -119,15 +120,15 @@ We can exploit this type of vulnerability with **Metasploit's web devivery scrip
 
 As instructed by Metasploit, we must run the generated command  as our command in the URL, and a meterpreter session will open on our shell:
 
-![meterpreter_session](https://github.com/CSpanias/pentesting.io/blob/main/thm/dogcat/media/meterpreter_shell.png)
+![meterpreter_session](meterpreter_shell.png)
 
 We can find our first 🚩 by listing the directory files:
 
-![first_flag](https://github.com/CSpanias/pentesting.io/blob/main/thm/dogcat/media/first_flag.jpg)
+![first_flag](first_flag.jpg)
 
 We can also find our second 🚩 by just searching for a file that includes `flag2` in its name:
 
-![second_flag](https://github.com/CSpanias/pentesting.io/blob/main/thm/dogcat/media/flag2.png)
+![second_flag](flag2.png)
 
 ## 4. PrivEsc with SUDO and GTFOBins
 
