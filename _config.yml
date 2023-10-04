@@ -18,7 +18,7 @@ timezone: Europe/London
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: Pentesting Notes # the main title
+title: Pentest Journeys # the main title
 
 tagline: Cybersecurity (BSc) | CTF N00b # it will display as the sub-title
 
