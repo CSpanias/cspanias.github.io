@@ -4,6 +4,7 @@ date: 2023-10-03
 categories: [CTF Write Up, THM]
 tags: [nmap, exploitdb, metasploit, hash, gpg, john, encryption, gtfobins, sudo, ajp]
 img_path: /assets/tomghost/
+mermaid: true
 ---
 ![tomghost banner](tomghost_banner.png)
 

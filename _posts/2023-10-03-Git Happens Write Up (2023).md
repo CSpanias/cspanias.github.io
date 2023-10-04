@@ -4,6 +4,7 @@ date: 2023-10-03 10:00:00 +0100
 categories: [CTF Write Up, THM] # up to 2 categories
 tags: [nmap, nikto, git, gittools] # TAG names should always be lowercase
 img_path: /assets/git_happens/
+mermaid: true
 ---
 
 ![room_banner](git_happens_banner.png)
