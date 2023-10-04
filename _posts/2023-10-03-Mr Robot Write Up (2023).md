@@ -12,10 +12,6 @@ mermaid: true
 
 [![](https://mermaid.ink/img/pako:eNpdkt9qwjAUxl8lZDcdRHDqnORiMKxDYYOhbFe9OSapzWyTkpxOnPocuxp7xT3C0irSeXf4vt8H59-OCisV5TTN7UZk4JA8zROTGJGD97FKiVOSeHR2rfhV2u2SlrXMK3X2ut20zml5E01MVSgHqK255pzXWG30oliLWgS3fUAEsW67_WgKPhu7IGuzajuDaPE6i9vKbfT78_VdK6G7WhhGM6NRQ04ercXM5pITETzPyHw8YeQCv4um1ulPazAkXpz-mHhxDlywo-hNOdSiTf5Dmpk7HRvaOpWd-70poGQru6w8KrcPsx-5XsMNT2Xgsq10wJaVK9mm9AJMYPtHtt-wd6cysKLejcdmr-zdZoZlYWMCMGQGx8ygyYwoo-EABWgZLrtLDCEJxUwVKqE8lBLcOqGJOQQOKrSLrRGUo6sUo1UpAVWsYeWgoDyF3AdVSY3WPR9fpfmYwx-gq8oN?type=png)](https://mermaid.live/edit#pako:eNpdkt9qwjAUxl8lZDcdRHDqnORiMKxDYYOhbFe9OSapzWyTkpxOnPocuxp7xT3C0irSeXf4vt8H59-OCisV5TTN7UZk4JA8zROTGJGD97FKiVOSeHR2rfhV2u2SlrXMK3X2ut20zml5E01MVSgHqK255pzXWG30oliLWgS3fUAEsW67_WgKPhu7IGuzajuDaPE6i9vKbfT78_VdK6G7WhhGM6NRQ04ercXM5pITETzPyHw8YeQCv4um1ulPazAkXpz-mHhxDlywo-hNOdSiTf5Dmpk7HRvaOpWd-70poGQru6w8KrcPsx-5XsMNT2Xgsq10wJaVK9mm9AJMYPtHtt-wd6cysKLejcdmr-zdZoZlYWMCMGQGx8ygyYwoo-EABWgZLrtLDCEJxUwVKqE8lBLcOqGJOQQOKrSLrRGUo6sUo1UpAVWsYeWgoDyF3AdVSY3WPR9fpfmYwx-gq8oN)
 
-1. **Enumeration** with _nmap_, _gobuster_
-2. **Dictionary attack** with _hydra_, _Burp Suite (Proxy, Intruder)_, _wpscan_
-4. **Hash Cracking** with _CrackStation_, _john_, _hashcat_
-5. **Exploiting SUIDs** with _GTFOBins_
 
 # CTF Process
 
