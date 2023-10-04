@@ -1,0 +1,24 @@
+id1(Enumeration):::blue
+id2(Periodic Elements
+Integers
+ASCII):::blue
+id3(Piet):::blue
+id5(SUBDIRECTORIES
+/index.php
+/nagiosxi):::red
+id6(HIDDEN DIRECTORY
+/PI3T.PNg):::red
+id7(ATTACK SURFACE
+Nagios XI creds):::red
+id8(Vertical PrivEsc: 🗝):::red
+
+id1--oid5
+id1--->|nmap
+nikto
+|id2
+
+id2--oid6
+id2--->|gimp|id3
+
+id3--oid7
+id3---o|metasploit|id8
