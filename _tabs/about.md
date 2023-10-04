@@ -16,14 +16,21 @@ I also plan to take the [PJPT](https://certifications.tcm-sec.com/pjpt/) and [PN
 # Recommended Learning Resources 
 
 [<i class="fa-brands fa-python"></i>](https://nostarch.com/pythoncrashcourse2e) Python Crash Course  
+
 [<i class="fa-solid fa-certificate"></i>](https://skillsforall.com/) Cisco Networking Academy  
+
 [<i class="fa-solid fa-headphones"></i>](https://darknetdiaries.com/) Darknet Diaries
+
 [<i class="fa-brands fa-html5"></i>]() HTML  
+
 [<i class="fa-brands fa-js"></i>]() JavaScript 
 
 # More
  
-[<i class="fa-solid fa-file"></i>](https://drive.google.com/file/d/10_o6X0mdp6ivJW7FZl-7LnuP01U0OtPI/view?usp=sharing) Up-to-date resume.
+[<i class="fa-solid fa-file"></i>](https://drive.google.com/file/d/10_o6X0mdp6ivJW7FZl-7LnuP01U0OtPI/view?usp=sharing) Up-to-date resume.  
+
 [<i class="fa-solid fa-chess"></i>](https://www.chess.com/member/spaniasch)  Fancy a game of chess?
+
 [<i class="fa-solid fa-user-ninja"></i>](https://smoothcomp.com/en/profile/101916) Fancy a game of human chess?  
+
  <script src="https://tryhackme.com/badge/2134791"></script>
