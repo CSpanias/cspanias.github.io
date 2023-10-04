@@ -24,4 +24,4 @@ Feel free to grab a copy of my __[resume](https://drive.google.com/file/d/10_o6X
 
 ## Contact
 
-Feel free to contact me via [LinkedIn](https://www.linkedin.com/in/charalamposspanias/) or [email](javascript:location.href = 'mailto:' + ['spaniascharalampos','gmail.com'].join('@')) if you have any questions or facy a team CTF challenge!
+Feel free to contact me via [LinkedIn](https://www.linkedin.com/in/charalamposspanias/) or [email](javascript:location.href = 'mailto:' + ['spaniascharalampos','gmail.com'].join('@')) if you have any questions or facy a team CTF challenge!  
