@@ -7,7 +7,7 @@ img_path: /assets/mr_robot/
 mermaid: true
 ---
 
-![mrrobot_banner](mr-robot-logo.jpg)
+![mrrobot_banner](mr-robot-logo.jpg){: width="50%" height="50%" .w77 .normal}
 
 # Summary
 
