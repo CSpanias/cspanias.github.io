@@ -18,10 +18,9 @@ I will be writing write ups for all the completed CTFs for reviewing the process
 
 Additionally, I plan to sit for the TMC's [PJPT](https://certifications.tcm-sec.com/pjpt/) and [PNPT](https://certifications.tcm-sec.com/pnpt/) certifications in the near future, so I aim to document my experience through TMC's training, and how it compares with THM's learning paths in terms of quality, difficulty, subjects covered, and, of course, enjoyment.
 
-### Recommended Learning Resources
+### Projects
 
-Python [<i class="fa-brands fa-python"></i>](https://nostarch.com/python-crash-course-3rd-edition)  
+Python [<i class="fa-brands fa-python"></i>] [Alien Invasion](https://github.com/CSpanias/alien_invasion), [Visualizations](https://github.com/CSpanias/visualization_project), [Spam Filter](https://github.com/CSpanias/spam_filter), [NLP-Based](https://github.com/CSpanias/nlp_resources)  
 HTML <i class="fa-brands fa-html5"></i> *(TBA)*  
 JavaScript <i class="fa-brands fa-js"></i> *(TBA)*  
-Networking [<i class="fa-solid fa-network-wired"></i>](https://skillsforall.com/career-path/cybersecurity?courseLang=en-US)  
-Darknet Diaries [<i class="fa-solid fa-headphones"></i>](https://darknetdiaries.com/)  
+ 
