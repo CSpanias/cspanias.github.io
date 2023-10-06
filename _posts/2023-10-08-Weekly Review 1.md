@@ -1,7 +1,7 @@
 ---
 title: Weekly Review 
 date: 2023-10-08
-categories: [Review, Concepts]
+categories: [CTF Write Up, THM]
 tags: [hydra, interactiveshell, wordpress]
 img_path: /assets/mr_robot/
 mermaid: true
