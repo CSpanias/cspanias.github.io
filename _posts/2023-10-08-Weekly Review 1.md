@@ -44,28 +44,30 @@ mermaid: true
  ```
  4. Now we can execute commands such as `/access.log&ext&c=<command>`, checking the output in the HTTP response.
  5. Run Metasploit's **web delivery** module, and pass the output as command.
- 
- ### Container Escape
+   
+ ### Container Escape  
  
  1. Check ```hostname```. 
  2. To break out we need to find a way to launch a reverse shell from the current env (Inception concept).
- 
- ## [Nax](https://cspanias.github.io/posts/Nax-Write-Up-(2023)/)
- 
- ### Nagios XI
+   
+ ## [Nax](https://cspanias.github.io/posts/Nax-Write-Up-(2023)/)  
+   
+ ### Nagios XI  
  
  Boosted Crontab used in DevOps for monitoring and generating alerts when something goes wrong (`/nagiosxi`).
- 
- ### Piet Programming Language
+   
+ ### Piet Programming Language  
  
  We can pass it `.ppm` files and get back chars.
  
  ## [Git Happens](https://cspanias.github.io/posts/Git-Happens-Write-Up-(2023)/)
- 
- ### GitTools
+   
+ ### GitTools  
+   
  We can download and manipulate public-facing repos (`/.git`) with GitTools.
- 
+   
  ### Chaining commands
+   
  ```shell
  # use " " as delimiter and pick the second field
  cut -d " " -f2
@@ -73,15 +75,15 @@ mermaid: true
  # converts standard input into args to a command
  xargs
  ```
- 
- ## [Tomghost](https://cspanias.github.io/posts/Tomghost-Write-Up-(2023)/)
- 
- ### Apache Tomcat
- 
+   
+ ## [Tomghost](https://cspanias.github.io/posts/Tomghost-Write-Up-(2023)/)  
+   
+ ### Apache Tomcat  
+   
  Apache Tomacat is a **web container** that can also be used as an HTTP(S) server. **Ghostcast** is a known vuln: if the *Apache Jserv Protocol (AJP)* is exposed (port 8009), we can read files from Tomcat's dirs. 
- 
+   
  ### GPG Encryption
- 
+   
 GPG is a file encryption tool. 
 ```shell
 # decrypt file
