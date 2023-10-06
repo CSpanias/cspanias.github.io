@@ -1,9 +1,9 @@
 ---
-title: Weekly Review 
+title: Weekly Review 1
 date: 2023-10-08
-categories: [CTF Write Up, THM]
+categories: [Review]
 tags: [hydra, interactiveshell, wordpress]
-img_path: /assets/mr_robot/
+img_path: /assets/review/
 mermaid: true
 ---
 ## [Mr Robot](https://cspanias.github.io/posts/Mr-Robot-Write-Up-(2023)/) 
