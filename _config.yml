@@ -193,3 +193,8 @@ jekyll-archives:
   permalinks:
     tag: /tags/:name/
     category: /categories/:name/
+
+# Publish posts or collection documents with a future date.
+# future: BOOL
+# --future
+future: true
