@@ -20,7 +20,14 @@ Additionally, I plan to sit for the TMC's [PJPT](https://certifications.tcm-sec.
 
 ### Projects
 
-Python [<i class="fa-brands fa-python"></i>] [Alien Invasion](https://github.com/CSpanias/alien_invasion), [Visualizations](https://github.com/CSpanias/visualization_project), [Spam Filter](https://github.com/CSpanias/spam_filter), [NLP-Based](https://github.com/CSpanias/nlp_resources)  
-HTML <i class="fa-brands fa-html5"></i> *(TBA)*  
-JavaScript <i class="fa-brands fa-js"></i> *(TBA)*  
+<i class="fa-brands fa-python"></i> [Alien Invasion](https://github.com/CSpanias/alien_invasion), [Visualizations](https://github.com/CSpanias/visualization_project), [Spam Filter](https://github.com/CSpanias/spam_filter), [NLP-Based](https://github.com/CSpanias/nlp_resources)  
+<i class="fa-brands fa-html5"></i> *(TBA)*  
+<i class="fa-brands fa-js"></i> *(TBA)*  
+
+### 2023 So Far
+
+<i class="fa-solid fa-building-columns"></i> [Technologies In Practice](https://www.open.ac.uk/courses/qualifications/details/tm129?orig=r60), [Cyber Security](https://www.open.ac.uk/courses/qualifications/details/tm256?orig=r60)  
+<i class="fa-solid fa-network-wired"></i> [Junior Cybersecurity Analyst (CISCO)](https://www.credly.com/earner/earned/badge/1bce6970-ccf1-4b58-9111-5a00b15aa261)  
+<i class="fa-brands fa-linux"></i> [Hacking with Kali Linux (Hackers Academy)], [NatWest Certified Infrastructure Security Tester](https://drive.google.com/file/d/1viyFopGSW36Lu58TiFbYRsqqlIu3pNw4/view?pli=1)
+
  
