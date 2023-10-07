@@ -17,9 +17,6 @@ mermaid: true
 3. Try building a **username list** by using static pass.
 4. If user(s) found, try the reverse to **crack pass**. 
 
- ```shell
- hydra -L <username_list> -p <static_pass> <target-ip> http-post-form "/<login_dir>:log=^USER^&pwd=^PASS^:F=<error message>" -t 30
- ```
 
 
 ### RCE on WordPpress
@@ -29,11 +26,9 @@ mermaid: true
 
 ## Interactive terminal with Python
 
-
  ```shell
  python -c 'import pty;pty.spawn("/bin/bash");'
  ```
-
 
 ## [Dogcat](https://cspanias.github.io/posts/Dogcat-Write-Up-(2023)/)
  
