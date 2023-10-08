@@ -1,6 +1,6 @@
 ---
 title: Git Happens CTF Write Up (2023)
-date: 2023-10-03
+date: 2023-10-06
 categories: [CTF Write Up, THM]
 tags: [nmap, nikto, git, gittools]
 img_path: /assets/git_happens/

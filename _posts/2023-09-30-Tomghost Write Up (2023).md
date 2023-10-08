@@ -1,6 +1,6 @@
 ---
 title: Tomghost CTF Write Up (2023)
-date: 2023-10-03
+date: 2023-09-30
 categories: [CTF Write Up, THM]
 tags: [nmap, exploitdb, metasploit, hash, gpg, john, encryption, gtfobins, sudo, ajp]
 img_path: /assets/tomghost/
