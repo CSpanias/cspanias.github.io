@@ -30,7 +30,7 @@ Additionally, I plan to sit for the TMC's [PJPT](https://certifications.tcm-sec.
 
 <i class="fa-brands fa-linux"></i> [Hacking with Kali Linux (Hackers Academy)](https://hackersacademy.com/courses/hacking-with-kali-linux), [NatWest Certified Infrastructure Security Tester](https://drive.google.com/file/d/1viyFopGSW36Lu58TiFbYRsqqlIu3pNw4/view?pli=1)
 
-<i class="fa-brands fa-html5"><i class="fa-brands fa-css3-alt"></i><i class="fa-brands fa-js"></i> *(TBA)* </i> [MDN - Learn Web Development](https://developer.mozilla.org/en-US/docs/Learn)  
+<i class="fa-brands fa-html5"></i><i class="fa-brands fa-css3-alt"></i><i class="fa-brands fa-js"></i> [MDN - Learn Web Development](https://developer.mozilla.org/en-US/docs/Learn)  
 
 <i class="fa-solid fa-book"></i> [The Pentester Blueprint](https://www.amazon.co.uk/Pentester-BluePrint-Starting-Career-Ethical/dp/1119684307), [This Is How They Tell Me The World Ends](https://www.amazon.co.uk/This-They-Tell-World-Ends/dp/1526652536/ref=tmm_pap_swatch_0?_encoding=UTF8&qid=1696664791&sr=1-1)
 
