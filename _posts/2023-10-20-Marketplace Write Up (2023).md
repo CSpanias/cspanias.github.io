@@ -72,4 +72,22 @@ We can check if the site is vulnerable to [XSS](https://owasp.org/www-community/
 
 ![XSS](xss.mp4)
 
+Now, we can take advantage of the hint. If we visit the **developer's console**, *right-click --> inspect --> console tab*, we can find our **session cookie**:
+
+![session-cookie](document-cookie.png)
+
+The plan is the following:
+1. Create a new listing with code that will **steal another's user cookie and sent it back to us**.
+
+![cookie-stealer](cookie-stealer.png)
+
+2. For the cookie to be sent back to us, and be of higher privileges than ours, we need a way to **"force" an admin to interact with our listing**, so the code we will write inside our listing, will be executed on the admin's browser and not ours. This is where the *reporting* hint comes handy.
+
+![report-to-admin](report-to-admin.jpg)
+
+3. Now it's the time to set up our **python server**. When we click *Report*, we get a message *From System* saying among others: "*One of our admins will evaluate...*". 
+
+4. Swap our session cookie with admin's cookie to access the `/admin` directory.
+
+
  🍻🥂🔒🚩🎊🎉
