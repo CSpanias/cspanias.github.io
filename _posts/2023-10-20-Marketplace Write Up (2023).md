@@ -224,7 +224,7 @@ We can now try a **Union-Based SQLi** by using the `UNION` clause to extract the
 
     ![sqli-6](sqli-6.png)
 
-    Bingo 🎉 ! We can see that the `users` table contains a `password` field, among others.
+    Bingo 👌! We can see that the `users` table contains a `password` field 😈, among others.
 
 5. Now we know the column names, we can see all the data of the `users` table:
 
