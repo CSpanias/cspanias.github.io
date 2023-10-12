@@ -72,7 +72,7 @@ Let's try to exploit our second point, the **Sign up** page as well as the autho
 
 When signing up, the *New listing* option appears:
 
-![new-listing](new-listing.png){:. width="50%}
+![new-listing](new-listing.png){: width="50%}
 
 We can check if the site is vulnerable to [XSS](https://owasp.org/www-community/attacks/xss/), by writing some simple code and see how the site reacts:
 
@@ -101,7 +101,7 @@ python -m http.server 12345
 
 3. Now, we need a way to **"force" an admin to interact with our listing**. That is because we want the code to be executed on the admin's browser, and not ours. This is where the reporting hint comes handy. We can create a new listing, report it, and then an admin should come and review it.
 
-![report-to-admin](report-to-admin.jpg){:. width="50%}
+![report-to-admin](report-to-admin.jpg){: width="50%}
 
 4. When we click *Report*, we get a message *From System* saying among others: "*One of our admins will evaluate...*". We should already have received our session cookie on the python server by now. After a few seconds, we refresh the page, and we have a new message that our post has been reviewed. Alongside that, we also got the admin's cookie!
 
