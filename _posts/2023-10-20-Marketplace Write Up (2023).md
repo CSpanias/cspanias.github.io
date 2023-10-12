@@ -21,7 +21,7 @@ mermaid: true
 
 And that's all there is! We are now left alone to figure out where those three flags are 🤔 !
 
-Let's see what kind of background knowledge is needed for solving this CTF.
+There are a lot of concepts involved in this CTF room, so let's see what kind of background knowledge is needed for solving it.
 
 ### 2.1 Cross-site Scripting (XSS)
 
@@ -55,7 +55,7 @@ As always, there is the [HTTP in detail](https://tryhackme.com/room/httpindetail
 
 For example, the following link could open our own profile: `http://online-service.thm/profile?user_id=1305`. If we could see another user's profile by tampering with the `user_id` parameter's value, we have found an IDOR vulnerability.
 
-The above information are directly taken from TryHackMe's [IDOR](https://tryhackme.com/room/idor) room.
+The above information can be found in TryHackMe's [IDOR](https://tryhackme.com/room/idor) room.
 
 ### 2.4 Structured Query Language Injection (SQLi)
 
@@ -65,7 +65,7 @@ When a web application communicates with a database using input from a user that
 
 ![sqli_explained](https://images.spiceworks.com/wp-content/uploads/2022/05/13064935/Functioning-of-an-SQL-Injection.png){: width="60%"}
 
-[SQL Injection](https://tryhackme.com/room/sqlinjectionlm) room
+The process of an SQLi is explained in great detail, in a step-by-step fashion, in the [SQL Injection](https://tryhackme.com/room/sqlinjectionlm) room. 
 
 ## 3 CTF Process
 
