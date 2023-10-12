@@ -126,7 +126,7 @@ When clicking on the different users, the address bar change as follows: `/admin
 
 The first thing we can do is trying to break the query. Usually, putting an `'` at the end does the trick:
 
-![break-query](break-query.png)
+![break-query](query-break.png)
 
 The fact that we are getting this error message confirms that existence of an *SQLi vulnerability*, but it is also kind enough to provide us with some extra information and let us know that the server uses *MySQL server*.
 
