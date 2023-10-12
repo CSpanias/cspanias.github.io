@@ -76,7 +76,9 @@ When signing up, the *New listing* option appears:
 
 We can check if the site is vulnerable to [XSS](https://owasp.org/www-community/attacks/xss/), by writing some simple code and see how the site reacts:
 
-![XSS](xss.mp4)
+<video controls="" width="800" height="500" muted="" loop="" autoplay="">
+<source src="xss.mp4" type="video/mp4">
+</video>
 
 Now, we can take advantage of the hint. If we visit the **developer's console** (*right-click --> inspect --> console tab*) we can find our **session cookie**:
 
