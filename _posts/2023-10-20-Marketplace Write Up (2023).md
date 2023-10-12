@@ -273,7 +273,7 @@ Lo and behold, the second 🚩 is just there waiting us!
 
 Let's check if user `jake` have any SUDO privileges:
 
-![sudo-l][sudo-list.png]
+![sudo-l](sudo-list.png)
 
 It seems that `jake`, can run the `/opt/backups/backup.sh` file with the perimissions of user `michael`, who is its owner. Upon closer inspection of the file's contents, we can see that this executable is vulnerable to **wildcard injection**. 
 
