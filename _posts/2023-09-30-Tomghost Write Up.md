@@ -1,5 +1,5 @@
 ---
-title: Tomghost CTF Write Up (2023)
+title: Tomghost CTF Write Up
 date: 2023-09-30
 categories: [CTF Write Up, THM]
 tags: [nmap, exploitdb, metasploit, hash, gpg, john, encryption, gtfobins, sudo, ajp]

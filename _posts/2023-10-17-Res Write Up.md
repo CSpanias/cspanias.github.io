@@ -1,5 +1,5 @@
 ---
-title: Res CTF Write Up (2023)
+title: Res CTF Write Up
 date: 2023-10-17
 categories: [CTF Write Up, THM]
 tags: [nmap, redis, rce, webshell, php, gtfobins, john, suid]
