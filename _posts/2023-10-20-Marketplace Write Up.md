@@ -1,5 +1,5 @@
 ---
-title: Marketplace CTF Write Up (2023)
+title: Marketplace CTF Write Up
 date: 2023-10-20
 categories: [CTF Write Up, THM]
 tags: [xss, idor, cookies, sqli, sudo, wildcard-injection, container-escape, tar]

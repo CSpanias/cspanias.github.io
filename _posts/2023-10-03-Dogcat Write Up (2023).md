@@ -1,5 +1,5 @@
 ---
-title: Dogcat CTF Write Up (2023)
+title: Dogcat CTF Write Up
 date: 2023-10-03
 categories: [CTF Write Up, THM]
 tags: [nmap, lfi, burp, metasploit, directorytraversal, gtfobins, containerescape, repeater]

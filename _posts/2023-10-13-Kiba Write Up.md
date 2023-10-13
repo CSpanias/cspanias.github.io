@@ -1,5 +1,5 @@
 ---
-title: Kiba CTF Write Up (2023)
+title: Kiba CTF Write Up
 date: 2023-10-13
 categories: [CTF Write Up, THM]
 tags: [kibana, gtfobins, prototypepollution, rce, capabilities]
