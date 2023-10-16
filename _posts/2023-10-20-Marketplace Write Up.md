@@ -279,7 +279,7 @@ It seems that `jake`, can run the `/opt/backups/backup.sh` file with the perimis
 
 ![backup-sh-script](backup-sh.png)
 
-Feel free to read this amazing [*Exploiting Wildcard for Privilege Escalation*](https://www.hackingarticles.in/exploiting-wildcard-for-privilege-escalation/) article to fully grasp the concept of the **wildcard injection**.
+Feel free to read this amazing [*Exploiting Wildcard for Privilege Escalation*](https://www.hackingarticles.in/exploiting-wildcard-for-privilege-escalation/) article to fully grasp the concept of the **wildcard injection**. The gist is that we are trying to exploit a vulnerability in a specific software or utility, `tar`, that processes files with specific flags, `--checkpoint-action`, in order to gain unauthorized access to a remote machine by executing arbitrary code, the `shell.sh` script.
 
 This is what `backup.sh` does:
 1. It creates a **tar archive** named `backup.tar`, using the `tar cf /opt/backups/backup.tar` command.
