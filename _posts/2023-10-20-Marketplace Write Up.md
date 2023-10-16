@@ -358,11 +358,8 @@ The provided command is a `docker` command that runs a Docker container using th
 
 GTFO mentions that "*this requires the user to be privileged enough to run `docker`, i.e. **being in the docker group** or being root*". We already know that we are in the docker group, so let's just execute the command, which, according to GTFO, will give us a root shell:
 
-> When executing the command, we get an error says "*The input device is not a TTY*". We need to spawn an interactive shell and then execute the command again:
-    ```bash
-    python -c 'import pty;pty.spawn("bin/bash")'
-    ```
-
+> When executing the command, we get an error says "*The input device is not a TTY*". We need to spawn an interactive shell, `python -c 'import pty;pty.spawn("bin/bash")'`, and then execute the command again!
+    
 ![flag-3](flag-3.jpg)
 
 Third 🚩 snatched, room done 🍻!
