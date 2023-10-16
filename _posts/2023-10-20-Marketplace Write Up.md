@@ -19,9 +19,9 @@ mermaid: true
 
 >The sysadmin of The Marketplace, Michael, has given you access to an internal server of his, so you can pentest the marketplace platform he and his team has been working on. He said it still has a few bugs he and his team need to iron out.
 
-And that's all there is! We are now left alone to figure out where those three flags are 🚩🚩🚩🤔 !
+And that's all there is! We are now left alone to figure out where those 🚩🚩🚩 are 🤔 !
 
-There are a lot of concepts involved in this CTF room, so let's see what kind of background knowledge is needed for solving it.
+There are a lot of concepts involved in this CTF room, so grab a strong ☕️ and let's crack on!
 
 ### 2.1 Cross-site Scripting (XSS)
 
@@ -66,10 +66,6 @@ When a web application communicates with a database using input from a user that
 ![sqli_explained](https://images.spiceworks.com/wp-content/uploads/2022/05/13064935/Functioning-of-an-SQL-Injection.png){: width="60%"}
 
 The process of an SQLi is explained in great detail, in a step-by-step fashion, in the [SQL Injection](https://tryhackme.com/room/sqlinjectionlm) room.
-
-### 2.5 Containers
-
-
 
 ## 3 CTF Process
 
@@ -345,19 +341,28 @@ We did it 🎉! Thanks Tib3rius!
 
 ### 3.4 Container Escape
 
-The output of the `id` command we executed before, included `999(docker)`, which let us know that we are within a container. We have performed a container escape at the [Dogcat](https://cspanias.github.io/posts/Dogcat-Write-Up/#35-container-escape) room, so let's try to escape again 🏃!
+The output of the `id` command we executed before, included `999(docker)`, which let us know that we are within a docker group. We have done our first container escape at the [Dogcat](https://cspanias.github.io/posts/Dogcat-Write-Up/#35-container-escape) room, so let's try to escape again 🏃!
 
-1. List the docker images:
+On searching [GTFO](https://gtfobins.github.io/gtfobins/docker/#shell) for docker exploits:
 
-    ```bash
-    docker image ls
-    ```
-1. Create a new container from image `alpine` (the "Dockerized" version of Alpine Linux) by mounting the root filesystem to `/mnt`, while starting in interctive mode (`-it`). 
+![gtfo_container_escape](container-escape-gtfo.png)
 
+The provided command is a `docker` command that runs a Docker container using the Alpine Linux image with the intention of executing a `chroot` command inside it. Let's break down the command step by step:
 
+1. `docker run`: This is the command to run a Docker container.
 
-2. , start the container in interactive mode which will give us a shell to work with, change the root to `/mnt` and delete the container upon exiting:
+2. `-v /:/mnt`: This is a volume mapping flag that mounts the root directory (`/`) of the host system to the `/mnt` directory inside the container. This allows the container to access and manipulate the host's file system.
+
+3. `--rm`: This flag tells Docker to remove the container once it exits. This is useful to keep your system clean by automatically cleaning up containers after they finish running.
+
+4. `-it`: These flags are used to start the container in interactive mode and allocate a terminal (TTY). This is necessary because you want to execute a shell command inside the container.
+
+5. `alpine`: This is the name of the Docker image that the container is based on. Alpine Linux is a lightweight Linux distribution often used as a base image for containers.
+
+6. `chroot /mnt sh`: This is the command that is executed inside the container. It uses the `chroot` command to change the root directory of the current process to `/mnt`, which was mounted from the host system. After the `chroot` is performed, it starts a new shell (`sh`) from the new root directory. This effectively changes the container's root filesystem to the host system's root filesystem, making the host's filesystem accessible and modifiable within the container.
+
+GTFO mentions that "*this requires the user to be privileged enough to run `docker`, i.e. **being in the docker group** or being root*". We already know that we are in the docker group, so let's just execute the command, which according to GTFO will give us a root shell:
 
 ![flag-3](flag-3.jpg)
 
- 🍻🥂🚩🎊🎉
+Third 🚩 snatched, room done 🍻!
