@@ -282,10 +282,9 @@ This is where things got dark really fast. I spent an awful lot of time research
 
 The gist of what I understood based on the above walkthrough is that we are trying to take advantage of the [**wildcard wildness**](https://www.hackingarticles.in/exploiting-wildcard-for-privilege-escalation/) concept by passing files as command arguments. As Tib3rius explains:
 
-> An `*` in Bash will take the names of all the files in current directory and it will concatenate them using spaces. And it just so happens that arguments to executables are separated by spaces too. So, if you ever have an `*` after a command, and one of the files in the current directory just happens to very closely resemble an argument for that command
-, you can execute that command and pass the files as arguments!
+> *An `*` *in Bash will take the names of all the files in the current directory and it will concatenate them using spaces. And it just so happens that arguments to executables are separated by spaces too. So, if you ever have an `*` after a command, and one of the files in the current directory just happens to very closely resemble an argument for that command, you can execute that command and pass the files as arguments!*
 
-Armed with Tib3rius explanation and GTFO's guidance on how to exploit [tar](https://gtfobins.github.io/gtfobins/tar/#sudo), this is how to do it:
+Armed with Tib3rius' explanation and GTFO's guidance on how to exploit [tar](https://gtfobins.github.io/gtfobins/tar/#sudo), this is how to do it:
 
 1. Generate a payload with `msfvenom`:
 
@@ -310,17 +309,13 @@ Armed with Tib3rius explanation and GTFO's guidance on how to exploit [tar](http
 4. Now, create a second file resembling the `--checkpoint=1` argument, which defines the point that the checkpoint is reached:
 
     ```bash
-    touch /.--checkpoint=1
-    # or
-    echo "" > --checkpoint=1
+    touch ./--checkpoint=1
     ```
 
-5. Finally, create another file resembling the `--checkpoint-action=exec=` argument, which defines what `ACTION` will be executed when the checkpoint is reached, pointing to where our payload `shell.ph`:
+5. Finally, create another file resembling the `--checkpoint-action=exec=` argument, which defines what `ACTION` will be executed when the checkpoint is reached, pointing to our `shell.ph` script:
 
     ```bash
     touch ./--checkpoint-action=exec=sh shell.sh
-    # or
-    echo "" > "--checkpoint-action=exec=sh shell.sh"
     ```
 
 6. Modify permissions to make the files executable:
@@ -337,11 +332,11 @@ Armed with Tib3rius explanation and GTFO's guidance on how to exploit [tar](http
 
 ![michael-shell](michael-shell.png)
 
-We did it 🎉! Thanks Tib3rius!
+We did it 🎉! Thanks Tib3rius 🙏!
 
 ### 3.4 Container Escape
 
-The output of the `id` command we executed before, included `999(docker)`, which let us know that we are within a docker group. We have done our first container escape at the [Dogcat](https://cspanias.github.io/posts/Dogcat-Write-Up/#35-container-escape) room, so let's try to escape again 🏃!
+The output of the `id` command we executed before, included the group `999(docker)`. We did our first container escape at the [Dogcat](https://cspanias.github.io/posts/Dogcat-Write-Up/#35-container-escape) room, so let's try to escape again 🏃!
 
 On searching [GTFO](https://gtfobins.github.io/gtfobins/docker/#shell) for docker exploits:
 
@@ -361,7 +356,12 @@ The provided command is a `docker` command that runs a Docker container using th
 
 6. `chroot /mnt sh`: This is the command that is executed inside the container. It uses the `chroot` command to change the root directory of the current process to `/mnt`, which was mounted from the host system. After the `chroot` is performed, it starts a new shell (`sh`) from the new root directory. This effectively changes the container's root filesystem to the host system's root filesystem, making the host's filesystem accessible and modifiable within the container.
 
-GTFO mentions that "*this requires the user to be privileged enough to run `docker`, i.e. **being in the docker group** or being root*". We already know that we are in the docker group, so let's just execute the command, which according to GTFO will give us a root shell:
+GTFO mentions that "*this requires the user to be privileged enough to run `docker`, i.e. **being in the docker group** or being root*". We already know that we are in the docker group, so let's just execute the command, which, according to GTFO, will give us a root shell:
+
+> When executing the command, we get an error says "*The input device is not a TTY*". We need to spawn an interactive shell and then execute the command again:
+    ```bash
+    python -c 'import pty;pty.spawn("bin/bash")'
+    ```
 
 ![flag-3](flag-3.jpg)
 
