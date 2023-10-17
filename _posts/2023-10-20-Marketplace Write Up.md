@@ -278,7 +278,7 @@ It seems that `jake`, can run the `/opt/backups/backup.sh` file with the perimis
 1. It creates a **tar archive** named `backup.tar`, using the `tar cf /opt/backups/backup.tar` command.
 2. Instead of archiving a specified file, for instance, `tar cf /opt/backups/backup.tar backup.sh`, it uses the wildcard character, `*`, which means that it is archiving all files within the directory.
 
-This is where things got dark really fast. I spent an awful lot of time researching and reading for this one, I even asked [ChatGPT](https://chat.openai.com/) 🤖, but I couldn't completely grasp what the concept of [**wildcard injection**](https://www.hackingarticles.in/exploiting-wildcard-for-privilege-escalation/). What finally did it for me was [Tib3rius](https://tryhackme.com/p/Tib3rius)' [walkthrough](https://youtu.be/EYqCHujNyHQ?t=2662)!
+This is where things got dark really fast. I spent an awful lot of time researching and reading for this one, I even asked [ChatGPT](https://chat.openai.com/) 🤖, but I couldn't completely grasp the concept of [**wildcard injection**](https://www.hackingarticles.in/exploiting-wildcard-for-privilege-escalation/). What finally did it for me was [Tib3rius](https://tryhackme.com/p/Tib3rius)' [walkthrough](https://youtu.be/EYqCHujNyHQ?t=2662)!
 
 The gist of what I understood based on the above walkthrough is that we are trying to take advantage of the [**wildcard wildness**](https://www.hackingarticles.in/exploiting-wildcard-for-privilege-escalation/) concept by passing files as command arguments. As Tib3rius explains:
 
