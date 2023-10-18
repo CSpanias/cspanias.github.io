@@ -7,7 +7,7 @@ img_path: /assets/rootme/
 mermaid: true
 ---
 
-![room_banner](room_banner.png)
+![room_banner](room-banner.png)
 
 ## 1 Summary
 
