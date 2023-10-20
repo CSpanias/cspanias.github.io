@@ -1,7 +1,7 @@
 ---
 title: Data Exfiltration
 date: 2023-10-20
-categories: [THM, Red Teaming]
+categories: [Red Teaming]
 tags: [data-exfiltration, red-teaming, ssh, http, http-tunneling, icmp, dns, dns-tunneling]
 img_path: /assets/red-teaming/data-exfiltration
 mermaid: true
