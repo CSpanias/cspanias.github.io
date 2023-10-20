@@ -127,7 +127,7 @@ This method is **easy to detect** as it relies on non-standard protocols, so it 
 
         - `> task4-creds.tar` This portion of the command redirects the decoded data to an output file named `task4-creds.tar`. The data, which was originally encoded and then decoded, is saved in this file.
 
-    2. `tar` This is the command-line utility for working with tar archives. "tar" stands for "tape archive," and it's commonly used to create, extract, and manipulate archives of files and directories.
+    2. `tar` We are using the `tar` utility again, but this time for extracting the directory.
         - `x` This option stands for "extract." It is used to extract the contents of an archive.
         - `f` This option specifies that the next argument will be the name of the archive file from which you want to extract the contents. In this case, `task4-creds.tar` is the archive file.
 
