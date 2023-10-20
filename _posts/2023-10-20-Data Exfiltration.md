@@ -101,7 +101,9 @@ This method is **easy to detect** as it relies on non-standard protocols, so it 
 
     ![Connection and data received](conn-received.png)
 
-4. We now need to decode and unarchive the data.
+4. We now need to decode and unarchive the data as it currently is in a non-human readable format.
+
+    ![Encoded data](encoded_data.png)
 
     ```shell
     # move the /tmp/ directory
@@ -114,7 +116,7 @@ This method is **easy to detect** as it relies on non-standard protocols, so it 
     tar xf task4-creds.tar
     ```
     
-    Let's break down the commands again.
+    Let's break down the commands again:
 
     1. `dd conv=ascii if=task4-creds.data | base64 -d > task4-creds.tar` does the opposite of what we did before.
         - `dd conv=ascii if=task4-creds.data` This part of the command uses the `dd` utility to read data from the input file `task4-creds.data`. Here's what each option does:
