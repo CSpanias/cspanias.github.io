@@ -265,4 +265,3 @@ The above PHP script will handle POST requests via the `file` parameter and stor
     ```shell
     base64 -d /tmp/http.bs64 | tar xvfz -
     ```
-    
