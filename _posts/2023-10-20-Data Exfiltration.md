@@ -293,7 +293,7 @@ In our network configuration, the `uploader.thm.com` server is reachable from th
 
     ![tunnel client list](neoreg-servers.png)
 
-3. Now, we need to upload our encrypted tunneling client file at the `uploader.thm.com` server, which we can visit via our browser at [http://10.10.19.86/uploader](http://10.10.19.86/uploader). To upload the `tunnel.php` we must use "admin" as the key.
+3. Now, we need to upload our encrypted tunneling client file at the `uploader.thm.com` server, which we can visit via our browser at `http://10.10.19.86/uploader`. To upload the `tunnel.php` we must use "admin" as the key.
 
     ![Tunnel Upload](tunnel-upload.jpg)
 
