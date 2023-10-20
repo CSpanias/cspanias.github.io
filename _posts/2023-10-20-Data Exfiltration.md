@@ -10,7 +10,7 @@ mermaid: true
 
 > This is content from THM's [Data Exfiltration](https://tryhackme.com/room/dataxexfilt) room, part of the **Red Teaming** learning path.
 
-# 1. What is Data Exfiltration?
+## 1. What is Data Exfiltration?
 
 **Data Exfiltration (DE)** is a technique used to transfer data from the target's machine to the attacker's machine. The goal is to **mimic normal network activities** in order to hide the transfer and bypass security measures.
 
@@ -18,7 +18,7 @@ This process is part of the last step on the [Cyber Kill Chain](https://www.lock
 
 ![Cyber Kill Chain](https://www.lockheedmartin.com/content/dam/lockheed-martin/rms/photo/cyber/THE-CYBER-KILL-CHAIN-body.png.pc-adaptive.1280.medium.png){: width="70%"}
 
-# 2. Network Infrastructure
+## 2. Network Infrastructure
 
 This room has the following network infrastructure available:
 
@@ -40,7 +40,7 @@ It is recommended to connect via SSH to the Jumpbox machine, and perform the roo
 
 The room also suggests using `tmux` to manage the SSH connections needed. Another way, is to first connect to Jumpbox via SSH, then open a new terminal tab, connect to Jumpbox again, and from there connect to the required machine, e.g. `victim1`.
 
-# 3. TCP Socket Exfiltration
+## 3. TCP Socket Exfiltration
 
 This method is **easy to detect** as it relies on non-standard protocols, so it is only used when the attacker knows that they are no network-based security products. 
 
@@ -138,7 +138,7 @@ This method is **easy to detect** as it relies on non-standard protocols, so it 
 
     ![Decoding and unarchiving data](decode-unarchive-data.png)
 
-# 4. SSH Exfiltration
+## 4. SSH Exfiltration
 
 To transfer data over SSH, we can either use the Secure Copy Protocol, `scp`, or the SSH client. For this task, we assume that we don't have the `scp` command available. 
 
@@ -164,9 +164,9 @@ The above command creates a tarball and sends it over SSH to the Jumpbox SSH ser
 
 ![SSH transmission](ssh-transmission.png)
 
-# 5. HTTP(S) Exfiltration
+## 5. HTTP(S) Exfiltration
 
-## 5.1 HTTP POST Request
+### 5.1 HTTP POST Request
 
 Data Exfiltration through HTTP(S) is one of the best methods, as it hard to distinguish between legitimate and malicious HTTP traffic. We will be using the **POST HTTP request**, as with a **GET HTTP request**, all parameters are registered into the log file. POST HTTP requests:
 - Are never cached.
@@ -190,7 +190,7 @@ We can decode the data needed for the flag as follows:
 
 ![First flag](first-flag.jpg)
 
-## 5.2 HTTP Data Exfiltration
+### 5.2 HTTP Data Exfiltration
 
 The steps to perform HTTP exfiltration are:
 1. We need an HTTP webserver with a data handler (a PHP page that handles the POST request sent to the server). In our case, `web.thm.com` and `contact.php`, respectively.
@@ -271,7 +271,7 @@ The above PHP script will handle POST requests via the `file` parameter and stor
     ```shell
     base64 -d /tmp/http.bs64 | tar xvfz -
     ```
-## 5.3 HTTP tunneling
+### 5.3 HTTP tunneling
 
 In our network configuration, the `uploader.thm.com` server is reachable from the Internet, but the `app.thm.com` and `flag.thm.com` servers are not. The latter runs locally and provides services only for the internal network.
 
