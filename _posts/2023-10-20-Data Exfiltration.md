@@ -188,7 +188,7 @@ The first line is a **GET** request which includes a `file` parameter with exfil
 
 We can decode the data needed for the flag as follows:
 
-![First flag](first-flag.png)
+![First flag](first-flag.jpg)
 
 ## 5.2 HTTP Data Exfiltration
 
