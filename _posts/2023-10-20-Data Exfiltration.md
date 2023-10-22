@@ -2,7 +2,7 @@
 title: Data Exfiltration
 date: 2023-10-20
 categories: [Red Teaming]
-tags: [data-exfiltration, red-teaming, ssh, http, http-tunneling, icmp, dns, dns-tunneling, neoreg, metasploit, hex, ping]
+tags: [data-exfiltration, red-teaming, ssh, http, http-tunneling, icmp, dns, dns-tunneling, neoreg, metasploit, hex, ping, tcpdump, icmpdoor, wireshark]
 img_path: /assets/red-teaming/data-exfiltration
 mermaid: true
 ---
@@ -311,9 +311,9 @@ In our network configuration, the `uploader.thm.com` server is reachable from th
 
 ![Flag 2](flag2.jpg)
 
-## ICMP Data Exfiltration
+## 6. ICMP Data Exfiltration
 
-### ICMP Manual Data Exfiltration
+### 6.1 ICMP Manual Data Exfiltration
 
 The [**Internet Control Message Protocol (ICMP)**](https://www.geeksforgeeks.org/internet-control-message-protocol-icmp/) is mostly used by network admins to troubleshoot network connectivity issues. ICMP has many types, but ICMP `ping` uses Type 8 (*Echo*) and Type 0 (*Reply).
 
@@ -354,7 +354,7 @@ By capturing the above packet in Wireshark, we can see that we successfully mana
 
 ![Manul ICMP Data Exfiltration - Wireshark capture](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/6a086470f770c67c0a07f9572088e5e1.png)
 
-### ICMP Data Exfiltration with Metasploit
+### 6.2 ICMP Data Exfiltration with Metasploit
 
 Metasploit has a module called `icmp_exfil` which uses the same technique we just performed. This module waits to receive a trigger value in order to start writing the data to the disk and then for another trigger value in order to stop. These trigger values are called **Beginning of File(BOF)** and **End of File (EOF)**, respectively.
 
@@ -416,7 +416,7 @@ We can check that the data is as should be:
 
 ![Exfiltrated data](loot-file.png)
 
-### ICMP Communication
+### 6.3 ICMP Communication
 
 We can also use the [ICMPDoor](https://github.com/krabelize/icmpdoor) tool, an open-source reverse-shell written in Python3 and [scapy](https://scapy.net/), which, again, uses the same concept as we did before, that is, exploiting the Data section of the ICMP packet.
 
@@ -444,4 +444,4 @@ To confim that all communications go through ICMP, we can capture the network tr
 
 ![tcpdump](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/b7df6f586e47769bf2addbee68d69cdc.png)
 
-## DNS Configurations
+## 7. DNS Configurations
