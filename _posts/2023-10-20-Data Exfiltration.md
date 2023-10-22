@@ -445,7 +445,7 @@ To confim that all communications go through ICMP, we can capture the network tr
 
 ![tcpdump](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/b7df6f586e47769bf2addbee68d69cdc.png)
 
-### 7. DNS Data Exfiltration
+## 7. DNS Data Exfiltration
 
 ### 7.1 DNS Configurations
 
