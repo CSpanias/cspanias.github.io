@@ -489,7 +489,7 @@ thm@jump-box:~$ ping test.thm.com -c 1
 
 We can also answer the room's question by resolving `flag.thm.com`:
 
-![DNS Flag1](dns-flag.png)
+![DNS Flag1](dns-flag.jpg)
 
 ### 7.2 DNS Manual Data Exfiltration
 
