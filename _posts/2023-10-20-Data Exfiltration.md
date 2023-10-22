@@ -338,7 +338,7 @@ The packet's Data section has been filled with random strings, but it can also b
 
 >**-p _pattern_**
 >
->	You may specify up to 16 ''pad'' bytes to fill out the packet you send. This is useful for diagnosing data-dependent problems in a network. For example, **-p ff** will cause the sent packet to be filled with all ones.
+>You may specify up to 16 ''pad'' bytes to fill out the packet you send. This is useful for diagnosing data-dependent problems in a network. For example, **-p ff** will cause the sent packet to be filled with all ones.
 
 This option allows the user to **specify 16 bytes of data in hex format** to send through the packet. For example, if we want to exfiltrate the following credentials: `thm:tryhackme`, we would need to first convert the data to hex, and then pass them to the `ping` command via the `-p` option:
 
