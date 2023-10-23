@@ -705,10 +705,12 @@ DNS tunneling, aka *TCP over DNS*, is a technique used to bypass network securit
 
 For this task, we will be using `jump.thm.com` to log into `victim2.thm.com` (located in Network 1), to then pivot to `web.thm.com` (located in Network 2). We will use the [**iodine**](https://github.com/yarrick/iodine) for creating our DNS tunneling communications. To establish DNS tunneling we need to:
 1. Use the preconfigured nameserver, which points to the `attacker.thm.com` machine (`att.tunnel.com` -> `172.20.0.200`).
-2. Run the **iodined** server from `attacker.thm.com` (notice the **d** at the end of iodined).
-3. Run the **iodine** (without the **d**) from `jump.thm.com` to establish the connection.
+2. Run the **iodined server** from `attacker.thm.com`.
+3. Run the **iodine application** from `jump.thm.com` to establish the connection.
 4. SSH to the machine on the created network interface to create a proxy over DNS.
 5. Once an SSH connection is established, we can use the local IP address and port as a proxy in FireFox. 
+
+>**Iodine** is the client application, while **iodined** is the server.
 
 1. Let's start by **running the iodined server**:
 
@@ -716,6 +718,14 @@ For this task, we will be using `jump.thm.com` to log into `victim2.thm.com` (lo
     # intiate the iodined server from Attacker
     thm@attacker:~$ sudo iodined -f -c -P thmpass 10.1.1.1/24 att.tunnel.com
     ```
+
+    Breaking down the command:
+    1. `iodined` The command-line utility used for setting up a DNS tunnel.
+    2. `-f` Foregrounds the command.
+    3. `-c` Disables checking the client IP address on all incoming requests.
+    4. `-P thmpass` Sets a pre-shared password for authentication and encryption.
+    5. `10.1.1.1/24` The IP address and subnet mask in CIDR notation, specifying the range of IP addresses that can be tunneled through DNS. In this case, it indicates the IP range from `10.1.1.1` to `10.1.1.255`.
+    6. `att.tunnel.com` The DNS server where the DNS tunnel will be established.
 
 2. Next, we need to connect to the server-side application from Jumpbox:
 
