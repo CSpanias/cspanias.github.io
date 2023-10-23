@@ -447,6 +447,24 @@ To confim that all communications go through ICMP, we can capture the network tr
 
 ## 7. DNS Data Exfiltration
 
+Let's start by reviewing what a DNS actually is and how it works.
+
+The **Domain Name System (DNS)** is a hierchical system that translates human-readable domain names, e.g. `www.example.com`, into numerical IP addresses, e.g. `10.10.10.10`. This allows computers to locate and communicate with web servers and other internet resources. Domain names need to be registered through accredited domain registrars. Once registered, the domain owner has exclusive rights to use that domain for a specific period. 
+
+![DNS server diagram](dns-server-diagram.png)
+
+The domain name consists of three parts. For instance, for `www.example.com`:
+1. `www` is a **subdomain**, often used for web servers.
+2. `example` is the **second-level domain (SLD)**, and it identifies the organization or entity.
+3. `com` is the **top-level domain (TLD)** and can indicate the type or purpose of the website.
+
+![Domain name structure](domain-name-structure.png)
+
+**DNS records** are essential components of the DNS infrastructure that provide information about **how domain names should be resolved** to their corresponding IP addresses or other types of data. There are variosu DNS record types and each one serves a specific purpose. We will explain just 3 of them, the ones that we will be using for this task:
+- `A` The **Address** record maps a domain name to an IPv4 address. 
+- `NS` The **Name Server** record specifies the authoritative name servers for a domain. These are responsible for providing DNS information about the domain.
+- `TXT` The **Text** record can store any text data and is can be used for various purposes.
+
 ### 7.1 DNS Configurations
 
 In order to perform DNS Data Exfiltration, we need to **control a domain name** and **set up DNS records**. For this task, a domain name has been already set up for us, `tunnel.com`, and we can add our own DNS records by visiting the web server via our browser: `http://ATTACKER_IP`. 
