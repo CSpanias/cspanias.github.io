@@ -741,18 +741,28 @@ For this task, we will be using `jump.thm.com` to log into `victim2.thm.com` (lo
     ```shell
     thm@jump-box:~$ ssh thm@10.1.1.2 -4 -f -N -D 1080
     ```
+    We used a lot of flags in this `ssh` command, so let's see what each is doing:
+    1. `-4` Forces the SSH client to use IPv4 communication. It is used to ensure that the SSH connection uses IPv4 instead of the default, which might use IPv6 if available.
+    2. `-f` Tells SSH to run in the background after authentication and connection establishment. It's often used when setting up SSH tunnels of forwarding, as it allows us to continue using the terminal for other tasks.
+    3. `-N` Tells SSH to not execute any remote commands. It's commonly used when the primary purpose of an SSH connection is to set up a tunnel or forwarding without running a remote shell session or command.
+    4. `-D 1080` Sets up a dynamic port forwarding tunnel. It instructs SSH to listen on port `1080` on the local machine and to act as a **SOCKS** proxy server. The local machine cna then use this proxy to route its traffic through the SSH connection to the remote server, in this case `10.1.1.2`. This is useful for securely tunneling internet traffic or accessing resources on the remote server's network.
 
-4. Now that we have connected to `jump.thm.com` over the `dns0` network, we will open a new terminal and use FireFox with `127.0.0.1:1080` as proxy settings:
+4. Now that we have connected to `jump.thm.com` over the `dns0` network, we will open a new terminal and use FireFox with `127.0.0.1:1080` as proxy settings in order to access the required resources, in this example `demo.php`:
 
     ```shell
     # use local IP address:port as a proxy in FireFox
     root@attacker$ curl --socks5 127.0.0.1:1080 http://192.168.0.100/demo.php
     ```
 
+    1. `curl` Command-line tool for performing HTTP requests.
+    2. `--socks5 127.0.0.1:1080` Specifies the use of a SOCKS5 proxy for the HTTP request. **SOCKS (Socket Secure)** is a protocol used for routing network packets between a client and a server through a proxy server. In this case, we specify that the proxy server is running locally on the machine (`127.0.0.1`) and listening on port `1080`. This is often used for anonymizing or routing traffic through an intermediary server.
+    3. `http://192.168.0.100/demo.php` The URL of the resource that we want to retrieve.
+
+
 We can confirm that all traffic goes through DNS by checking the `tcpdump` on the Attacker machine through the `eth0` interface:
 
 ![tcpdump DNS traffic](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/ffbd2ecb2563c649fde174b40c450097.png)
 
-For getting the room's flag, all we need to do is replace `demo.php` with `test.php` on our last command:
+For getting the room's flag, all we need to do is changing the URL resource we want to retrieve, i.e., from `demo.php` to `test.php`:
 
 ![DNS Flag 2](dns-tunneling-flag2.jpg)
