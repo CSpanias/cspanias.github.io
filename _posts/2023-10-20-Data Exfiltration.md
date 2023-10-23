@@ -308,7 +308,7 @@ In our network configuration, the `uploader.thm.com` server is reachable from th
 
 5. We can now use the tunnel for accessing the `flag.thm.com` server with an IP address of `172.20.0.120:80`. We leave the tunnel terminal tab as it is, and on a new terminal/tab we communicate with the server via `curl`:
 
-![Flag 2](flag2.jpg)
+    ![Flag 2](flag2.jpg)
 
 ## 6. ICMP Data Exfiltration
 
