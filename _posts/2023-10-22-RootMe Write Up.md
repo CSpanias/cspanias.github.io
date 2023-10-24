@@ -40,7 +40,7 @@ Breaking down the command:
 
 With just one command we are able to answer almost all task's 2 questions 🍻 !
 
-The last question asks us to scan the web server using `gobuster` in order to find a hidden directory, so let's do just that:
+The last question tells us to scan the web server with `gobuster`, so let's do just that:
 
 ```shell
 gobuster dir -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -u MACHINE_IP
@@ -50,15 +50,15 @@ This is fairly straightforward scan:
 1. `gobuster` **Executes Gobuster**.
 2. `dir` Specifies that we want to perform **directory brute-forcing**.
 3. `-w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt` **Specifies the wordlist** file that Gobuster should use for its brute-force attack. The `directory-list-2.3-medium.txt` file is a commonly used wordlist for web directory and file enumeration.
-4. `-u MACHINE_IP` Defines the target URL or IP address on which you want to perform the directory/file brute-forcing.
+4. `-u MACHINE_IP` Defines the target URL or IP address on which we want to perform the directory/file brute-forcing.
 
 ![Gobuster scan results](gobuster-scan.png)
 
-And with that, we are ready to move on onto Task 3!
+The scan results reveals the `/panel` directory, and with that, we are ready to move on onto Task 3!
 
 ### 3.2 Getting a Shell
 
-If we visit the subdirectory `/panel` that we just found via our browser, we see that it is in fact an upload page:
+If we visit the subdirectory `/panel` via our browser, we see that it is an upload page:
 
 ![Panel subdirectory](panel-dir.png)
 
@@ -68,15 +68,15 @@ If we visit the subdirectory `/panel` that we just found via our browser, we see
 
 2. When we try to upload our shell, the server makes it clear that `.php` extension files are not allowed:
 
-    ![php-ext](php-ext.png){: width="70%"}
+    ![php-ext](php-ext.png){: width="60%"}
 
-    A simple way to bypass this server-side filtering is to change to extension to something else that would still work, such as `.php5`. This concept is explained thoroughly in the THM's [Upload Vulnerabilities](https://tryhackme.com/room/uploadvulns) room.
+    A simple way to bypass this **server-side filtering** is to change to extension to something else that would still work, such as `.php5`. This concept is explained thoroughly in the THM's [Upload Vulnerabilities](https://tryhackme.com/room/uploadvulns) room.
 
     When we try to upload `revshell.php5` the server now accepts it:
 
-    ![php5-ext](php5-ext.png){: width="70%"}
+    ![php5-ext](php5-ext.png){: width="60%"}
 
-3. Next, we open a listener and the port we specified on our reverse shell, and upon visiting the URL hosting our revshell.php5, we receive our reverse shell. We can get our first 🚩 by searching for the `user.txt` file:
+3. Next, we open a listener at the port we specified before, and upon visiting the URL hosting our script, `http://MACHINE-IP/revshell.php5`, we should receive our reverse shell. We can get our first 🚩 by searching for the `user.txt` file:
 
     ```shell
     find -name user.txt -type f 2>/dev/null
@@ -93,10 +93,10 @@ If we visit the subdirectory `/panel` that we just found via our browser, we see
 
 ### 3.3 Privilege Escalation
 
-The last task asks us to find a "weird" file with SUID permission and the `root.txt` file. Escalating privileges through SUID files is very common on CTFs, so our plan is as follows:
-1. Search and find the "weird" SUID file.
-2. Visit [GTFOBins](https://gtfobins.github.io/) to check how we can use it to perform privilege escalation.
-3. Search and read for `root.txt`.
+The last task asks us to find a "weird" file with the SUID permission set as well as the `root.txt` file. Escalating privileges through SUID files is very common on CTFs, so our plan is as follows:
+    1. Search and find the "weird" SUID file.
+    2. Visit [GTFOBins](https://gtfobins.github.io/) to check how we can use it to perform privilege escalation.
+    3. Search for `root.txt`.
 
 1. Let's search for SUID files:
 
@@ -104,13 +104,13 @@ The last task asks us to find a "weird" file with SUID permission and the `root.
     find / -perm -u=s -type f 2>/dev/null
     ```
 
-    This is almost identical as the previous `find` command, but we are now searching for SUID files instead of a specific file as before. As a result, we replaced `-iname user.txt` with `-perm -u=s`. The latter specifies the **permission pattern** to search for. In this case, it's looking for files with the setuid permission. The `-u=s` part indicates files where the setuid bit is set. The `u` stands for the user's permissions (owner), and `s` indicates that the setuid bit is set.
+    This is almost identical as the previous `find` command, but we are now searching for SUID files instead of a specific file as before. As a result, we replaced `-iname user.txt` with `-perm -u=s`. The latter specifies the **permission pattern** to search for. In this case, it's looking for files with the setuid permission, where `-u=s` indicates files where the setuid bit is set. The `u` stands for the user's permissions (owner), and `s` indicates that the setuid bit is set.
 
     ![SUID Files](python-suid.png)
 
-    From the list we get, **Python** definetely seems the most "weird".
+    From the resulting list, there is only one obvious culprit: `/usr/bin/python`.
 
-2. If we search for [Python with the SUID flag highlighted](https://gtfobins.github.io/gtfobins/python/#suid) at GTFOBins, we get the following:
+2. If we search for ["python" with the SUID flag highlighted](https://gtfobins.github.io/gtfobins/python/#suid) at GTFOBins, we get the following:
 
     ![GTFOBins Python](gtfobins-python-suid.png)
 
