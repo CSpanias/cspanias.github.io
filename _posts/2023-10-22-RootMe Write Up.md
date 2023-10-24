@@ -15,7 +15,7 @@ mermaid: true
 
 ## 2 Background Information
 
-[The RootMe](https://tryhackme.com/room/rrootme) room is a fairly straightfoward room, great for beginners, as it provides "hints" on what to search for on each task. As a result, not really any specific background information is needed!
+[The RootMe](https://tryhackme.com/room/rrootme) room is fairly straigthfoward, great for beginners, as it provides "hints" on what to search for on each task. As a result, not really any specific background information is needed!
 
 Let's dive right in 🏃!
 
@@ -25,34 +25,34 @@ Let's dive right in 🏃!
 
 This task asks us about **open ports**, **services**, and **service versions**. We can use `nmap` to find out all this information:
 
-    ```shell
-    nmap -open -sC -sV -T4 MACHINE_IP
-    ```
-    
-    Breaking down the command:
-    1. `nmap` **Launches Nmap**.
-    2. `-open` Specifies that we want to **scan for open ports**.
-    3. `-sC` Enables Nmap's **default script scanning**. Nmap has a set of built-in scripts that can be used to perform various tasks, such as service discovery, vulnerability detection, and more. Using this option, Nmap will run these default scripts against the target hosts to gather **additional information about the services** and their potential vulnerabilities.
-    4. `-sV` Performs **version detection on the target services**.
-    5. `-T4` Sets the **timing template** for the scan. Timing levels in Nmap range from 0 (paranoid) to 5 (insane), with 4 being a relatively aggressive and faster scanning speed.
+```shell
+nmap -open -sC -sV -T4 MACHINE_IP
+```
 
-    ![Nmap Scan results](nmap-scan.png)
+Breaking down the command:
+1. `nmap` **Launches Nmap**.
+2. `-open` Specifies that we want to **scan for open ports**.
+3. `-sC` Enables Nmap's **default script scanning**. Nmap has a set of built-in scripts that can be used to perform various tasks, such as service discovery, vulnerability detection, and more. Using this option, Nmap will run these default scripts against the target hosts to gather **additional information about the services** and their potential vulnerabilities.
+4. `-sV` Performs **version detection on the target services**.
+5. `-T4` Sets the **timing template** for the scan. Timing levels in Nmap range from 0 (paranoid) to 5 (insane), with 4 being a relatively aggressive and faster scanning speed.
+
+![Nmap Scan results](nmap-scan.png)
 
 With just one command we are able to answer almost all task's 2 questions 🍻 !
 
 The last question asks us to scan the web server using `gobuster` in order to find a hidden directory, so let's do just that:
 
-    ```shell
-    gobuster dir -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -u MACHINE_IP
-    ```
-    
-    This is fairly straightforward scan:
-    1. `gobuster` **Executes Gobuster**.
-    2. `dir` Specifies that we want to perform **directory brute-forcing**.
-    3. `-w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt` **Specifies the wordlist** file that Gobuster should use for its brute-force attack. The `directory-list-2.3-medium.txt` file is a commonly used wordlist for web directory and file enumeration.
-    4. `-u MACHINE_IP` Defines the target URL or IP address on which you want to perform the directory/file brute-forcing.
+```shell
+gobuster dir -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -u MACHINE_IP
+```
 
-    ![Gobuster scan results](gobuster-scan.png)
+This is fairly straightforward scan:
+1. `gobuster` **Executes Gobuster**.
+2. `dir` Specifies that we want to perform **directory brute-forcing**.
+3. `-w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt` **Specifies the wordlist** file that Gobuster should use for its brute-force attack. The `directory-list-2.3-medium.txt` file is a commonly used wordlist for web directory and file enumeration.
+4. `-u MACHINE_IP` Defines the target URL or IP address on which you want to perform the directory/file brute-forcing.
+
+![Gobuster scan results](gobuster-scan.png)
 
 And with that, we are ready to move on onto Task 3!
 
@@ -68,13 +68,13 @@ If we visit the subdirectory `/panel` that we just found via our browser, we see
 
 2. When we try to upload our shell, the server makes it clear that `.php` extension files are not allowed:
 
-    ![php-ext](php-ext.png)
+    ![php-ext](php-ext.png){: width="70%"}
 
     A simple way to bypass this server-side filtering is to change to extension to something else that would still work, such as `.php5`. This concept is explained thoroughly in the THM's [Upload Vulnerabilities](https://tryhackme.com/room/uploadvulns) room.
 
     When we try to upload `revshell.php5` the server now accepts it:
 
-    ![php5-ext](php5-ext.png)
+    ![php5-ext](php5-ext.png){: width="70%"}
 
 3. Next, we open a listener and the port we specified on our reverse shell, and upon visiting the URL hosting our revshell.php5, we receive our reverse shell. We can get our first 🚩 by searching for the `user.txt` file:
 
