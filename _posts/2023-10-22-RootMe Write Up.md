@@ -23,11 +23,18 @@ Let's dive right in 🏃!
 
 ### 3.1 Reconnaissance
 
-This task asks us about **open ports**, **services**, and **service versions**. We can use `nmap` to find out all that:
+This task asks us about **open ports**, **services**, and **service versions**. We can use `nmap` to find out all this information:
 
     ```shell
     nmap -open -sC -sV -T4 MACHINE_IP
     ```
+    
+    Breaking down the command:
+    1. `nmap` **Launches Nmap**.
+    2. `-open` Specifies that we want to **scan for open ports**.
+    3. `-sC` Enables Nmap's **default script scanning**. Nmap has a set of built-in scripts that can be used to perform various tasks, such as service discovery, vulnerability detection, and more. Using this option, Nmap will run these default scripts against the target hosts to gather **additional information about the services** and their potential vulnerabilities.
+    4. `-sV` Performs **version detection on the target services**.
+    5. `-T4` Sets the **timing template** for the scan. Timing levels in Nmap range from 0 (paranoid) to 5 (insane), with 4 being a relatively aggressive and faster scanning speed.
 
     ![Nmap Scan results](nmap-scan.png)
 
@@ -38,6 +45,12 @@ The last question asks us to scan the web server using `gobuster` in order to fi
     ```shell
     gobuster dir -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -u MACHINE_IP
     ```
+    
+    This is fairly straightforward scan:
+    1. `gobuster` **Executes Gobuster**.
+    2. `dir` Specifies that we want to perform **directory brute-forcing**.
+    3. `-w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt` **Specifies the wordlist** file that Gobuster should use for its brute-force attack. The `directory-list-2.3-medium.txt` file is a commonly used wordlist for web directory and file enumeration.
+    4. `-u MACHINE_IP` Defines the target URL or IP address on which you want to perform the directory/file brute-forcing.
 
     ![Gobuster scan results](gobuster-scan.png)
 
@@ -69,6 +82,13 @@ If we visit the subdirectory `/panel` that we just found via our browser, we see
     find -name user.txt -type f 2>/dev/null
     ```
 
+    The above command does the following:
+    1.  `find` This utility is used for **searching files and directories** in a specified directory structure.
+    2. `/` This is the starting point for the search. In our case, it represents the root directory of the file system, `/`, meaning that find will search the entire file system.
+    3. `-name user.txt` Specifies the **name of the file** we want to search for.
+    4. `-type f` Restricts the search to **regular files only**, as opposed to directories, symbolic links, or other types of files.
+    5. `2>/dev/null` This is a **redirection operation** that suppresses standard error (*stderr*) output by directing it to the null device (`/dev/null`). This ensures that any error messages or warnings generated during the search are discarded and not displayed in the terminal.
+
     ![revshell-user-txt](user-txt.jpg)
 
 ### 3.3 Privilege Escalation
@@ -83,6 +103,8 @@ The last task asks us to find a "weird" file with SUID permission and the `root.
     ```shell
     find / -perm -u=s -type f 2>/dev/null
     ```
+
+    This is almost identical as the previous `find` command, but we are now searching for SUID files instead of a specific file as before. As a result, we replaced `-iname user.txt` with `-perm -u=s`. The latter specifies the **permission pattern** to search for. In this case, it's looking for files with the setuid permission. The `-u=s` part indicates files where the setuid bit is set. The `u` stands for the user's permissions (owner), and `s` indicates that the setuid bit is set.
 
     ![SUID Files](python-suid.png)
 
