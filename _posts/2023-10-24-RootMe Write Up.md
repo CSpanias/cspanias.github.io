@@ -1,6 +1,6 @@
 ---
 title: RootMe CTF Write Up
-date: 2023-10-20
+date: 2023-10-24
 categories: [CTF Write Up, THM]
 tags: [gtfobins, suid, gobuster, nmap, webshell, apache]
 img_path: /assets/rootme/
