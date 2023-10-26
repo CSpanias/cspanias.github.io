@@ -33,8 +33,6 @@ The [Agent Sudo](https://tryhackme.com/room/agentsudoctf)
     5. `-p-` Scans all ports, not just the most common ones.
     5. `-T4` Sets the **timing template** for the scan. Timing levels in Nmap range from 0 (paranoid) to 5 (insane), with 4 being a relatively aggressive and faster scanning speed.
 
-    ![Nmap Scan results](nmap-scan.png)
-
     Our scan revealed three services:
     1. FTP
     2. SSH
