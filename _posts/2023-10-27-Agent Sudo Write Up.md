@@ -63,7 +63,7 @@ In this section we are expected to find and crack 4 passwords as well as find an
 
 1. We need to first find the password for the **FTP** service. Since we already have a username, `chris`, we can try guessing it with **hydra**:
 
-    ![hydra](hydra-fpt-password.jpg)
+    ![hydra](hydra-ftp-password.jpg)
 
 2. Next, we are asked about a **zip** file password, but we don't have any such file yet! Let's login into FTP, and see what we can find:
 
@@ -85,23 +85,19 @@ In this section we are expected to find and crack 4 passwords as well as find an
 
     ![zip2john](zip2john.jpg) 
 
-3. The third questions need a steg password. We have extracted a text file before, so let's inspect its content:
+3. The third question needs a **steg password**. We have extracted a text file before, so let's inspect its content:
 
     ![to-agentR](to-agentR-txt.png)
 
-    From reading the sentence, we can infer that `QXJlYTUx` is a name which is currently encoded. The most straightfoward thing to do is to visit [CyberChef](https://gchq.github.io/CyberChef/) and let it works its magic:
+    From reading the sentence, we can infer that `QXJlYTUx` is a name which is currently encoded. The most straightfoward thing to do is to visit [CyberChef](https://gchq.github.io/CyberChef/) and let it do its magic:
 
     ![cyberchef](cyberchef.jpg)
 
-    There are other ways to find this such as directly trying decoding with `base64`:
+4. Now we need to find another's agent full name. We haven't yet used the `cute-alien.jpg` picture, so let's check if there is something there using `stegseek`:
 
-    ![base64-decoding](base64-d-area51.jpg)
+    ![stegseek-extraction](stegseek-extraction.jpg)
 
-    Or use `stegseek`:
-
-    ![stegseek-passphrase](stegseek.jpg)
-
-4. Now we need to find
+    We were able 
 
 
 
