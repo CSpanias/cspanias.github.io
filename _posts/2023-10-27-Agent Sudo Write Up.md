@@ -130,7 +130,7 @@ We reached the final task of this room 🎉, but this time there are no hints av
 
     ![sudo](sudo-l.png)
 
-    It appears that we have `!root` access?! That's seems strange, so let's ask our good friend Google:
+    It appears that we have **not root**, `!root`, access?! That's seems a bit strange, so let's ask Google about it:
 
     ![cve-root](cve-root.png)
 
