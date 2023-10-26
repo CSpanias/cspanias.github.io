@@ -2,7 +2,7 @@
 title: Agent Sudo CTF Write Up
 date: 2023-10-27
 categories: [CTF Write Up, THM]
-tags: [nmap, burpsuite, ssh, ftp, john, hydra, brute-force, dictionary-attack, steganography, binwalk, stegseek, john, encoding, base64, exploit-db, gtfobins, sudo, \!root, zip, compression]
+tags: [nmap, burpsuite, ssh, ftp, john, hydra, brute-force, dictionary-attack, steganography, binwalk, stegseek, john, encoding, base64, exploit-db, gtfobins, sudo, zip, compression]
 img_path: /assets/agent-sudo/
 mermaid: true
 ---
@@ -45,13 +45,17 @@ The [Agent Sudo](https://tryhackme.com/room/agentsudoctf)
 
     >You might face problem on using Firefox. Try 'user agent switcher' plugin with user agent: C
 
-    Instead of using the plugin, we can also use **Burp Suite**: we need to first capture the HTTP request via **Proxy**, send the request to **Repeater**, modify the **User-Agent** accordingly, and inspect the incoming HTTP response:
+    The `User-Agent` is an HTTP header field that is part of the request sent by a client (such as a web browser or a mobile app) to a web server when making an HTTP request. It provides information about the user agent (i.e., the client software or device) that is making the request. The `User-Agent` header typically includes details about the client's operating system, software version, and sometimes other information like the device type.
+
+    Its primary purpose is to help web servers and web applications determine how to respond to the client's request based on the client's capabilities. For example, a web server might use the `User-Agent` header to serve different versions of a website or web application to different types of clients (e.g., mobile devices vs. desktop computers).
+    
+    The author of the room suggests using a plugin for changing the `User-Agent` header, but we can also use **Burp Suite**. We need to first capture the HTTP request via **Proxy**, send the request to **Repeater**, modify the `User-Agent` header accordingly, send the modified request, and inspect the incoming HTTP response:
 
     ![Burp Proxy](http-request-proxy.jpg)
 
     ![user-agent-c](user-agent-c.jpg)
 
-    The HTTP response revealed a new subdirectory, and upon visiting it on our browser, the agent's name is revealed:
+    The HTTP response reveals a new subdirectory, and upon visiting it on our browser, the agent's name is revealed!
 
     ![agent-c-location](agent-c-location.png)
 
@@ -82,11 +86,11 @@ In this section we are expected to find and crack 4 passwords as well as find an
     1. There is another picture inside `J`'s directory.
     2. `J`'s login password is stored in the fake picture.
 
-    Based on the above, and the fact that the next question is related to **steganography**, we can check if these two "fake" photos are hiding something. We can do that with `binwalk`:
+    Based on the above, and the fact that the next question is related to **steganography**, we probably have to check if these two photos are hiding something. Steganography is Greek for *hidden writing*, and is, in simple terms, the practice of hiding something inside of something else. We can use [**binwalk**](https://www.kali.org/tools/binwalk/), a tool for **searching images for embedded files** and executable code, to see if something is hidden inside the images:
 
     ![binwalk](binwalk.png)
 
-    Apparently, the zip file was embedded in the `cutie.png` file! This question provides the hint: *Mr.John*, which points in using `john`, so let's try that. We need to first convert the file to a suitable format for `john` and then just pass it over:
+    Apparently, the zip file is embedded in the `cutie.png` file! The question provides the hint: "*Mr.John*", suggesting to use **John The Ripper**, so let's try that. We need to first convert the file to a suitable format for **john**, and then just pass it over to him:
 
     ![zip2john](zip2john.jpg) 
 
@@ -98,7 +102,7 @@ In this section we are expected to find and crack 4 passwords as well as find an
 
     ![cyberchef](cyberchef.jpg)
 
-4. Now we need to find another's agent full name. We haven't yet used the `cute-alien.jpg` picture, so let's check if there is something there using `stegseek`:
+4. Now we need to find another's agent full name. We haven't yet used the `cute-alien.jpg` picture, so let's check if there is something there, this time using [**stegseek**](https://github.com/RickdeJager/stegseek), a fast steghide cracker that is used to extract hidden data from files:
 
     ![stegseek-extraction](stegseek-extraction.jpg)
 
@@ -112,9 +116,11 @@ In this section we are expected to find and crack 4 passwords as well as find an
 
     That was easy 🚩!
 
-2. Next we are asked the name of the photo's incident. There is indeed a photo laying around, so let's copy it to our machine using `scp`:
+2. Next we are asked the name of the photo's incident. Along with the `user_flag.txt` file, there was also the `Alien_autospy.jpg` file. Let's get a copy that file to our machine using `scp`:
 
     ![scp](scp.png)
+
+    ![alien-photo](alien-photo.png)
 
     The hint for this question mentions "Fox news", so we can use google and hack our way to the answer:
 
