@@ -21,7 +21,7 @@ The [Agent Sudo](https://tryhackme.com/room/agentsudoctf)
 
 ### 3.1 Enumerate
 
-1. The first question of the room is asking us how many open ports are on our target, so let's try answering that using **nmap**:
+1. The first question of the room ask us how many open ports our target has, so let's try answering that using **nmap**:
 
     ![nmap-results](nmap-results.png)
 
@@ -30,25 +30,22 @@ The [Agent Sudo](https://tryhackme.com/room/agentsudoctf)
     2. `-sC` Enables Nmap's **default script scanning**. Nmap has a set of built-in scripts that can be used to perform various tasks, such as service discovery, vulnerability detection, and more. Using this option, Nmap will run these default scripts against the target hosts to gather **additional information about the services** and their potential vulnerabilities.
     3. `-sV` Performs **version detection on the target services**.
     4. `-open` Specifies that we want to **scan for open ports**.
-    5. `-p-` Scans all ports, not just the most common ones.
+    5. `-p-` Scans **all ports**, not just the most common ones.
     5. `-T4` Sets the **timing template** for the scan. Timing levels in Nmap range from 0 (paranoid) to 5 (insane), with 4 being a relatively aggressive and faster scanning speed.
 
-    Our scan revealed three services:
-    1. FTP
-    2. SSH
-    3. Web Server
+    Our scan revealed the following services: an FTP, an SSH and a Web Server.
 
 2. The second question is: "*How you redirect yourself to a secret page?*"
 
-    That can be answered by visiting the web server via our browser:
+    This can be answered by simply visiting the web server via our browser:
 
     ![homepage](homepage.png)
 
-3. The last question of this task wants to find out the agent's name and has the following hint:
+3. The last question of this task wants us to find out the agent's name and provides the following hint:
 
     >You might face problem on using Firefox. Try 'user agent switcher' plugin with user agent: C
 
-    Instead of using the plugin, we can use **Burp Suite** instead: we need to first capture the HTTP request via **Proxy**, send the request to **Repeater**, modify the **User-Agent** accordingly, and inspect the incoming HTTP response:
+    Instead of using the plugin, we can also use **Burp Suite**: we need to first capture the HTTP request via **Proxy**, send the request to **Repeater**, modify the **User-Agent** accordingly, and inspect the incoming HTTP response:
 
     ![Burp Proxy](http-request-proxy.jpg)
 
@@ -62,29 +59,29 @@ Onto task 2 🏃!
 
 ### 3.2 Hash Cracking and Brute-force
 
-In this section we are expected to find and crack four passwords as well as find another's agent full name.
+In this section we are expected to find and crack 4 passwords as well as find another's agent full name.
 
-1. We need to first find the password for the **FTP** service. Since we already have a username, `chris`, and we know already that he has a weak password, we can try guessing it with **hydra**:
+1. We need to first find the password for the **FTP** service. Since we already have a username, `chris`, we can try guessing it with **hydra**:
 
-    ![hydra][hydra-fpt-password.jpg]
+    ![hydra](hydra-fpt-password.jpg)
 
 2. Next, we are asked about a **zip** file password, but we don't have any such file yet! Let's login into FTP, and see what we can find:
 
     ![ftp-mget](ftp-mget.png)
 
-    There are three files there: `To_AgentJ.txt`, `cute-alien.jpg`, and `cutie.png` which we can download locally using `mget *`, as shown above. So, still, no zip file! Let's see what the contant of `To_AgentJ.txt` is:
+    There are 3 files there: `To_AgentJ.txt`, `cute-alien.jpg`, and `cutie.png`, which we can download locally using `mget *`, as shown above. So, still, no zip file! Let's see what the content of `To_AgentJ.txt` is:
 
     ![txt-message](txt-message.png)
 
-    We have two pieces of information:
-    1. There is another picture inside our, i.e., `J`, directory.
+    We have 2 new pieces of information:
+    1. There is another picture inside `J`'s directory.
     2. `J`'s login password is stored in the fake picture.
 
-    Based on the above as well as that next question is related to steganography, we can see these two "fake" photos are hiding something. We can do that with `binwalk`:
+    Based on the above and the fact that the next question is related to **steganography**, we can check if these two "fake" photos are hiding something. We can do that with `binwalk`:
 
     ![binwalk](binwalk.png)
 
-    Apparently, the zip file was embedded in the `cutie.png` file! The *Mr.John* hint provides, points in using `john`, so let's try that. We need to first convert the file to a suitable format for `john` and then just pass it over:
+    Apparently, the zip file was embedded in the `cutie.png` file! This question provides the hint: *Mr.John*, which points in using `john`, so let's try that. We need to first convert the file to a suitable format for `john` and then just pass it over:
 
     ![zip2john](zip2john.jpg) 
 
