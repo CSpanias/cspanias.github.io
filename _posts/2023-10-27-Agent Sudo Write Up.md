@@ -11,7 +11,17 @@ mermaid: true
 
 ## 1 Summary
 
+flowchart TD
+    A[Enumeration]
+    B[ /agent_C_attention]:::red
+    C[FTP Credentials]
+    D[Steganography \nHash Cracking \nDecoding]
+    E[SSH credentials]:::red
 
+  A-- nmap \nBurp Suite --> B
+  B-- hydra --oC
+  C-- binwalk \njohn \nCyberchef \nstegseek--oD
+  D-->E
 
 ## 2 Background Information
 
