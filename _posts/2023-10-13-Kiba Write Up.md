@@ -2,7 +2,7 @@
 title: Kiba CTF Write Up
 date: 2023-10-13
 categories: [CTF Write Up, THM]
-tags: [kibana, gtfobins, prototypepollution, rce, capabilities]
+tags: [kibana, gtfobins, prototype-pollution, rce, capabilities]
 img_path: /assets/kiba/
 mermaid: true
 ---

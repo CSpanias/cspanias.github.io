@@ -2,7 +2,7 @@
 title: Dogcat CTF Write Up
 date: 2023-10-03
 categories: [CTF Write Up, THM]
-tags: [nmap, lfi, burp, metasploit, directorytraversal, gtfobins, containerescape, repeater]
+tags: [nmap, lfi, burp-suite, metasploit, directory-traversal, gtfobins, container-escape, repeater]
 img_path: /assets/dogcat/
 mermaid: true
 ---
