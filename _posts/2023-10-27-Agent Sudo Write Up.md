@@ -65,11 +65,16 @@ In this section we are expected to find and crack 4 passwords as well as find an
 
     ![hydra](hydra-ftp-password.jpg)
 
+    The command is pretty straightforward:
+    1. `-l chris` Lowercase `l` is used as we want to use just a single login username, `chris`.
+    2. `-P PASS_LIST` Uppercase `P` as we now want to pass a list of passwords against `chris`.
+    3. `ftp://TAGET_IP` Definining what service we want to attack, in this case, `ftp`.
+
 2. Next, we are asked about a **zip** file password, but we don't have any such file yet! Let's login into FTP, and see what we can find:
 
     ![ftp-mget](ftp-mget.png)
 
-    There are 3 files there: `To_AgentJ.txt`, `cute-alien.jpg`, and `cutie.png`, which we can download locally using `mget *`, as shown above. So, still, no zip file! Let's see what the content of `To_AgentJ.txt` is:
+    There are 3 files there: `To_AgentJ.txt`, `cute-alien.jpg`, and `cutie.png` We can download them locally using `mget *`, as shown above. But, still, no zip file! Let's see what the content of `To_AgentJ.txt` is:
 
     ![txt-message](txt-message.png)
 
@@ -77,7 +82,7 @@ In this section we are expected to find and crack 4 passwords as well as find an
     1. There is another picture inside `J`'s directory.
     2. `J`'s login password is stored in the fake picture.
 
-    Based on the above and the fact that the next question is related to **steganography**, we can check if these two "fake" photos are hiding something. We can do that with `binwalk`:
+    Based on the above, and the fact that the next question is related to **steganography**, we can check if these two "fake" photos are hiding something. We can do that with `binwalk`:
 
     ![binwalk](binwalk.png)
 
@@ -97,13 +102,50 @@ In this section we are expected to find and crack 4 passwords as well as find an
 
     ![stegseek-extraction](stegseek-extraction.jpg)
 
-    We were able 
-
-
-
-
+    We have enough information for answering both questions for this task 🍻 ! 
 
 ### 3.3 Capture the User Flag
 
+1. We have a new pair of credentials, so let's use them right away:
+
+    ![user-flag](user-flag.jpg)
+
+    That was easy 🚩!
+
+2. Next we are asked the name of the photo's incident. There is indeed a photo laying around, so let's copy it to our machine using `scp`:
+
+    ![scp](scp.png)
+
+    The hint for this question mentions "Fox news", so we can use google and hack our way to the answer:
+
+    ![google][google-incident-fox.png]
+
+    ![roswell-alien-autopsy](roswell-alien-autopsy-fox.png)
+
 ### 3.4 Privilege Escalation
 
+We reached the final task of this room 🎉, but this time there are no hints available 😩!
+
+1. The first thing we always do when searching for a privilege escalation vector is checking if the current user has any SUDO privileges:
+
+    ![sudo](sudo-l.png)
+
+    It appears that we have `!root` access?! That's seems strange, so let's ask our good friend Google:
+
+    ![cve-root](cve-root.png)
+
+    Apparently, according to [Exploit-DB](https://www.exploit-db.com/exploits/47502), there is already a way to exploit this, which answers the first question. 
+
+2. The above page contains details on how to use this exploit:
+
+    ![sudo-exploit](sudo-exploit.png)
+
+    Executing the above command results in us getting a root shell 🍾!
+
+    ![root-exploit](root-exploit.png)
+
+    Now, we can simply search for the root flag:
+
+    ![root-flag](root-flag.jpg)
+
+    And with that, both last questions can be answered 🚩! Thanks Agent R. 🕵️‍♂️!
