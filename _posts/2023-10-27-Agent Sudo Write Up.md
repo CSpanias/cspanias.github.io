@@ -55,7 +55,7 @@ The [Agent Sudo](https://tryhackme.com/room/agentsudoctf)
 
     ![agent-c-location](agent-c-location.png)
 
-Onto task 2 🏃!
+    Onto task 2 🏃!
 
 ### 3.2 Hash Cracking and Brute-force
 
@@ -66,9 +66,9 @@ In this section we are expected to find and crack 4 passwords as well as find an
     ![hydra](hydra-ftp-password.jpg)
 
     The command is pretty straightforward:
-    1. `-l chris` Lowercase `l` is used as we want to use just a single login username, `chris`.
-    2. `-P PASS_LIST` Uppercase `P` as we now want to pass a list of passwords against `chris`.
-    3. `ftp://TAGET_IP` Definining what service we want to attack, in this case, `ftp`.
+    1. `-l chris` Lowercase `l` is used as we want to use just a **single static login username**, `chris`.
+    2. `-P PASS_LIST` Uppercase `P` as we now want to pass a **list of passwords** against `chris`.
+    3. `ftp://TAGET_IP` Definining what **service we want to attack**, in this case, `ftp`.
 
 2. Next, we are asked about a **zip** file password, but we don't have any such file yet! Let's login into FTP, and see what we can find:
 
@@ -118,7 +118,7 @@ In this section we are expected to find and crack 4 passwords as well as find an
 
     The hint for this question mentions "Fox news", so we can use google and hack our way to the answer:
 
-    ![google][google-incident-fox.png]
+    ![google](google-incident-fox.png)
 
     ![roswell-alien-autopsy](roswell-alien-autopsy-fox.png)
 
@@ -134,7 +134,7 @@ We reached the final task of this room 🎉, but this time there are no hints av
 
     ![cve-root](cve-root.png)
 
-    Apparently, according to [Exploit-DB](https://www.exploit-db.com/exploits/47502), there is already a way to exploit this, which answers the first question. 
+    Apparently, according to [Exploit-DB](https://www.exploit-db.com/exploits/47502), there is a way to exploit this, which also help us to answer the first question. 
 
 2. The above page contains details on how to use this exploit:
 
@@ -148,4 +148,6 @@ We reached the final task of this room 🎉, but this time there are no hints av
 
     ![root-flag](root-flag.jpg)
 
-    And with that, both last questions can be answered 🚩! Thanks Agent R. 🕵️‍♂️!
+    And with that, both last questions can be answered 🚩! 
+    
+    Thanks Agent R. 🕵️‍♂️!
