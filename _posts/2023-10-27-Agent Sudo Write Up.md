@@ -11,17 +11,7 @@ mermaid: true
 
 ## 1 Summary
 
-flowchart TD
-    A[Enumeration]
-    B[ /agent_C_attention]:::red
-    C[FTP Credentials]
-    D[Steganography \nHash Cracking \nDecoding]
-    E[SSH credentials]:::red
-
-  A-- nmap \nBurp Suite --> B
-  B-- hydra --oC
-  C-- binwalk \njohn \nCyberchef \nstegseek--oD
-  D-->E
+[![](https://mermaid.ink/img/pako:eNplUsGOm0AM_RV39pJKQc2ZQ6UQSIjUw6q06gGqlQMGZoEZNAzJotX-SC899-_6CfUk2iSocHnys_2e7XkVuS5I-KJs9Smv0Vj48jVTwN86jdTYkUErtYIsUydpa1Ad9j993z-0I13ygvT7QMZbV6Qs1IQFGZdtsevJSFXBuS4YTQ_JKC3NqzfpwpUr7OijYwwVFyJMQ5k7aTQTrK3FvOGul2b1VBic94nSxfbbI-Rczz4ktoMzAfsOKwJUBVh6sVDKloa5zjZNLFWodGWwr6froAep8IRts4SB-YGocVSMQ80ibMZN9p77rOvzhkLibd4Tm-lAJq-pnJvdpYskif8zO_Ii4O_vX39u1ude4_TRyCPPwDPRkGN7vc1RInwwWturdPTSt1paLwzm2vt0cc5zOrfu7ueTex78oAOwjyNb8bzPELh4wPFP6A78tHlCa51p1vU8vXH0hhNDB0KORA5EHNk6sOXIzoEdR2IHYgb7i2De4jCEVAJb4C0b3ZD_UK5Wd0xliNSVW5X3nJvpRq1KsRT8XDuUBb_nV6eVCVtTR5nwGRZomkxk6o3zcLQ6mVQufGtGWoqxL9BSKJEfQSf8ki9Cb_8An9ANbw?type=png)](https://mermaid.live/edit#pako:eNplUsGOm0AM_RV39pJKQc2ZQ6UQSIjUw6q06gGqlQMGZoEZNAzJotX-SC899-_6CfUk2iSocHnys_2e7XkVuS5I-KJs9Smv0Vj48jVTwN86jdTYkUErtYIsUydpa1Ad9j993z-0I13ygvT7QMZbV6Qs1IQFGZdtsevJSFXBuS4YTQ_JKC3NqzfpwpUr7OijYwwVFyJMQ5k7aTQTrK3FvOGul2b1VBic94nSxfbbI-Rczz4ktoMzAfsOKwJUBVh6sVDKloa5zjZNLFWodGWwr6froAep8IRts4SB-YGocVSMQ80ibMZN9p77rOvzhkLibd4Tm-lAJq-pnJvdpYskif8zO_Ii4O_vX39u1ude4_TRyCPPwDPRkGN7vc1RInwwWturdPTSt1paLwzm2vt0cc5zOrfu7ueTex78oAOwjyNb8bzPELh4wPFP6A78tHlCa51p1vU8vXH0hhNDB0KORA5EHNk6sOXIzoEdR2IHYgb7i2De4jCEVAJb4C0b3ZD_UK5Wd0xliNSVW5X3nJvpRq1KsRT8XDuUBb_nV6eVCVtTR5nwGRZomkxk6o3zcLQ6mVQufGtGWoqxL9BSKJEfQSf8ki9Cb_8An9ANbw)
 
 ## 2 Background Information
 
