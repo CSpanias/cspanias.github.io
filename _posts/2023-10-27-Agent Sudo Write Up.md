@@ -11,13 +11,15 @@ mermaid: true
 
 ## 1 Summary
 
-[![](https://mermaid.ink/img/pako:eNplUsGOm0AM_RV39pJKQc2ZQ6UQSIjUw6q06gGqlQMGZoEZNAzJotX-SC899-_6CfUk2iSocHnys_2e7XkVuS5I-KJs9Smv0Vj48jVTwN86jdTYkUErtYIsUydpa1Ad9j993z-0I13ygvT7QMZbV6Qs1IQFGZdtsevJSFXBuS4YTQ_JKC3NqzfpwpUr7OijYwwVFyJMQ5k7aTQTrK3FvOGul2b1VBic94nSxfbbI-Rczz4ktoMzAfsOKwJUBVh6sVDKloa5zjZNLFWodGWwr6froAep8IRts4SB-YGocVSMQ80ibMZN9p77rOvzhkLibd4Tm-lAJq-pnJvdpYskif8zO_Ii4O_vX39u1ude4_TRyCPPwDPRkGN7vc1RInwwWturdPTSt1paLwzm2vt0cc5zOrfu7ueTex78oAOwjyNb8bzPELh4wPFP6A78tHlCa51p1vU8vXH0hhNDB0KORA5EHNk6sOXIzoEdR2IHYgb7i2De4jCEVAJb4C0b3ZD_UK5Wd0xliNSVW5X3nJvpRq1KsRT8XDuUBb_nV6eVCVtTR5nwGRZomkxk6o3zcLQ6mVQufGtGWoqxL9BSKJEfQSf8ki9Cb_8An9ANbw?type=png)](https://mermaid.live/edit#pako:eNplUsGOm0AM_RV39pJKQc2ZQ6UQSIjUw6q06gGqlQMGZoEZNAzJotX-SC899-_6CfUk2iSocHnys_2e7XkVuS5I-KJs9Smv0Vj48jVTwN86jdTYkUErtYIsUydpa1Ad9j993z-0I13ygvT7QMZbV6Qs1IQFGZdtsevJSFXBuS4YTQ_JKC3NqzfpwpUr7OijYwwVFyJMQ5k7aTQTrK3FvOGul2b1VBic94nSxfbbI-Rczz4ktoMzAfsOKwJUBVh6sVDKloa5zjZNLFWodGWwr6froAep8IRts4SB-YGocVSMQ80ibMZN9p77rOvzhkLibd4Tm-lAJq-pnJvdpYskif8zO_Ii4O_vX39u1ude4_TRyCPPwDPRkGN7vc1RInwwWturdPTSt1paLwzm2vt0cc5zOrfu7ueTex78oAOwjyNb8bzPELh4wPFP6A78tHlCa51p1vU8vXH0hhNDB0KORA5EHNk6sOXIzoEdR2IHYgb7i2De4jCEVAJb4C0b3ZD_UK5Wd0xliNSVW5X3nJvpRq1KsRT8XDuUBb_nV6eVCVtTR5nwGRZomkxk6o3zcLQ6mVQufGtGWoqxL9BSKJEfQSf8ki9Cb_8An9ANbw)
+[![](https://mermaid.ink/img/pako:eNptksFuozAQhl_Fci-pVKScOawUAgmVeqiW7sn0MDEDuAEb2aZtVPVF9rLnfbs-QmcaqU26CwdG8_3_-Lfxi9SuQZnKdnBPugcfxc3P2gp6Vqqw84geonH2Pk3T3TDjEWXqV0CfrDq0UdS1jTBO6I3tzmVrtWCdhREvmXhsjiBXudE8FvyB_asYQe_PzYVabO5uhSZTOHdvVBWxA-s6D1P_MaCE0JOUhlAIbuRI-_on0FYtqqo8zmSVmCmeePvz--_5CqW69ebRDNghyzBoGP5zDNdq4Z2L3wbwS6eXJMKOMIkk-SEy7mTUyWY_iWo2Eanv1txekyDnIifeHxoPjAruFIQ2XGwI7YyFJxj2HCjQ_gPiR_3gesvf9WGHXvfYsn3Lri3ZSy5KshfP0-BMTPKM-fUxph4ghJwsFFyE6N0e04t2uTwhnUe0n2zZnjI-iS-0bOWVpPsygmnoQr3wyrWMPY5Yy5TKBvy-lrV9JR3M0VUHq2Ua_YxXcp4aiJgboH86yrSFIeDrO8s13XQ?type=png)](https://mermaid.live/edit#pako:eNptksFuozAQhl_Fci-pVKScOawUAgmVeqiW7sn0MDEDuAEb2aZtVPVF9rLnfbs-QmcaqU26CwdG8_3_-Lfxi9SuQZnKdnBPugcfxc3P2gp6Vqqw84geonH2Pk3T3TDjEWXqV0CfrDq0UdS1jTBO6I3tzmVrtWCdhREvmXhsjiBXudE8FvyB_asYQe_PzYVabO5uhSZTOHdvVBWxA-s6D1P_MaCE0JOUhlAIbuRI-_on0FYtqqo8zmSVmCmeePvz--_5CqW69ebRDNghyzBoGP5zDNdq4Z2L3wbwS6eXJMKOMIkk-SEy7mTUyWY_iWo2Eanv1txekyDnIifeHxoPjAruFIQ2XGwI7YyFJxj2HCjQ_gPiR_3gesvf9WGHXvfYsn3Lri3ZSy5KshfP0-BMTPKM-fUxph4ghJwsFFyE6N0e04t2uTwhnUe0n2zZnjI-iS-0bOWVpPsygmnoQr3wyrWMPY5Yy5TKBvy-lrV9JR3M0VUHq2Ua_YxXcp4aiJgboH86yrSFIeDrO8s13XQ)
 
 ## 2 Background Information
 
-The [Agent Sudo](https://tryhackme.com/room/agentsudoctf) is rated as **Easy* as it involves nothing too complex. However, if you know nothing about steganography or hasn't used any steg tools before, it might be a bit more challenging that expected! As [Wired](https://www.wired.com/story/steganography-hacker-lexicon/) says: "*Steganography is hiding bad things in good things*"!
+The [Agent Sudo](https://tryhackme.com/room/agentsudoctf) room is rated as an *Easy* room, and it is, as it involves nothing too complex. However, if you know nothing about **steganography** or hasn't used any steg tools before, it might be a bit more challenging that expected! 
 
-![steg](https://media.wired.com/photos/594db1717c1bde11fe06f341/master/w_1920,c_limit/hidden_data-01.png)
+As [Wired](https://www.wired.com/story/steganography-hacker-lexicon/) says: "*Steganography is hiding bad things in good things*"!
+
+![steg](https://media.wired.com/photos/594db1717c1bde11fe06f341/master/w_1920,c_limit/hidden_data-01.png){: width="60%}
 
 Personally, I knew what steganography was, but I had only used **steghide** before, so I certainly learnt a couple of more tools and tricks from completing this room!
 
