@@ -15,7 +15,11 @@ mermaid: true
 
 ## 2 Background Information
 
-The [Agent Sudo](https://tryhackme.com/room/agentsudoctf) 
+The [Agent Sudo](https://tryhackme.com/room/agentsudoctf) is rated as **Easy* as it involves nothing too complex. However, if you know nothing about steganography or hasn't used any steg tools before, it might be a bit more challenging that expected! As [Wired](https://www.wired.com/story/steganography-hacker-lexicon/) says: "*Steganography is hiding bad things in good things*"!
+
+![steg](https://media.wired.com/photos/594db1717c1bde11fe06f341/master/w_1920,c_limit/hidden_data-01.png)
+
+Personally, I knew what steganography was, but I had only used **steghide** before, so I certainly learnt a couple of more tools and tricks from completing this room!
 
 ## 3. CTF Process
 
@@ -55,7 +59,7 @@ The [Agent Sudo](https://tryhackme.com/room/agentsudoctf)
 
     ![user-agent-c](user-agent-c.jpg)
 
-    The HTTP response reveals a new subdirectory, and upon visiting it on our browser, the agent's name is revealed!
+    The HTTP response reveals a new subdirectory, `/agent_C_attention`, and upon visiting it on our browser, the agent's name is revealed!
 
     ![agent-c-location](agent-c-location.png)
 
@@ -78,7 +82,7 @@ In this section we are expected to find and crack 4 passwords as well as find an
 
     ![ftp-mget](ftp-mget.png)
 
-    There are 3 files there: `To_AgentJ.txt`, `cute-alien.jpg`, and `cutie.png` We can download them locally using `mget *`, as shown above. But, still, no zip file! Let's see what the content of `To_AgentJ.txt` is:
+    There are 3 files there: `To_AgentJ.txt`, `cute-alien.jpg`, and `cutie.png`. We can download them locally using `mget *`, as shown above. But still, no zip file! Let's see what the content of `To_AgentJ.txt` is:
 
     ![txt-message](txt-message.png)
 
@@ -116,13 +120,13 @@ In this section we are expected to find and crack 4 passwords as well as find an
 
     That was easy 🚩!
 
-2. Next we are asked the name of the photo's incident. Along with the `user_flag.txt` file, there was also the `Alien_autospy.jpg` file. Let's get a copy that file to our machine using `scp`:
+2. Next, we are asked the name of the photo's incident. Along with the `user_flag.txt` file, there was also the `Alien_autospy.jpg` file. Let's get a copy that file to our machine using `scp`:
 
     ![scp](scp.png)
 
     ![alien-photo](alien-photo.png)
 
-    The hint for this question mentions "Fox news", so we can use google and hack our way to the answer:
+    The hint for this question mentions "*Fox news*", so we can use google and hack our way to the answer:
 
     ![google](google-incident-fox.png)
 
