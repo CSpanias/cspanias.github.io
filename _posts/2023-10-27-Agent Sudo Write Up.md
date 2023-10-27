@@ -19,7 +19,7 @@ The [Agent Sudo](https://tryhackme.com/room/agentsudoctf) room is rated as an *E
 
 As [Wired](https://www.wired.com/story/steganography-hacker-lexicon/) says: "*Steganography is hiding bad things in good things*"!
 
-![steg](https://media.wired.com/photos/594db1717c1bde11fe06f341/master/w_1920,c_limit/hidden_data-01.png){: width="60%}
+![steg](https://media.wired.com/photos/594db1717c1bde11fe06f341/master/w_1920,c_limit/hidden_data-01.png){: width="60%"}
 
 Personally, I knew what steganography was, but I had only used **steghide** before, so I certainly learnt a couple of more tools and tricks from completing this room!
 
