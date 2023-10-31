@@ -43,7 +43,7 @@ You can find an overview of each room below:
 | Room | Concept | Service | Tool(s) |
 |:-----------------------------|:-----------------|
 | Meow | Pwnbox/VPN, enumeration | telnet | `nmap` | 
-| Fawn | | ports, SSL/TLS | FTP | `nmap`, `ftp` |
+| Fawn | ports, SSL/TLS | FTP | `nmap`, `ftp` |
 | Dancing | SMB | SMB, NetBIOS | `nmap`, `smbclient` |
 | Reedemer | | | |
 | Explosion | | | |
