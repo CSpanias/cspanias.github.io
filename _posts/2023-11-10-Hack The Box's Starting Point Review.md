@@ -9,28 +9,44 @@ mermaid: true
 
 ## Introduction
 
-For the past few months, I was intensively studying and practicing almost exclusively through the [Try Hack Me](https://tryhackme.com), platform. I have completed 6 out of 9 learning paths that I have set as a target, currently working on [Red Teaming](https://tryhackme.com/paths), as well as worked my way through numerous CTF rooms. I was spending far too much time on just one resource, so I recently also joined the [HTB](https://app.hackthebox.com/home) platform. 
+For the past few months, I was intensively studying and practicing almost exclusively through the [Try Hack Me](https://tryhackme.com) (THM) platform. I have completed 6 out of 9 learning paths that I have set as a target - I am currently working on [Red Teaming](https://tryhackme.com/paths) - as well as worked my way through numerous CTF rooms. 
 
-I have read numerous articles and seen many YouTube videos performing comparisons between THM and HTB, and everyone seemed to agree on the follwoing: THM is aimed at absolute beginners and includes a lot of "handholding", while HTB is considered a platform for more advanced users. I think that is because HTB used to only have machines to hack with absolutely no guidance, but this is very much not the case now. 
+I realised that I was spending far too much time on just one resource, so I recently decide to also joined the [HTB](https://app.hackthebox.com/home) platform. 
 
-HTB contains many different things nowadays: [Hacking Labs](https://www.hackthebox.com/hacker/hacking-labs), [Pro Hacking Labs](https://www.hackthebox.com/hacker/pro-labs), [Hacking Battlegrounds](https://www.hackthebox.com/hacker/hacking-battlegrounds), [CTFs](https://www.hackthebox.com/hacker/ctf), and also the [HTB Academy](https://academy.hackthebox.com/) which aims to teach everything, from fundamentals concepts and tools, such as basic networking and how to use nmap, to advanced concepts, like how to attack an enterprise network from start to finish and how to document the whole process while doing it.
+I have read numerous articles and seen many YouTube videos performing comparisons between THM and HTB, and everyone seemed to agree on the following: 
 
-I am now subscribed on both THM and HTB as a student, which comes below £20 per month for both, and my plan is to continue learning via THM until I, at least, achieve my goals, while perfroming my practical work on HTB. Having read the aforementioned comparisons, I was expecting to have a really hard time on starting out at HTB and hit many roadblocks straight away. Quite the opposite!
+> THM is aimed at absolute beginners as it includes a lot of "handholding", while HTB is considered a platform for more advanced users. 
 
-When I first logged in on the HTB platform, it suggested to me to go through its [**Starting Point**](https://app.hackthebox.com/starting-point), which as HTB puts it's: "*Hack The Box on rails.*". I was so impressed by the well thought out structure and the exceptionally well-written write up that each machine has, that I decided to write a quick post about it, and, hopefully, let other people now about it.
+I think that is because HTB used to only have machines to "hack" with absolutely no guidance, but this is very much not the case now. 
+
+HTB contains many different things nowadays: [Hacking Labs](https://www.hackthebox.com/hacker/hacking-labs), [Pro Hacking Labs](https://www.hackthebox.com/hacker/pro-labs), [Hacking Battlegrounds](https://www.hackthebox.com/hacker/hacking-battlegrounds), [CTFs](https://www.hackthebox.com/hacker/ctf), and also the [HTB Academy](https://academy.hackthebox.com/) which aims to teach everything, from fundamentals concepts and tools, such as **basic networking** and **how to use nmap**, to advanced concepts, like **how to attack an enterprise network** from start to finish and **how to document the whole process** while doing it.
+
+I am now subscribed on both THM and HTB as a student, which comes below £20 per month for both, and my plan is to continue learning via THM until I, at least, achieve my goals, while perfroming my practical work on HTB. 
+
+Having read the aforementioned comparisons, I was expecting to have a really hard time on starting out at HTB and I was ready to hit many roadblocks straight away. But it proved quite the opposite!
+
+When I first logged in on the HTB platform, it suggested to me to go through its [**Starting Point**](https://app.hackthebox.com/starting-point), which as HTB puts it's: "*Hack The Box on rails*". I was so impressed by the **well thought out structure** and the **exceptionally well-written write ups**, that I decided to write a quick post about it, and, hopefully, let other people now about it.
 
 ## Tier 0
 
-According to HTB, Tier 0:
+According to HTB, the goal of Tier 0 machines are to:
 
 > *Cover the absolute **fundamentals of attacking a Box**. You'll learn **how to connect to the VPN**, perform **basic enumeration of ports and services**, and **interact with the services you find**. Each Box in this Tier is focused on a particular tool or service and contains only a single primary step.*
 
-Tier 0 contains 8 rooms in total and the final task of each machine in this Tier, is finding just one flag, the `flag.txt` file. In addition, each write-up is similary structured, and, usually, contains three sections: 
-    1. Introduction (general information and room context)
-    2. Enumeration (port scanning and service-specific enumeration)
-    3. Foothold (service interaction)
+This Tier contains 8 rooms in total and the final task of each machine, is to find a single flag, the `flag.txt` file. Each machine includes a write-up that is similary structured, and, usually, contains three sections:
+1. Introduction: General information as well as setting up the room's context.
+2. Enumeration: How to use `nmap` for port scanning and to enumerate a specific service.
+3. Foothold: How to interact with the service found.
 
 You can find an overview of each room below:
+
+| Room | Content |
+|:-----------------------------|:-----------------|
+| Meow | How to use the Pwnbox/VPN. \nWhat **enumeration** is and how to peform a basic `nmap` scan. \nInformation about `telnet` and common default credentials. | 
+| Island Trading               | Helen Bennett    |
+| Magazzini Alimentari Riuniti | Giovanni Rovelli |
+
+
 1. Meow 
     - How to use the Pwnbox/VPN.
     - What **enumeration** is and how to peform a basic `nmap` scan.
