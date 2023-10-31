@@ -40,11 +40,16 @@ This Tier contains 8 rooms in total and the final task of each machine, is to fi
 
 You can find an overview of each room below:
 
-| Room | Content |
+| Room | Concept | Service | Tool(s) |
 |:-----------------------------|:-----------------|
-| Meow | How to use the Pwnbox/VPN. \nWhat **enumeration** is and how to peform a basic `nmap` scan. \nInformation about `telnet` and common default credentials. | 
-| Island Trading               | Helen Bennett    |
-| Magazzini Alimentari Riuniti | Giovanni Rovelli |
+| Meow | Pwnbox/VPN, enumeration | telnet | `nmap` | 
+| Fawn | | ports, SSL/TLS | FTP | `nmap`, `ftp` |
+| Dancing | SMB | SMB, NetBIOS | `nmap`, `smbclient` |
+| Reedemer | | | |
+| Explosion | | | |
+| Preignition | | | |
+| Mongod | | | |
+| Synced | | | |
 
 
 1. Meow 
@@ -65,7 +70,7 @@ You can find an overview of each room below:
     - Infromation about the **Remote Desktop Protocol (RDP)**.
     - Information about **CLI-remote access tools**, such as **telnet** and **ssh**.
     - Infromation about **GUI-remote desktop tools**, such as **TeamViewer** and `xfreerdp`.
-6. Pre-ignition
+6. Preignition
     - Information about **WordPress**.
     - Information about web servers in general, and **nginx** in particular.
     - What **dir busting** is and how to use `gobuster`.
