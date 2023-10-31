@@ -17,12 +17,54 @@ HTB contains many different things nowadays: [Hacking Labs](https://www.hacktheb
 
 I am now subscribed on both THM and HTB as a student, which comes below £20 per month for both, and my plan is to continue learning via THM until I, at least, achieve my goals, while perfroming my practical work on HTB. Having read the aforementioned comparisons, I was expecting to have a really hard time on starting out at HTB and hit many roadblocks straight away. Quite the opposite!
 
-When I first logged in on the HTB platform, it suggested to me to go through its [**Starting Point**](https://app.hackthebox.com/starting-point), which as HTB puts it's: "*Hack The Box on rails.*". I was so impressed by the well thought out structure and the exceptionally well-written write up that each machine has, that I decided to write a quick post about it.
+When I first logged in on the HTB platform, it suggested to me to go through its [**Starting Point**](https://app.hackthebox.com/starting-point), which as HTB puts it's: "*Hack The Box on rails.*". I was so impressed by the well thought out structure and the exceptionally well-written write up that each machine has, that I decided to write a quick post about it, and, hopefully, let other people now about it.
 
 ## Tier 0
 
+According to HTB, Tier 0:
+
+> *Cover the absolute **fundamentals of attacking a Box**. You'll learn **how to connect to the VPN**, perform **basic enumeration of ports and services**, and **interact with the services you find**. Each Box in this Tier is focused on a particular tool or service and contains only a single primary step.*
+
+Tier 0 contains 8 rooms in total and the final task of each machine in this Tier, is finding just one flag, the `flag.txt` file. In addition, each write-up is similary structured, and, usually, contains three sections: 
+    1. Introduction (general information and room context)
+    2. Enumeration (port scanning and service-specific enumeration)
+    3. Foothold (service interaction)
+
+You can find an overview of each room below:
+1. Meow 
+    - How to use the Pwnbox/VPN.
+    - What **enumeration** is and how to peform a basic `nmap` scan.
+    - Information about `telnet` and common default credentials.
+2. Fawn
+    - Information about the **File Transfer Protocol**, `ftp`, including `anonymous` login.
+    - General information about **ports** and the **SSL/TLS** protocol.
+    - Introduction to `nmap` switches.
+3. Dancing
+    - Information about **Server Message Block (SMB)**.
+    - SMB interaction with `smbclient`.
+4. Reedemer
+    - Information about the **Remote Dictionary Server (Redis)**.
+    - Redis interaction via `redis-cli`.
+5. Explosion
+    - Infromation about the **Remote Desktop Protocol (RDP)**.
+    - Information about **CLI-remote access tools**, such as **telnet** and **ssh**.
+    - Infromation about **GUI-remote desktop tools**, such as **TeamViewer** and `xfreerdp`.
+6. Pre-ignition
+    - Information about **WordPress**.
+    - Information about web servers in general, and **nginx** in particular.
+    - What **dir busting** is and how to use `gobuster`.
+7. Mongod
+    - Information about **MongoDB**.
+    - Interacting with **MongoDB** with `mongodb`.
+8. Synced
+    - Information about the **rsync** protocol.
+
 ## Tier 1
 
+Fundamental exploitation techniques, single primary exploitation step per machine, guided tasks, 1 flag
+
 ## Tier 2
+
+Chain all steps together: enumeration, initial foothold, privilege escalation, 2 flags `user.txt` and `root.txt`
 
 ## Conclusion
