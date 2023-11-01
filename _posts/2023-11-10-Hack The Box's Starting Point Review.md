@@ -13,19 +13,19 @@ For the past few months, I was intensively studying and practicing almost exclus
 
 I realised that I was spending far too much time on just one resource, so I recently decide to also joined the [HTB](https://app.hackthebox.com/home) platform. 
 
-![THM profile](thm-profile.png)
+![THM profile](thm-profile.png){: width="70%"}
 
 ![HTB profile](htb-profile.png)
 
 I have read numerous articles and seen many YouTube videos performing comparisons between THM and HTB, and everyone seemed to agree on the following: 
 
-> THM is aimed at absolute beginners as it includes a lot of "handholding", while HTB is considered a platform for more advanced users. 
-
-![THM vs HTB](thm-vs-htb.png){: width="50%"}
+> **THM is aimed at absolute beginners** , while **HTB is considered a more advanced platform**. 
 
 I think that is because HTB used to only have machines to "hack" with absolutely no guidance, but this is very much not the case now. 
 
 HTB contains many different things nowadays: [Hacking Labs](https://www.hackthebox.com/hacker/hacking-labs), [Pro Hacking Labs](https://www.hackthebox.com/hacker/pro-labs), [Hacking Battlegrounds](https://www.hackthebox.com/hacker/hacking-battlegrounds), [CTFs](https://www.hackthebox.com/hacker/ctf), and also the [HTB Academy](https://academy.hackthebox.com/) which aims to teach everything, from fundamentals concepts and tools, such as **basic networking** and **how to use nmap**, to advanced concepts, like **how to attack an enterprise network** from start to finish and **how to document the whole process** while doing it.
+
+![htb products](htb-products.png)
 
 I now have a montly student subscription for both THM and HTB, which costs £12 and £10, respectively, and my plan is to continue learning via THM until I, at least, achieve my goals, while perfroming my practical work on HTB. 
 
@@ -34,6 +34,10 @@ Having read the aforementioned comparisons, I was expecting to have a really har
 When I first logged in on the HTB platform, it suggested to me to go through its [**Starting Point**](https://app.hackthebox.com/starting-point), which as HTB puts it's: "*Hack The Box on rails*". I was so impressed by the **well thought out structure** and the **exceptionally well-written walkthroughs**, that I decided to write a quick post about it, and, hopefully, let other people now about it.
 
 ![htb-starting-point](htb-starting-point.jpg)
+
+These walkthroughs are real gold, and they are accessible only to HTB's [subscribers](https://www.hackthebox.com/hacker/pricing#compare-plans-table):
+
+![htb-pricing-plans](htb-pricing-plans.jpg)
 
 ## Tier 0
 
