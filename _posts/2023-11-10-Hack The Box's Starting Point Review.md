@@ -13,9 +13,7 @@ For the past few months, I was intensively studying and practicing almost exclus
 
 I realised that I was spending far too much time on just one resource, so I recently decide to also joined the [HTB](https://app.hackthebox.com/home) platform. 
 
-![THM profile](thm-profile.png){: width="70%"}
-
-![HTB profile](htb-profile.png)
+![THM and HTB profiles](site-profiles.png)
 
 I have read numerous articles and seen many YouTube videos performing comparisons between THM and HTB, and everyone seemed to agree on the following: 
 
