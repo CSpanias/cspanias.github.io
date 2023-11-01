@@ -23,7 +23,7 @@ I think that is because HTB used to only have machines to "hack" with absolutely
 
 HTB contains many different things nowadays: [Hacking Labs](https://www.hackthebox.com/hacker/hacking-labs), [Pro Hacking Labs](https://www.hackthebox.com/hacker/pro-labs), [Hacking Battlegrounds](https://www.hackthebox.com/hacker/hacking-battlegrounds), [CTFs](https://www.hackthebox.com/hacker/ctf), and also the [HTB Academy](https://academy.hackthebox.com/) which aims to teach everything, from fundamentals concepts and tools, such as **basic networking** and **how to use nmap**, to advanced concepts, like **how to attack an enterprise network** from start to finish and **how to document the whole process** while doing it.
 
-![htb products](htb-products.png)
+![htb products](htb-products.png){: width="70%"}
 
 I now have a montly student subscription for both THM and HTB, which costs £12 and £10, respectively, and my plan is to continue learning via THM until I, at least, achieve my goals, while perfroming my practical work on HTB. 
 
