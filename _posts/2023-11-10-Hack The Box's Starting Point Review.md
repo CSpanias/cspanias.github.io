@@ -19,7 +19,7 @@ I have read numerous articles and seen many YouTube videos performing comparison
 
 > THM is aimed at absolute beginners as it includes a lot of "handholding", while HTB is considered a platform for more advanced users. 
 
-![THM vs HTB](https://defcreds.b-cdn.net/wp-content/uploads/2021/07/THMHTB-2-780x470.png){: width="50%"}
+![THM vs HTB](thm-vs-htb.png){: width="50%"}
 
 I think that is because HTB used to only have machines to "hack" with absolutely no guidance, but this is very much not the case now. 
 
@@ -39,7 +39,7 @@ According to HTB, the goal of Tier 0 machines are to:
 
 > *Cover the absolute **fundamentals of attacking a Box**. You'll learn **how to connect to the VPN**, perform **basic enumeration of ports and services**, and **interact with the services you find**. Each Box in this Tier is focused on a particular tool or service and contains only a single primary step.*
 
-This Tier contains 8 rooms in total and the final task of each machine is to find a single flag, the `flag.txt` file. Each machine includes a walkthrough that is similary structured, and, usually, contains three sections:
+This tier contains 8 rooms in total and the final task of each machine is to find a single flag, the `flag.txt` file. Each machine includes a walkthrough that is similary structured, and, usually, contains three sections:
 1. Introduction: General information as well as setting up the room's context.
 2. Enumeration: How to use `nmap` for port scanning and to enumerate a specific service.
 3. Foothold: How to interact with the service found.
