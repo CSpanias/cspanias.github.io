@@ -56,10 +56,10 @@ You can find an overview of each room below:
 |:-----------------------------|:-----------------|
 | Meow | Pwnbox/VPN, enumeration | telnet | `nmap` | 
 | Fawn | ports, SSL/TLS | FTP | `nmap`, `ftp` |
-| Dancing | Server Message Block, OSI model | smb | `nmap`, `smbclient` |
+| Dancing | SMB, OSI model | smb | `nmap`, `smbclient` |
 | Reedemer | Key-value in-memory NoSQL databases | Redis | `nmap`, `redis-cli` |
 | Explosion | Remote access tools | RDP |  `nmap`, `xfreerdp` |
-| Preignition | Web servers, WordPress, nginx, dir-busting | HTTP |  `nmap`, `gobuster`|
+| Preignition | Web servers, WordPress, nginx, dir busting | HTTP |  `nmap`, `gobuster`|
 | Mongod | Document-oriented NoSQL databases | mongodb |  `nmap`, `mongodb` |
 | Synced | File transfer services | rsync |  `nmap`, `rsync` |
 
@@ -73,22 +73,22 @@ Moving on to tier 1:
 
 > ...things are kicked up a notch and a bit more complexity is introduced. Tier 1 focuses on **fundamental exploitation techniques**. While **the depth of the material in this **Tier** is increased** over the previous, these **Boxes** still feature a single primary exploitation step.
 
-<!-- need to finish to have full picture -->
+<!-- need to finish to have full picture: number of walkthrough pages -->
 <!-- add image when completed -->
-This Tier contains 10 rooms in total and the final task is the same as before, i.e., finding `flag.txt`. The walkthroughs are similarly structured, but they increase in size, from 8 up to 19 pages, and complexity. 
+This tier contains 10 rooms in total and the final task is the same as before, i.e., finding `flag.txt`. The walkthroughs are similarly structured, but they increase in complexity and size, from 8 up to 19 pages.
 
 This is where it can get a bit intimidating. As I said, I am studying intensively for few months now through THM, so I have seen more of the concepts already. However, if I have decided to start directly through HTB, the concepts introduced here, such as tunneling. 
 
 | Room | Concept | Service | Tool(s) |
 |:-----------------------------|:-----------------|
-| Appointment |  |  | `nmap` | 
-| Sequel |  |  | `nmap` |
-| Crocodile |   |  | `nmap` |
-| Responder |  |  | `nmap` |
-| Three |  |  |  `nmap` |
-| Ignition |  |  |  `nmap`|
-| Bike |  |  |  `nmap` |
-| Funnel |  |  |  `nmap` |
+| Appointment | SQLi | HTTP | `nmap`, `gobuster`, SQL | 
+| Sequel | MariaDB | mysql | `nmap`, `mysql` |
+| Crocodile | Chaining together attack vectors, dir busting  | FTP, HTTP | `nmap`, `ftp`, Wappalyzer, `gobuster` |
+| Responder | Name-Based Virtual Hosting, LFI, RFI, path traversal, NTLM, hash cracking | HTTP, WinRM | `nmap`, Responder, `john`, `evil-winrm` |
+| Three | AWS S3 buckets, subdomains, virtual-host routing, dir busting, webshells | SSH, HTTP |  `nmap`, Wappalyzer, `gobuster`, `awscli`, `nc`, `curl` |
+| Ignition | Name-Based Virtual Hosting, DNS, dir busting  | HTTP |  `nmap`, `curl`, `gobuster` |
+| Bike | Node.js, XSS, template engines, SSTI, URL encoding | HTTP, SSH |  `nmap`, Wappalyzer, Burp Suite |
+| Funnel | Port forwarding, SOCKS5, password spraying, interal network enumeration | SSH, FTP, postgresql |  `nmap`, `hydra`, `ss`, `psql`, `proxychains` |
 | Pennyworth |  |  |  `nmap` |
 | Tactics |  |  |  `nmap` |
 
