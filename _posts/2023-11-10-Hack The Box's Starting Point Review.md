@@ -43,6 +43,8 @@ According to HTB, the goal of Tier 0 machines are to:
 
 > *Cover the absolute **fundamentals of attacking a Box**. You'll learn **how to connect to the VPN**, perform **basic enumeration of ports and services**, and **interact with the services you find**. Each Box in this Tier is focused on a particular tool or service and contains only a single primary step.*
 
+![tier0](tier-0-completed.png)
+
 This tier contains 8 rooms in total and the final task of each machine is to find a single flag, the `flag.txt` file. Each machine includes a walkthrough that is similary structured, and, usually, contains three sections:
 1. Introduction: General information as well as setting up the room's context.
 2. Enumeration: How to use `nmap` for port scanning and to enumerate a specific service.
@@ -73,8 +75,8 @@ Moving on to tier 1:
 
 > ...things are kicked up a notch and a bit more complexity is introduced. Tier 1 focuses on **fundamental exploitation techniques**. While **the depth of the material in this **Tier** is increased** over the previous, these **Boxes** still feature a single primary exploitation step.
 
-<!-- need to finish to have full picture: number of walkthrough pages -->
-<!-- add image when completed -->
+![tier1](tier-1-completed.png)
+
 This tier contains 10 rooms in total and the final task is the same as before, i.e., finding `flag.txt`. The walkthroughs are similarly structured, but they increase in complexity and size, from 8 up to 19 pages.
 
 This is where it can get a bit intimidating. As I said, I am studying intensively for few months now through THM, so I have seen more of the concepts already. However, if I have decided to start directly through HTB, the concepts introduced here, such as tunneling. 
@@ -89,8 +91,10 @@ This is where it can get a bit intimidating. As I said, I am studying intensivel
 | Ignition | Name-Based Virtual Hosting, DNS, dir busting  | HTTP |  `nmap`, `curl`, `gobuster` |
 | Bike | Node.js, XSS, template engines, SSTI, URL encoding | HTTP, SSH |  `nmap`, Wappalyzer, Burp Suite |
 | Funnel | Port forwarding, SOCKS5, password spraying, interal network enumeration | SSH, FTP, postgresql |  `nmap`, `hydra`, `ss`, `psql`, `proxychains` |
-| Pennyworth |  |  |  `nmap` |
-| Tactics |  |  |  `nmap` |
+| Pennyworth | Jenkins, groovy scripts, RCE | HTTP |  `nmap`, `nc` |
+| Tactics | Firewalls, Impacket | SMB |  `nmap`, `smbclient`, `psexec.py` |
+
+<!-- add info about concept's complexity, walkthrough's depth and tools used -->
 
 ## Tier 2
 
