@@ -29,7 +29,11 @@ I now have a montly student subscription for both THM and HTB, which costs £12 
 
 Having read the aforementioned comparisons, I was expecting to have a really hard time on starting out at HTB and I was ready to hit many roadblocks straight away. But it proved quite the opposite!
 
-When I first logged in on the HTB platform, it suggested to me to go through its [**Starting Point**](https://app.hackthebox.com/starting-point), which as HTB puts it's: "*Hack The Box on rails*". I was so impressed by the **well thought out structure** and the **exceptionally well-written walkthroughs**, that I decided to write a quick post about it, and, hopefully, let other people now about it.
+When I first logged in on the HTB platform, it suggested to me to go through its [**Starting Point**](https://app.hackthebox.com/starting-point), which as HTB puts it's: 
+
+> _**Starting Point** is **Hack The Box on rails**. It's a **linear series of Boxes tailored to absolute beginners** and features very easy exploit paths to not only introduce you to our platform but also **break the ice into the realm of penetration testing**. Using the Starting Point, you can **get a feel for how Hack The Box works**, how to connect and interact with Boxes, and **pave a basic foundation for your hacking skills to build off of**._
+
+I was so impressed by the **well thought out structure** and the **exceptionally well-written walkthroughs**, that I decided to write a quick post about it, and, hopefully, let other people now about it.
 
 ![htb-starting-point](htb-starting-point.jpg)
 
