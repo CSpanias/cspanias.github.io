@@ -29,7 +29,7 @@ I now have a montly student subscription for both THM and HTB, which costs £12 
 
 Having read the aforementioned comparisons, I was expecting to have a really hard time on starting out at HTB and I was ready to hit many roadblocks straight away. But it proved quite the opposite!
 
-When I first logged in on the HTB platform, it suggested to me to go through its [**Starting Point**](https://app.hackthebox.com/starting-point), which as HTB puts it's: 
+When I first logged in on the HTB platform, it suggested to me to go through its [**Starting Point**](https://app.hackthebox.com/starting-point), which according to HTB: 
 
 > _**Starting Point** is **Hack The Box on rails**. It's a **linear series of Boxes tailored to absolute beginners** and features very easy exploit paths to not only introduce you to our platform but also **break the ice into the realm of penetration testing**. Using the Starting Point, you can **get a feel for how Hack The Box works**, how to connect and interact with Boxes, and **pave a basic foundation for your hacking skills to build off of**._
 
@@ -37,13 +37,9 @@ I was so impressed by the **well thought out structure** and the **exceptionally
 
 ![htb-starting-point](htb-starting-point.jpg)
 
-These walkthroughs are real gold, and they are accessible only to HTB's [subscribers](https://www.hackthebox.com/hacker/pricing#compare-plans-table):
-
-![htb-pricing-plans](htb-pricing-plans.jpg)
-
 ## Tier 0
 
-According to HTB, the goal of this leve is to:
+According to HTB, the goal of this level is to:
 
 > *Cover the absolute **fundamentals of attacking a Box**. You'll learn **how to connect to the VPN**, perform **basic enumeration of ports and services**, and **interact with the services you find**. Each Box in this Tier is focused on a particular tool or service and contains only a single primary step.*
 
@@ -65,7 +61,7 @@ You can find an overview of each room below:
 | Dancing | SMB, OSI model | smb | `nmap`, `smbclient` |
 | Reedemer | Key-value in-memory NoSQL databases | Redis | `nmap`, `redis-cli` |
 | Explosion | Remote access tools | RDP |  `nmap`, `xfreerdp` |
-| Preignition | Web servers, WordPress, nginx, dir busting | HTTP |  `nmap`, `gobuster`|
+| Preignition | Web servers, dir busting | HTTP |  `nmap`, `gobuster`|
 | Mongod | Document-oriented NoSQL databases | mongodb |  `nmap`, `mongodb` |
 | Synced | File transfer services | rsync |  `nmap`, `rsync` |
 
@@ -107,7 +103,7 @@ For instance, for the Funnel room:
 2. Took a step back, read some more articles, such as [this](https://iximiuz.com/en/posts/ssh-tunnels/) excellent visual guide to SSH Tunnels, until I got clarity. At the same time, I refined my notes.
 3. Armed with a better understanding, I restarted Funnel and went over the parts that was not very clear at first, in this case, getting the flag with **dynamic port forwarding** instead of **local port forwarding**.
 
-Most walkthroughs include links to HTB academy modules that are relevant to the room. Funnel was one of the few that did not, but after I manually searched I found the [Pivoting, Tunneling, and Port Forwarding](https://academy.hackthebox.com/module/details/158) module, which they might forget to link(?)!
+Most walkthroughs include links to HTB academy modules that are relevant to the room. Funnel was one of the few that did not, but after I manually searched I found the [Pivoting, Tunneling, and Port Forwarding](https://academy.hackthebox.com/module/details/158) module, which they might forget to link. Unfortunately, I do not currently have an HTB Academy subscription or enough cubes to unlock its content, but I am pretty confident that its quality would be great!
 
 ![](tunneling-module.png)
 
