@@ -39,16 +39,16 @@ These walkthroughs are real gold, and they are accessible only to HTB's [subscri
 
 ## Tier 0
 
-According to HTB, the goal of Tier 0 machines are to:
+According to HTB, the goal of this leve is to:
 
 > *Cover the absolute **fundamentals of attacking a Box**. You'll learn **how to connect to the VPN**, perform **basic enumeration of ports and services**, and **interact with the services you find**. Each Box in this Tier is focused on a particular tool or service and contains only a single primary step.*
 
 ![tier0](tier-0-completed.png)
 
 This tier contains 8 rooms in total and the final task of each machine is to find a single flag, the `flag.txt` file. Each machine includes a walkthrough that is similary structured, and, usually, contains three sections:
-1. Introduction: General information as well as setting up the room's context.
-2. Enumeration: How to use `nmap` for port scanning and to enumerate a specific service.
-3. Foothold: How to interact with the service found.
+1. **Introduction**: General information for setting up the room's context.
+2. **Enumeration**: How to use `nmap` for port scanning and how to perform service-specific enumeration.
+3. **Foothold**: How to interact with the service found.
 
 ![Tier 0 walkthrough](tier0-walkthrough.jpg)
 
@@ -73,13 +73,13 @@ The **walkthroughs here are relatively short**, from 4 to 12 pages, so it does n
 
 Moving on to tier 1:
 
-> ...things are kicked up a notch and a bit more complexity is introduced. Tier 1 focuses on **fundamental exploitation techniques**. While **the depth of the material in this **Tier** is increased** over the previous, these **Boxes** still feature a single primary exploitation step.
+> ...things are kicked up a notch and a bit more complexity is introduced. Tier 1 focuses on **fundamental exploitation techniques**. While **the depth of the material in this Tier is increased** over the previous, these **Boxes** still feature a single primary exploitation step.
 
 ![tier1](tier-1-completed.png)
 
 This tier contains 10 rooms in total and the final task is the same as before, i.e., finding `flag.txt`. The walkthroughs are similarly structured, but they increase in complexity and size, from 8 up to 19 pages.
 
-This is where it can get a bit intimidating. As I said, I am studying intensively for few months now through THM, so I have seen more of the concepts already. However, if I have decided to start directly through HTB, the concepts introduced here, such as tunneling. 
+Here is an overview of the rooms included on this level:
 
 | Room | Concept | Service | Tool(s) |
 |:-----------------------------|:-----------------|
@@ -94,16 +94,28 @@ This is where it can get a bit intimidating. As I said, I am studying intensivel
 | Pennyworth | Jenkins, groovy scripts, RCE | HTTP |  `nmap`, `nc` |
 | Tactics | Firewalls, Impacket | SMB |  `nmap`, `smbclient`, `psexec.py` |
 
-<!-- add info about concept's complexity, walkthrough's depth and tools used -->
+As you can see, a lot of more concepts are introduced, the depth of each walkthough increases, and the number of tools used per machine grows from just 1-2 to 2-6. 
+
+As I have already mentioned, the quality of the walkthroughs is top-notch. Personally, I am always taking my time with each machine, so I can make sure that I understand what I am doing on each step. It is not uncommon, in particular when I encounter concepts for the first time, to go over a machine many times. 
+
+For instance, for the Funnel room:
+1. The first time, I worked along the walkthrough, making detailed notes on the side. I completed the machine, but the concepts of **remote and dynamic port forwarding** were not entirely clear on my head.
+2. Took a step back, read some more articles, such as [this](https://iximiuz.com/en/posts/ssh-tunnels/) excellent visual guide to SSH Tunnels, until I got clarity. At the same time, I refined my notes.
+3. Armed with a better understanding, I restarted Funnel and went over the parts that was not very clear at first, in this case, getting the flag with **dynamic port forwarding** instead of **local port forwarding**.
+
+Most walkthroughs include links to HTB academy modules that are relevant to the room. Funnel was one of the few that did not, but after I manually searched I found the [Pivoting, Tunneling, and Port Forwarding](https://academy.hackthebox.com/module/details/158) module, which they might forget to link(?)!
+
+![](tunneling-module.png)
+
 
 ## Tier 2
 
-> This is the final **Tier**, and the most complex. The **Boxes** in **Tier 2** are full-fledged, and chain multiple steps together. You'll need to enumerate, gain an initial foothold, and escalate your privileges to reach root/system. Unlike in the previous **Tiers**, these **Boxes** have two flags, **`user.txt`** and **`root.txt
+> This is the final **Tier**, and the most complex. The **Boxes** in **Tier 2** are full-fledged, and chain multiple steps together. You'll need to enumerate, gain an initial foothold, and escalate your privileges to reach root/system. Unlike in the previous **Tiers**, these **Boxes** have two flags, **`user.txt`** and **`root.txt`**.
 
 | Room | Concept | Service | Tool(s) |
 |:-----------------------------|:-----------------|
-| Archetype |  |  | `nmap` | 
-| Oopsie |  |  | `nmap` |
+| Archetype | Reverse shell, privilege escalation, automated enumeration | SMB, ms-sql-s | `nmap`, `smbclient`, `mssqlclient.py`, `nc`, winPEAS, `psexec.py` | 
+| Oopsie | Web crawling, cookie tampering, information disclosure, webshell, dir busting, shell stabilization, suid | HTTP | `nmap`, Burp Suite, `gobuster`, `find`, `grep` |
 | Vaccine |   |  | `nmap` |
 | Unified |  |  | `nmap` |
 | Included |  |  |  `nmap` |
