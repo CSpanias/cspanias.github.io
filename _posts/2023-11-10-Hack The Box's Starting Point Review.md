@@ -103,6 +103,8 @@ For instance, for the Funnel room:
 2. Took a step back, read some more articles, such as [this](https://iximiuz.com/en/posts/ssh-tunnels/) excellent visual guide to SSH Tunnels, until I got clarity. At the same time, I refined my notes.
 3. Armed with a better understanding, I restarted Funnel and went over the parts that was not very clear at first, in this case, getting the flag with **dynamic port forwarding** instead of **local port forwarding**.
 
+![funnel-room](funnel-room-png)
+
 Most walkthroughs include links to HTB academy modules that are relevant to the room. Funnel was one of the few that did not, but after I manually searched I found the [Pivoting, Tunneling, and Port Forwarding](https://academy.hackthebox.com/module/details/158) module, which they might forget to link. Unfortunately, I do not currently have an HTB Academy subscription or enough cubes to unlock its content, but I am pretty confident that its quality would be great!
 
 ![](tunneling-module.png)
