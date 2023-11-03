@@ -73,7 +73,7 @@ The **walkthroughs here are relatively short**, from 4 to 12 pages, so it does n
 
 Moving on to tier 1:
 
-> ...things are kicked up a notch and a bit more complexity is introduced. Tier 1 focuses on **fundamental exploitation techniques**. While **the depth of the material in this Tier is increased** over the previous, these **Boxes** still feature a single primary exploitation step.
+> _...things are kicked up a notch and a bit more complexity is introduced. Tier 1 focuses on **fundamental exploitation techniques**. While **the depth of the material in this Tier is increased** over the previous, these **Boxes** still feature a single primary exploitation step._
 
 ![tier1](tier-1-completed.png)
 
@@ -110,7 +110,7 @@ Most walkthroughs include links to HTB academy modules that are relevant to the 
 
 ## Tier 2
 
-> This is the final **Tier**, and the most complex. The **Boxes** in **Tier 2** are full-fledged, and chain multiple steps together. You'll need to enumerate, gain an initial foothold, and escalate your privileges to reach root/system. Unlike in the previous **Tiers**, these **Boxes** have two flags, **`user.txt`** and **`root.txt`**.
+> _This is the final **Tier**, and the most complex. The **Boxes** in **Tier 2** are full-fledged, and chain multiple steps together. You'll need to enumerate, gain an initial foothold, and escalate your privileges to reach root/system. Unlike in the previous **Tiers**, these **Boxes** have two flags, **`user.txt`** and **`root.txt`**._
 
 | Room | Concept | Service | Tool(s) |
 |:-----------------------------|:-----------------|
