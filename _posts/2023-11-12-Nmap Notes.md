@@ -81,4 +81,48 @@ An interesting thing to note is the time-to-live variable, `ttl`. Its value can 
 
 > As ICMP Echo requests tend to be blocked, we can consider sending an ICMP Timestamp (`-PP`) or an ICMP Address Mask (`-PM`) request, and expect for a Timestamp or an Address Mask reply, respectively.
 
-### TCP scan
+### TCP scans
+
+#### TCP full scan
+
+> Unprivileged users can only scan using the full TCP 3-way handshake method.
+
+Process:
+1. Nmap sends a SYN packet.
+2. If the host is alive, it will reply with a SYN/ACK packet.
+3. Nmap will send an ACK packet.
+
+![TCP 3-way handshake scan.](tcp_full.png)
+
+That's is how the process looks like:
+
+![TCP 3-way handshake scan with packet trace.](tcp_full_scan_low_user.jpg)
+
+![TCP 3-way handshake scan with reason.](tcp_full_scan_low_user_reason.jpg)
+
+#### TCP SYN scan
+
+Requirements:
+1. We have a privileged account.
+2. We are on a different subnet.
+
+Process:
+1. Nmap sents a SYN packet.
+2. If host is alive, it will replay with a SYN/ACK packet.
+3. Nmap will close the communication by sending a RST packet.
+
+> The process looks the same with a TCP full scan, with the difference that here the communication is closed, and not hanged up.
+
+<!-- what's the real differece? -->
+
+#### TCP ACK
+
+Process:
+1. Nmap sends with the ACK flag set.
+2. If the host is up, it will reply with a RST packet.
+
+As we can see below, since the `reset` flag was received, nmap marked the host as up:
+
+![TCP ACK scan packet tracing.](tcp_ack_scan.jpg)
+
+![TCP ACK scan reasoning.](tcp_ack_scan_reason.jpg)
