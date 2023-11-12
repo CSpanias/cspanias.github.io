@@ -22,9 +22,9 @@ When no host discovery options are set, nmap follows the approaches shown below 
 
 To confirm nmap's behaviour with and without the use of a privileged account, we can trying scanning a random IP address from the same subnet as ours:
 
-![Using ifconfig command to find our IP address.](ifconfig.jpg)
+![Using ifconfig command to find our IP address.](ifconfig.jpg){: width="70%"}
 
-![Default host discovery scan with and without sudo.](default_vs_sudo_scan.jpg)
+![Default host discovery scan with and without sudo.](default_vs_sudo_scan.jpg){: width="70%"}
 
 When we execute the command without `sudo`, it skips both the ARP and ICMP scans, and goes straight for a full TCP scan. However, when we use `sudo` it performs an ARP scan as expected, since the target host is on the same subnet as us.
 
@@ -62,7 +62,7 @@ To see what happens in practice, we can scan a live host residing on a different
 
 ![Packet tracing during an ICMP echo request](icmp_echo_packet-trace.jpg)
 
-![Reason that hosts is up on ICMP echo request](icmp_echo_reason.jpg){: width="80%"}
+![Reason that hosts is up on ICMP echo request](icmp_echo_reason.jpg){: width="70%"}
 
 We see that nmap sent an ICMP echo request and it received an ICMP echo reply back, thus, it marked the host as online. If we try to replicate that for a host that is not up, nmap will send two ICMP echo requests before it gives up and mark the host as offline. The second is just making sure that nothing went wrong with the first one:
 
@@ -90,11 +90,11 @@ Process:
 2. If the host is alive, it will **reply with a SYN/ACK packet**.
 3. Nmap will **send an ACK packet**.
 
-![TCP 3-way handshake scan.](tcp_full.png)
+![TCP 3-way handshake scan.](tcp_full.png){: width="70%"}
 
 That's is how the process looks like:
 
-![TCP 3-way handshake scan with packet trace.](tcp_full_scan_low_user.jpg)
+![TCP 3-way handshake scan with packet trace.](tcp_full_scan_low_user.jpg){: width="70%"}
 
 ![TCP 3-way handshake scan with reason.](tcp_full_scan_low_user_reason.jpg){: width="70%"}
 
