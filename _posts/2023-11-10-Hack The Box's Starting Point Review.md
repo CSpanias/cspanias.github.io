@@ -19,7 +19,11 @@ I have read numerous articles and seen many YouTube videos performing comparison
 
 > **THM is aimed at absolute beginners** , while **HTB is considered a more advanced platform**. 
 
-I think that is because HTB used to only have machines to "hack" with absolutely no guidance, but this is very much not the case now. 
+I think that is because HTB used to only have machines to "hack" with absolutely no guidance. Taken from their Pentesting learning path:
+
+> _Hack The Box was initially created to give technical professionals a safe place to practice and develop hacking skills and was not ideally suited for beginners starting their IT/Security journeys. Hack The Box began as solely a competitive CTF platform with a mix of machines and challenges, each awarding varying amounts of points depending on the difficulty, to be solved from a "black box" approach, with no walkthrough, guidance, or even hints._
+
+HTB is a completely different beast from back then. 
 
 HTB contains many different things nowadays: [Hacking Labs](https://www.hackthebox.com/hacker/hacking-labs), [Pro Hacking Labs](https://www.hackthebox.com/hacker/pro-labs), [Hacking Battlegrounds](https://www.hackthebox.com/hacker/hacking-battlegrounds), [CTFs](https://www.hackthebox.com/hacker/ctf), and also the [HTB Academy](https://academy.hackthebox.com/) which aims to teach everything, from fundamentals concepts and tools, such as **basic networking** and **how to use nmap**, to advanced concepts, like **how to attack an enterprise network** from start to finish and **how to document the whole process** while doing it.
 
