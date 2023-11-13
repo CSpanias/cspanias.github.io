@@ -25,10 +25,10 @@ When no host discovery options are set, nmap follows the approaches shown below 
 
 To confirm nmap's behaviour with and without the use of a privileged account, we can trying scanning a random IP address from the same subnet as ours:
 
-![Using ifconfig command to find our IP address](ifconfig.jpg){: width="70%" .center-image} 
+![Using ifconfig command to find our IP address](ifconfig.jpg) 
 _Using `ifconfig` to note down our IP address_
 
-![Default host discovery scan with and without sudo](default_vs_sudo_scan.jpg){: width="70%" .center} 
+![Default host discovery scan with and without sudo](default_vs_sudo_scan.jpg) 
 _Default Live Host Discovery scan with and without the use of a privilieged account_
 
 When we execute the command without `sudo`, it skips both the ARP and ICMP scans, and goes straight for a full TCP scan. However, when we use `sudo` it performs an ARP scan as expected, since the target host is on the same subnet as us.
@@ -42,7 +42,7 @@ Requirements:
 1. Privileged account.
 2. Same subnet.
 
-![Schematic diagram of an ARP request.](arp_scan.png){: width="60%"}
+![Schematic diagram of an ARP request.](arp_scan.png)
 _Schematic diagram of an ARP request_
 
 ### ICMP echo scan
@@ -53,7 +53,7 @@ Requirements:
 > If the target is on the same subnet, **an ARP request will precede the ICMP echo request**. We can disable ARP requests using `--disable-arp-ping`.
 {: .prompt-info }
 
-![Schematic diagram of an ICMP echo request.](nmap_icmp.png){: width="60%"}
+![Schematic diagram of an ICMP echo request.](nmap_icmp.png)
 _Schematic diagram of an ICMP echo request_
 
 New Windows versions as well as many firewalls block ICMP echo requests by default:
@@ -72,7 +72,7 @@ To see what happens in practice, we can scan a live host residing on a different
 ![Packet tracing during an ICMP echo request](icmp_echo_packet-trace.jpg)
 _Packet tracing during an ICMP echo request_
 
-![Reason that hosts is up on ICMP echo request](icmp_echo_reason.jpg){: width="70%"}
+![Reason that hosts is up on ICMP echo request](icmp_echo_reason.jpg)
 _Reasoning of why nmap marked this hosts as alive after an ICMP echo request_
 
 We see that nmap sent an ICMP echo request and it received an ICMP echo reply back, thus, it marked the host as online. If we try to replicate that for a host that is not up, nmap will send two ICMP echo requests before it gives up and mark the host as offline. The second is just making sure that nothing went wrong with the first one:
@@ -83,10 +83,10 @@ _Packet tracing of a dead host with an ICMP echo request_
 > The TTL (time-to-live) value can helps us in identifying the target OS. The [default initial TTL value](https://www.systranbox.com/why-is-ttl-different-for-linux-and-windows-systems/) for **Linux/Unix** is **64**, and TTL value for **Windows** is **128**.
 {: .prompt-tip }
 
-![ttl value of 63 for Linux](ttl_linux.jpg){: width="70%"}
+![ttl value of 63 for Linux](ttl_linux.jpg)
 _TTL value of 63 pointing out to a Linux OS_
 
-![ttl value of 127 for Windows](ttl_windows.jpg){: width="70%"}
+![ttl value of 127 for Windows](ttl_windows.jpg)
 _TTL value of 127 pointing out to a Windodws OS_
 
 > As ICMP echo requests tend to be blocked, we can consider sending an **ICMP Timestamp** (`-PP`) or an **ICMP Address Mask** (`-PM`) request, and expect for a Timestamp or an Address Mask reply, respectively.
@@ -99,15 +99,15 @@ _TTL value of 127 pointing out to a Windodws OS_
 > Unprivileged users can only scan using the full TCP 3-way handshake method.
 {: .prompt-info }
 
-![TCP 3-way handshake scan.](tcp_full.png){: width="70%"}
+![TCP 3-way handshake scan.](tcp_full.png)
 _Full TCP 3-way handshake scan_
 
 That's is how the process looks like:
 
-![TCP 3-way handshake scan with packet trace.](tcp_full_scan_low_user.jpg){: width="70%"}
+![TCP 3-way handshake scan with packet trace.](tcp_full_scan_low_user.jpg)
 _Packet tracing of a full TCP 3-way handshake scan_
 
-![TCP 3-way handshake scan with reason.](tcp_full_scan_low_user_reason.jpg){: width="60%"}
+![TCP 3-way handshake scan with reason.](tcp_full_scan_low_user_reason.jpg)
 _Reasosing of a live host after a full TCP 3-way handshake scan_
 
 #### TCP SYN scan
@@ -118,7 +118,7 @@ Requirements:
 > Privileged users don't need to complete the TCP 3-way handshake even if the port is open (TCP SYN scan), but unprivileged ones have no choice but wait for its completion (TCP full scan).
 {: .prompt-info }
 
-![TCP SYN scan diagram.](tcp_syn_ps.png){: width="70%"}
+![TCP SYN scan diagram.](tcp_syn_ps.png)
 _Schematic diagram of a TCP SYN scan_
 
 ![TCP SYN scan packet tracing.](tcp_syn_scan.jpg)
@@ -126,7 +126,7 @@ _Packet tracing of a TCP SYN scan_
 
 #### TCP ACK
 
-![TCP ACK scan diagram.](tcp_ack.png){: width="70%"}
+![TCP ACK scan diagram.](tcp_ack.png)
 _Schematic diagram of a TCP ACK scan_
 
 As we can see below, since the `reset` flag was received, nmap marked the host as alive:
@@ -134,7 +134,7 @@ As we can see below, since the `reset` flag was received, nmap marked the host a
 ![TCP ACK scan packet tracing.](tcp_ack_scan.jpg)
 _Packet tracing of a TCP ACK scan_
 
-![TCP ACK scan reasoning.](tcp_ack_scan_reason.jpg){: width="60%"}
+![TCP ACK scan reasoning.](tcp_ack_scan_reason.jpg)
 _Reasosing of a live host after a TCP ACK scan_
 
 ## Footnote
