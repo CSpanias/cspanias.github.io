@@ -1,14 +1,16 @@
 ---
 title: Nmap Notes
 date: 2023-11-12
-categories: [Notes, Enumeration]
-tags: [nmap]
+categories: [Notes, Nmap]
+tags: [nmap, networking, firewall, icmp, tcp, ttl, enumeration, arp]
 img_path: /assets/nmap/
 ---
 
 ## Introduction
 
-<!-- material and picks taken from THM and HTB -->
+**Live host discovery** is crucial as going directly into port scanning can **waste time** and **create unnecessary noise** if trying to scan offline systems.
+
+![Host discovery cheatsheet.](host_discovery_cheatsheet.png)
 
 ## Host discovery
 
@@ -29,6 +31,7 @@ To confirm nmap's behaviour with and without the use of a privileged account, we
 When we execute the command without `sudo`, it skips both the ARP and ICMP scans, and goes straight for a full TCP scan. However, when we use `sudo` it performs an ARP scan as expected, since the target host is on the same subnet as us.
 
 > If we gain an initial foothold with a low-privileged user on a target host and we try to enumerate the network from within using `nmap`, it will use a full TCP scan which will generate a lot of traffic and probably a system alert.
+{: .prompt-danger }
 
 ### ARP scan
 
@@ -44,6 +47,7 @@ Requirements:
 1. Privileged account.
 
 > If the target is on the same subnet, **an ARP request will precede the ICMP echo request**. We can disable ARP requests using `--disable-arp-ping`.
+{: .prompt-info }
 
 ![Schematic diagram of an ICMP echo request.](nmap_icmp.png){: width="60%"}
 
@@ -55,7 +59,7 @@ New Windows versions as well as many firewalls block ICMP echo requests by defau
 
 ![ICMP echo permitted.](firewall_icmp_permitted.jpg)
 
-To see what happens in practice, we can scan a live host residing on a different subnet and add the `--packet-trace` and `--reason` flags:
+To see what happens in practice, we can scan a live host residing on a different subnet:
 
 ![Packet tracing during an ICMP echo request](icmp_echo_packet-trace.jpg)
 
@@ -65,20 +69,23 @@ We see that nmap sent an ICMP echo request and it received an ICMP echo reply ba
 
 ![Reason that hosts is up on ICMP echo request](icmp_echo_packet-trace_host_down.jpg)
 
-<!-- Can we highlight this part? -->
-An interesting thing to note is that we can identify which OS our target use by looking at its **time-to-live** value, (`ttl`). The [default initial TTL value](https://www.systranbox.com/why-is-ttl-different-for-linux-and-windows-systems/) for **Linux/Unix** is **64**, and TTL value for **Windows** is **128**.
+
+> The TTL (time-to-live) value can helps us in identifying the target OS. The [default initial TTL value](https://www.systranbox.com/why-is-ttl-different-for-linux-and-windows-systems/) for **Linux/Unix** is **64**, and TTL value for **Windows** is **128**.
+{: .prompt-tip }
 
 ![ttl value of 63 for Linux](ttl_linux.jpg){: width="70%"}
 
 ![ttl value of 127 for Windows](ttl_windows.jpg){: width="70%"}
 
 > As ICMP echo requests tend to be blocked, we can consider sending an **ICMP Timestamp** (`-PP`) or an **ICMP Address Mask** (`-PM`) request, and expect for a Timestamp or an Address Mask reply, respectively.
+{: .prompt-tip }
 
 ### TCP scans
 
 #### TCP full scan
 
 > Unprivileged users can only scan using the full TCP 3-way handshake method.
+{: .prompt-info }
 
 ![TCP 3-way handshake scan.](tcp_full.png){: width="70%"}
 
@@ -94,6 +101,7 @@ Requirements:
 1. Privileged account.
 
 > Privileged users don't need to complete the TCP 3-way handshake even if the port is open (TCP SYN scan), but unprivileged ones have no choice but wait for its completion (TCP full scan).
+{: .prompt-info }
 
 ![TCP SYN scan diagram.](tcp_syn_ps.png){: width="70%"}
 
@@ -108,3 +116,8 @@ As we can see below, since the `reset` flag was received, nmap marked the host a
 ![TCP ACK scan packet tracing.](tcp_ack_scan.jpg)
 
 ![TCP ACK scan reasoning.](tcp_ack_scan_reason.jpg){: width="60%"}
+
+## Footnote
+
+1. The majority of the material comes from [TryHackMe's Nmap](https://tryhackme.com/room/furthernmap) and [HackTheBox's Network Enumeration with Nmap](https://academy.hackthebox.com/course/preview/network-enumeration-with-nmap) modules.
+2. The scan diagrams come exclusively from [TryHackMe's Nmap](https://tryhackme.com/room/furthernmap) module.
