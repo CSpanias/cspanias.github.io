@@ -25,7 +25,7 @@ When no host discovery options are set, nmap follows the approaches shown below 
 
 To confirm nmap's behaviour with and without the use of a privileged account, we can trying scanning a random IP address from the same subnet as ours:
 
-![Using ifconfig command to find our IP address](ifconfig.jpg){: width="70%" .center} 
+![Using ifconfig command to find our IP address](ifconfig.jpg){: width="70%" .center-image} 
 _Using `ifconfig` to note down our IP address_
 
 ![Default host discovery scan with and without sudo](default_vs_sudo_scan.jpg){: width="70%" .center} 
