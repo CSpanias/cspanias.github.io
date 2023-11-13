@@ -73,7 +73,7 @@ To see what happens in practice, we can scan a live host residing on a different
 _Packet tracing during an ICMP echo request_
 
 ![Reason that hosts is up on ICMP echo request](icmp_echo_reason.jpg)
-_Reasoning of why nmap marked this hosts as alive after an ICMP echo request_
+_Reasoning of why nmap marked the host as alive after an ICMP echo request_
 
 We see that nmap sent an ICMP echo request and it received an ICMP echo reply back, thus, it marked the host as online. If we try to replicate that for a host that is not up, nmap will send two ICMP echo requests before it gives up and mark the host as offline. The second is just making sure that nothing went wrong with the first one:
 
@@ -84,10 +84,10 @@ _Packet tracing of a dead host with an ICMP echo request_
 {: .prompt-tip }
 
 ![ttl value of 63 for Linux](ttl_linux.jpg)
-_TTL value of 63 pointing out to a Linux OS_
+_TTL value of 63 pointing towards a Linux OS_
 
 ![ttl value of 127 for Windows](ttl_windows.jpg)
-_TTL value of 127 pointing out to a Windodws OS_
+_TTL value of 127 pointing towards a Windodws OS_
 
 > As ICMP echo requests tend to be blocked, we can consider sending an **ICMP Timestamp** (`-PP`) or an **ICMP Address Mask** (`-PM`) request, and expect for a Timestamp or an Address Mask reply, respectively.
 {: .prompt-tip }
@@ -100,7 +100,7 @@ _TTL value of 127 pointing out to a Windodws OS_
 {: .prompt-info }
 
 ![TCP 3-way handshake scan.](tcp_full.png)
-_Full TCP 3-way handshake scan_
+_Schematic diagram of a full TCP 3-way handshake scan_
 
 That's is how the process looks like:
 
