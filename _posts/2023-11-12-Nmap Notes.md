@@ -36,27 +36,24 @@ Requirements:
 1. Privileged account.
 2. Same subnet.
 
-Process:
-1. Nmap **sends an ARP request**.
-2. It **expects an ARP reply** back if the host is online.
-
 ![Schematic diagram of an ARP request.](arp_scan.png){: width="60%"}
 
 ### ICMP echo scan
 
 Requirements:
 1. Privileged account.
-2. Different subnet.
 
 > If the target is on the same subnet, **an ARP request will precede the ICMP echo request**. We can disable ARP requests using `--disable-arp-ping`.
 
-Process:
-1. Nmap **sends an ICMP echo request**.
-2. It **expects an ICMP echo reply** back if the host is online.
-
 ![Schematic diagram of an ICMP echo request.](nmap_icmp.png){: width="60%"}
 
-> New Windows versions as well as many firewalls block ICMP echo requests by default.
+New Windows versions as well as many firewalls block ICMP echo requests by default:
+
+![Windows Defenders Inbound rules.](firewall_rules.jpg)
+
+![ICMP echo blocked.](firewall_icmp_blocked.jpg)
+
+![ICMP echo permitted.](firewall_icmp_permitted.jpg)
 
 To see what happens in practice, we can scan a live host residing on a different subnet and add the `--packet-trace` and `--reason` flags:
 
@@ -68,16 +65,14 @@ We see that nmap sent an ICMP echo request and it received an ICMP echo reply ba
 
 ![Reason that hosts is up on ICMP echo request](icmp_echo_packet-trace_host_down.jpg)
 
----------------
-An interesting thing to note is the **time-to-live** variable, `ttl`. Its value can helps us enumerate the target OS: smaller numbers, such as `63`, indicate Linux, while bigger ones, like `127`, indicate Windows.
-
-<!-- Why? What about macOS? -->
+<!-- Can we highlight this part? -->
+An interesting thing to note is that we can identify which OS our target use by looking at its **time-to-live** value, (`ttl`). The [default initial TTL value](https://www.systranbox.com/why-is-ttl-different-for-linux-and-windows-systems/) for **Linux/Unix** is **64**, and TTL value for **Windows** is **128**.
 
 ![ttl value of 63 for Linux](ttl_linux.jpg){: width="70%"}
 
 ![ttl value of 127 for Windows](ttl_windows.jpg){: width="70%"}
 
-> As ICMP Echo requests tend to be blocked, we can consider sending an ICMP Timestamp (`-PP`) or an ICMP Address Mask (`-PM`) request, and expect for a Timestamp or an Address Mask reply, respectively.
+> As ICMP echo requests tend to be blocked, we can consider sending an **ICMP Timestamp** (`-PP`) or an **ICMP Address Mask** (`-PM`) request, and expect for a Timestamp or an Address Mask reply, respectively.
 
 ### TCP scans
 
@@ -85,42 +80,31 @@ An interesting thing to note is the **time-to-live** variable, `ttl`. Its value 
 
 > Unprivileged users can only scan using the full TCP 3-way handshake method.
 
-Process:
-1. Nmap **sends a SYN packet**.
-2. If the host is alive, it will **reply with a SYN/ACK packet**.
-3. Nmap will **send an ACK packet**.
-
 ![TCP 3-way handshake scan.](tcp_full.png){: width="70%"}
 
 That's is how the process looks like:
 
 ![TCP 3-way handshake scan with packet trace.](tcp_full_scan_low_user.jpg){: width="70%"}
 
-![TCP 3-way handshake scan with reason.](tcp_full_scan_low_user_reason.jpg){: width="70%"}
+![TCP 3-way handshake scan with reason.](tcp_full_scan_low_user_reason.jpg){: width="60%"}
 
 #### TCP SYN scan
 
 Requirements:
 1. Privileged account.
-2. Different subnet.
 
-Process:
-1. Nmap **sends a SYN packet**.
-2. If host is alive, it will **reply with a SYN/ACK packet**.
-3. Nmap will close the communication by **sending a RST packet**.
+> Privileged users don't need to complete the TCP 3-way handshake even if the port is open (TCP SYN scan), but unprivileged ones have no choice but wait for its completion (TCP full scan).
 
-> The process looks the same with a TCP full scan, with the difference that here the communication is closed, and not hanged up.
+![TCP SYN scan diagram.](tcp_syn_ps.png){: width="70%"}
 
-<!-- what's the real differece? -->
+![TCP SYN scan packet tracing.](tcp_syn_scan.jpg)
 
 #### TCP ACK
 
-Process:
-1. Nmap **sends a packet with the ACK flag set**.
-2. If the host is up, it will **reply with a RST packet**.
+![TCP ACK scan diagram.](tcp_ack.png){: width="70%"}
 
 As we can see below, since the `reset` flag was received, nmap marked the host as alive:
 
 ![TCP ACK scan packet tracing.](tcp_ack_scan.jpg)
 
-![TCP ACK scan reasoning.](tcp_ack_scan_reason.jpg){: width="70%"}
+![TCP ACK scan reasoning.](tcp_ack_scan_reason.jpg){: width="60%"}
