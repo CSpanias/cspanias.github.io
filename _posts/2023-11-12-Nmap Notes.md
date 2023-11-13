@@ -10,7 +10,7 @@ img_path: /assets/nmap/
 
 **Live host discovery** is crucial as going directly into port scanning can **waste time** and **create unnecessary noise** if trying to scan offline systems.
 
-![Host discovery cheatsheet.](host_discovery_cheatsheet.png)
+![Host discovery cheatsheet](host_discovery_cheatsheet.png)
 _[Commands](https://www.stationx.net/nmap-cheat-sheet/) related with Live Host Discovery_
 
 ## Host discovery
@@ -25,10 +25,10 @@ When no host discovery options are set, nmap follows the approaches shown below 
 
 To confirm nmap's behaviour with and without the use of a privileged account, we can trying scanning a random IP address from the same subnet as ours:
 
-![Using ifconfig command to find our IP address.](ifconfig.jpg){: width="70%"}
+![Using ifconfig command to find our IP address](ifconfig.jpg){: width=70%} 
 _Using `ifconfig` to note down our IP address_
 
-![Default host discovery scan with and without sudo.](default_vs_sudo_scan.jpg){: width="70%"}
+![Default host discovery scan with and without sudo](default_vs_sudo_scan.jpg){: width=70%} 
 _Default Live Host Discovery scan with and without the use of a privilieged account_
 
 When we execute the command without `sudo`, it skips both the ARP and ICMP scans, and goes straight for a full TCP scan. However, when we use `sudo` it performs an ARP scan as expected, since the target host is on the same subnet as us.
