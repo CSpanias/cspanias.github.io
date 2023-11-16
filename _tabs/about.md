@@ -16,7 +16,7 @@ I am always game for a game of chess [<i class="fa-solid fa-chess"></i>](https:/
 
 I will be writing write ups for all the completed CTFs for reviewing the process myself as well as digging into the nitty-gritty of each room. Hopefully, aside from my own benefit, people who are complete beginners, like me, might find these posts helpful.
 
-Additionally, I plan to sit for the TMC's [PJPT](https://certifications.tcm-sec.com/pjpt/) and [PNPT](https://certifications.tcm-sec.com/pnpt/) certifications in the near future, so I aim to document my experience through TMC's training, and how it compares with THM's learning paths in terms of quality, difficulty, subjects covered, and, of course, enjoyment.
+Additionally, I plan to sit for the TMC's [PJPT](https://certifications.tcm-sec.com/pjpt/) and [PNPT](https://certifications.tcm-sec.com/pnpt/) certifications in the near future, so I aim to document my experience through TMC's training, and how it compares with THM's and HTB's learning paths in terms of quality, difficulty, subjects covered, and, of course, enjoyment.
 
 ### Projects
 
