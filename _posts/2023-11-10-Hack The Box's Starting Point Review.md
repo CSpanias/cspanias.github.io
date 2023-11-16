@@ -120,10 +120,10 @@ Most walkthroughs include links to HTB academy modules that are relevant to the 
 
 | Room | Concept | Service | Tool(s) |
 |:-----------------------------|:-----------------|
-| Archetype | Reverse shell, privilege escalation, automated enumeration | SMB, ms-sql-s | `nmap`, `smbclient`, `mssqlclient.py`, `nc`, winPEAS, `psexec.py` | 
+| Archetype | xp_cmdshell, automated enumeration | SMB, ms-sql-s | `nmap`, `smbclient`, `mssqlclient.py`, `nc`, winPEAS, `psexec.py` | 
 | Oopsie | Web crawling, cookie tampering, information disclosure, webshell, dir busting, shell stabilization, suid | HTTP | `nmap`, Burp Suite, `gobuster`, `find`, `grep` |
-| Vaccine |   |  | `nmap` |
-| Unified |  |  | `nmap` |
+| Vaccine | Password-protected files, hashes, SQLi, cookie stealing, RCE | FTP, HTTP | `nmap`, `zip2john`, `john`, crackstation, `sqlmap`, cookie-editor, GTFOBins |
+| Unified | Log4J, UniFi, OS Command Injection, RCE, hashes | HTTP, MongoDB | `nmap`, Burp Suite, `tcpdump`, rogue-jndi, `nc`, `mongo` |
 | Included |  |  |  `nmap` |
 | Markup |  |  |  `nmap`|
 | Base |  |  |  `nmap` |
