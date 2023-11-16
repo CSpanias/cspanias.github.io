@@ -28,7 +28,9 @@ Additionally, I plan to sit for the TMC's [PJPT](https://certifications.tcm-sec.
 -->
 <i class="fa-solid fa-network-wired"></i> [Junior Cybersecurity Analyst (CISCO)](https://www.credly.com/earner/earned/badge/1bce6970-ccf1-4b58-9111-5a00b15aa261)  
 
-<i class="fa-brands fa-linux"></i> [Hacking with Kali Linux (Hackers Academy)](https://hackersacademy.com/courses/hacking-with-kali-linux), [NCIST (NatWest)](https://drive.google.com/file/d/1viyFopGSW36Lu58TiFbYRsqqlIu3pNw4/view?pli=1), [THM Paths](https://tryhackme.com/paths): Pre Security (40h), Complete Beginner (64h), Introduction to Cyber Security (24h), Web Fundamentals (32h), CompTIA Pentest+ (32h), Jr Penetration Tester (64h), Red Teaming (48h)
+<i class="fa-brands fa-linux"></i> [Hacking with Kali Linux (Hackers Academy)](https://hackersacademy.com/courses/hacking-with-kali-linux), [NCIST (NatWest)](https://drive.google.com/file/d/1viyFopGSW36Lu58TiFbYRsqqlIu3pNw4/view?pli=1), 
+
+<i class="fa-solid fa-check-double"></i> [THM Paths](https://tryhackme.com/paths): Pre Security (40h), Complete Beginner (64h), Introduction to Cyber Security (24h), Web Fundamentals (32h), CompTIA Pentest+ (32h), Jr Penetration Tester (64h), Red Teaming (48h)  
 
 <!-- 
 <i class="fa-brands fa-html5"></i> <i class="fa-brands fa-css3-alt"></i> <i class="fa-brands fa-js"></i> [MDN - Learn Web Development](https://developer.mozilla.org/en-US/docs/Learn)  
