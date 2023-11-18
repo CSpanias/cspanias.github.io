@@ -114,7 +114,7 @@ Most walkthroughs include links to HTB academy modules that are relevant to the 
 
 ## Tier 2
 
-This Tier includes 7 rooms and their walkthrough range from 14 up to 23 pages. HTB does a good job describing this tier:
+Tier 2 includes 7 rooms and the walkthroughs range from 14 up to 23 pages.
 
 > _This is the final Tier, and the **most complex**. The Boxes in Tier 2 are **full-fledged, and chain multiple steps together**. You'll need to enumerate, gain an initial foothold, and escalate your privileges to reach root/system. Unlike in the previous Tiers, these Boxes have **two flags**, `user.txt` and `root.txt`._
 
@@ -130,17 +130,20 @@ Here is an overview of the tier 2 machines:
 | Markup |  |  |  `nmap`|
 | Base |  |  |  `nmap` |
 
-When I entered the tier 2 machines, I had already started studying through the [Penetration Tester](https://academy.hackthebox.com/path/preview/penetration-tester) job path for the CPTS, so I took a slighly different approach than the previous tiers:
+When I entered this level, I had already started studying through the [Penetration Tester](https://academy.hackthebox.com/path/preview/penetration-tester) job path for the CPTS, so I took a slighly different approach than the previous tiers:
 1. I spawned the machine and just noted down the IP address; I didn't look at any of the room questions. 
 2. I tried to enumerate it to the best of my abilities and went as far as I could.
-2. If I couldn't make any progress for about 30-45 minutes, I then looked at the questions, which, more often than not, worked like hints. 
-3. If after looking the questions I was still stuck, then I read the walkthrough until I got myself unstuck.
+2. If I couldn't make any progress for about 30-45 minutes, I then looked at the questions, which, more often than not, they worked like hints. 
+3. If after looking the questions I was still stuck, I then read the walkthrough until I got myself unstuck.
 4. Then, I started working alone again, and in case I got stuck again, I repeated the process until I solved the box.
 
-As a result, it took me, on average, 2.5 hours to solve a (very easy!) box! I have also implemented [Tyler Ramsbey](https://www.youtube.com/@TylerRamsbey)'s advice and started making a to-do list for each port/service I found, to make sure that I was not forgetting to check anything and most importantly to have a plan beforehand and not spend too long on a potential rabithole. 
+As a result, it took me, on average, **2.5 hours to solve a (very easy!!!) box**. In this tier I also implemented [Tyler Ramsbey](https://www.youtube.com/@TylerRamsbey)'s advice and started making a to-do list for each port/service I found, to made sure that I was not forgetting to check anything and, most importantly, to have a plan beforehand and not spend too long on a potential rabithole. 
 
-> The **to-do list** methodology helped me tremendously in progressing through each box and developing the **intuition of having an attack plan ready as soon as I see a service**. In addition, as I do it while working through a machine, it helps me a lot with generating **documentation** which is a big bonus. I also used this approach on a recent **assault course exercise** that I had to do for an **entry level security tester position** (more on that on another post!). 
+> The **to-do list** methodology helped me tremendously in progressing through each box and developing the **intuition of having an attack plan ready as soon as I saw a service**. In addition, as I did it while working through a machine, it helped me a lot with generating **documentation** which was a big bonus. 
+>
+> I also used this approach on a recent **assault course exercise** that I had to do for an **entry level security tester position** (more on that on another post!) with very good results. 
 
 
 ## Conclusion
 
+<!-- Briefly mention: THM path good, HTB great and more options, briefly mention the HTB Pentest path -->
