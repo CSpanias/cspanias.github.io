@@ -1,5 +1,5 @@
 ---
-title: Mr Robot CTF Write Up
+title: THM - Mr Robot
 date: 2023-09-27
 categories: [CTF Write Up, THM]
 tags: [nmap, gobuster, hydra, burp-suite, wpscan, crackstation, hash, john, hashcat, gtfobins, suid, intruder]
