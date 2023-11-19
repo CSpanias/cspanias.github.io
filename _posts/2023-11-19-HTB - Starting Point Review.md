@@ -9,11 +9,11 @@ mermaid: true
 
 ## TryHackMe vs. HackTheBox
 
-For the past few months, I was intensively studying and practicing almost exclusively through the [Try Hack Me](https://tryhackme.com) (THM) platform. Within 3 months, I have completed, almost, 7 out of 9 learning paths that I had set as a goal - I stopped at ~80% of [Red Teaming](https://tryhackme.com/paths) - as well as worked my way through numerous CTF rooms. 
-
-I realised that I was spending far too much time on just one resource, so I through to give a try to its "competitor", the [Hack The Box](https://app.hackthebox.com/home) platform. 
+For the past few months, I was intensively studying and practicing almost exclusively through the [Try Hack Me](https://tryhackme.com) (THM) platform. Within 3 months I completed, almost, 7 out of 9 learning paths that I had set as a goal, worked my way through numerous CTF rooms, and I was sitting at the top 2% rank.
 
 ![THM profile](thm_profile.png)
+
+My initial plan was to "pause" my THM journey, as I wanted to enroll and start studying for the [Practical Junior Penetration Tester (PJPT)](https://certifications.tcm-sec.com/pjpt/) cert, but after exploring HTB's structure, I found it so intriguing, that I opted to go for the [Certified Penetration Testing Specialist (CPTS)](https://academy.hackthebox.com/preview/certifications/htb-certified-penetration-testing-specialist) instead. 
 
 I have read numerous articles and seen many YouTube videos comparing THM and HTB, and everyone seemed to agree that **THM is aimed at absolute beginners** , while **HTB is considered a more advanced platform**. And I quickly understood why when I read the following while working through HTB's Penetration Testing job path:
 
@@ -23,22 +23,20 @@ Luckily for beginners, like myself, HTB is presently a lot more than the above d
 
 ![htb products](htb-products.png){: width="70%"}
 
-After exploring HTB's structure, I was keen to give it a try so I decided to switch from THM to HTB. My initial plan was to enroll and start studying for the [Practical Junior Penetration Tester (PJPT)](https://certifications.tcm-sec.com/pjpt/) cert, so I would "pause" my THM journey anyway, but since I found HTB's platform so intriguing, I also opted to go for the [Certified Penetration Testing Specialist (CPTS)](https://academy.hackthebox.com/preview/certifications/htb-certified-penetration-testing-specialist) instead. 
+My HTB journey is now under way and, hopefully, I will soon be writing another post for my experience on completing the [Penetration Test job path](https://academy.hackthebox.com/path/preview/penetration-tester) as well as for the CPTS exam itself.
 
-So, my HTB journey is now at its roots, and hopefully, I will soon be writing another post for my experience on completing the [Penetration Test job path](https://academy.hackthebox.com/path/preview/penetration-tester), which is a requirement for being eligible to sit for the CPTS exam, as well as for the CPTS exam itself. 
-
-> You can find the rationale behind why one can't sit directly for the CPTS without having completed the associated job path on [this](https://youtu.be/noieqyKdMQg?t=1165) amazing discussion between John Hammond and Dimitrios Bougioukas, the HTB's Academy Director.
+> You can find the rationale behind why one can't sit directly for the CPTS without having completed the associated job path on [this](https://youtu.be/noieqyKdMQg?t=1165) amazing discussion between [John Hammond](https://johnhammond.llc/) and [Dimitrios Bougioukas](https://www.linkedin.com/in/dbougioukas/), HTB's Academy Director.
 {: .prompt-info }
 
-When I first logged in on the HTB platform, it suggested to me to go through the [Starting Point](https://app.hackthebox.com/starting-point): 
-
-> _**Starting Point** is **Hack The Box on rails**. It's a **linear series of Boxes tailored to absolute beginners** and features very easy exploit paths to not only introduce you to our platform but also **break the ice into the realm of penetration testing**. Using the Starting Point, you can **get a feel for how Hack The Box works**, how to connect and interact with Boxes, and **pave a basic foundation for your hacking skills to build off of**._
-
-I just completed all three tiers of the Starting Point, and I was so impressed by the **well thought out structure** and the **exceptionally well-written walkthroughs**, that I decided to write a quick post and, hopefully, let more people know about it!
+When I first logged in on the HTB platform, it suggested to me to go through the [Starting Point](https://app.hackthebox.com/starting-point):
 
 ![htb-starting-point](htb-starting-point.jpg)
 
-As I said, Starting point is divided into three tiers: 0, 1, and 2. So, I will try to briefly review each one separately.
+> _**Starting Point** is **Hack The Box on rails**. It's a **linear series of Boxes tailored to absolute beginners** and features very easy exploit paths to not only introduce you to our platform but also **break the ice into the realm of penetration testing**. Using the Starting Point, you can **get a feel for how Hack The Box works**, how to connect and interact with Boxes, and **pave a basic foundation for your hacking skills to build off of**._
+
+I just completed all 3 tiers of the Starting Point, and I was so impressed by the **well thought out structure** and the **exceptionally well-written walkthroughs**, that I decided to write a quick post and, hopefully, let more people know about it!
+
+My goal is to provide a very brief overview of each tier and highlight the differences among them.
 
 ## The Key is a Strong Foundation - Tier 0
 
@@ -47,14 +45,14 @@ According to HTB, the goal of this tier is to:
 > *Cover the absolute **fundamentals of attacking a Box**. You'll learn **how to connect to the VPN**, perform **basic enumeration of ports and services**, and **interact with the services you find**. Each Box in this Tier is focused on a particular tool or service and contains only a single primary step.*
 
 
-Tier 0 contains 8 rooms in total and the final task of each machine is to find a single flag, the `flag.txt` file. Each machine includes a walkthrough that is similary structured, and, usually, contains three sections:
+Tier 0 contained 8 rooms in total and the final task of each machine was to find a single flag, the `flag.txt` file. Each machine included a walkthrough that was similary structured, and, usually, consisted of three sections:
 1. **Introduction**: General information for setting up the room's context.
 2. **Enumeration**: How to use `nmap` for port scanning and how to perform service-specific enumeration.
 3. **Foothold**: How to interact with the service found.
 
 ![Tier 0 walkthrough](tier0-walkthrough.jpg)
 
-You can find an overview of each room below:
+An overview of each room is presented below:
 
 | Room | Concept | Service | Tool(s) |
 |:-----------------------------|:-----------------|
@@ -67,17 +65,17 @@ You can find an overview of each room below:
 | Mongod | Document-oriented NoSQL databases | mongodb |  `nmap`, `mongodb` |
 | Synced | File transfer services | rsync |  `nmap`, `rsync` |
 
-As you can see, this tier does just what it says: emphasizes **basic enumeration using** `nmap`, which starts from just a basic scan and ends up using various options, such as `-sC`, `-sV`, `-p-` and `--min-rate`, and **service-specific interaction**. 
+This tier does just what it says: emphasizes **basic enumeration using** `nmap`, which starts from just a basic scan and ends up using various options, such as `-sC`, `-sV`, `-p-` and `--min-rate`, and **service-specific interaction**. 
 
 The **walkthroughs here are relatively short**, from 4 to 12 pages, so it does not dive deep in any of the concepts mentioned, but gives just enough information so someone can understand what is happening on each room.
 
 ## You Need to Walk Before You Can Run - Tier 1
 
-Moving on to tier 1, the difficulty started to ramp up and some rooms seemed a bit challenging given the fact that are rated as **very easy** (but don't get discouraged!):
+Moving on to tier 1, the difficulty started to ramp up and some rooms seemed a bit more challenging than expected, given the fact that are rated as **very easy**:
 
 > _...things are kicked up a notch and a bit more complexity is introduced. Tier 1 focuses on **fundamental exploitation techniques**. While **the depth of the material in this Tier is increased** over the previous, these **Boxes** still feature a single primary exploitation step._
 
-This tier contained 10 rooms in total and the final task was the same as before, i.e., finding `flag.txt`. The walkthroughs were similarly structured, but they increased in complexity and size, ranging from 8 up to 19 pages.
+This tier included 10 rooms in total and the final task was the same as before, i.e., finding `flag.txt`. The walkthroughs were similarly structured, but they increased in complexity and size, ranging from 8 up to 19 pages.
 
 Here is an overview of the rooms included on this level:
 
@@ -94,9 +92,9 @@ Here is an overview of the rooms included on this level:
 | Pennyworth | Jenkins, groovy scripts, RCE | HTTP |  `nmap`, `nc` |
 | Tactics | Firewalls, Impacket | SMB |  `nmap`, `smbclient`, `psexec.py` |
 
-A lot of more concepts were introduced, the depth of each walkthough increased, and the number of tools used per machine grew from just 1-2 to 2-6. 
+A lot of more concepts were introduced, the depth of each walkthough was increased, and the number of tools used per machine grew from just 1-2 to 2-6. 
 
-As I have already mentioned, **the quality of the walkthroughs is top-notch**. Personally, I always took my time with each machine, so I can make sure that I understoond what I was doing on each step. More than once, in particular when I encountered a concept for the first time, I went over a machine multiple times. 
+As I have already mentioned, **the quality of the walkthroughs is top-notch**. Personally, I always took my time with each machine, and progressed slowly until I was confident that I understoond what I was doing on each step. More than once, in particular when I encountered a concept for the first time, I went over a machine multiple times. 
 
 For example, for the Funnel room:
 1. The first time, I worked along the walkthrough, making detailed notes on the side. I completed the machine, but I was still having a hard time understanding how **remote and dynamic port forwarding** worked.
@@ -107,9 +105,6 @@ For example, for the Funnel room:
 
 > Most walkthroughs include links to HTB academy modules that are relevant to the room. Funnel was one of the few that did not, but after a quick search on the HTB Academy I found the [Pivoting, Tunneling, and Port Forwarding](https://academy.hackthebox.com/module/details/158) module, which they might forgot to link to the machine.
 {: .prompt-info }
-
-![](tunneling-module.png)
-
 
 ## Tier 2
 
@@ -136,12 +131,21 @@ When I entered this level, I had already started studying through the [Penetrati
 3. If after looking the questions I was still stuck, I then read the walkthrough until I got myself unstuck.
 4. Then, I started working alone again, and in case I got stuck again, I repeated the process until I solved the box.
 
-As a result, it took me, on average, **2.5 hours to solve a (very easy!!!) box**. While working through this tier, I also implemented [Tyler Ramsbey](https://www.youtube.com/@TylerRamsbey)'s advice and started making a to-do list for each port/service I found, to made sure that I was not forgetting to check anything and, most importantly, to have a plan beforehand and not spend too long on a potential rabithole. For example, if the machine has an HTTP(S) server I know beforehand what I will do and I also have the commands right below to make the process as efficient as possible:
+As a result, it took me, on average, **2.5 hours to solve a (very easy!!!) box**. While working through this tier, I also implemented [Tyler Ramsbey](https://www.youtube.com/@TylerRamsbey)'s advice and started making a to-do list for each port/service I found, to made sure that I was not forgetting to check anything and, most importantly, to have a plan beforehand and not spend too long on a potential rabithole. 
+
+For example, if the machine has an HTTP(S) server, I know beforehand what I want to do. Obviously, this list serves as a starting point, and it expands with info and tasks as I am working through the machine. I found handy to also have the commands right below as it makes the process far more efficient:
 
 ![Web Enumeration Checklist](web_enum_checklist.png)
 
 > The **to-do list** methodology helped me tremendously in progressing through each box and developing the **intuition of having an attack plan ready as soon as I saw a service**. In addition, as I did it while working through a machine, it helped me a lot with generating **documentation** which was a big bonus.
+{: .prompt-info }
 
 ## Conclusion
 
-<!-- Briefly mention: THM path good, HTB great and more options, briefly mention the HTB Pentest path, writeups for the retired machines are bad? -->
+As a conclusion, having spend some time on both THM and HTB, I can't say that it is a matter of which is best, but rather which suits someone's goals best. I wanted to sit for an entry-level certification while having the chance to practice on CTFs, and HTB ticks both boxes. Having said that, I will almost certainly rejoin THM once I get the CPTS, and I will try to be active in both platforms. 
+
+The only unpleasant surprise I encountered so far on HTB is that the walkthroughs for the retired machines do not seem to be on the same level as those written for Starting Point's machines. To be fair, I have just done two boxes, [Nibbles](https://app.hackthebox.com/machines/121) and [Broker](https://app.hackthebox.com/machines/578), so I will have a better opinion when I have a bigger sample.
+
+One reason for that might be that there is an extensive video-walkthrough from [IppSec](https://www.youtube.com/@ippsec) on every box as well as a shorter written walkthrough from [0xdf](https://0xdf.gitlab.io/)!
+
+![Starting Point badges](starting_point_badges)
