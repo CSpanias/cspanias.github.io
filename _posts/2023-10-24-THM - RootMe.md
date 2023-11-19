@@ -1,5 +1,5 @@
 ---
-title: RootMe CTF Write Up
+title: THM - RootMe
 date: 2023-10-24
 categories: [CTF Write Up, THM]
 tags: [gtfobins, suid, gobuster, nmap, webshell, apache]

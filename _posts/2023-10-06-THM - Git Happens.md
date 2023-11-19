@@ -1,5 +1,5 @@
 ---
-title: Git Happens CTF Write Up
+title: THM - Git Happens
 date: 2023-10-06
 categories: [CTF Write Up, THM]
 tags: [nmap, nikto, git, gittools]

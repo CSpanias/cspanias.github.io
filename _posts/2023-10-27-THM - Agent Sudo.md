@@ -1,5 +1,5 @@
 ---
-title: Agent Sudo CTF Write Up
+title: THM - Agent Sudo
 date: 2023-10-27
 categories: [CTF Write Up, THM]
 tags: [nmap, burpsuite, ssh, ftp, john, hydra, brute-force, dictionary-attack, steganography, binwalk, stegseek, john, encoding, base64, exploit-db, gtfobins, sudo, zip, compression]
