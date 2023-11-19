@@ -2,8 +2,8 @@
 icon: fas fa-info-circle
 order: 4
 ---
-<div align="left"> <script src="https://www.hackthebox.com/badge/1705946"></script> </div>
-<div align="left"> <script src="https://tryhackme.com/badge/2134791"></script> </div>
+ <script src="https://www.hackthebox.com/badge/1705946"></script>
+ <script src="https://tryhackme.com/badge/2134791"></script>
 
 
 ### Who Am I?
