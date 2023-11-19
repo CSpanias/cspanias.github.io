@@ -6,9 +6,15 @@ order: 4
 <script src="https://tryhackme.com/badge/2134791"></script>
 
 
-![THM-kuv4z](https://www.hackthebox.com/badge/1705946)
-![HTB-kuvaz](https://tryhackme.com/badge/2134791)
+[![THM-kuv4z](https://www.hackthebox.com/badge/1705946)](https://www.hackthebox.com/badge/1705946)
+[![HTB-kuvaz](https://tryhackme.com/badge/2134791)](https://tryhackme.com/badge/2134791)
 
+
+[![THM-kuv4z](https://www.hackthebox.com/badge/image/1705946)](https://www.hackthebox.eu/home/users/profile/1705946)
+[![HTB-kuvaz](https://tryhackme.com/badge/2134791)](https://tryhackme.com/badge/2134791)
+
+
+[ ![Relwarc17](https://www.hackthebox.eu/badge/image/42767)](https://www.hackthebox.eu/home/users/profile/42767)
 
 ### Who Am I?
 
