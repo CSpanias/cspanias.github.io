@@ -146,6 +146,6 @@ As a conclusion, having spend some time on both THM and HTB, I can't say that it
 
 The only unpleasant surprise I encountered so far on HTB is that the walkthroughs for the retired machines do not seem to be on the same level as those written for Starting Point's machines. To be fair, I have just done two boxes, [Nibbles](https://app.hackthebox.com/machines/121) and [Broker](https://app.hackthebox.com/machines/578), so I will have a better opinion when I have a bigger sample.
 
-One reason for that might be that there is an extensive video-walkthrough from [IppSec](https://www.youtube.com/@ippsec) on every box as well as a shorter written walkthrough from [0xdf](https://0xdf.gitlab.io/)!
+One reason for that might be that there is an extensive video-walkthrough from [IppSec](https://www.youtube.com/@ippsec) on every box as well as a shorter written walkthrough from [0xdf](https://0xdf.gitlab.io/), so I shouldn't really complain, should I???
 
 ![Starting Point badges](starting_point_badges.png)
