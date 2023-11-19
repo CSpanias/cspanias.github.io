@@ -2,7 +2,7 @@
 title: HTB - Starting Point Review 
 date: 2023-11-19
 categories: [Review, HTB]
-tags: [penetration-testing, starting-point, hackthebox, htb-academy, ctf, capture-the-flag, ethical-hacking]
+tags: [penetration-testing, starting-point, hackthebox, htb-academy, ctf, capture-the-flag, ethical-hacking, review]
 img_path: /assets/htb-startingpoint/
 mermaid: true
 ---
@@ -148,4 +148,4 @@ The only unpleasant surprise I encountered so far on HTB is that the walkthrough
 
 One reason for that might be that there is an extensive video-walkthrough from [IppSec](https://www.youtube.com/@ippsec) on every box as well as a shorter written walkthrough from [0xdf](https://0xdf.gitlab.io/)!
 
-![Starting Point badges](starting_point_badges)
+![Starting Point badges](starting_point_badges.png)
