@@ -7,35 +7,38 @@ img_path: /assets/htb-startingpoint/
 mermaid: true
 ---
 
-## Introduction
+## TryHackMe vs. HackTheBox
 
-For the past few months, I was intensively studying and practicing almost exclusively through the [Try Hack Me](https://tryhackme.com) (THM) platform. I have completed, almost, 7 out of 9 learning paths that I have set as a target - I stopped at ~80% of the [Red Teaming](https://tryhackme.com/paths) - as well as worked my way through numerous CTF rooms. 
+For the past few months, I am intensively studying and practicing almost exclusively through the [Try Hack Me](https://tryhackme.com) (THM) platform. Within 3 months, I have completed, almost, 7 out of 9 learning paths that I have set as a target - I stopped at ~80% of the [Red Teaming](https://tryhackme.com/paths) - as well as worked my way through numerous CTF rooms. 
 
-I realised that I was spending far too much time on just one resource, so I recently decide to also joined the [HTB](https://app.hackthebox.com/home) platform. 
+I realised that I was spending far too much time on just one resource, so I through to give a try to its "competitor", the [Hack The Box](https://app.hackthebox.com/home) platform. 
 
-![THM and HTB profiles](site-profiles.png)
+![THM profile](thm-profile.png)
 
-I have read numerous articles and seen many YouTube videos performing comparisons between THM and HTB, and everyone seemed to agree on the following: 
+I have read numerous articles and seen many YouTube videos comparing THM and HTB, and everyone seemed to agree on the following: 
 
 > **THM is aimed at absolute beginners** , while **HTB is considered a more advanced platform**. 
 
-I think that is because HTB used to only have machines to "hack" with absolutely no guidance. Taken from their Pentesting learning path:
+And I quickly understood why when I read the following while working through the Penetration Testing job path:
 
 > _Hack The Box was **initially created to give technical professionals a safe place to practice** and develop hacking skills and was not ideally suited for beginners starting their IT/Security journeys. Hack The Box began as **solely a competitive CTF platform** with a mix of machines and challenges, each awarding varying amounts of points depending on the difficulty, to be solved from a "black box" approach, with **no walkthrough, guidance, or even hints**._
 
-But, fortunately for beginners like myself, HTB is a completely different platform from back then! HTB contains many different things nowadays: [Hacking Labs](https://www.hackthebox.com/hacker/hacking-labs), [Pro Hacking Labs](https://www.hackthebox.com/hacker/pro-labs), [Hacking Battlegrounds](https://www.hackthebox.com/hacker/hacking-battlegrounds), [CTFs](https://www.hackthebox.com/hacker/ctf), and also the [HTB Academy](https://academy.hackthebox.com/) which aims to teach everything, from fundamentals concepts and tools, such as **basic networking** and **how to use nmap**, to advanced concepts, like **how to attack an enterprise network** from start to finish and **how to document the whole process** while doing it.
+Luckily for beginners, like myself, HTB is presently a lot more than the above description. It now consists of various elements, such as: [Hacking Labs](https://www.hackthebox.com/hacker/hacking-labs), [Pro Hacking Labs](https://www.hackthebox.com/hacker/pro-labs), [Hacking Battlegrounds](https://www.hackthebox.com/hacker/hacking-battlegrounds), [CTFs](https://www.hackthebox.com/hacker/ctf), and the [HTB Academy](https://academy.hackthebox.com/). The latter aims to teach everything, from fundamental concepts and tools, such as **basic networking** and **how to use nmap**, to advanced concepts, like **how to attack an enterprise network** from start to finish and **how to document the whole process** while doing it.
 
 ![htb products](htb-products.png){: width="70%"}
 
-I decided to switch platforms for now, and started to work for the HTB [CPTS](https://academy.hackthebox.com/preview/certifications/htb-certified-penetration-testing-specialist). I have now an active subscription for both HTB's CTF and Academy platforms.
+After exploring HTB's structure, I was keen to give it a try so I decided to switch from THM to HTB. My initial plan was to enroll and start studying for the [Practical Junior Penetration Tester](https://certifications.tcm-sec.com/pjpt/) cert, so I would "pause" my THM journey anyway, but since I found HTB's platform so intriguing, I also opted to go for the [Certified Penetration Testing Specialist](https://academy.hackthebox.com/preview/certifications/htb-certified-penetration-testing-specialist) instead. 
 
-Having read the aforementioned comparisons, I was expecting to have a really hard time on starting out at HTB and I was ready to hit many roadblocks straight away. But it proved quite the opposite!
+So, my HTB journey is now at its roots, and hopefully, I will soon be writing another post for my experience on completing the [Penetration Test job path](https://academy.hackthebox.com/path/preview/penetration-tester), which is a requirement for being eligible to sit for the CPTS exam, as well as for the CPTS exam itself. 
+
+> You can find the rationale behind why one can't sit directly for the CPTS without having completed the associated job path on [this](https://youtu.be/noieqyKdMQg?t=1165) amazing discussion between John Hammond and Dimitrios Bougioukas, the HTB's Academy Director.
+{: .prompt-info }
 
 When I first logged in on the HTB platform, it suggested to me to go through its [**Starting Point**](https://app.hackthebox.com/starting-point), which according to HTB: 
 
 > _**Starting Point** is **Hack The Box on rails**. It's a **linear series of Boxes tailored to absolute beginners** and features very easy exploit paths to not only introduce you to our platform but also **break the ice into the realm of penetration testing**. Using the Starting Point, you can **get a feel for how Hack The Box works**, how to connect and interact with Boxes, and **pave a basic foundation for your hacking skills to build off of**._
 
-I was so impressed by the **well thought out structure** and the **exceptionally well-written walkthroughs**, that I decided to write a quick post about it, and, hopefully, let other people now about it.
+I just completed all 3 tiers of the Starting Point, and I was so impressed by the **well thought out structure** and the **exceptionally well-written walkthroughs**, that I decided to write a quick post about it, and, hopefully, let other people now about it!
 
 ![htb-starting-point](htb-starting-point.jpg)
 
