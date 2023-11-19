@@ -6,7 +6,7 @@ order: 4
  <script src="https://tryhackme.com/badge/2134791"></script>
 
 
-### Who Am I?
+### :raising_hand_man: Who Am I?
 
 A former [Strength & Conditioning (MSc)](https://scholar.google.com/citations?user=NEcbEUYAAAAJ&hl=en) coach and a current [Cybersecurity (BSc)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60) student working as a **Software Engineer**. Venturing in the **Penetration Testing** space through [TryHackMe](https://tryhackme.com/), [HackTheBox](https://www.hackthebox.com/), [CISCO Networking Academy](https://www.netacad.com/), and [Open University](https://www.open.ac.uk/), currently focusing on **putting the theory into practice** by grinding through HTB's and THM's **Capture The Flag** rooms. 
 
