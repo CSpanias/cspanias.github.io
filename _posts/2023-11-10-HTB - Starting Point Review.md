@@ -1,8 +1,8 @@
 ---
-title: Hack The Box's Starting Point Review 
+title: HTB - Starting Point Review 
 date: 2023-11-10
 categories: [Review, HTB]
-tags: [nmap, telnet, ftp, smb, redis, apache, rdp, dir-busting, mongodb, rsync]
+tags: [penetration-testing, starting-point, hackthebox, htb-academy, ctf, capture-the-flag, ethical-hacking]
 img_path: /assets/htb-startingpoint/
 mermaid: true
 ---
@@ -127,7 +127,7 @@ Here is an overview of the tier 2 machines:
 | Vaccine | Password-protected files, hashes, SQLi, cookie stealing, RCE | FTP, HTTP | `nmap`, `zip2john`, `john`, crackstation, `sqlmap`, cookie-editor, GTFOBins |
 | Unified | Log4J, UniFi, OS Command Injection, RCE, hashes | HTTP, MongoDB | `nmap`, Burp Suite, `tcpdump`, rogue-jndi, `nc`, `mongo` |
 | Included | UDP, LFI, RCE, containers | TFTP, HTTP |  `nmap`, `curl`, `tfpt`, `lxc`, HackTricks  |
-| Markup |  |  |  `nmap`|
+| Markup | XXE, SSH keys, Windows permissions, RCE | HTTP, SSH |  `nmap`, Burp Suite, HackTricks, WinPEAS |
 | Base |  |  |  `nmap` |
 
 When I entered this level, I had already started studying through the [Penetration Tester](https://academy.hackthebox.com/path/preview/penetration-tester) job path for the CPTS, so I took a slighly different approach than the previous tiers:
@@ -139,11 +139,11 @@ When I entered this level, I had already started studying through the [Penetrati
 
 As a result, it took me, on average, **2.5 hours to solve a (very easy!!!) box**. In this tier I also implemented [Tyler Ramsbey](https://www.youtube.com/@TylerRamsbey)'s advice and started making a to-do list for each port/service I found, to made sure that I was not forgetting to check anything and, most importantly, to have a plan beforehand and not spend too long on a potential rabithole. 
 
-> The **to-do list** methodology helped me tremendously in progressing through each box and developing the **intuition of having an attack plan ready as soon as I saw a service**. In addition, as I did it while working through a machine, it helped me a lot with generating **documentation** which was a big bonus. 
+> The **to-do list** methodology helped me tremendously in progressing through each box and developing the **intuition of having an attack plan ready as soon as I saw a service**. In addition, as I did it while working through a machine, it helped me a lot with generating **documentation** which was a big bonus.
 >
 > I also used this approach on a recent **assault course exercise** that I had to do for an **entry level security tester position** (more on that on another post!) with very good results. 
-
+{: .prompt-info }
 
 ## Conclusion
 
-<!-- Briefly mention: THM path good, HTB great and more options, briefly mention the HTB Pentest path -->
+<!-- Briefly mention: THM path good, HTB great and more options, briefly mention the HTB Pentest path, writeups for the retired machines are bad? -->
