@@ -24,14 +24,14 @@ What we know beforehand:
 3. The room focus on **web app testing***.
 
 Checklist:
-- [x] Port scanning
-- [x] Banner Grabbing
+- [x] 1 Port scanning
+- [x] 2 Banner Grabbing
 
-![nmap_scan](nmap-scan 1.png)
-_List item 1.1_
+![nmap_scan](nmap-scan.png)
+_List item 1_
 
-![banner_grabbing](banner_grabbing 1.png)
-_List item 1.2_{: .prompt-warning }
+![banner_grabbing](banner_grabbing.png)
+_List item 2_{: .prompt-warning }
 
 Next steps:
 - [ ] Web enumeration
@@ -39,19 +39,25 @@ Next steps:
 
 ## Web enumeration
 
-- [ ] Check tools used
-  + [ ] Wappalyzer
-  + [ ] `whatweb`
-- [ ] View page source
-  + [ ] Enumerate `/nibbleblog` dir & search public exploits
-  + [ ] [CVE-2015-6967](https://nvd.nist.gov/vuln/detail/CVE-2015-6967)
-  > works on < 4.0.5
-  {: .prompt-warning }
+- [ ] 1 Check tools used
+  + [ ] 1.1 Wappalyzer
+  + [ ] 1.2 `whatweb`
+- [ ] 2 View page source
+  + [ ] 2.1 Enumerate `/nibbleblog` dir & search public exploits
+    + [ ] 2.1.1 [CVE-2015-6967](https://nvd.nist.gov/vuln/detail/CVE-2015-6967)
+    > works on < 4.0.5
+    {: .prompt-warning }
+    + [ ] 2.1.2 Metasploit module tested on 4.0.3
+    > works on 4.0.3 & needs valid creds
+    {: .prompt-warning }
+- [ ] 3 Dir-busting
 
-![wappalyzer](jelly-Wappalyzer.png)
+
+
+![wappalyzer](Wappalyzer.png)
 _List item 1.1_
 
-![whatweb](whatweb 1 1.png)
+![whatweb](whatweb.png)
 _List item 1.2_
 
 ![page_source](web_server_page_source.png)
@@ -66,4 +72,9 @@ _List item 2.1_
 > [CVE-2015-6967](https://nvd.nist.gov/vuln/detail/CVE-2015-6967): _Unrestricted file upload vulnerability in the <u>My Image plugin</u> in Nibbleblog before 4.0.5 allows remote administrators to execute arbitrary code by uploading a file with an executable extension, then accessing it via a direct request to the file in content/private/plugins/my_image/image.php._
 {: .prompt-info }
 
+![msf_module](msf_exploit.png)
+![msf_module_options](msf_exploit_options.png)
+ _List item 2.1.2_
 
+![gobuster_scan](gobuster-scan.png)
+_List item 3_
