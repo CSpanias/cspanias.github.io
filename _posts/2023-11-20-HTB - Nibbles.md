@@ -51,10 +51,10 @@ Next steps:
     > works on 4.0.3 & needs valid creds
     {: .prompt-warning }
 - [ ] 3 Dir-busting
+    + [ ] 3.1 Enumerate subdirectories
 
 
-
-![wappalyzer](Wappalyzer.png)
+![wappalyzer](wappalyzer.png)
 _List item 1.1_
 
 ![whatweb](whatweb.png)
@@ -78,3 +78,6 @@ _List item 2.1_
 
 ![gobuster_scan](gobuster-scan.png)
 _List item 3_
+
+![readme_subdir](nibbleblog_version.png)
+_List item 3.1_
