@@ -62,13 +62,19 @@ _List item 1.1_
 ![whatweb](whatweb.png)
 _List item 1.2_
 
-![page_source](web_server_page_source.png){: width="50%"}
+<figure>
+    <img src="web_server_page_source.png" width="50%"
+    alt="Homepage's page source" >
+<figcaption>List item 2.</figcaption>
+</figure>
+
+![page_source](web_server_page_source.png)
 _List item 2_
 
 > Add to checklist: Enumerate `/nibbleblog` dir & search public exploits. 
 {: .prompt-warning }
 
-![public_exploit](public_exploit.png){: width="60%"}
+![public_exploit](public_exploit.png)
 _List item 2.1_
 
 > [CVE-2015-6967](https://nvd.nist.gov/vuln/detail/CVE-2015-6967): _Unrestricted file upload vulnerability in the <u>My Image plugin</u> in Nibbleblog before 4.0.5 allows remote administrators to execute arbitrary code by uploading a file with an executable extension, then accessing it via a direct request to the file in content/private/plugins/my_image/image.php._
@@ -78,7 +84,7 @@ _List item 2.1_
 ![msf_module_options](msf_exploit_options.png)
  _List item 2.1.2_
 
-![gobuster_scan](gobuster-scan.png){: width="60%"}
+![gobuster_scan](gobuster-scan.png)
 _List item 3_
 
 ![readme_subdir](nibbleblog_version.png)
@@ -117,6 +123,9 @@ _List item 1 & 2_
 ![sudo_l](sudo_l.png)
 _List item 3_
 
+> `nibbles` can run `monitor.sh` as `root` with no pass. Exploit it to get a root shell.
+{: .prompt-tip }
+
 ## Privilege Escalation
 
 Checklist:
@@ -125,9 +134,6 @@ Checklist:
 
 ![personal_zip](personal_zip.png)
 _List item 1_
-
-> `nibbles` can run `monitor.sh` as `root` with no pass. Exploit it to get a root shell.
-{: .prompt-tip }
 
 ![script_perms](script_perms.png)
 _List item 1_
