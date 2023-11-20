@@ -68,9 +68,6 @@ _List item 1.2_
 <figcaption>List item 2.</figcaption>
 </figure>
 
-![page_source](web_server_page_source.png)
-_List item 2_
-
 > Add to checklist: Enumerate `/nibbleblog` dir & search public exploits. 
 {: .prompt-warning }
 
