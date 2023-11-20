@@ -86,7 +86,7 @@ _List item 3.1_
 
 > Nibbleblog v4.0.3 --> Metasploit module, need to find creds.
 
-![users_xml_file](user_xml.png)
+![users_xml_file](users_xml.png)
 _List item 3.1_
 
 > Username, `admin` obtained, still missing password for Logging in & Metasploit. After trying several passwords, `admin:nibbles` works.
@@ -95,7 +95,7 @@ _List item 3.1_
 
 > MSF error: tried re-installing `My Image` plugin, and although `image.php` is not there, still same error.
 
-![My_image_plugin_config](my_img_plugin_config)
+![My_image_plugin_config](my_img_plugin_config.png)
 _List item 4_
 
 ![shell_upload](shell_upload.png)
