@@ -14,8 +14,6 @@ img_path: /assets/nibbles/
 
 > _Nibbles is a fairly simple machine, however with the inclusion of a login blacklist, it is a fair bit more challenging to find valid credentials. Luckily, a username can be enumerated and guessing the correct password does not take long for most._
 
-
-
 ## Information Gathering
 
 What we know beforehand:
@@ -28,7 +26,7 @@ Checklist:
 - [x] 2 Banner Grabbing
 
 <figure>
-    <img src="nmap-scan.png" width="60%"
+    <img src="nmap-scan.png" width="70%"
     alt="Nmap scan results" >
 <figcaption>List item 1</figcaption>
 </figure>
@@ -62,7 +60,7 @@ Checklist:
 - [x] 4 Upload a [PHP reverse shell](https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php) directly on `My Image` plugin. 
 
 <figure>
-    <img src="wappalyzer.png"
+    <img src="wappalyzer.png" width="80%"
     alt="Wappalyzer technologies" >
 <figcaption>List item 1.1</figcaption>
 </figure>
@@ -74,7 +72,7 @@ Checklist:
 </figure>
 
 <figure>
-    <img src="web_server_page_source.png" width="50%"
+    <img src="web_server_page_source.png" width="60%"
     alt="Homepage's page source" >
 <figcaption>List item 2</figcaption>
 </figure>
@@ -82,26 +80,29 @@ Checklist:
 > Add to checklist: Enumerate `/nibbleblog` dir & search public exploits. 
 {: .prompt-warning }
 
-![public_exploit](public_exploit.png)
-_List item 2.1_
+<figure>
+    <img src="public_exploit.png" width="60%"
+    alt="Nibbleblog public exploit" >
+<figcaption>List item 2.1</figcaption>
+</figure>
 
 > [CVE-2015-6967](https://nvd.nist.gov/vuln/detail/CVE-2015-6967): _Unrestricted file upload vulnerability in the <u>My Image plugin</u> in Nibbleblog before 4.0.5 allows remote administrators to execute arbitrary code by uploading a file with an executable extension, then accessing it via a direct request to the file in content/private/plugins/my_image/image.php._
 {: .prompt-info }
 
 <figure>
-    <img src="msf_exploit.png" width="50%"
+    <img src="msf_exploit.png" width="75%"
     alt="Metasploit module options" >
 <figcaption>List item 2.1.2</figcaption>
 </figure>
 
 <figure>
-    <img src="msf_exploit_options.png" width="50%"
+    <img src="msf_exploit_options.png" width="75%"
     alt="Metasploit module options" >
 <figcaption>List item 2.1.2</figcaption>
 </figure>
 
 <figure>
-    <img src="gobuster-scan.png" width="50%"
+    <img src="gobuster-scan.png" width="65%"
     alt="Gobuster's scan results" >
 <figcaption>List item 3</figcaption>
 </figure>
@@ -115,7 +116,7 @@ _List item 2.1_
 > Nibbleblog v4.0.3 --> Metasploit module, need to find creds.
 
 <figure>
-    <img src="users_xml.png" width="60%"
+    <img src="users_xml.png" width="70%"
     alt="content subdirectory-users.xml file" >
 <figcaption>List item 3.1</figcaption>
 </figure>
@@ -131,19 +132,19 @@ _List item 2.1_
 > MSF error: tried re-installing `My Image` plugin, and although `image.php` is not there, still same error.
 
 <figure>
-    <img src="my_img_plugin_config.png" width="60%"
+    <img src="my_img_plugin_config.png" width="70%"
     alt="My Image plugin configurations" >
 <figcaption>List item 4</figcaption>
 </figure>
 
 <figure>
-    <img src="shell_upload.png" width="60%"
+    <img src="shell_upload.png" width="70%"
     alt="Shell upload" >
 <figcaption>List item 4</figcaption>
 </figure>
 
 <figure>
-    <img src="revshell_success.png" width="60%"
+    <img src="revshell_success.png" width="75%"
     alt="Reverse shell obtained" >
 <figcaption>List item 4</figcaption>
 </figure>
@@ -155,11 +156,17 @@ Checklist:
 - [x] 2 Search for `user.txt`
 - [x] 3 Check current user's privileges
 
-![upgrading_shell_user_flag](upgrading_shell_user_flag.jpg)
-_List item 1 & 2_
+<figure>
+    <img src="upgrading_shell_user_flag.jpg" width="50%"
+    alt="Upgrading revese shell and getting user flag" >
+<figcaption>List item 1 & 2</figcaption>
+</figure>
 
-![sudo_l](sudo_l.png)
-_List item 3_
+<figure>
+    <img src="sudo_l.png" width="70%"
+    alt="Checking current user's privileges" >
+<figcaption>List item 3</figcaption>
+</figure>
 
 > `nibbles` can run `monitor.sh` as `root` with no pass. Exploit it to get a root shell.
 {: .prompt-tip }
@@ -170,16 +177,35 @@ Checklist:
 - [x] 1 Try to exploit `monitor.sh`
 - [x] 2 Search for `root.txt`
 
-![personal_zip](personal_zip.png)
-_List item 1_
+<figure>
+    <img src="personal_zip.png" width="70%"
+    alt="Personal_zip file" >
+<figcaption>List item 1</figcaption>
+</figure>
 
-![script_perms](script_perms.png)
-_List item 1_
+<figure>
+    <img src="script_perms.png" width="70%"
+    alt="Checking script's permissions" >
+<figcaption>List item 1</figcaption>
+</figure>
 
-![root_shell_code](root_shell_code.png)
-_List item 1_
+<figure>
+    <img src="root_shell_code.png"
+    alt="Adding root shell code" >
+<figcaption>List item 1</figcaption>
+</figure>
 
-![root_shell_root_txt](root_shell_root_txt.jpg)
-_List item 2_
+<figure>
+    <img src="root_shell_root_txt.jpg" width="80%"
+    alt="Getting root shell and root.txt" >
+<figcaption>List item 2</figcaption>
+</figure>
 
-![nibbles_pwnd](nibbles.png)
+<figure>
+    <img src="nibbles.png" width="70%"
+    alt="Nibbles machine pwnd" >
+<figcaption>Nibbles machine pwned</figcaption>
+</figure>
+
+
+
