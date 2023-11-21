@@ -177,23 +177,24 @@ Checklist:
 - [x] 1 Try to exploit `monitor.sh`
 - [x] 2 Search for `root.txt`
 
+### 1 `monitor.sh` exploitation
+
 <figure>
     <img src="personal_zip.png" width="70%"
     alt="Personal_zip file" >
-<figcaption>List item 1</figcaption>
 </figure>
 
 <figure>
     <img src="script_perms.png" width="70%"
     alt="Checking script's permissions" >
-<figcaption>List item 1</figcaption>
 </figure>
 
 <figure>
     <img src="root_shell_code.png"
     alt="Adding root shell code" >
-<figcaption>List item 1</figcaption>
 </figure>
+
+### 2 Searching for `root.txt`
 
 <figure>
     <img src="root_shell_root_txt.jpg" width="65%"
@@ -201,11 +202,9 @@ Checklist:
 <figcaption>List item 2</figcaption>
 </figure>
 
-Nibbles machine pwned
 <figure>
     <img src="nibbles.png" width="70%"
     alt="Nibbles machine pwnd" >
-<figcaption>Nibbles machine pwned</figcaption>
 </figure>
 
 
