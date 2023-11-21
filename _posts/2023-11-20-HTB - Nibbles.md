@@ -96,19 +96,19 @@ Checklist:
 </figure>
 
 <figure>
-    <img src="msf_exploit_options.png" width="75%"
+    <img src="msf_exploit_options.png" width="85%"
     alt="Metasploit module options" >
 <figcaption>List item 2.1.2</figcaption>
 </figure>
 
 <figure>
-    <img src="gobuster-scan.png" width="65%"
+    <img src="gobuster-scan.png" width="85%"
     alt="Gobuster's scan results" >
 <figcaption>List item 3</figcaption>
 </figure>
 
 <figure>
-    <img src="nibbleblog_version.png" width="70%"
+    <img src="nibbleblog_version.png" width="80%"
     alt="README subdirectory-Nibbleblog's version" >
 <figcaption>List item 3.1</figcaption>
 </figure>
@@ -132,19 +132,19 @@ Checklist:
 > MSF error: tried re-installing `My Image` plugin, and although `image.php` is not there, still same error.
 
 <figure>
-    <img src="my_img_plugin_config.png" width="70%"
+    <img src="my_img_plugin_config.png" width="85%"
     alt="My Image plugin configurations" >
 <figcaption>List item 4</figcaption>
 </figure>
 
 <figure>
-    <img src="shell_upload.png" width="70%"
+    <img src="shell_upload.png" width="85%"
     alt="Shell upload" >
 <figcaption>List item 4</figcaption>
 </figure>
 
 <figure>
-    <img src="revshell_success.png" width="75%"
+    <img src="revshell_success.png" width="85%"
     alt="Reverse shell obtained" >
 <figcaption>List item 4</figcaption>
 </figure>
@@ -196,11 +196,12 @@ Checklist:
 </figure>
 
 <figure>
-    <img src="root_shell_root_txt.jpg" width="80%"
+    <img src="root_shell_root_txt.jpg" width="65%"
     alt="Getting root shell and root.txt" >
 <figcaption>List item 2</figcaption>
 </figure>
 
+Nibbles machine pwned
 <figure>
     <img src="nibbles.png" width="70%"
     alt="Nibbles machine pwnd" >
