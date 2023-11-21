@@ -43,7 +43,7 @@ Checklist:
 1. Web enumeration
 2. SSH credentials
 
-## Web enumeration
+## 2. Web enumeration
 
 Checklist:
 - [x] 1 Check tools used
@@ -61,7 +61,7 @@ Checklist:
   + [x] 3.1 Enumerate subdirectories 
 - [x] 4 Upload a [PHP reverse shell](https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php) directly on `My Image` plugin. 
 
-### Checking technologies used
+### Checking technologies
 
 <figure>
     <img src="wappalyzer.png" width="80%"
@@ -153,14 +153,14 @@ Checklist:
     alt="Reverse shell obtained" >
 </figure>
 
-## Initial Foothold
+## 3. Initial Foothold
 
 Checklist:
 - [x] 1 Stabilize shell
 - [x] 2 Search for `user.txt`
 - [x] 3 Check current user's privileges
 
-### Stabilize shell & 2 Search for `user.txt`
+### Stabilizing shell & searching for `user.txt`
 
 <figure>
     <img src="upgrading_shell_user_flag.jpg" width="50%"
@@ -176,13 +176,13 @@ Checklist:
 
 > `nibbles` can run `monitor.sh` as `root` with no pass. Exploit it to get a root shell.
 
-## Privilege Escalation
+## 4. Privilege Escalation
 
 Checklist:
 - [x] 1 Try to exploit `monitor.sh`
 - [x] 2 Search for `root.txt`
 
-### `monitor.sh` exploitation
+### Exploiting `monitor.sh` 
 
 <figure>
     <img src="personal_zip.png" width="70%"
