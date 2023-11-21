@@ -4,7 +4,7 @@ date: 2023-11-21
 categories: [CTF Write Up, HTB]
 tags: []
 img_path: /assets/keeper/
-published: false
+published: true
 ---
 
 ![room_banner](keeper_banner.png)
