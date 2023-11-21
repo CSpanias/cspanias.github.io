@@ -27,11 +27,19 @@ Checklist:
 - [x] 1 Port scanning
 - [x] 2 Banner Grabbing
 
-![nmap_scan](nmap-scan.png)
-_List item 1_
 
-![banner_grabbing](banner_grabbing.png)
-_List item 2_{: .prompt-warning }
+<figure>
+    <img src="nmap-scan.png" width="60%"
+    alt="Nmap scan results" >
+<figcaption>List item 1</figcaption>
+</figure>
+
+
+<figure>
+    <img src="banner_grabbing.png"
+    alt="Banner grabbing with netcat" >
+<figcaption>List item 2</figcaption>
+</figure>
 
 Next steps:
 - Web enumeration
@@ -65,7 +73,7 @@ _List item 1.2_
 <figure>
     <img src="web_server_page_source.png" width="50%"
     alt="Homepage's page source" >
-<figcaption>List item 2.</figcaption>
+<figcaption>List item 2</figcaption>
 </figure>
 
 > Add to checklist: Enumerate `/nibbleblog` dir & search public exploits. 
