@@ -27,13 +27,11 @@ Checklist:
 - [x] 1 Port scanning
 - [x] 2 Banner Grabbing
 
-
 <figure>
     <img src="nmap-scan.png" width="60%"
     alt="Nmap scan results" >
 <figcaption>List item 1</figcaption>
 </figure>
-
 
 <figure>
     <img src="banner_grabbing.png"
@@ -63,12 +61,17 @@ Checklist:
   + [x] 3.1 Enumerate subdirectories 
 - [x] 4 Upload a [PHP reverse shell](https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php) directly on `My Image` plugin. 
 
+<figure>
+    <img src="wappalyzer.png"
+    alt="Wappalyzer technologies" >
+<figcaption>List item 1.1</figcaption>
+</figure>
 
-![wappalyzer](wappalyzer.png)
-_List item 1.1_
-
-![whatweb](whatweb.png)
-_List item 1.2_
+<figure>
+    <img src="whatweb.png"
+    alt="whatweb technologies" >
+<figcaption>List item 1.2</figcaption>
+</figure>
 
 <figure>
     <img src="web_server_page_source.png" width="50%"
@@ -85,35 +88,65 @@ _List item 2.1_
 > [CVE-2015-6967](https://nvd.nist.gov/vuln/detail/CVE-2015-6967): _Unrestricted file upload vulnerability in the <u>My Image plugin</u> in Nibbleblog before 4.0.5 allows remote administrators to execute arbitrary code by uploading a file with an executable extension, then accessing it via a direct request to the file in content/private/plugins/my_image/image.php._
 {: .prompt-info }
 
-![msf_module](msf_exploit.png)
-![msf_module_options](msf_exploit_options.png)
- _List item 2.1.2_
+<figure>
+    <img src="msf_exploit.png" width="50%"
+    alt="Metasploit module options" >
+<figcaption>List item 2.1.2</figcaption>
+</figure>
 
-![gobuster_scan](gobuster-scan.png)
-_List item 3_
+<figure>
+    <img src="msf_exploit_options.png" width="50%"
+    alt="Metasploit module options" >
+<figcaption>List item 2.1.2</figcaption>
+</figure>
 
-![readme_subdir](nibbleblog_version.png)
-_List item 3.1_
+<figure>
+    <img src="gobuster-scan.png" width="50%"
+    alt="Gobuster's scan results" >
+<figcaption>List item 3</figcaption>
+</figure>
+
+<figure>
+    <img src="nibbleblog_version.png" width="70%"
+    alt="README subdirectory-Nibbleblog's version" >
+<figcaption>List item 3.1</figcaption>
+</figure>
 
 > Nibbleblog v4.0.3 --> Metasploit module, need to find creds.
 
-![users_xml_file](users_xml.png)
-_List item 3.1_
+<figure>
+    <img src="users_xml.png" width="60%"
+    alt="content subdirectory-users.xml file" >
+<figcaption>List item 3.1</figcaption>
+</figure>
 
-> Username, `admin` obtained, still missing password for Logging in & Metasploit. After trying several passwords, `admin:nibbles` works.
+> Username, `admin`, obtained, still missing password for Logging in & Metasploit. After trying several passwords, `admin:nibbles` works.
 
-![msf_error](msf_manual_cleanup.png)
+<figure>
+    <img src="msf_manual_cleanup.png" width="70%"
+    alt="Metasploit error message" >
+<figcaption>List item 2.1.2</figcaption>
+</figure>
 
 > MSF error: tried re-installing `My Image` plugin, and although `image.php` is not there, still same error.
 
-![My_image_plugin_config](my_img_plugin_config.png)
-_List item 4_
+<figure>
+    <img src="my_img_plugin_config.png" width="60%"
+    alt="My Image plugin configurations" >
+<figcaption>List item 4</figcaption>
+</figure>
 
-![shell_upload](shell_upload.png)
-_List item 4_
+<figure>
+    <img src="shell_upload.png" width="60%"
+    alt="Shell upload" >
+<figcaption>List item 4</figcaption>
+</figure>
 
-![revshell_success](revshell_success.png)
-_List item 4_
+<figure>
+    <img src="revshell_success.png" width="60%"
+    alt="Reverse shell obtained" >
+<figcaption>List item 4</figcaption>
+</figure>
 
 ## Initial Foothold
 
