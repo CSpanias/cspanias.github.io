@@ -4,7 +4,7 @@ date: 2023-11-25
 categories: [CTF Write Up, HTB]
 tags: [nmap, ]
 img_path: /assets/cozyhosting/
-published: false
+published: true
 ---
 
 ![room_banner](cozy_banner.png)
