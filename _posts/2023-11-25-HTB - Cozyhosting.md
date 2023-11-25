@@ -15,7 +15,7 @@ published: true
 |Machine|[Cozyhosting](https://app.hackthebox.com/machines/559)|
 |Rank|Easy|
 |Time|3h22m|
-|Focus| |
+|Focus|Dir-busting, cookies|
 
 ## Information Gathering
 
