@@ -17,10 +17,7 @@ published: true
 |Time|3h22m|
 |Focus|Dir-busting, cookies|
 
-## Information Gathering
-
-
-# 1. Enumeration
+## 1. Enumeration
 
 ```shell
 # port scanning
@@ -36,7 +33,7 @@ PORT   STATE SERVICE VERSION
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
 
-# 2. Web Server Enum
+## 2. Web Server Enum
 
 ```shell
 # tech used
@@ -234,7 +231,7 @@ bash: no job control in this shell
 app@cozyhosting:/app$
 ```
 
-# 4. Lateral movement
+## 4. Lateral movement
 
 > Stabilize shell.
 
@@ -469,7 +466,7 @@ josh@cozyhosting:/app$ cat ~/user.txt
 1ce25812e75a54178b64f6258b0d83c6
 ```
 
-# 5. Privilege escalation
+## 5. Privilege escalation
 
 ```shell
 josh@cozyhosting:/app$ sudo -l
@@ -496,5 +493,5 @@ uid=0(root) gid=0(root) groups=0(root)
     alt="Cozy machine pwned" >
 </figure>
 
-# New things
+## New things
 
