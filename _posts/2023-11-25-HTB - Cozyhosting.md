@@ -507,7 +507,7 @@ uid=0(root) gid=0(root) groups=0(root)
     > _WhiteLabel Error Handling is a simple way to handle errors that is easy to customize. You can change the error pages that are displayed to users, and you can also configure the error code that is displayed and whether or not the stack trace is included._
 
     <figure>
-        <img src="whitelabel_error_page.png"
+        <img src="whitelabel_error_page.jpg"
         alt="White label error page" >
     </figure>
 
