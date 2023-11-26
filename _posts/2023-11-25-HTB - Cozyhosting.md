@@ -4,7 +4,7 @@ date: 2023-11-25
 categories: [CTF Write Up, HTB]
 tags: [nmap, http, webserver, nginx, whatweb, wappalyzer, gobuster, dirsearch, cookies, burp-suite, jar, psql, postgres, hash, john, gtfobins]
 img_path: /assets/cozyhosting/
-published: true
+published: false
 ---
 
 ![room_banner](cozy_banner.png)
@@ -550,9 +550,9 @@ uid=0(root) gid=0(root) groups=0(root)
 
 4. Internal Field Separator (IFS) variable
 
-- [Bash IFS - What is the Internal Field Separator?](https://delightlylinux.wordpress.com/2020/02/16/bash-ifs-what-is-the-internal-field-separator/)
-- [Linux Shell - What is IFS?](https://www.theunixschool.com/2020/05/linux-shell-what-is-ifs.html)
+    - [Bash IFS - What is the Internal Field Separator?](https://delightlylinux.wordpress.com/2020/02/16/bash-ifs-what-is-the-internal-field-separator/)
+    - [Linux Shell - What is IFS?](https://www.theunixschool.com/2020/05/linux-shell-what-is-ifs.html)
 
 5. JAR file manipulation
 
-- [How to Open a JAR File Using the Command Line](https://www.makeuseof.com/jar-file-open-using-command-line/)
+    - [How to Open a JAR File Using the Command Line](https://www.makeuseof.com/jar-file-open-using-command-line/)
