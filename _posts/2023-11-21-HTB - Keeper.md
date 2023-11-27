@@ -15,13 +15,12 @@ published: true
 |Machine|[Keeper](https://app.hackthebox.com/machines/556)|
 |Rank|Easy|
 |Time|3h19m|
-|Focus|Default credentials, [CVE-2023-32784](https://nvd.nist.gov/vuln/detail/CVE-2023-32784)|
+|Focus|Default credentials, CVEs|
 
-> STILL ACTIVE MACHINE!
+> CONTENT HIDDEN - ACTIVE MACHINE!
 {: .prompt-warning}
 
-<!--
-## Information Gathering
+<!-- ## Information Gathering
 
 ```shell
 # live host discovery
@@ -272,7 +271,7 @@ You have new mail.
 Last login: Tue Aug  8 19:00:06 2023 from 10.10.14.41
 root@keeper:~# ls
 root.txt  RT30000.zip  SQL
-```
+``` -->
 
 <figure>
     <img src="keeper_pwned.png"

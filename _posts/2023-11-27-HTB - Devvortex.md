@@ -17,7 +17,7 @@ published: true
 |Time|5h|
 |Focus|vHost-busting, CVEs, SSTI|
 
-> STILL ACTIVE MACHINE!
+> CONTENT HIDDEN - ACTIVE MACHINE!
 {: .prompt-warning}
 
 <!-- ## 1. INITIAL ENUM

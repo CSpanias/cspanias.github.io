@@ -17,12 +17,10 @@ published: true
 |Time|3h14m|
 |Focus|Dir-busting, cookies|
 
-> STILL ACTIVE MACHINE!
+> CONTENT HIDDEN - ACTIVE MACHINE!
 {: .prompt-warning}
 
-<!--
-
-## 1. Enumeration
+<!-- ## 1. Enumeration
 
 ```shell
 # port scanning
@@ -54,7 +52,7 @@ http://cozyhosting.htb [200 OK] Bootstrap, Content-Language[en-US], Country[RESE
     * Template URL: https://bootstrapmade.com/flexstart-bootstrap-startup-template/
     * Author: BootstrapMade.com
     * License: https://bootstrapmade.com/license/
-    ======================================================== --\>
+    ======================================================== --
 ```
 
 ```page-source-login
@@ -64,7 +62,7 @@ http://cozyhosting.htb [200 OK] Bootstrap, Content-Language[en-US], Country[RESE
     * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
     * Author: BootstrapMade.com
     * License: https://bootstrapmade.com/license/
-    ======================================================== --\>
+    ======================================================== --
 ```
 
 <figure>
@@ -498,10 +496,6 @@ uid=0(root) gid=0(root) groups=0(root)
 # cat ~/root.txt
 07964e5398eaa692f7994088783567f3
 ```
-<figure>
-    <img src="cozy_pwned.png"
-    alt="Cozy machine pwned" >
-</figure>
 
 ## New things
 
@@ -560,4 +554,9 @@ uid=0(root) gid=0(root) groups=0(root)
 
 5. JAR file manipulation
 
-    - [How to Open a JAR File Using the Command Line](https://www.makeuseof.com/jar-file-open-using-command-line/)
+    - [How to Open a JAR File Using the Command Line](https://www.makeuseof.com/jar-file-open-using-command-line/) -->
+
+<figure>
+    <img src="cozy_pwned.png"
+    alt="Cozy machine pwned" >
+</figure>
