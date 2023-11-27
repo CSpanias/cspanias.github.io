@@ -247,7 +247,7 @@ Disallow: /plugins/
 Disallow: /tmp/
 ```
 
-> [CVE-2023-23752](https://nvd.nist.gov/vuln/detail/CVE-2023-23752): https://github.com/Acceis/exploit-CVE-2023-23752
+> [CVE-2023-23752](https://nvd.nist.gov/vuln/detail/CVE-2023-23752): [PoC](https://github.com/Acceis/exploit-CVE-2023-23752)
 
 ```shell
 sudo ruby exploit.rb http://dev.devvortex.htb
@@ -279,11 +279,10 @@ DB encryption 0
 
 ## 3. INITIAL FOOTHOLD
 
-> **Huge rabbit hole**
-> PHP 7.4.3 
-> [Hacktricks](https://book.hacktricks.xyz/network-services-pentesting/pentesting-web/php-tricks-esp/php-useful-functions-disable_functions-open_basedir-bypass/disable_functions-bypass-php-7.0-7.4-nix-only)
-> [PoC](https://github.com/neex/phuip-fpizdam)
-> - https://ine.com/blog/cve-201911043-exploiting-the-phuip-fpizdam-vulnerability
+> **Huge rabbit hole**  
+> PHP 7.4.3  
+> [Hacktricks](https://book.hacktricks.xyz/network-services-pentesting/pentesting-web/php-tricks-esp/php-useful-functions-disable_functions-open_basedir-bypass/disable_functions-bypass-php-7.0-7.4-nix-only)  
+> [PoC](https://github.com/neex/phuip-fpizdam), [Usage](https://ine.com/blog/cve-201911043-exploiting-the-phuip-fpizdam-vulnerability)
 
 <figure>
     <img src="template_webshell.png"
@@ -432,8 +431,7 @@ User logan may run the following commands on devvortex:
     (ALL : ALL) /usr/bin/apport-cli
 ```
 
-> [CVE-2023-1326](https://nvd.nist.gov/vuln/detail/CVE-2023-1326#:~:text=Description,local%20attacker%20can%20escalate%20privilege.)
-> [PoC](https://github.com/canonical/apport/commit/e5f78cc89f1f5888b6a56b785dddcb0364c48ecb)
+> [CVE-2023-1326](https://nvd.nist.gov/vuln/detail/CVE-2023-1326#:~:text=Description,local%20attacker%20can%20escalate%20privilege.): [PoC](https://github.com/canonical/apport/commit/e5f78cc89f1f5888b6a56b785dddcb0364c48ecb)
 
 ```shell
 # create a crash file
