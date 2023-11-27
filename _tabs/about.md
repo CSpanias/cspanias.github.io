@@ -18,7 +18,9 @@ I am always game for a game of chess [<i class="fa-solid fa-chess"></i>](https:/
 
 I will be writing write ups for all the completed CTFs for reviewing the process myself as well as digging into the nitty-gritty of each room. Hopefully, aside from my own benefit, people who are complete beginners, like me, might find these posts helpful.
 
-Additionally, I plan to sit for the TMC's [PJPT](https://certifications.tcm-sec.com/pjpt/) and [PNPT](https://certifications.tcm-sec.com/pnpt/) certifications in the near future, so I aim to document my experience through TMC's training, and how it compares with THM's and HTB's learning paths in terms of quality, difficulty, subjects covered, and, of course, enjoyment.
+Additionally, I am currently studying for HTB's [CPTS](https://academy.hackthebox.com/preview/certifications/htb-certified-penetration-testing-specialist) certification, and after completing it, I plan to make a review of the [Penetration Tester Job Role Path](https://academy.hackthebox.com/path/preview/penetration-tester) as well as the exam itself.
+
+I also have my eyes on TMC's [PJPT](https://certifications.tcm-sec.com/pjpt/) and [PNPT](https://certifications.tcm-sec.com/pnpt/) certifications, and if I eventually sit for them, I aim to document my experience through TMC's training, and how it compares with THM's and HTB's resources in terms of quality, difficulty, subjects covered, and, of course, enjoyment.
 
 ### Projects
 
@@ -30,7 +32,7 @@ Additionally, I plan to sit for the TMC's [PJPT](https://certifications.tcm-sec.
 -->
 <i class="fa-solid fa-network-wired"></i> [Junior Cybersecurity Analyst (CISCO)](https://www.credly.com/earner/earned/badge/1bce6970-ccf1-4b58-9111-5a00b15aa261)  
 
-<i class="fa-brands fa-linux"></i> [Hacking with Kali Linux (Hackers Academy)](https://hackersacademy.com/courses/hacking-with-kali-linux), [NCIST (NatWest)](https://drive.google.com/file/d/1viyFopGSW36Lu58TiFbYRsqqlIu3pNw4/view?pli=1), 
+<i class="fa-brands fa-linux"></i> [Hacking with Kali Linux (Hackers Academy)](https://hackersacademy.com/courses/hacking-with-kali-linux), [NCIST (NatWest)](https://drive.google.com/file/d/1viyFopGSW36Lu58TiFbYRsqqlIu3pNw4/view?pli=1)
 
 <i class="fa-solid fa-check-double"></i> [THM Paths](https://tryhackme.com/paths): Pre Security (40h), Complete Beginner (64h), Introduction to Cyber Security (24h), Web Fundamentals (32h), CompTIA Pentest+ (32h), Jr Penetration Tester (64h), Red Teaming (48h)  
 
