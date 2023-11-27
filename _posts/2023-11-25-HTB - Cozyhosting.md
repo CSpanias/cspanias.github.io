@@ -14,7 +14,7 @@ published: false
 |:-:|:-:|
 |Machine|[Cozyhosting](https://app.hackthebox.com/machines/559)|
 |Rank|Easy|
-|Time|3h22m|
+|Time|3h14m|
 |Focus|Dir-busting, cookies|
 
 ## 1. Enumeration
