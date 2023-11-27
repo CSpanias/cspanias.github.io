@@ -4,7 +4,7 @@ date: 2023-11-27
 categories: [CTF Write Up, HTB]
 tags: [nmap, http, webserver, nginx, whatweb, wappalyzer, gobuster, dirsearch, robots-txt, vhost-busting, cve-2023-23752, ssti, mysql, hash, john, aport-cli, cve-2023-1326]
 img_path: /assets/devvortex/
-published: false
+published: true
 ---
 
 ![room_banner](machine_banner.png)
@@ -16,6 +16,11 @@ published: false
 |Rank|Easy|
 |Time|5h|
 |Focus|vHost-busting, CVEs, SSTI|
+
+> STILL ACTIVE MACHINE!
+{: .prompt-warning}
+
+<!--
 
 ## 1. INITIAL ENUM
 
@@ -178,7 +183,7 @@ dirsearch -u http://dev.devvortex.htb/
 [19:43:42] 200 -    0B  - /configuration.php
 [19:43:21] 200 -   31B  - /cache/
 [19:42:39] 200 -   31B  - /administrator/logs/
-[19:42:40] 200 -   12KB - /administrator/ --> login page
+[19:42:40] 200 -   12KB - /administrator/ --\> login page
 [19:42:40] 200 -   12KB - /administrator/index.php
 [19:42:39] 200 -   31B  - /administrator/cache/
 ```

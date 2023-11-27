@@ -4,7 +4,7 @@ date: 2023-11-25
 categories: [CTF Write Up, HTB]
 tags: [nmap, http, webserver, nginx, whatweb, wappalyzer, gobuster, dirsearch, cookies, burp-suite, jar, psql, postgres, hash, john, gtfobins]
 img_path: /assets/cozyhosting/
-published: false
+published: true
 ---
 
 ![room_banner](cozy_banner.png)
@@ -16,6 +16,11 @@ published: false
 |Rank|Easy|
 |Time|3h14m|
 |Focus|Dir-busting, cookies|
+
+> STILL ACTIVE MACHINE!
+{: .prompt-warning}
+
+<!--
 
 ## 1. Enumeration
 
@@ -49,7 +54,7 @@ http://cozyhosting.htb [200 OK] Bootstrap, Content-Language[en-US], Country[RESE
     * Template URL: https://bootstrapmade.com/flexstart-bootstrap-startup-template/
     * Author: BootstrapMade.com
     * License: https://bootstrapmade.com/license/
-    ======================================================== -->
+    ======================================================== --\>
 ```
 
 ```page-source-login
@@ -59,7 +64,7 @@ http://cozyhosting.htb [200 OK] Bootstrap, Content-Language[en-US], Country[RESE
     * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
     * Author: BootstrapMade.com
     * License: https://bootstrapmade.com/license/
-    ======================================================== -->
+    ======================================================== --\>
 ```
 
 <figure>
