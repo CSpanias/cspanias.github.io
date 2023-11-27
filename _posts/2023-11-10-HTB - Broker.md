@@ -1,9 +1,9 @@
 ---
-title: HTB - Devvortex
-date: 2023-11-27
+title: HTB - Broker
+date: 2023-11-10
 categories: [CTF Write Up, HTB]
-tags: [nmap, http, webserver, nginx, whatweb, wappalyzer, gobuster, dirsearch, robots-txt, vhost-busting, cve-2023-23752, ssti, mysql, hash, john, aport-cli, cve-2023-1326]
-img_path: /assets/devvortex/
+tags: [nmap, ]
+img_path: /assets/broker/
 published: true
 ---
 
@@ -12,9 +12,9 @@ published: true
 ## Overview
 
 |:-:|:-:|
-|Machine|[Devvortex](https://app.hackthebox.com/machines/577)|
+|Machine|[Broker](https://app.hackthebox.com/machines/578)|
 |Rank|Easy|
-|Time|5h|
+|Time|-|
 |Focus|vHost-busting, CVEs, SSTI|
 
 > STILL ACTIVE MACHINE!
@@ -487,5 +487,3 @@ a018baec037ce9a218071e0b308efdc1
     <img src="devvortex_pwned.png"
     alt="Cozy machine pwned" >
 </figure>
-
--->
