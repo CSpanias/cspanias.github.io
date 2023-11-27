@@ -17,9 +17,6 @@ published: true
 |Time|-|
 |Focus|Default creds, CVEs, activemq|
 
-> CONTENT HIDDEN - ACTIVE MACHINE!
-{: .prompt-warning}
-
 ## 1. Initial Enumeration
 
 What we know:
@@ -56,19 +53,18 @@ What we know:
     alt="Logged in as admin" >
 </figure>
 
-```wappalyzer
-Nginx 1.18.0
-C ?
-Ubuntu
-Reverse Proxies: Nginx 1.18.0
-```
+Wappalyzer report:
+- Nginx 1.18.0
+- C
+- Ubuntu
+- Reverse Proxies: Nginx 1.18.0
 
 <figure>
     <img src="whatweb.png"
     alt="Whatweb report" >
 </figure>
 
-> Management tab reveals version:
+> Management tab reveals version
 
 <figure>
     <img src="activemq_version.png"
@@ -82,8 +78,7 @@ Reverse Proxies: Nginx 1.18.0
     alt="CVE-2023-46604" >
 </figure>
 
-> There is a [msf module](https://www.rapid7.com/db/modules/exploit/multi/misc/apache_activemq_rce_cve_2023_46604/) for that. [AttackerDB](https://attackerkb.com/topics/IHsgZDE3tS/cve-2023-46604/rapid7-analysis)'s explanation.  
-> [PoC](https://github.com/SaumyajeetDas/CVE-2023-46604-RCE-Reverse-Shell-Apache-ActiveMQ).
+> There is a [msf module](https://www.rapid7.com/db/modules/exploit/multi/misc/apache_activemq_rce_cve_2023_46604/) for that. [AttackerDB](https://attackerkb.com/topics/IHsgZDE3tS/cve-2023-46604/rapid7-analysis)'s explanation. There is also a [PoC](https://github.com/SaumyajeetDas/CVE-2023-46604-RCE-Reverse-Shell-Apache-ActiveMQ).
 
 <figure>
     <img src="broker_pwned.png"
