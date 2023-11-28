@@ -7,7 +7,10 @@ img_path: /assets/find_the_easy_pass/
 published: true
 ---
 
-![room_banner](chall_banner.png)
+<figure>
+    <img src="room_banner.png"
+    alt="Room's banner" >
+</figure>
 
 ## Overview
 
