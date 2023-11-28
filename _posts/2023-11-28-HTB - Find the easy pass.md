@@ -2,15 +2,14 @@
 title: HTB - Find the easy pass
 date: 2023-11-28
 categories: [Challenges, Reverse Engineering]
-tags: [reverse-enginnering, exe, xxd, subl, ghidra, ollydbg]
+tags: [reverse-enginnering, exe, binary, windows, xxd, subl, ghidra, ollydbg]
 img_path: /assets/find-the-easy-pass/
 published: true
 ---
 
-<figure>
-    <img src="room_banner.png"
-    alt="Room's banner" >
-</figure>
+
+
+![](room_banner.png)
 
 ## Overview
 
