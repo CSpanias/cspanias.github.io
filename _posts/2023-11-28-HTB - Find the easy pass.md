@@ -7,9 +7,7 @@ img_path: /assets/find-the-easy-pass/
 published: true
 ---
 
-
-
-![](room_banner.png)
+![](chall_banner.png)
 
 ## Overview
 
@@ -47,7 +45,7 @@ subl bin_code
 > Search for "password" in Sublime.
 
 <figure>
-    <img src="subl_password_search.png"
+    <img src="subl_password_search.jpg"
     alt="Searching for the string 'password' in Sublime" >
 </figure>
 
@@ -99,14 +97,14 @@ Search for the string 'password`:
 </figure>
 
 <figure>
-    <img src="search_password_search.png"
+    <img src="search_password_string.png"
     alt="'Password' string search" >
 </figure>
 
 Click on 'Wrong Password' (memory reference: `00454200`) and check References from main app:
 
 <figure>
-    <img src="refs_check.png"
+    <img src="ref_check.png"
     alt="Checking references" >
 </figure>
 
