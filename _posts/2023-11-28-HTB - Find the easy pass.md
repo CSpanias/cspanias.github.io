@@ -85,11 +85,9 @@ total 2280
 ghidra
 ```
 
-> [Ghidra](https://ghidra-sre.org/) is a reverse engineering tool, aka a disassembly tool, that was developed by the NSA and released in 2019.
+> [Ghidra](https://ghidra-sre.org/) is a reverse engineering tool, aka a disassembly tool, that was developed by the NSA and released in 2019 ([Ghidra quickstart & tutorial: Solving a simple crackme](https://www.youtube.com/watch?v=fTGTnrgjuGA)).
 
-> [Ghidra quickstart & tutorial: Solving a simple crackme](https://www.youtube.com/watch?v=fTGTnrgjuGA).
-
-Search for the string 'password`:
+Search for the string 'password':
 
 <figure>
     <img src="search_strings.png"
@@ -113,14 +111,14 @@ Click on 'Wrong Password' (memory reference: `00454200`) and check References fr
     alt="Memory location's references" >
 </figure>
 
-Repeat above step (memory ref: `00454144`) and click Function Graph icon (top bar):
+Repeat above step (memory ref: `00454144`) and click on the Function Graph icon (top bar):
 
 <figure>
     <img src="function_graph.jpg"
     alt="Function Graph" >
 </figure>
 
-This represents an `if` statement and the green arrow indicates that the function executed the second box (`00454144`). The last function call was `FUN_00404628`. Click on the function and check back on the main window (mem ref: `00454131`):
+The above represents an `if` statement and the green arrow indicates that the function executed the second box (`00454144`). The last function call was `FUN_00404628`. Click on the function and check back on the main window (mem ref: `00454131`):
 
 <figure>
     <img src="function_mem_ref.png"
@@ -141,7 +139,7 @@ We need to find out what is stored inside these parameters. Open `.exe` with `ol
     alt="Toggle breakpoint" >
 </figure>
 
-Now click the Play button on top and check the registers at the right-hand side:
+Now click the Play button on top and check the registers on the right-hand side:
 
 <figure>
     <img src="registers.jpg"
