@@ -1,7 +1,7 @@
 ---
 title: HTB - Devvortex
 date: 2023-11-27
-categories: [CTF Write Up, HTB]
+categories: [CTF, HTB]
 tags: [nmap, http, webserver, nginx, whatweb, wappalyzer, gobuster, dirsearch, robots-txt, vhost-busting, cve-2023-23752, ssti, mysql, hash, john, aport-cli, cve-2023-1326]
 img_path: /assets/devvortex/
 published: true

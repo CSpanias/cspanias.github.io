@@ -1,7 +1,7 @@
 ---
 title: THM - Tomghost
 date: 2023-09-30
-categories: [CTF Write Up, THM]
+categories: [CTF, THM]
 tags: [nmap, exploitdb, metasploit, hash, gpg, john, encryption, gtfobins, sudo, ajp]
 img_path: /assets/tomghost/
 mermaid: true

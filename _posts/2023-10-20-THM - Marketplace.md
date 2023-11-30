@@ -1,7 +1,7 @@
 ---
 title: THM - Marketplace
 date: 2023-10-20
-categories: [CTF Write Up, THM]
+categories: [CTF, THM]
 tags: [xss, idor, cookies, sqli, sudo, wildcard-injection, container-escape, tar]
 img_path: /assets/marketplace/
 mermaid: true

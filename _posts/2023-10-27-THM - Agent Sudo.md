@@ -1,7 +1,7 @@
 ---
 title: THM - Agent Sudo
 date: 2023-10-27
-categories: [CTF Write Up, THM]
+categories: [CTF, THM]
 tags: [nmap, burpsuite, ssh, ftp, john, hydra, brute-force, dictionary-attack, steganography, binwalk, stegseek, john, encoding, base64, exploit-db, gtfobins, sudo, zip, compression]
 img_path: /assets/agent-sudo/
 mermaid: true

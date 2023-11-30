@@ -1,7 +1,7 @@
 ---
 title: THM - Mr Robot
 date: 2023-09-27
-categories: [CTF Write Up, THM]
+categories: [CTF, THM]
 tags: [nmap, gobuster, hydra, burp-suite, wpscan, crackstation, hash, john, hashcat, gtfobins, suid, intruder]
 img_path: /assets/mr_robot/
 mermaid: true

@@ -1,7 +1,7 @@
 ---
 title: HTB - Cozyhosting
 date: 2023-11-25
-categories: [CTF Write Up, HTB]
+categories: [CTF, HTB]
 tags: [nmap, http, webserver, nginx, whatweb, wappalyzer, gobuster, dirsearch, cookies, burp-suite, jar, psql, postgres, hash, john, gtfobins]
 img_path: /assets/cozyhosting/
 published: true

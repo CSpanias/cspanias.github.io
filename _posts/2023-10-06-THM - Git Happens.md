@@ -1,7 +1,7 @@
 ---
 title: THM - Git Happens
 date: 2023-10-06
-categories: [CTF Write Up, THM]
+categories: [CTF, THM]
 tags: [nmap, nikto, git, gittools]
 img_path: /assets/git_happens/
 mermaid: true
