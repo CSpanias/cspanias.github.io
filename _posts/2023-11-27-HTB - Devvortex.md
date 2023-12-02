@@ -20,7 +20,8 @@ published: true
 > CONTENT HIDDEN - ACTIVE MACHINE!
 {: .prompt-warning}
 
-<!-- ## 1. INITIAL ENUM
+<!-- 
+## 1. INITIAL ENUM
 
 ```shell
 # TCP SYN common port scanning
@@ -489,6 +490,7 @@ uid=0(root) gid=0(root) groups=0(root)
 a018baec037ce9a218071e0b308efdc1
 !done  (press RETURN)
 ``` -->
+
 
 <figure>
     <img src="devvortex_pwned.png"
