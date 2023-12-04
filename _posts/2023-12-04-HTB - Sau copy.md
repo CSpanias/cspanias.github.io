@@ -132,7 +132,7 @@ local: PRTG Configuration.old.bak remote: PRTG Configuration.old.bak
 
 ![](creds.png)
 
-> prtgadmin:PrTg@dmin2018 --> do not work
+> prtgadmin:PrTg@dmin2018 --> do not work  
 > prtgadmin:PrTg@dmin2019 --> password rotation
 
 ```shell
