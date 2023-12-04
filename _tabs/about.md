@@ -8,7 +8,7 @@ order: 4
 
 ### Who Am I?
 
-A former [Strength & Conditioning (MSc)](https://scholar.google.com/citations?user=NEcbEUYAAAAJ&hl=en) coach and a current [Cybersecurity (BSc)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60) student working as a **Software Engineer**. Venturing in the **Penetration Testing** space through [TryHackMe](https://tryhackme.com/), [HackTheBox](https://www.hackthebox.com/), [CISCO Networking Academy](https://www.netacad.com/), and [Open University](https://www.open.ac.uk/), currently focusing on **putting the theory into practice** by grinding through HTB's and THM's **Capture The Flag** rooms. 
+A [Strength & Conditioning (MSc)](https://scholar.google.com/citations?user=NEcbEUYAAAAJ&hl=en) coach turned Software Engineer turned Penetration Tester. A [Cybersecurity (BSc)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60) student trying to improve my pentesting and CTF skills through platforms such as [HackTheBox](https://www.hackthebox.com/) and [TryHackMe](https://tryhackme.com/).
 
 You can find more about me by reading my up-to-date resume [<i class="fa-solid fa-file"></i>](https://drive.google.com/file/d/10_o6X0mdp6ivJW7FZl-7LnuP01U0OtPI/view?usp=sharing).
 
@@ -20,7 +20,7 @@ I will be writing write ups for all the completed CTFs for reviewing the process
 
 Additionally, I am currently studying for HTB's [CPTS](https://academy.hackthebox.com/preview/certifications/htb-certified-penetration-testing-specialist) certification, and after completing it, I plan to make a review of the [Penetration Tester Job Role Path](https://academy.hackthebox.com/path/preview/penetration-tester) as well as the exam itself.
 
-I also have my eyes on TMC's [PJPT](https://certifications.tcm-sec.com/pjpt/) and [PNPT](https://certifications.tcm-sec.com/pnpt/) certifications, and if I eventually sit for them, I aim to document my experience through TMC's training, and how it compares with THM's and HTB's resources in terms of quality, difficulty, subjects covered, and, of course, enjoyment.
+I also have my eyes on TMC's [PNPT](https://certifications.tcm-sec.com/pnpt/) certification, and if I eventually sit for it, I aim to document my experience through TMC's training, and how it compares with THM's and HTB's resources in terms of quality, difficulty, subjects covered, and, of course, enjoyment.
 
 ### Projects
 
