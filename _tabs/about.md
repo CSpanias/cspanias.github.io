@@ -8,11 +8,11 @@ order: 4
 
 ### Who Am I?
 
-A [Strength & Conditioning (MSc)](https://scholar.google.com/citations?user=NEcbEUYAAAAJ&hl=en) coach turned Software Engineer turned Penetration Tester. A [Cybersecurity (BSc)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60) student trying to improve my pentesting and CTF skills through platforms such as [HackTheBox](https://www.hackthebox.com/) and [TryHackMe](https://tryhackme.com/).
+A [Strength & Conditioning (MSc)](https://scholar.google.com/citations?user=NEcbEUYAAAAJ&hl=en) coach turned Software Engineer turned Penetration Tester. A [Cybersecurity (BSc)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60) student trying to improve his pentesting and CTF skills through [HackTheBox](https://www.hackthebox.com/) and [TryHackMe](https://tryhackme.com/).
 
-You can find more about me by reading my up-to-date resume [<i class="fa-solid fa-file"></i>](https://drive.google.com/file/d/10_o6X0mdp6ivJW7FZl-7LnuP01U0OtPI/view?usp=sharing).
+Up-to-date resume: [<i class="fa-solid fa-file"></i>](https://drive.google.com/file/d/10_o6X0mdp6ivJW7FZl-7LnuP01U0OtPI/view?usp=sharing).
 
-I am always game for a game of chess [<i class="fa-solid fa-chess"></i>](https://www.chess.com/member/spaniasch) or its human version [<i class="fa-solid fa-user-ninja"></i>](https://smoothcomp.com/en/profile/101916) !
+Fancy a game of chess [<i class="fa-solid fa-chess"></i>](https://www.chess.com/member/spaniasch) or its human version [<i class="fa-solid fa-user-ninja"></i>](https://smoothcomp.com/en/profile/101916) ?
 
 ### Why Pentest Journeys?
 
