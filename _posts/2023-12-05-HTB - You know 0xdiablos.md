@@ -175,7 +175,7 @@ GCC: (Debian 8.3.0-19) 8.3.0
 	```shell
   # check that the file was created
 	ls
-	0xdiablos.gpr   0xdiablos.lock   0xdiablos.lock~   0xdiablos.rep   bof.txt   peda-session-vuln.txt   vuln  'You know 0xDiablos.zip'  'You know 0xDiablos.zip:Zone.Identifier'
+	0xdiablos.gpr   0xdiablos.lock   0xdiablos.lock~   0xdiablos.rep   bof.txt   peda-session-vuln.txt   vuln  You know 0xDiablos.zip  You know 0xDiablos.zip:Zone.Identifier
 	
   # display the content of the file
 	cat bof.txt
