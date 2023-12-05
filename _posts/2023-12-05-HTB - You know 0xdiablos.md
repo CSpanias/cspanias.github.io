@@ -170,9 +170,7 @@ GCC: (Debian 8.3.0-19) 8.3.0
   # create a pattern bigger than 180 chars
 	gdb-peda$ pattern_create 200 bof.txt
 	Writing pattern of 200 chars to filename "bof.txt"
-	```
-
-	```shell
+  shell
   # check that the file was created
 	ls
 	0xdiablos.gpr   0xdiablos.lock   0xdiablos.lock~   0xdiablos.rep   bof.txt   peda-session-vuln.txt   vuln  You know 0xDiablos.zip  You know 0xDiablos.zip:Zone.Identifier
@@ -180,14 +178,14 @@ GCC: (Debian 8.3.0-19) 8.3.0
 
 7. Run (`r`) the program with `bof.txt` as input:
 
-  ![](gdb_r_bof.png)
+ ![](gdb_r_bof.png)
 
-  > A standard buffer overflow is **used to overwrite the Extended Instruction Pointer (EIP)**. It is usually possible to predict an appropriate EIP value that will land execution within the NOPs (No Operation) which will “execute” until the payload (usually shellcode) is encountered.
+ > A standard buffer overflow is **used to overwrite the Extended Instruction Pointer (EIP)**. It is usually possible to predict an appropriate EIP value that will land execution within the NOPs (No Operation) which will “execute” until the payload (usually shellcode) is encountered.
 
-  ```EIP-value
-  # we have successfully overflowed the IP
-  EIP: 0x41417741 ('AwAA')
-  ```
+ ```EIP-value
+ # we have successfully overflowed the IP
+ EIP: 0x41417741 ('AwAA')
+ ```
 
 8. We need to find the offset, which will enable us to find the exact location after which we can inject our payload:
 
