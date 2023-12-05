@@ -176,7 +176,9 @@ GCC: (Debian 8.3.0-19) 8.3.0
   # check that the file was created
 	ls
 	0xdiablos.gpr   0xdiablos.lock   0xdiablos.lock~   0xdiablos.rep   bof.txt   peda-session-vuln.txt   vuln  You know 0xDiablos.zip  You know 0xDiablos.zip:Zone.Identifier
-	
+  ```
+  
+  ```shell
   # display the content of the file
 	cat bof.txt
 	AAA%AAsAABAA$AAnAACAA-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA
