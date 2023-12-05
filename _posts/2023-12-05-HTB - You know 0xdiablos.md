@@ -3,7 +3,7 @@ title: HTB - You know 0xdiablos
 date: 2023-12-05
 categories: [Challenges, Pwn]
 tags: [pwn, ghidra, gdb, gdb-peda, debugging, python, buffer-overflow]
-img_path: /assets/blue/
+img_path: /assets/0xdiablos/
 published: true
 ---
 
