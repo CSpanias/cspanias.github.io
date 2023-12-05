@@ -187,7 +187,7 @@ GCC: (Debian 8.3.0-19) 8.3.0
   [Thread debugging using libthread_db enabled]
   Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
   You know who are 0xDiablos:
-  AAA%AAsAABAA$AAnAACAA-AA(AADAA\;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA
+  'AAA%AAsAABAA$AAnAACAA-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA'
 
   Program received signal SIGSEGV, Segmentation fault.
   [----------------------------------registers-----------------------------------]
@@ -220,10 +220,10 @@ GCC: (Debian 8.3.0-19) 8.3.0
 
   > A standard buffer overflow is **used to overwrite the Extended Instruction Pointer (EIP)**. It is usually possible to predict an appropriate EIP value that will land execution within the NOPs (No Operation) which will “execute” until the payload (usually shellcode) is encountered.
 
-    ```EIP-value
-    # we have successfully overflowed the IP
-    EIP: 0x41417741 ('AwAA')
-    ```
+  ```EIP-value
+  # we have successfully overflowed the IP
+  EIP: 0x41417741 ('AwAA')
+  ```
 
 8. We need to find the offset, which will enable us to find the exact location after which we can inject our payload:
 
