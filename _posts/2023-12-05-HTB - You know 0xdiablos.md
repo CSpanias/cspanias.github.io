@@ -227,12 +227,12 @@ GCC: (Debian 8.3.0-19) 8.3.0
 
 8. We need to find the offset, which will enable us to find the exact location after which we can inject our payload:
 
-	```shell
+  ```shell
   # find the offset
-	# we use the address of the EIP
-	gdb-peda$ pattern_offset 0x41417741
-	1094809409 found at offset: 188
-	```
+  # we use the address of the EIP
+  gdb-peda$ pattern_offset 0x41417741
+  1094809409 found at offset: 188
+  ```
 
   > We need exactly 188 chars/bit to achieve overflow. We usually inject code to achieve RCE, but in this case we need to use the `flag()` function to reveal its value.
 
