@@ -14,13 +14,13 @@ published: true
 
 > The DVWA server itself contains instructions about almost everything.
 
-__Damn Vulnerable Web Application (DVWA) is a PHP/MySQL web application that is damn vulnerable. Its main goal is to be an aid for security professionals to test their skills and tools in a legal environment, help web developers better understand the processes of securing web applications and to aid both students & teachers to learn about web application security in a controlled class room environment.__
+_**Damn Vulnerable Web Application (DVWA)** is a PHP/MySQL web application that is damn vulnerable. Its main goal is to be an aid for security professionals to test their skills and tools in a legal environment, help web developers better understand the processes of securing web applications and to aid both students & teachers to learn about web application security in a controlled class room environment._
 
-__The aim of DVWA is to practice some of the most common web vulnerabilities, with various levels of difficultly, with a simple straightforward interface.__
+_The aim of DVWA is to practice some of the most common web vulnerabilities, with various levels of difficultly, with a simple straightforward interface._
 
 ![](dvwa_home.png)
 
-The DVWA server has four different security levels which can be set as seen below:
+The DVWA server has **4 different security levels** which can be set as seen below:
 
 ![](security_levels.png)
 
