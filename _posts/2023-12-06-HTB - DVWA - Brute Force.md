@@ -12,13 +12,11 @@ published: true
 - [How to install dvwa on Kali](https://www.kali.org/tools/dvwa/).
 - [Official GitHub repository](https://github.com/digininja/DVWA).
 
-The DVWA server contains detailed instructions about everything, and as it is mentioned there:
+> The DVWA server itself contains instructions about almost everything.
 
 __Damn Vulnerable Web Application (DVWA) is a PHP/MySQL web application that is damn vulnerable. Its main goal is to be an aid for security professionals to test their skills and tools in a legal environment, help web developers better understand the processes of securing web applications and to aid both students & teachers to learn about web application security in a controlled class room environment.__
 
 __The aim of DVWA is to practice some of the most common web vulnerabilities, with various levels of difficultly, with a simple straightforward interface.__
-
-> If you have any problem though, feel free to reach out!
 
 ![](dvwa_home.png)
 
@@ -32,10 +30,10 @@ The DVWA server has four different security levels which can be set as seen belo
 
 	![](low_burp_proxy.png)
 
-Things to note down:
-- `GET` request
-- Parameters: `username`, `password`, `Login`
-- `Cookie: PHPSESSID=ud36qu65oddvmncfg54n515nhn; security=low`
+	Things to note down:
+	- `GET` request
+	- Parameters: `username`, `password`, `Login`
+	- `Cookie: PHPSESSID=ud36qu65oddvmncfg54n515nhn; security=low`
 
 2. Check for error messages when attempting a random login (via Burp Suite or browser):
 
@@ -106,7 +104,7 @@ Things to note down:
 
 	![](high_hydra.png)
 
-	> What's the difference between `Medium` and `High`? The source code adds an Anti-CSRF token, but seems not to work here.
+	> What's the difference between `Medium` and `High`? The source code adds an Anti-CSRF token, but it does not seem to work.
 
 ## Security: Impossible
 
@@ -140,9 +138,9 @@ Resources to read:
 
 3. Create a custom brute-forcing script:
 
-	> Original code taken from [Danny Beton](https://medium.com/@dannybeton/dvwa-brute-force-tutorial-high-security-456e6ed3ae39).
+	> 
 
-	Changes needed from the [Security Tutorials article](https://securitytutorials.co.uk/brute-forcing-web-logins-with-dvwa/):
+	Changes needed from the [Security Tutorials article](https://securitytutorials.co.uk/brute-forcing-web-logins-with-dvwa/) (original code taken from [Danny Beton](https://medium.com/@dannybeton/dvwa-brute-force-tutorial-high-security-456e6ed3ae39)):
 	1. `sudo pip3 install bs4, 2to3`
 	2. `sudo apt install 2to3`
 	3. Conversion of the script from Python2 to Python3: `2to3 -w csrf_script.py` 
