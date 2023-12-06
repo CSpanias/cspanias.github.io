@@ -30,7 +30,7 @@ The DVWA server has four different security levels which can be set as seen belo
 
 1. Intercept packet with Burp Suite:
 
-	![](burp_proxy.png)
+	![](low_burp_proxy.png)
 
 Things to note down:
 - `GET` request
