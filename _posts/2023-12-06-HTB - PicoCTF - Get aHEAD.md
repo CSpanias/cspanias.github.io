@@ -168,7 +168,7 @@ Content-type: text/html; charset=UTF-8
 ```
 
 > [-I/--head](https://linux.die.net/man/1/curl)  
-> _(HTTP/FTP/FILE) Fetch the HTTP-header only! HTTP-servers feature the command HEAD which this uses to get nothing but the header of a document. When used on a FTP or FILE file, curl displays the file size and last modification time only.__
+> _(HTTP/FTP/FILE) Fetch the HTTP-header only! HTTP-servers feature the command HEAD which this uses to get nothing but the header of a document. When used on a FTP or FILE file, curl displays the file size and last modification time only._
 
 
 
