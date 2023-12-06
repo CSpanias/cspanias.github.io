@@ -1,9 +1,9 @@
 ---
-title: HTB - You know 0xdiablos
+title: DVWA - Brute Force
 date: 2023-12-06
 categories: [DVWA, Brute Force]
-tags: [dvwa, brute-force, hydra, burp-suite, python, bs4, beautifulsoup, csrf]
-img_path: /assets/dvwp/brute_force
+tags: [dvwa, brute-force, hydra, burp-suite, python, bs4, beautifulsoup, csrf, 2to3]
+img_path: /assets/dvwa/brute_force
 published: true
 ---
 
