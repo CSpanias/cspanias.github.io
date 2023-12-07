@@ -29,15 +29,11 @@ The DVWA server has **4 different security levels** which can be set as seen bel
 - **High**: This option is an extension to the medium difficulty, with a mixture of harder or alternative bad practices to attempt to secure the code. The vulnerability may not allow the same extent of the exploitation, similar in various Capture The Flags (CTFs) competitions.
 - **Impossible**: This level should be secure against all vulnerabilities. It is used to compare the vulnerable source code to the secure source code.
 
-_The purpose of the **command injection** attack is to inject and execute commands specified by the attacker in the vulnerable application. In situation like this, the application, which executes unwanted system commands, is like a pseudo system shell, and the attacker may use it as any authorized system user. However, commands are executed with the same privileges and environment as the web service has._
+The purpose of the **command injection** attack is to inject and execute commands specified by the attacker in the vulnerable application. In situation like this, the application, which executes unwanted system commands, is like a pseudo system shell, and the attacker may use it as any authorized system user. However, commands are executed with the same privileges and environment as the web service has.
 
-_Command injection attacks are possible in most cases because of lack of correct input data validation, which can be manipulated by the attacker (forms, cookies, HTTP headers etc.)._
+Command injection attacks are possible in most cases because of lack of correct input data validation, which can be manipulated by the attacker (forms, cookies, HTTP headers etc.).
 
-_The syntax and commands may differ between the Operating Systems (OS), such as Linux and Windows, depending on their desired actions._
-
-_This attack may also be called "Remote Command Execution (RCE)"._
-
-## Security: Low
+The syntax and commands may differ between the Operating Systems (OS), such as Linux and Windows, depending on their desired actions. This attack may also be called "Remote Command Execution (RCE)".
 
 How it works:
 - When we want to execute more than one command we use concatenating characters to chain commands, such as `;`, `&&`, and `||`.
@@ -56,9 +52,11 @@ How it works:
 
 ## Security: Low
 
-![](low_ping_command.png){: width='75%'}
+> _This allows for direct input into one of many PHP functions that will execute commands on the OS. It is possible to escape out of the designed command and executed unintentional actions. This can be done by adding on to the request, "once the command has executed successfully, run this command"._
 
-What the above web application does is simply executing the `ping` command with the given input:
+What this web application does is simply executing the `ping` command with the given input:
+
+![](low_ping_command.png){: width='75%'}
 
 ```shell
 # executing the same command via the terminal
@@ -92,6 +90,8 @@ On the source code below we can see that:
 
 ## Security: Medium
 
+> _The developer has read up on some of the issues with command injection, and placed in various pattern patching to filter the input. However, this isn't enough. Various other system syntaxes can be used to break out of the desired command._
+
 If we try the first two commands, i.e. `1.1.1.1 && id` and `1.1.1.1; cat /etc/os-release`, they won't work. However the third command, `. || lsb_release -a`, will work just fine!
 
 ![](low_lsb-release.jpg){: width='75%'}
@@ -101,6 +101,8 @@ Looking at the source code below, we can see that a blacklist was added which es
 ![](medium_source_code.jpg){: width='75%'}
 
 ## Security: High
+
+> _In the high level, the developer goes back to the drawing board and puts in even more pattern to match. But even this isn't enough. The developer has either made a slight typo with the filters and believes a certain PHP command will save them from this mistake._
 
 Now none of our three commands work! As we can see below, the blacklist was extended included Boolean and Bitwise operators, among others.  
 
@@ -112,4 +114,4 @@ However, if we watch carefully the pipe operator on the third item on the blackl
 
 ## Security: Impossible
 
-In the impossible level, the challenge has been re-written, only to allow a very stricted input. If this doesn't match and doesn't produce a certain result, it will not be allowed to execute. Rather than "black listing" filtering (allowing any input and removing unwanted), this uses "white listing" (only allow certain values).
+> _In the impossible level, the challenge has been re-written, only to allow a very stricted input. If this doesn't match and doesn't produce a certain result, it will not be allowed to execute. Rather than "black listing" filtering (allowing any input and removing unwanted), this uses "white listing" (only allow certain values)._
