@@ -35,8 +35,10 @@ The DVWA server has **4 different security levels** which can be set as seen bel
 > _[Command Injection](https://owasp.org/www-community/attacks/Command_Injection) is an attack in which the goal is execution of arbitrary commands on the host operating system via a vulnerable application._
 
 How it works:
-- When we want to execute more than one command we use concatenating characters, such as `;`, `&&`, and `||`, aka *command chaining*.
+- When we want to execute more than one command we use concatenating characters to chain commands, such as `;`, `&&`, and `||`.
 - The commands are executed from left to right.
+
+> The `&&` and `||` are [Boolean operators](https://www.scaler.com/topics/linux-operators/).
 
 | Character | Description |
 |:-:|:-:|
@@ -86,9 +88,18 @@ On the source code below we can see that:
 
 If we try the first two commands, i.e. `1.1.1.1 && id` and `1.1.1.1; cat /etc/os-release`, they won't work. However the third command, `. || lsb_release -a`, will work just fine!
 
-Looking at the source code below, we can see that a blacklist which essentially removes the `&&` and `;` operators, but not the `||` operator! 
+![](low_lsb-release.jpg)
+
+Looking at the source code below, we can see that a blacklist was added which essentially removes the `&&` and `;` operators, but not the `||` operator! 
+
 ![](medium_source_code.jpg)
 
+## Security: High
 
+Now none of our three commands work! As we can see below, the blacklist was extended included Boolean and Bitwise operators, among others.  
 
+![](high_source_code.jpg)
 
+However, if we watch carefully the pipe operator on the third item on the blacklist, a space is included: `| `. Thus, if we use `|` without a space our payload should work:
+
+![](high_id.jpg)
