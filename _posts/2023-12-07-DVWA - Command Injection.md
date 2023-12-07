@@ -68,9 +68,9 @@ rtt min/avg/max/mdev = 16.141/17.477/18.886/1.087 ms
 
 So we can try some command chaining, such as:
 
-![](low_id.png)
+![](low_and_id.jpg)
 
-![](low_os-release.png)
+![](low_os-release.jpg)
 
 ![](low_lsb_release.png)
 
@@ -78,9 +78,13 @@ On the source code below we can see that:
 1. The script defines the `$target` variable with whatever we pass it as input.
 2. The passes our input directly to the `shell_exec()` function which adds our input to a predefined `ping` or `ping -c 4` command.
 
+![](low_source_code.jpg)
+
 > When we give `. | id` as input , `ping -c 4 . | id` is executed.
 
-![](low_source_code.jpg)
+## Security: Medium
+
+![](medium_source_code.jpg)
 
 
 
