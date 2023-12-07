@@ -2,7 +2,7 @@
 title: DVWA - Command Injection
 date: 2023-12-07
 categories: [DVWA, Command Injection]
-tags: [dvwa, command-injection]
+tags: [dvwa, command-injection, boolean-operators, bitwise-operators, command-chaining]
 img_path: /assets/dvwa/command_injection
 published: true
 ---
@@ -29,7 +29,6 @@ The DVWA server has **4 different security levels** which can be set as seen bel
 - **High**: This option is an extension to the medium difficulty, with a mixture of harder or alternative bad practices to attempt to secure the code. The vulnerability may not allow the same extent of the exploitation, similar in various Capture The Flags (CTFs) competitions.
 - **Impossible**: This level should be secure against all vulnerabilities. It is used to compare the vulnerable source code to the secure source code.
 
-
 ## Security: Low
 
 > _[Command Injection](https://owasp.org/www-community/attacks/Command_Injection) is an attack in which the goal is execution of arbitrary commands on the host operating system via a vulnerable application._
@@ -40,6 +39,7 @@ How it works:
 
 > The `&&` and `||` are [Boolean operators](https://www.scaler.com/topics/linux-operators/).
 
+|||
 |:-:|:-:|
 | Character | Description |
 | ; | executes all commands regardless of whether the previous ones failed or not
