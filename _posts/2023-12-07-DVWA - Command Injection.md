@@ -50,7 +50,7 @@ How it works:
 
 ## Security: Low
 
-![](low_ping_command.png){: width='75%' }
+![](low_ping_command.png){: width='75%'}
 
 What the above web application does is simply executing the `ping` command with the given input:
 
@@ -70,17 +70,17 @@ rtt min/avg/max/mdev = 16.141/17.477/18.886/1.087 ms
 
 So we can try some command chaining, such as:
 
-![](low_and_id.jpg){: width='75%' }
+![](low_and_id.jpg){: width='75%'}
 
-![](low_os-release.jpg){: width='75%' }
+![](low_os-release.jpg){: width='75%'}
 
-![](low_lsb-release.jpg){: width='75%' }
+![](low_lsb-release.jpg){: width='75%'}
 
 On the source code below we can see that:
 1. The script defines the `$target` variable with whatever we pass it as input.
 2. The passes our input directly to the `shell_exec()` function which adds our input to a predefined `ping` or `ping -c 4` command.
 
-![](low_source_code.jpg){: width='75%' }
+![](low_source_code.jpg){: width='75%'}
 
 > When we give `. | id` as input , `ping -c 4 . | id` is executed.
 
@@ -88,11 +88,11 @@ On the source code below we can see that:
 
 If we try the first two commands, i.e. `1.1.1.1 && id` and `1.1.1.1; cat /etc/os-release`, they won't work. However the third command, `. || lsb_release -a`, will work just fine!
 
-![](low_lsb-release.jpg){: width='75%' }
+![](low_lsb-release.jpg){: width='75%'}
 
 Looking at the source code below, we can see that a blacklist was added which essentially removes the `&&` and `;` operators, but not the `||` operator! 
 
-![](medium_source_code.jpg){: width='75%' }
+![](medium_source_code.jpg){: width='75%'}
 
 ## Security: High
 
@@ -102,4 +102,4 @@ Now none of our three commands work! As we can see below, the blacklist was exte
 
 However, if we watch carefully the pipe operator on the third item on the blacklist, a space is included: `| `. Thus, if we use `|` without a space our payload should work:
 
-![](high_id.jpg){: width='75%' }
+![](high_id.jpg){: width='75%'}
