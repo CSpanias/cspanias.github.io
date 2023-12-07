@@ -24,9 +24,15 @@ The DVWA server has **4 different security levels** which can be set as seen bel
 
 ![](security_levels.png)
 
+- **Low**: This security level is completely vulnerable and has no security measures at all. It's use is to be as an example of how web application vulnerabilities manifest through bad coding practices and to serve as a platform to teach or learn basic exploitation techniques.
+- **Medium**: This setting is mainly to give an example to the user of bad security practices, where the developer has tried but failed to secure an application. It also acts as a challenge to users to refine their exploitation techniques.
+- **High**: This option is an extension to the medium difficulty, with a mixture of harder or alternative bad practices to attempt to secure the code. The vulnerability may not allow the same extent of the exploitation, similar in various Capture The Flags (CTFs) competitions.
+- **Impossible**: This level should be secure against all vulnerabilities. It is used to compare the vulnerable source code to the secure source code.
+
+
 ## Security: Low
 
-> [Command injection](https://owasp.org/www-community/attacks/Command_Injection) is an attack in which the goal is execution of arbitrary commands on the host operating system via a vulnerable application.
+> _[Command Injection](https://owasp.org/www-community/attacks/Command_Injection) is an attack in which the goal is execution of arbitrary commands on the host operating system via a vulnerable application._
 
 How it works:
 - When we want to execute more than one command we use concatenating characters, such as `;`, `&&`, and `||`, aka *command chaining*.
@@ -38,32 +44,13 @@ How it works:
 | && | executes the second command only if the preceding command succeeds |
 | \|\| | executes the second command only if the precedent command fails |
 
-```shell
-# command chaining examples
-ls
-test  test1
-
-cat test; cat test1
-This is the content of test.
-This is the content of test1.
-
-cat test && cat test1
-This is the content of test.
-This is the content of test1.
-
-cat test2 && cat test1
-cat: test2: No such file or directory
-
-cat test2 || cat test1
-cat: test2: No such file or directory
-This is the content of test1.
-```
+![](command_chaining.png)
 
 ## Security: Low
 
 ![](low_ping_command.png)
 
-What the above web application does is simply executing the `ping` command.
+What the above web application does is simply executing the `ping` command with the given input:
 
 ```shell
 # executing the same command via the terminal
@@ -91,7 +78,7 @@ On the source code below we can see that:
 1. The script defines the `$target` variable with whatever we pass it as input.
 2. The passes our input directly to the `shell_exec()` function which adds our input to a predefined `ping` or `ping -c 4` command.
 
-> When we input `. | id`, `ping -c 4 . | id` is executed.
+> When we give `. | id` as input , `ping -c 4 . | id` is executed.
 
 ![](low_source_code.jpg)
 
