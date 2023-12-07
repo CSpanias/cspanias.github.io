@@ -72,7 +72,7 @@ So we can try some command chaining, such as:
 
 ![](low_os-release.jpg)
 
-![](low_lsb_release.png)
+![](low_lsb_release.jpg)
 
 On the source code below we can see that:
 1. The script defines the `$target` variable with whatever we pass it as input.
