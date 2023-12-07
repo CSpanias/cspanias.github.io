@@ -29,6 +29,14 @@ The DVWA server has **4 different security levels** which can be set as seen bel
 - **High**: This option is an extension to the medium difficulty, with a mixture of harder or alternative bad practices to attempt to secure the code. The vulnerability may not allow the same extent of the exploitation, similar in various Capture The Flags (CTFs) competitions.
 - **Impossible**: This level should be secure against all vulnerabilities. It is used to compare the vulnerable source code to the secure source code.
 
+_**Password cracking** is the process of recovering passwords from data that has been stored in or transmitted by a computer system. A common approach is to repeatedly try guesses for the password._
+
+_Users often choose **weak passwords**. Examples of insecure choices include single words found in dictionaries, family names, any too short password (usually thought to be less than 6 or 7 characters), or predictable patterns (e.g. alternating vowels and consonants, which is known as leetspeak, so "password" becomes "p@55w0rd")._
+
+_Creating a **targeted wordlist**, which is generated towards the target, often gives the highest success rate. There are public tools out there that will create a dictionary based on a combination of company websites, personal social networks and other common information (such as birthdays or year of graduation)._
+
+_A last resort is to try every possible password, known as a **brute force attack**. In theory, if there is no limit to the number of attempts, a brute force attack will always be successful since the rules for acceptable passwords must be publicly known; but as the length of the password increases, so does the number of possible passwords making the attack time longer._
+
 ## Security: Low
 
 1. Intercept packet with Burp Suite:
@@ -85,31 +93,31 @@ The DVWA server has **4 different security levels** which can be set as seen bel
 
 	![](low_success.png)
 
+The developer has completely missed out any protections methods, allowing for anyone to try as many times as they wish, to login to any user without any repercussions.
+
 ## Security: Medium
 
-1. Almost identical `hydra` command as before, just change `security=low` to `security=medium`:
+Almost identical `hydra` command as before, just change `security=low` to `security=medium`:
 
-	```shell
-	hydra -L usernames.txt -P passwords.txt 127.0.0.1 -s 42001 http-get-form "/vulnerabilities/brute/:username=^USER^&password=^PASS^&Login=Login:H=Cookie:PHPSESSID=ud36qu65oddvmncfg54n515nhn; security=medium:F=Username and/or password incorrect." -t 30
-	```
+```shell
+hydra -L usernames.txt -P passwords.txt 127.0.0.1 -s 42001 http-get-form "/vulnerabilities/brute/:username=^USER^&password=^PASS^&Login=Login:H=Cookie:PHPSESSID=ud36qu65oddvmncfg54n515nhn; security=medium:F=Username and/or password incorrect." -t 30
+```
 
-	![](medium_hydra.png)
+![](medium_hydra.png)
 
-	> Why the false positive?
-
-	> The command took a bit longer to complete, as a `sleep(2)` function was added to the source code.
+This stage adds a sleep on the failed login screen. This mean when you login incorrectly, there will be an extra two second wait before the page is visible. This will only slow down the amount of requests which can be processed a minute, making it longer to brute force.
 
 ## Security: High
 
-1. Same concept as before, this time changing `security=medium` to `security=high`:
+Same concept as before, this time changing `security=medium` to `security=high`:
 
-	```shell
-	hydra -L usernames.txt -P passwords.txt 127.0.0.1 -s 42001 http-get-form "/vulnerabilities/brute/:username=^USER^&password=^PASS^&Login=Login:H=Cookie:PHPSESSID=ud36qu65oddvmncfg54n515nhn; security=high:F=Username and/or password incorrect." -t 30
-	```
+```shell
+hydra -L usernames.txt -P passwords.txt 127.0.0.1 -s 42001 http-get-form "/vulnerabilities/brute/:username=^USER^&password=^PASS^&Login=Login:H=Cookie:PHPSESSID=ud36qu65oddvmncfg54n515nhn; security=high:F=Username and/or password incorrect." -t 30
+```
 
-	![](high_hydra.png)
+![](high_hydra.png)
 
-	> What's the difference between `Medium` and `High`? The source code adds an Anti-CSRF token, but it does not seem to work.
+There has been an "anti Cross-Site Request Forgery (CSRF) token" used. There is a old myth that this protection will stop brute force attacks. This is not the case. This level also extends on the medium level, by waiting when there is a failed login but this time it is a random amount of time between two and four seconds. The idea of this is to try and confuse any timing predictions. Using a CAPTCHA form could have a similar effect as a CSRF token.
 
 ## Security: Impossible
 
@@ -236,6 +244,10 @@ Resources to read:
 	Password is: password
 	```
 
+Brute force (and user enumeration) should not be possible in the impossible level. The developer has added a "lock out" feature, where if there are five bad logins within the last 15 minutes, the locked out user cannot log in.
 
+If the locked out user tries to login, even with a valid password, it will say their username or password is incorrect. This will make it impossible to know if there is a valid account on the system, with that password, and if the account is locked.
+
+This can cause a "Denial of Service" (DoS), by having someone continually trying to login to someone's account. This level would need to be extended by blacklisting the attacker (e.g. IP address, country, user-agent).
 
 
