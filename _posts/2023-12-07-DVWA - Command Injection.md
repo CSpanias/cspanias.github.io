@@ -72,7 +72,7 @@ So we can try some command chaining, such as:
 
 ![](low_os-release.jpg)
 
-![](low_lsb_release.jpg)
+![](low_lsb-release.jpg)
 
 On the source code below we can see that:
 1. The script defines the `$target` variable with whatever we pass it as input.
@@ -84,6 +84,9 @@ On the source code below we can see that:
 
 ## Security: Medium
 
+If we try the first two commands, i.e. `1.1.1.1 && id` and `1.1.1.1; cat /etc/os-release`, they won't work. However the third command, `. || lsb_release -a`, will work just fine!
+
+Looking at the source code below, we can see that a blacklist which essentially removes the `&&` and `;` operators, but not the `||` operator! 
 ![](medium_source_code.jpg)
 
 
