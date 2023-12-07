@@ -18,11 +18,11 @@ _**Damn Vulnerable Web Application (DVWA)** is a PHP/MySQL web application that 
 
 _The aim of DVWA is to practice some of the most common web vulnerabilities, with various levels of difficultly, with a simple straightforward interface._
 
-![](dvwa_home.png)
+![](dvwa_home.png){: width='70%' }
 
 The DVWA server has **4 different security levels** which can be set as seen below:
 
-![](security_levels.png)
+![](security_levels.png){: width='70%' }
 
 - **Low**: This security level is completely vulnerable and has no security measures at all. It's use is to be as an example of how web application vulnerabilities manifest through bad coding practices and to serve as a platform to teach or learn basic exploitation techniques.
 - **Medium**: This setting is mainly to give an example to the user of bad security practices, where the developer has tried but failed to secure an application. It also acts as a challenge to users to refine their exploitation techniques.
