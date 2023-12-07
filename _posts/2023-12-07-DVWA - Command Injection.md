@@ -39,7 +39,7 @@ How it works:
 - When we want to execute more than one command we use concatenating characters to chain commands, such as `;`, `&&`, and `||`.
 - The commands are executed from left to right.
 
-> The `&&` and `||` are [Boolean operators](https://www.scaler.com/topics/linux-operators/).
+> `&&` and `||` are [Boolean operators](https://www.scaler.com/topics/linux-operators/).
 
 |||
 |:-:|:-:|
