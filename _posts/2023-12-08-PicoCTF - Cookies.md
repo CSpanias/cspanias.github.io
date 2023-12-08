@@ -3,7 +3,7 @@ title: PicoCTF - Cookies
 date: 2023-12-08
 categories: [PicoCTF, Web Exploitation]
 tags: [picoctf, web-exploitation, cookies, http-requests, burp-suite]
-img_path: /assets/picoctf/web_exploitation/cookies
+img_path: assets\picoctf\web_exploitation\cookies
 published: true
 ---
 
@@ -31,6 +31,7 @@ We have a cookie called `name` set to value `0`. Sending requests with different
 
 ![](28_mac.png)
 
+We can also do the same process using `curl`:
 
 
 
