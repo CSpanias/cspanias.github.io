@@ -23,7 +23,7 @@ Intercepting the traffic with Burp and refreshing the page:
 
 We have a cookie called `name` set to value `0`. Sending requests with different cookie values results to different responses, including the flag:
 
-![](1_chock.png)
+![](1_choc.png)
 
 ![](2_oat.png)
 
