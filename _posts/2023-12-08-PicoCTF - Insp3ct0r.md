@@ -11,7 +11,9 @@ published: true
 
 Visiting the site:
 
-<video src="home.mp4" controls="controls">
+<video controls autoplay>
+  <source src="home.mp4" type="video/mp4">
+  Your browser does not support the video tag.
 </video>
 
 Since the room is called Insp3ct0r, let's use the Inspector tool to inspect the page's HTML code:
