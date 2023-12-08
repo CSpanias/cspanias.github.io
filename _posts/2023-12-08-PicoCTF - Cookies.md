@@ -27,7 +27,7 @@ We have a cookie called `name` set to value `0`. Sending requests with different
 
 ![](2_oat.png)
 
-![](18_flag.png)
+![](18_flag.jpg)
 
 ![](28_mac.png)
 
