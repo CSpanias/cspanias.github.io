@@ -11,7 +11,7 @@ published: true
 
 Visiting the site:
 
-{% Video home.mp4 500 400 %}
+![](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/picoctf/web_exploitation/insp3ct0r/home.mp4)
 
 Since the room is called Insp3ct0r, let's use the Inspector tool to inspect the page's HTML code:
 
