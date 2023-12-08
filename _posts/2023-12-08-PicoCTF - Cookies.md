@@ -7,11 +7,11 @@ img_path: /assets/picoctf/web_exploitation/cookies
 published: true
 ---
 
-![](cookie_banner.png)
+![](cookie_banner.png){: width='60%' }
 
 Visiting the link:
 
-![](home.png)
+![](home.png){: width='60%' }
 
 Putting `snickerdoodle` as input results to:
 
@@ -21,7 +21,7 @@ Intercepting the traffic with Burp and refreshing the page:
 
 ![](0_snickerdoodle.png)
 
-We have a cookie called `name` set to value `0`. Sending requests with different cookie values results to different responses, including the flag:
+We have a cookie called `name` set to value `0`. Playing around with different cookie values results to different responses, including the flag:
 
 ![](1_choc.png)
 
@@ -70,7 +70,7 @@ curl -s http://mercury.picoctf.net:29649/check -H "Cookie: name=18;" | grep -i C
             <h3 class="text-muted">Cookies</h3>
 ```
 
-We notice that when the `name=18` it does not return any cookie back! So we can get the full response to see what's happening:
+We notice that when the cookie to `name=18` it does not return any cookie back! We can inspect the full response:
 
 ```shell
 # getting the full response back
