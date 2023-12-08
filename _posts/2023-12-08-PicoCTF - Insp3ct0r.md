@@ -11,7 +11,7 @@ published: true
 
 Visiting the site:
 
-[![home](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/picoctf/web_exploitation/insp3ct0r/home.mp4)](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/picoctf/web_exploitation/insp3ct0r/home.mp4)
+https://github.com/CSpanias/cspanias.github.io/assets/78966278/8e8779de-dc19-43b6-8a62-9ab7935c90f6
 
 Since the room is called Insp3ct0r, let's use the Inspector tool to inspect the page's HTML code:
 
