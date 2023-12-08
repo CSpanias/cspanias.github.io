@@ -1,8 +1,8 @@
 ---
 title: HTB - Netmon
 date: 2023-12-04
-categories: [CTF, HTB]
-tags: [nmap, ftp, prtg, metasploit, cve-2018-9276]
+categories: [CTF, Fullpwn]
+tags: [htb, hackthebox, nmap, ftp, prtg, metasploit, cve-2018-9276]
 img_path: /assets/netmon/
 published: true
 ---

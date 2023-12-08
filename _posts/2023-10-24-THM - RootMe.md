@@ -1,8 +1,8 @@
 ---
 title: THM - RootMe
 date: 2023-10-24
-categories: [CTF, THM]
-tags: [gtfobins, suid, gobuster, nmap, webshell, apache]
+categories: [CTF, Fullpwn]
+tags: [thm, tryhackme, gtfobins, suid, gobuster, nmap, webshell, apache]
 img_path: /assets/rootme/
 mermaid: true
 ---

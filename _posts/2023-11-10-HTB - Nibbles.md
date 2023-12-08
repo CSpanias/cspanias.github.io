@@ -1,8 +1,8 @@
 ---
 title: HTB - Nibbles
 date: 2023-11-10
-categories: [CTF, HTB]
-tags: [nibbleblog, http, nc, nmap, wappalyzer, whatweb, gobuster, cve-2015-6967, metasploit, php, rce, webshell]
+categories: [CTF, Fullpwn]
+tags: [htb, hackthebox, nibbleblog, http, nc, nmap, wappalyzer, whatweb, gobuster, cve-2015-6967, metasploit, php, rce, webshell]
 img_path: /assets/nibbles/
 ---
 

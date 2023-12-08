@@ -1,8 +1,8 @@
 ---
 title: HTB - Broker
 date: 2023-11-10
-categories: [CTF, HTB]
-tags: [nmap, default-credentials, activemq, cve-2023-46604, metasploit]
+categories: [CTF, Fullpwn]
+tags: [htb, hackthebox, nmap, default-credentials, activemq, cve-2023-46604, metasploit]
 img_path: /assets/broker/
 published: true
 ---

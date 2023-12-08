@@ -1,8 +1,8 @@
 ---
 title: HTB - Keeper
 date: 2023-11-21
-categories: [CTF, HTB]
-tags: [nmap, whatweb, wappalyzer, curl, request-tracker, default-credentials, ssh, netstat, keepass, cve-2023-32784, dmp, kdbx, putty, ppk, puttygen, pem]
+categories: [CTF, Fullpwn]
+tags: [htb, hackthebox, nmap, whatweb, wappalyzer, curl, request-tracker, default-credentials, ssh, netstat, keepass, cve-2023-32784, dmp, kdbx, putty, ppk, puttygen, pem]
 img_path: /assets/keeper/
 published: true
 ---
