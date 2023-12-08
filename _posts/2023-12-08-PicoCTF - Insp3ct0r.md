@@ -11,9 +11,9 @@ published: true
 
 Visiting the site:
 
-![](home_what.png)
+![](home_what.png){: width='60%' .normal}
 
-![](home_how.png)
+![](home_how.png){: width='60%' .normal}
 
 Since the room is called Insp3ct0r, let's use the Inspector tool to inspect the page's HTML code:
 
