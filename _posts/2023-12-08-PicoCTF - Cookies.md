@@ -7,7 +7,7 @@ img_path: /assets/picoctf/web_exploitation/cookies
 published: true
 ---
 
-![](cookie_banner.png){: width='60%' }
+![](cookie_banner.png){: width='60%' .normal}
 
 Visiting the link:
 
