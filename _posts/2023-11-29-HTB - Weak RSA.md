@@ -1,7 +1,7 @@
 ---
 title: HTB - Weak RSA
 date: 2023-11-29
-categories: [Challenges, Crypto]
+categories: [CTF, Crypto]
 tags: [crypto, rsa, wieners-attack, python, pycryptodomex, pycryptodome, owiener]
 img_path: /assets/weak_rsa/
 published: true
