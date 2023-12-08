@@ -11,7 +11,7 @@ published: true
 
 Visiting the site:
 
-[![](home.mp4)](https://github.com/CSpanias/cspanias.github.io/assets/78966278/4dfb34bd-c0fe-4309-8f6e-ddb76a940778)
+{% Video home.mp4 500 400 %}
 
 Since the room is called Insp3ct0r, let's use the Inspector tool to inspect the page's HTML code:
 
