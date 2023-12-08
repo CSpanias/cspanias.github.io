@@ -11,7 +11,7 @@ published: true
 
 Visiting the site:
 
-<video src="home.mp4" controls="controls" style="max-width: 730px;">
+<video src="home.mp4" controls="controls">
 </video>
 
 Since the room is called Insp3ct0r, let's use the Inspector tool to inspect the page's HTML code:
