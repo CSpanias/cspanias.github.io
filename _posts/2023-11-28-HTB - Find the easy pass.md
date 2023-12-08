@@ -1,7 +1,7 @@
 ---
 title: HTB - Find the easy pass
 date: 2023-11-28
-categories: [Challenges, Reverse Engineering]
+categories: [Challenges, Reverse Engineering, HTB]
 tags: [reverse-enginnering, exe, binary, windows, xxd, subl, ghidra, ollydbg]
 img_path: /assets/find-the-easy-pass/
 published: true

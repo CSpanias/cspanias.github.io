@@ -1,7 +1,7 @@
 ---
 title: PicoCTF - Cookies
 date: 2023-12-08
-categories: [PicoCTF, Web Exploitation]
+categories: [Challenges, Web Exploitation, PicoCTF]
 tags: [picoctf, web-exploitation, cookies, http-requests, burp-suite, curl]
 img_path: /assets/picoctf/web_exploitation/cookies
 published: true

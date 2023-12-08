@@ -1,7 +1,7 @@
 ---
 title: PicoCTF - Insp3ct0r
 date: 2023-12-08
-categories: [PicoCTF, Web Exploitation]
+categories: [Challenges, Web Exploitation, PicoCTF]
 tags: [picoctf, web-exploitation, inspector, html, css, javascript]
 img_path: /assets/picoctf/web_exploitation/insp3ct0r
 published: true
