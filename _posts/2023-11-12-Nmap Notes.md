@@ -1,5 +1,5 @@
 ---
-title: Nmap Notes
+title: Nmap
 date: 2023-11-12
 categories: [Notes, Nmap]
 tags: [nmap, networking, firewall, icmp, tcp, ttl, enumeration, arp]
