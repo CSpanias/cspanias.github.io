@@ -108,19 +108,23 @@ If we capture the traffic of the file inclusion page, it looks like this:
 
 ![](get_proxy.png)
 
-Notice that we are in the `/vulnerabilities/fi/` directory and requesting the `include.php` page. Thus, we can try get out of this directory by including `../../` and then to the desired path, i.e., `hackable/flags/fi.php`:
+Notice that we are in the `/vulnerabilities/fi/` directory and requesting the `include.php` page. Thus, we can try get out of this directory by including `../../` and then try to reach the desired path, i.e., `hackable/flags/fi.php`:
 
 ![](low_dir_traversal.png)
 
+Visiting the URL via the browser we get the three quotes:
+
 ![](low_3_5_quotes.png)
+
+Viewing the page source we get the fifth quote:
 
 ![](low_4_5_quotes.png)
 
 Note that we should use the include function, i.e., pass our directory traversal attack as a value to the `page` parameter:
 
-![](without_include.png)
+![](without_include.png){: .normal}
 
-We are missing one quote, so we can try searching for `.php` file via dir-busting ([command explanation](https://youtu.be/KY58WcX7OZ4?t=541)):
+We are missing one quote, so we can try searching for other `.php` files via dir-busting ([command explanation](https://youtu.be/KY58WcX7OZ4?t=541)):
 
 ```shell
 # searching for '.php' file in the '/hackable/flags' directory
@@ -145,7 +149,7 @@ Filtered Requests: 220559
 Requests/sec.: 1322.034
 ```
 
-Nothing but the `fi` file found that we already know!
+Nothing but the already known `fi` file found!
 
 ### Remote File Inclusion
 
