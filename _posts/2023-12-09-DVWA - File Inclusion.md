@@ -228,6 +228,8 @@ $file = str_replace( array( "../", "..\\" ), "", $file );
 ?> 
 ```
 
+### Local File Inclusion
+
 1. Since the developer now removes the `../`, the directory traversal attack should not work:
 
     ![](medium_dir_trav.png)
@@ -239,6 +241,20 @@ $file = str_replace( array( "../", "..\\" ), "", $file );
 As you can see below, only what's within red rectangles will be removed:
 
     ![doubling_explanation.png]
+
+### Remote File Inclusion
+
+1. Since the developer now also removes the `http://`, the RFI process for getting a reverse shell should not work:
+
+![](fail_rev_shell.png)
+
+2. However, the source code is checking for an exact match so changing any lowercase letter to uppercase would bypass this measure:
+
+![](capital_rev_shell.png)
+
+3. We can also do exactly what we did for LFI above, that is, doubling the characters:
+
+![](doubling_rev_shell.png)
 
 ## Security: High
 
