@@ -279,13 +279,13 @@ if( !fnmatch( "file*", $file ) && $file != "include.php" ) {
 
 > The logical operator `&&` returns: `TRUE` only if both of its operands evaluate to true, and `FALSE` if either or both of its operands evaluate to false.
 
-1. The developer now put some conditions: the file must start with `file` following by anything else or should be the `include.php`. As a result, both directory traversal attacks now fail:
+1. The developer has now set some conditions: the file must start with `file` (followed by anything else) or should be the `include.php`. As a result, both directory traversal attacks now fail:
 
     ![](high_error_dir_trav.png)
 
     ![](high_error_double_dir_trav.png)
 
-2. Since the word `file` is allowed, we can use the `file://` [PHP wrapper](https://www.php.net/manual/en/wrappers.php) to reach our target file, providing it the full path:
+2. Since the word `file` is allowed, we can use the `file://` [PHP wrapper](https://www.php.net/manual/en/wrappers.php) and the full file path to read our target file:
 
     ![](php_wrappers.png)
 
