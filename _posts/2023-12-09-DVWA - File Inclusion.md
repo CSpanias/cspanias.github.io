@@ -50,10 +50,10 @@ To make the "The PHP function allow_url_include is not enabled." message to disa
 
     Press `CTRL+W` and search for "allow_url_".
 
-2. Restart the PHP service:
+2. Restart the php-fpm service:
 
     ```shell
-    # restarting the php-fpm service
+    # restarting the php-fpm service (change `8.2` to your version)
     sudo /etc/init.d/php8.2-fpm restart
     Restarting php8.2-fpm (via systemctl): php8.2-fpm.service.
     ```
