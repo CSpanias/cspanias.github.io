@@ -70,7 +70,15 @@ To make the "The PHP function allow_url_include is not enabled." message to disa
 
 > _This allows for direct input into one of many PHP functions that will include the content when executing. Depending on the web service configuration will depend if RFI is a possibility._
 
-By viewing the page source, we notice that the structure of each directory is preceded by `../../`:
+When we click any of the 3 files on the FI homepage, the address bar changes like this:
+
+![](file2.png)
+
+If we change the file number to `4`:
+
+![](file4.png)
+
+That's something, but our goal is to find 5 quotes! By viewing the page source, we notice that the structure of each directory is preceded by `../../`:
 
 ```html
 <li class=""><a href="../../instructions.php">Instructions</a></li>
