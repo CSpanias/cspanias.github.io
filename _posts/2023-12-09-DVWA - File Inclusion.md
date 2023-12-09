@@ -2,7 +2,7 @@
 title: DVWA - File Inclusion
 date: 2023-12-09
 categories: [DVWA, File Inclusion]
-tags: [dvwa, file-inclusion, burp-suite]
+tags: [dvwa, file-inclusion, burp-suite, directory-traversal, wfuzz, dir-busting]
 img_path: /assets/dvwa/file_inclusion
 published: true
 ---
@@ -122,15 +122,15 @@ Notice that we are in the `/vulnerabilities/fi/` directory and requesting the `i
 
 ![](low_dir_traversal.png)
 
-Visiting the URL via the browser we get the three quotes:
+By visiting the URL we get the three quotes:
 
 ![](low_3_5_quotes.png)
 
-Viewing the page source we get the fifth quote:
+By viewing the page source we get the fifth quote:
 
 ![](low_4_5_quotes.png)
 
-Note that we should use the include function, i.e., pass our directory traversal attack as a value to the `page` parameter:
+Note that we should use the include function for the directory traversal attack to work, otherwise, it does not work:
 
 ![](without_include.png){: .normal}
 
@@ -175,7 +175,7 @@ Nothing but the already known `fi` file found!
     Serving HTTP on 0.0.0.0 port 8888 (http://0.0.0.0:8888/) ...
     ```
 
-3. Visit your server via the browser and copy the link directing to the shell script:
+3. Visit the webserver via the browser and copy the link directing to the shell script:
 
     ![](webserver_browser.png)
 
@@ -240,21 +240,21 @@ $file = str_replace( array( "../", "..\\" ), "", $file );
 
 As you can see below, only what's within red rectangles will be removed:
 
-    ![doubling_explanation.png]
+    ![](doubling_explanation.png)
 
 ### Remote File Inclusion
 
-1. Since the developer now also removes the `http://`, the RFI process for getting a reverse shell should not work:
+1. Since the developer now also removes the `http://`, the same RFI process for getting a reverse shell as before should not work:
 
-![](fail_rev_shell.png)
+    ![](fail_rev_shell.png)
 
 2. However, the source code is checking for an exact match so changing any lowercase letter to uppercase would bypass this measure:
 
-![](capital_rev_shell.png)
+    ![](capital_rev_shell.png)
 
 3. We can also do exactly what we did for LFI above, that is, doubling the characters:
 
-![](doubling_rev_shell.png)
+    ![](doubling_rev_shell.png)
 
 ## Security: High
 
@@ -277,6 +277,40 @@ if( !fnmatch( "file*", $file ) && $file != "include.php" ) {
 ?> 
 ```
 
+> The logical operator `&&` returns: `TRUE` only if both of its operands evaluate to true, and `FALSE` if either or both of its operands evaluate to false.
+
+1. The developer now put some conditions: the file must start with `file` following by anything else or should be the `include.php`. As a result, both directory traversal attacks now fail:
+
+    ![](high_error_dir_trav.png)
+
+    ![](high_error_double_dir_trav.png)
+
+2. Since the word `file` is allowed, we can use the `file://` [PHP wrapper](https://www.php.net/manual/en/wrappers.php) to reach our target file, providing it the full path:
+
+    ![](php_wrappers.png)
+
 ## Security: Impossible
 
 > _The developer calls it quits and hardcodes only the allowed pages, with there exact filenames. By doing this, it removes all avenues of attack._
+
+```php
+# source code for impossible security
+<?php
+
+// The page we wish to display
+$file = $_GET[ 'page' ];
+
+// Only allow include.php or file{1..3}.php
+if( $file != "include.php" && $file != "file1.php" && $file != "file2.php" && $file != "file3.php" ) {
+    // This isn't the page we want!
+    echo "ERROR: File not found!";
+    exit;
+}
+
+?> 
+```
+
+## Resources
+
+- [LFI Cheatsheet](https://highon.coffee/blog/lfi-cheat-sheet/)
+- [Hacktricks File Inclusion](https://book.hacktricks.xyz/pentesting-web/file-inclusion)
