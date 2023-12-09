@@ -35,9 +35,38 @@ If the file chosen to be included is local on the target machine, it is called *
 
 **Objective**: Read all five famous quotes from `../hackable/flags/fi.php` using only the file inclusion.
 
+## Bypassing the "The PHP function allow_url_include is not enabled." setting
+
+To make the "The PHP function allow_url_include is not enabled." message to disappear:
+
+1. Follow the instruction [here](https://github.com/digininja/DVWA?tab=readme-ov-file#php-configuration):
+
+    ![](php_config_changes.png)
+
+    ```shell
+    # editing file with nano
+    sudo nano /etc/php/8.2/fpm/php.ini
+    ```
+
+    Press `CTRL+W` and search for "allow_url_".
+
+2. Restart the PHP service:
+
+    ```shell
+    # restarting the php-fpm service
+    sudo /etc/init.d/php8.2-fpm restart
+    Restarting php8.2-fpm (via systemctl): php8.2-fpm.service.
+    ```
+
+3. Refresh the page.
+
+    ![](message_left.png)
+
 ## Security: Low
 
 > _This allows for direct input into one of many PHP functions that will include the content when executing. Depending on the web service configuration will depend if RFI is a possibility._
+
+
 
 ## Security: Medium
 
