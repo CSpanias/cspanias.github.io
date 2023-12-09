@@ -70,6 +70,16 @@ To make the "The PHP function allow_url_include is not enabled." message to disa
 
 > _This allows for direct input into one of many PHP functions that will include the content when executing. Depending on the web service configuration will depend if RFI is a possibility._
 
+```php
+# source code for low security
+<?php
+
+// The page we wish to display
+$file = $_GET[ 'page' ];
+
+?> 
+```
+
 ### Local File Inclusion
 
 When we click any of the 3 files on the FI homepage, the address bar changes like this:
@@ -203,6 +213,32 @@ Nothing but the already known `fi` file found!
 ## Security: Medium
 
 > _The developer has read up on some of the issues with LFI/RFI, and decided to filter the input. However, the patterns that are used, isn't enough._
+
+```php
+# source code for medium security
+<?php
+
+// The page we wish to display
+$file = $_GET[ 'page' ];
+
+// Input validation
+$file = str_replace( array( "http://", "https://" ), "", $file );
+$file = str_replace( array( "../", "..\\" ), "", $file );
+
+?> 
+```
+
+1. Since the developer now removes the `../`, the directory traversal attack should not work:
+
+    ![](medium_dir_trav.png)
+
+2. However this can bypassed very easy by just doubling the characters used from `../` to `....//`:
+
+    ![](medium_bypass.png)
+
+As you can see below, only what's within red rectangles will be removed:
+
+    ![doubling_explanation.png]
 
 ## Security: High
 
