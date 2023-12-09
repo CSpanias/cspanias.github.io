@@ -31,7 +31,7 @@ The DVWA server has **4 different security levels** which can be set as seen bel
 
 ## File Inclusion
 
-Some web applications *allow the user to specify input that is used directly into file streams* or *allows the user to upload files to the server*. At a later time the web application accesses the user supplied input in the web applications context. By doing this, the web application is allowing the potential for malicious file execution. 
+Some web applications **allow the user to specify input that is used directly into file streams or allows the user to upload files to the server**. At a later time the web application accesses the user supplied input in the web applications context. By doing this, the web application is allowing the potential for malicious file execution. 
 
 If the file chosen to be included is local on the target machine, it is called **Local File Inclusion (LFI)**. But files may also be included on other machines, which then the attack is a **Remote File Inclusion (RFI)**. When RFI is not an option, using another vulnerability with LFI, such as file upload and directory traversal, can often achieve the same effect.
 
@@ -70,7 +70,37 @@ To make the "The PHP function allow_url_include is not enabled." message to disa
 
 > _This allows for direct input into one of many PHP functions that will include the content when executing. Depending on the web service configuration will depend if RFI is a possibility._
 
+By viewing the page source, we notice that the structure of each directory is preceded by `../../`:
 
+```html
+<li class=""><a href="../../instructions.php">Instructions</a></li>
+<li class=""><a href="../../setup.php">Setup / Reset DB</a></li>
+</ul><ul class="menuBlocks"><li class=""><a href="../../vulnerabilities/brute/">Brute Force</a></li>
+<li class=""><a href="../../vulnerabilities/exec/">Command Injection</a></li>
+<li class=""><a href="../../vulnerabilities/csrf/">CSRF</a></li>
+<li class="selected"><a href="../../vulnerabilities/fi/.?page=include.php">File Inclusion</a></li>
+<li class=""><a href="../../vulnerabilities/upload/">File Upload</a></li>
+<li class=""><a href="../../vulnerabilities/captcha/">Insecure CAPTCHA</a></li>
+<li class=""><a href="../../vulnerabilities/sqli/">SQL Injection</a></li>
+<li class=""><a href="../../vulnerabilities/sqli_blind/">SQL Injection (Blind)</a></li>
+<li class=""><a href="../../vulnerabilities/weak_id/">Weak Session IDs</a></li>
+<li class=""><a href="../../vulnerabilities/xss_d/">XSS (DOM)</a></li>
+<li class=""><a href="../../vulnerabilities/xss_r/">XSS (Reflected)</a></li>
+<li class=""><a href="../../vulnerabilities/xss_s/">XSS (Stored)</a></li>
+<li class=""><a href="../../vulnerabilities/csp/">CSP Bypass</a></li>
+<li class=""><a href="../../vulnerabilities/javascript/">JavaScript</a></li>
+<li class=""><a href="../../vulnerabilities/open_redirect/">Open HTTP Redirect</a></li>
+</ul><ul class="menuBlocks"><li class=""><a href="../../security.php">DVWA Security</a></li>
+<li class=""><a href="../../phpinfo.php">PHP Info</a></li>
+```
+
+If we capture the traffic of the file inclusion page, it looks like this:
+
+![](get_proxy.png)
+
+Notice that we are in the `/vulnerabilities/fi/` directory and requesting the `include.php` page. Thus, we can try get out of this directory by including `../../` and then to the desired path, i.e., `hackable/flags/fi.php`:
+
+![](low_dir_traversal.png)
 
 ## Security: Medium
 
