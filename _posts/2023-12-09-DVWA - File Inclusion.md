@@ -29,17 +29,19 @@ The DVWA server has **4 different security levels** which can be set as seen bel
 - **High**: This option is an extension to the medium difficulty, with a mixture of harder or alternative bad practices to attempt to secure the code. The vulnerability may not allow the same extent of the exploitation, similar in various Capture The Flags (CTFs) competitions.
 - **Impossible**: This level should be secure against all vulnerabilities. It is used to compare the vulnerable source code to the secure source code.
 
+## File Inclusion
+
 Some web applications *allow the user to specify input that is used directly into file streams* or *allows the user to upload files to the server*. At a later time the web application accesses the user supplied input in the web applications context. By doing this, the web application is allowing the potential for malicious file execution. 
 
 If the file chosen to be included is local on the target machine, it is called **Local File Inclusion (LFI)**. But files may also be included on other machines, which then the attack is a **Remote File Inclusion (RFI)**. When RFI is not an option, using another vulnerability with LFI, such as file upload and directory traversal, can often achieve the same effect.
 
 **Objective**: Read all five famous quotes from `../hackable/flags/fi.php` using only the file inclusion.
 
-## Bypassing the "The PHP function allow_url_include is not enabled." setting
+## Enabling allow_url_include function
 
 To make the "The PHP function allow_url_include is not enabled." message to disappear:
 
-1. Follow the instruction [here](https://github.com/digininja/DVWA?tab=readme-ov-file#php-configuration):
+1. Make the following [changes](https://github.com/digininja/DVWA?tab=readme-ov-file#php-configuration):
 
     ![](php_config_changes.png)
 
@@ -48,7 +50,9 @@ To make the "The PHP function allow_url_include is not enabled." message to disa
     sudo nano /etc/php/8.2/fpm/php.ini
     ```
 
-    Press `CTRL+W` and search for "allow_url_".
+    Press `CTRL+W` and search for "allow_url_":
+
+    ![](allow_url_include.png)
 
 2. Restart the php-fpm service:
 
