@@ -240,7 +240,7 @@ $file = str_replace( array( "../", "..\\" ), "", $file );
 
 As you can see below, only what's within red rectangles will be removed:
 
-    ![](doubling_explanation.png)
+![](doubling_explanation.png)
 
 ### Remote File Inclusion
 
