@@ -37,7 +37,7 @@ The consequences of unrestricted file upload can vary, including complete system
 
 **Objective**: Execute any PHP function of your choosing on the target system (such as `phpinfo()`	or `system()`) thanks to this file upload vulnerability.
 
-> Source [video walkthrough]((https://youtu.be/K7XBQWAZdZ4)) (includes the "**The PHP module GD is not installed**" solution).
+> Source [video walkthrough](https://youtu.be/K7XBQWAZdZ4) (includes the "**The PHP module GD is not installed**" solution).
 
 ## Security: Low
 

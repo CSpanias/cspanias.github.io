@@ -52,6 +52,8 @@ How it works:
 
 ![](command_chaining.png)
 
+> Source [video walkthrough](https://www.youtube.com/watch?v=WiqRvlN_UIU).
+
 ## Security: Low
 
 > _This allows for direct input into one of many PHP functions that will execute commands on the OS. It is possible to escape out of the designed command and executed unintentional actions. This can be done by adding on to the request, "once the command has executed successfully, run this command"._

@@ -39,6 +39,8 @@ Creating a **targeted wordlist**, which is generated towards the target, often g
 
 A last resort is to try every possible password, known as a **brute force attack**. In theory, if there is no limit to the number of attempts, a brute force attack will always be successful since the rules for acceptable passwords must be publicly known; but as the length of the password increases, so does the number of possible passwords making the attack time longer.
 
+> Source [video walkthrough](https://www.youtube.com/watch?v=SWzxoK6DAE4).
+
 ## Security: Low
 
 > _The developer has completely missed out any protections methods, allowing for anyone to try as many times as they wish, to login to any user without any repercussions._

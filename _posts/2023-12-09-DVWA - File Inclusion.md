@@ -66,6 +66,8 @@ To make the "The PHP function allow_url_include is not enabled." message to disa
 
     ![](message_left.png)
 
+> Source [video walkthrough](https://www.youtube.com/watch?v=KY58WcX7OZ4).
+
 ## Security: Low
 
 > _This allows for direct input into one of many PHP functions that will include the content when executing. Depending on the web service configuration will depend if RFI is a possibility._
