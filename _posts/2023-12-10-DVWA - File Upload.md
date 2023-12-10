@@ -259,11 +259,11 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 ?> 
 ```
 
-1. When trying to upload the same script to the webserver we fail as it only accepts `JPEG` or `PNG` images: 
+1. When trying to upload the same script as before to the webserver it fails as it now only accepts `JPEG` or `PNG` images: 
 
     ![](medium_failed_upload.png)
 
-2. Intercept the traffic with Burp when uploading the file and change the [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types):
+2. This is easily bypassed by changing the file's [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types) using Burp while uploading it:
 
     ![](mime-type_php.png)
 
@@ -318,7 +318,7 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 
     ![](high_mime_failed.png)
 
-2. If we try to match the extension by renaming the `revshell.php` file to `revshell.png` file, we will find that it will fail again as it is also check the file's contents:
+2. If we try to match the extension by renaming the `revshell.php` file to `revshell.png` file, we will find that it will fail again as it is also checks the file's contents this time:
 
     ```shell
     # changing file's extension
@@ -327,11 +327,11 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 
     ![](high_mime_ext_failed.png)
 
-3. One way of bypassing this is by changing the file's [Magic Number](https://en.wikipedia.org/wiki/List_of_file_signatures). We must first find out what that number is for `.png` files:
+3. One way of bypassing this is by changing the file's [Magic Number](https://en.wikipedia.org/wiki/List_of_file_signatures). We must first find out what this number is for `.png` files:
 
     ![](png_mn.png)
 
-4. We can see that this is 8 bits long, so we will edit the `revshell.png` file and add 8 random bits at the very beginning of the file:
+4. We can see that it's 8 bits long, so we will edit the `revshell.png` file and add 8 random bits at the very beginning:
 
     ![](random_bits.png)
 
@@ -345,7 +345,7 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 
     ![](hexeditor_png.png)
 
-6. Upload the file to the webserver:
+6. Now the webserver will accept the file upload:
 
     ![](upload_success.png)
 
@@ -355,7 +355,7 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 
     ![](high_revshell_fail.png)
 
-8. We need a way to get the file to be executed as `.php` but also keep the `.png` extension so we can upload it. This can be done by first renaming it once again:
+8. We need a way to get the file to be executed as `.php` but also keep the `.png` extension so we can upload it. This can be done by first renaming it the file by adding the `.php` extension:
 
     ```shell
     # changing file's extension
@@ -366,10 +366,12 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 
     ![](high_pre_null_byte.png)
 
+    ![](high_null_byte.png)
+
     ![](high_shell_null.png)
 
 
-10. If you try to call it by just visiting the give path it won't work:
+10. If you try to call it by just visiting the given path it won't work:
 
     ![](high_revshell_null_fail.png)
 
