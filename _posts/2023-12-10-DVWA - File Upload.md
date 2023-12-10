@@ -118,9 +118,9 @@ We can also use [`weevely3`](https://github.com/epinna/weevely3) to get a revers
 
 2. Upload it to the webserver:
 
-    ![](weevely_upload.png)
+    ![](weevely_upload.png){: width='65%'}
 
-3. Call it through terminal:
+3. Call it through the terminal:
 
     ```shell
      sudo /opt/weevely3/weevely.py http://127.0.0.1:42001/hackable/uploads/weevely.php test123
