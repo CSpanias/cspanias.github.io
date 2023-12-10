@@ -150,7 +150,7 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 
 2. Intercept the traffic with Burp when uploading the file and change the [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types):
 
-    ![](mime-type_original.png)
+    ![](mime-type_php.png)
 
     ![](medium_burp_content-type.png)
 
