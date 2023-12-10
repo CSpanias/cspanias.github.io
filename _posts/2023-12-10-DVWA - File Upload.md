@@ -1,0 +1,222 @@
+---
+title: DVWA - File Upload
+date: 2023-12-10
+categories: [DVWA, File Upload]
+tags: [dvwa, file-upload, burp-suite,]
+img_path: /assets/dvwa/file_upload
+published: true
+---
+
+## Information
+
+- [How to install dvwa on Kali](https://www.kali.org/tools/dvwa/).
+- [Official GitHub repository](https://github.com/digininja/DVWA).
+
+> The DVWA server itself contains instructions about almost everything.
+
+_**Damn Vulnerable Web Application (DVWA)** is a PHP/MySQL web application that is damn vulnerable. Its main goal is to be an aid for security professionals to test their skills and tools in a legal environment, help web developers better understand the processes of securing web applications and to aid both students & teachers to learn about web application security in a controlled class room environment._
+
+_The aim of DVWA is to practice some of the most common web vulnerabilities, with various levels of difficultly, with a simple straightforward interface._
+
+![](dvwa_home.png){: width='70%' }
+
+The DVWA server has **4 different security levels** which can be set as seen below:
+
+![](security_levels.png){: width='70%' }
+
+- **Low**: This security level is completely vulnerable and has no security measures at all. It's use is to be as an example of how web application vulnerabilities manifest through bad coding practices and to serve as a platform to teach or learn basic exploitation techniques.
+- **Medium**: This setting is mainly to give an example to the user of bad security practices, where the developer has tried but failed to secure an application. It also acts as a challenge to users to refine their exploitation techniques.
+- **High**: This option is an extension to the medium difficulty, with a mixture of harder or alternative bad practices to attempt to secure the code. The vulnerability may not allow the same extent of the exploitation, similar in various Capture The Flags (CTFs) competitions.
+- **Impossible**: This level should be secure against all vulnerabilities. It is used to compare the vulnerable source code to the secure source code.
+
+## File Upload
+
+Uploaded files represent a significant risk to web applications. The first step in many attacks is to get some code to the system to be attacked. Then the attacker only needs to find a way to get the code executed. Using a file upload helps the attacker accomplish the first step.
+
+The consequences of unrestricted file upload can vary, including complete system takeover, an overloaded file system, forwarding attacks to backend systems, and simple defacement. It depends on what the application does with the uploaded file, including where it is stored.
+
+**Objective**: Execute any PHP function of your choosing on the target system (such as `phpinfo()`	or `system()`) thanks to this file upload vulnerability.
+
+## Security: Low
+
+> _Low level will not check the contents of the file being uploaded in any way. It relies only on trust._
+
+```php
+# source code for low security
+<?php
+
+if( isset( $_POST[ 'Upload' ] ) ) {
+    // Where are we going to be writing to?
+    $target_path  = DVWA_WEB_PAGE_TO_ROOT . "hackable/uploads/";
+    $target_path .= basename( $_FILES[ 'uploaded' ][ 'name' ] );
+
+    // Can we move the file to the upload folder?
+    if( !move_uploaded_file( $_FILES[ 'uploaded' ][ 'tmp_name' ], $target_path ) ) {
+        // No
+        echo '<pre>Your image was not uploaded.</pre>';
+    }
+    else {
+        // Yes!
+        echo "<pre>{$target_path} succesfully uploaded!</pre>";
+    }
+}
+
+?> 
+```
+
+
+## Security: Medium
+
+> _When using the medium level, it will check the reported file type from the client when its being uploaded._
+
+```php
+# source code for medium security
+<?php
+
+if( isset( $_POST[ 'Upload' ] ) ) {
+    // Where are we going to be writing to?
+    $target_path  = DVWA_WEB_PAGE_TO_ROOT . "hackable/uploads/";
+    $target_path .= basename( $_FILES[ 'uploaded' ][ 'name' ] );
+
+    // File information
+    $uploaded_name = $_FILES[ 'uploaded' ][ 'name' ];
+    $uploaded_type = $_FILES[ 'uploaded' ][ 'type' ];
+    $uploaded_size = $_FILES[ 'uploaded' ][ 'size' ];
+
+    // Is it an image?
+    if( ( $uploaded_type == "image/jpeg" || $uploaded_type == "image/png" ) &&
+        ( $uploaded_size < 100000 ) ) {
+
+        // Can we move the file to the upload folder?
+        if( !move_uploaded_file( $_FILES[ 'uploaded' ][ 'tmp_name' ], $target_path ) ) {
+            // No
+            echo '<pre>Your image was not uploaded.</pre>';
+        }
+        else {
+            // Yes!
+            echo "<pre>{$target_path} succesfully uploaded!</pre>";
+        }
+    }
+    else {
+        // Invalid file
+        echo '<pre>Your image was not uploaded. We can only accept JPEG or PNG images.</pre>';
+    }
+}
+
+?> 
+```
+
+## Security: High
+
+> _Once the file has been received from the client, the server will try to resize any image that was included in the request._
+
+```php
+# source code for high security
+<?php
+
+if( isset( $_POST[ 'Upload' ] ) ) {
+    // Where are we going to be writing to?
+    $target_path  = DVWA_WEB_PAGE_TO_ROOT . "hackable/uploads/";
+    $target_path .= basename( $_FILES[ 'uploaded' ][ 'name' ] );
+
+    // File information
+    $uploaded_name = $_FILES[ 'uploaded' ][ 'name' ];
+    $uploaded_ext  = substr( $uploaded_name, strrpos( $uploaded_name, '.' ) + 1);
+    $uploaded_size = $_FILES[ 'uploaded' ][ 'size' ];
+    $uploaded_tmp  = $_FILES[ 'uploaded' ][ 'tmp_name' ];
+
+    // Is it an image?
+    if( ( strtolower( $uploaded_ext ) == "jpg" || strtolower( $uploaded_ext ) == "jpeg" || strtolower( $uploaded_ext ) == "png" ) &&
+        ( $uploaded_size < 100000 ) &&
+        getimagesize( $uploaded_tmp ) ) {
+
+        // Can we move the file to the upload folder?
+        if( !move_uploaded_file( $uploaded_tmp, $target_path ) ) {
+            // No
+            echo '<pre>Your image was not uploaded.</pre>';
+        }
+        else {
+            // Yes!
+            echo "<pre>{$target_path} succesfully uploaded!</pre>";
+        }
+    }
+    else {
+        // Invalid file
+        echo '<pre>Your image was not uploaded. We can only accept JPEG or PNG images.</pre>';
+    }
+}
+
+?> 
+```
+
+
+## Security: Impossible
+
+> _This will check everything from all the levels so far, as well then to re-encode the image. This will make a new image, therefor stripping any "non-image" code (including metadata)._
+
+```php
+# source code for impossible security
+<?php
+
+if( isset( $_POST[ 'Upload' ] ) ) {
+    // Check Anti-CSRF token
+    checkToken( $_REQUEST[ 'user_token' ], $_SESSION[ 'session_token' ], 'index.php' );
+
+
+    // File information
+    $uploaded_name = $_FILES[ 'uploaded' ][ 'name' ];
+    $uploaded_ext  = substr( $uploaded_name, strrpos( $uploaded_name, '.' ) + 1);
+    $uploaded_size = $_FILES[ 'uploaded' ][ 'size' ];
+    $uploaded_type = $_FILES[ 'uploaded' ][ 'type' ];
+    $uploaded_tmp  = $_FILES[ 'uploaded' ][ 'tmp_name' ];
+
+    // Where are we going to be writing to?
+    $target_path   = DVWA_WEB_PAGE_TO_ROOT . 'hackable/uploads/';
+    //$target_file   = basename( $uploaded_name, '.' . $uploaded_ext ) . '-';
+    $target_file   =  md5( uniqid() . $uploaded_name ) . '.' . $uploaded_ext;
+    $temp_file     = ( ( ini_get( 'upload_tmp_dir' ) == '' ) ? ( sys_get_temp_dir() ) : ( ini_get( 'upload_tmp_dir' ) ) );
+    $temp_file    .= DIRECTORY_SEPARATOR . md5( uniqid() . $uploaded_name ) . '.' . $uploaded_ext;
+
+    // Is it an image?
+    if( ( strtolower( $uploaded_ext ) == 'jpg' || strtolower( $uploaded_ext ) == 'jpeg' || strtolower( $uploaded_ext ) == 'png' ) &&
+        ( $uploaded_size < 100000 ) &&
+        ( $uploaded_type == 'image/jpeg' || $uploaded_type == 'image/png' ) &&
+        getimagesize( $uploaded_tmp ) ) {
+
+        // Strip any metadata, by re-encoding image (Note, using php-Imagick is recommended over php-GD)
+        if( $uploaded_type == 'image/jpeg' ) {
+            $img = imagecreatefromjpeg( $uploaded_tmp );
+            imagejpeg( $img, $temp_file, 100);
+        }
+        else {
+            $img = imagecreatefrompng( $uploaded_tmp );
+            imagepng( $img, $temp_file, 9);
+        }
+        imagedestroy( $img );
+
+        // Can we move the file to the web root from the temp folder?
+        if( rename( $temp_file, ( getcwd() . DIRECTORY_SEPARATOR . $target_path . $target_file ) ) ) {
+            // Yes!
+            echo "<pre><a href='${target_path}${target_file}'>${target_file}</a> succesfully uploaded!</pre>";
+        }
+        else {
+            // No
+            echo '<pre>Your image was not uploaded.</pre>';
+        }
+
+        // Delete any temp files
+        if( file_exists( $temp_file ) )
+            unlink( $temp_file );
+    }
+    else {
+        // Invalid file
+        echo '<pre>Your image was not uploaded. We can only accept JPEG or PNG images.</pre>';
+    }
+}
+
+// Generate Anti-CSRF token
+generateSessionToken();
+
+?> 
+```
+

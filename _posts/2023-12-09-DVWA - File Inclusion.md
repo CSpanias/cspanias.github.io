@@ -261,7 +261,7 @@ As you can see below, only what's within red rectangles will be removed:
 > _The developer has had enough. They decided to only allow certain files to be used. However as there are multiple files with the same basename, they use a wildcard to include them all._
 
 ```php
-# source code for medium security
+# source code for high security
 <?php
 
 // The page we wish to display
