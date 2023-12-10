@@ -66,7 +66,7 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 ?> 
 ```
 
-1. Let grab [Pentestmonkey's PHP reverse shell](https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php) and make the required changes:
+1. Let's grab [Pentestmonkey's PHP reverse shell](https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php) and make the required changes:
 
     ![](shell_script.png)
 
@@ -318,7 +318,7 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 
     ![](high_mime_failed.png)
 
-2. If we try to match the extension by renaming the `revshell.php` file to `revshell.png` file, we will find that it will fail again as it is also checks the file's contents this time:
+2. If we try to match the extension by renaming the `revshell.php` file to `revshell.png` file, we will find that it will fail again as it also checks the file's contents this time:
 
     ```shell
     # changing file's extension
@@ -327,7 +327,7 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 
     ![](high_mime_ext_failed.png)
 
-3. One way of bypassing this is by changing the file's [Magic Number](https://en.wikipedia.org/wiki/List_of_file_signatures). We must first find out what this number is for `.png` files:
+3. One way of bypassing this is by changing the file's [Magic Number](https://en.wikipedia.org/wiki/List_of_file_signatures) to the `.png`s one:
 
     ![](png_mn.png)
 
@@ -380,9 +380,9 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 
 ### Injecting file's metadata and using LFI
 
-> Source: [DVWA File Upload(https://spencerdodd.github.io/2017/03/05/dvwa_file_upload/)]
+> Source: [DVWA File Upload](https://spencerdodd.github.io/2017/03/05/dvwa_file_upload/).
 
-1. We can download a low resolution image, such as [this](https://www.bestprintingonline.com/help_resources/Image/Ducky_Head_Web_Low-Res.jpg), and the `.php` extension, and inject our payload into the image's metadata:
+1. We can download a low resolution image, such as [this](https://www.bestprintingonline.com/help_resources/Image/Ducky_Head_Web_Low-Res.jpg), add the `.php` extension, and inject our payload into the image's metadata:
 
     ```shell
     cp duck.jpg duck.php.jpg
@@ -397,7 +397,7 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 
     ![](exif_image_browser.png)
 
-2. The we have to set the security level back to Low and call the image via LFI:
+2. Then we have to set the security level back to Low and call the image via LFI:
 
     ![](lfi_high.png)
 
