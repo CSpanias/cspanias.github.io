@@ -37,7 +37,7 @@ The consequences of unrestricted file upload can vary, including complete system
 
 **Objective**: Execute any PHP function of your choosing on the target system (such as `phpinfo()`	or `system()`) thanks to this file upload vulnerability.
 
-> If you get the "**The PHP module GD is not installed**" check the solution [here](https://youtu.be/K7XBQWAZdZ4).
+> Source [video walkthrough]((https://youtu.be/K7XBQWAZdZ4)) (includes the "**The PHP module GD is not installed**" solution).
 
 ## Security: Low
 
@@ -379,6 +379,8 @@ if( isset( $_POST[ 'Upload' ] ) ) {
     ![](high_revshell_null_success.png)
 
 ### Injecting file's metadata and using LFI
+
+> Source: [DVWA File Upload(https://spencerdodd.github.io/2017/03/05/dvwa_file_upload/)]
 
 1. We can download a low resolution image, such as [this](https://www.bestprintingonline.com/help_resources/Image/Ducky_Head_Web_Low-Res.jpg), and the `.php` extension, and inject our payload into the image's metadata:
 
