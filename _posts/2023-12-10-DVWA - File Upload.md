@@ -155,7 +155,7 @@ We can also use [`weevely3`](https://github.com/epinna/weevely3) to get a revers
 
 2. Upload the file:
 
-    ![](msfvenom_upload.png)
+    ![](msfvenom_uploaded.png)
 
 3. Set up the a listener within `msfconsole`:
 
