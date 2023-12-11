@@ -48,13 +48,18 @@ We need to register on the provided link to generate our keys:
 6. Add the generated keys to the specified file: `sudo nano /etc/dvwa/config/config.inc.php`.
 7. Refresh the CAPTCHA page.
 
-![](captcha_config.png)
+![](captcha_config.png){: width='70%' }
 
-![](captcha_rdy.png)
+
+![](captcha_rdy.png){: width='80%' }
+
 
 ## Security: Low
 
 > _The issue with this CAPTCHA is that it is easily bypassed. The developer has made the assumption that all users will progress through screen 1, complete the CAPTCHA, and then move on to the next screen where the password is actually updated. By submitting the new password directly to the change page, the user may bypass the CAPTCHA system._
+
+<details>
+	<summary>Source code</summary>
 
 ```php
 # source code for low security
@@ -134,8 +139,9 @@ if( isset( $_POST[ 'Change' ] ) && ( $_POST[ 'step' ] == '2' ) ) {
 
 ?> 
 ```
+</details>
 
-1. If we change the password and solve the CAPTCHA the captured traffic shows that this is a 2-step process. The first step is solving the CAPTCHA and the second changing the password:
+1. If we change the password and solve the CAPTCHA, the captured traffic shows that this is a 2-step process. The first step is solving the CAPTCHA and the second changing the password:
 
     ![](low_step1.png)
 
@@ -236,7 +242,7 @@ if( isset( $_POST[ 'Change' ] ) && ( $_POST[ 'step' ] == '2' ) ) {
 ?> 
 ```
 
-1. This work exactly like the Low security level. The only difference is the addition of a new parameter, `passed_captcha`, but that does not change much:
+1. This work exactly like the Low security level. The only difference is the addition of a new parameter in the second step, `passed_captcha`, but that does not change much:
 
     ![](medium_step1.png)
 
