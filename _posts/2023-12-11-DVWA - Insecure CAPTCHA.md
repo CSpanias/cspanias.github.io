@@ -35,10 +35,22 @@ A [CAPTCHA](https://en.wikipedia.org/wiki/CAPTCHA) is a program that can tell wh
 
 CAPTCHAs are often used to protect sensitive functionality from automated bots. Such functionality typically includes user registration and changes, password changes, and posting content. In this example, the CAPTCHA is guarding the change password functionality for the user account. This provides limited protection from CSRF attacks as well as automated bot guessing.
 
-
 **Objective**: Your aim is to change the current user's password in a automated manner because of the poor CAPTCHA system.
 
 > Source [video walkthrough](https://www.youtube.com/watch?v=But-uBPdsKk).
+
+We need to register on the provided link to generate our keys:
+1. Click the [link](https://www.google.com/recaptcha/admin/create) > Switch to create a classic key.
+2. **Label**: `dvwa`
+3. **Type**: `reCAPTCHA type v2` > `"I'm not a robot checkbox" tickbox.`
+4. **Domains**: 127.0.0.1.
+5. **Accept** > **Submit**.
+6. Add the generated keys to the specified file: `sudo nano /etc/dvwa/config/config.inc.php`.
+7. Refresh the CAPTCHA page.
+
+![](captcha_config.png)
+
+![](captcha_rdy.png)
 
 ## Security: Low
 
@@ -122,6 +134,16 @@ if( isset( $_POST[ 'Change' ] ) && ( $_POST[ 'step' ] == '2' ) ) {
 
 ?> 
 ```
+
+1. If we change the password and solve the CAPTCHA the traffic show that this is a 2-step process. The first step is solving the CAPTCHA and the second changing the password:
+
+    ![](low_step1.png)
+
+    ![](low_step2.png)
+
+2. We can bypass the first step as it is, and just capture the second's step traffic, modify it with a new password, and sent it:
+
+    ![](low_changed.png)
 
 ## Security: Medium
 
