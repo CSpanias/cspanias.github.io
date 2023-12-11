@@ -58,6 +58,7 @@ We need to register on the provided link to generate our keys:
 
 > _The issue with this CAPTCHA is that it is easily bypassed. The developer has made the assumption that all users will progress through screen 1, complete the CAPTCHA, and then move on to the next screen where the password is actually updated. By submitting the new password directly to the change page, the user may bypass the CAPTCHA system._
 
+{% highlight php %}
 ```php
 # source code for low security
 <?php
@@ -132,13 +133,17 @@ if( isset( $_POST[ 'Change' ] ) && ( $_POST[ 'step' ] == '2' ) ) {
 
     ((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
 }
+?>
 ```
+{% endhighlight php %}
 
 <details>
 <summary>test</summary>
 
 {% highlight python %}
+```python
 print()
+```
 {% endhighlight python %}
 
 </details>
