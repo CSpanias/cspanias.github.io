@@ -139,6 +139,7 @@ if( isset( $_POST[ 'Change' ] ) && ( $_POST[ 'step' ] == '2' ) ) {
 
 ?> 
 ```
+
 </details>
 
 1. If we change the password and solve the CAPTCHA, the captured traffic shows that this is a 2-step process. The first step is solving the CAPTCHA and the second changing the password:
