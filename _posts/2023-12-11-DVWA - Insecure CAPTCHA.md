@@ -2,7 +2,7 @@
 title: DVWA - Insecure CAPTCHA
 date: 2023-12-11
 categories: [DVWA, Insecure CAPTCHA]
-tags: [dvwa, captcha, burp-suite, ]
+tags: [dvwa, captcha, burp-suite]
 img_path: /assets/dvwa/insecure_captcha
 published: true
 ---
@@ -38,7 +38,7 @@ CAPTCHAs are often used to protect sensitive functionality from automated bots. 
 
 **Objective**: Your aim is to change the current user's password in a automated manner because of the poor CAPTCHA system.
 
-> Source [video walkthrough]().
+> Source [video walkthrough](https://www.youtube.com/watch?v=But-uBPdsKk).
 
 ## Security: Low
 
