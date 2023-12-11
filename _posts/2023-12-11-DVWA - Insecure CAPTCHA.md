@@ -135,13 +135,13 @@ if( isset( $_POST[ 'Change' ] ) && ( $_POST[ 'step' ] == '2' ) ) {
 ?> 
 ```
 
-1. If we change the password and solve the CAPTCHA the traffic show that this is a 2-step process. The first step is solving the CAPTCHA and the second changing the password:
+1. If we change the password and solve the CAPTCHA the captured traffic shows that this is a 2-step process. The first step is solving the CAPTCHA and the second changing the password:
 
     ![](low_step1.png)
 
     ![](low_step2.png)
 
-2. We can bypass the first step as it is, and just capture the second's step traffic, modify it with a new password, and sent it:
+2. We can bypass the first step and jump right to the second, modify the request's parameters with a new password, and send it:
 
     ![](low_changed.png)
 
@@ -236,6 +236,16 @@ if( isset( $_POST[ 'Change' ] ) && ( $_POST[ 'step' ] == '2' ) ) {
 ?> 
 ```
 
+1. This work exactly like the Low security level. The only difference is the addition of a new parameter, `passed_captcha`, but that does not change much:
+
+    ![](medium_step1.png)
+
+    ![](medium_step2.png)
+
+2. We can bypass the first step and jump right to the second, modify the request's parameters with a new password, and send it:
+
+    ![](medium_changed.png)
+
 ## Security: High
 
 > _There has been development code left in, which was never removed in production. It is possible to mimic the development values, to allow invalid values in be placed into the CAPTCHA field._
@@ -299,6 +309,13 @@ generateSessionToken();
 ?> 
 ```
 
+1. The two steps are now merged into one, but we can see some development code in the form of a comment that basically guide us on what we need to do for this level:
+
+    ![](high_step1.png)
+
+2. Setting the `User-Agent` value to `reCAPTCHA` and the `g-recaptcha-response` value to `hidd3n_valu3` allow us to change the password:
+
+    ![](high_changed.png)
 
 ## Security: Impossible
 
@@ -374,4 +391,3 @@ generateSessionToken();
 
 ?> 
 ```
-
