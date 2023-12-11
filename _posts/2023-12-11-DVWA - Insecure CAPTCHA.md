@@ -61,6 +61,7 @@ We need to register on the provided link to generate our keys:
 ```php
 # source code for low security
 <?php
+
 if( isset( $_POST[ 'Change' ] ) && ( $_POST[ 'step' ] == '1' ) ) {
     // Hide the CAPTCHA form
     $hide_form = true;
@@ -132,6 +133,7 @@ if( isset( $_POST[ 'Change' ] ) && ( $_POST[ 'step' ] == '2' ) ) {
 
     ((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
 }
+
 ?>
 ```
 
