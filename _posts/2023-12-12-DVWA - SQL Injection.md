@@ -78,7 +78,7 @@ Before start working on this lab, we must ensure that the `display_errors` PHP c
     ![](errors_on.png)
 
 ## Security: Low
-> [Source code](sqli_low_source_code.php)
+> Source code
 
 
 > _The SQL query uses RAW input that is directly controlled by the attacker. All they need to-do is escape the query and then they are able to execute any SQL query they wish._
