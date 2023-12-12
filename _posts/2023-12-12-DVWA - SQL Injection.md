@@ -80,7 +80,6 @@ Before start working on this lab, we must ensure that the `display_errors` PHP c
 ## Security: Low
 > [Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/sqli/sqli_low_source_code.php)
 
-
 > _The SQL query uses RAW input that is directly controlled by the attacker. All they need to-do is escape the query and then they are able to execute any SQL query they wish._
 
 1. If we put `1` as input we get back the `ID` (our input), `First name`, and `Surname` fields. 
@@ -192,207 +191,22 @@ Before start working on this lab, we must ensure that the `display_errors` PHP c
 
 
 ## Security: Medium
+> [Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/sqli/sqli_medium_source_code.php)
 
 > _The medium level uses a form of SQL injection protection, with the function of [`mysql_real_escape_string()`](https://www.php.net/manual/en/function.mysql-real-escape-string.php). However due to the SQL query not having quotes around the parameter, this will not fully protect the query from being altered. The text box has been replaced with a pre-defined dropdown list and uses POST to submit the form._
 
-```php
-# source code for medium security
-<?php
-
-if( isset( $_POST[ 'Submit' ] ) ) {
-    // Get input
-    $id = $_POST[ 'id' ];
-
-    $id = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $id);
-
-    switch ($_DVWA['SQLI_DB']) {
-        case MYSQL:
-            $query  = "SELECT first_name, last_name FROM users WHERE user_id = $id;";
-            $result = mysqli_query($GLOBALS["___mysqli_ston"], $query) or die( '<pre>' . mysqli_error($GLOBALS["___mysqli_ston"]) . '</pre>' );
-
-            // Get results
-            while( $row = mysqli_fetch_assoc( $result ) ) {
-                // Display values
-                $first = $row["first_name"];
-                $last  = $row["last_name"];
-
-                // Feedback for end user
-                echo "<pre>ID: {$id}<br />First name: {$first}<br />Surname: {$last}</pre>";
-            }
-            break;
-        case SQLITE:
-            global $sqlite_db_connection;
-
-            $query  = "SELECT first_name, last_name FROM users WHERE user_id = $id;";
-            #print $query;
-            try {
-                $results = $sqlite_db_connection->query($query);
-            } catch (Exception $e) {
-                echo 'Caught exception: ' . $e->getMessage();
-                exit();
-            }
-
-            if ($results) {
-                while ($row = $results->fetchArray()) {
-                    // Get values
-                    $first = $row["first_name"];
-                    $last  = $row["last_name"];
-
-                    // Feedback for end user
-                    echo "<pre>ID: {$id}<br />First name: {$first}<br />Surname: {$last}</pre>";
-                }
-            } else {
-                echo "Error in fetch ".$sqlite_db->lastErrorMsg();
-            }
-            break;
-    }
-}
-
-// This is used later on in the index.php page
-// Setting it here so we can close the database connection in here like in the rest of the source scripts
-$query  = "SELECT COUNT(*) FROM users;";
-$result = mysqli_query($GLOBALS["___mysqli_ston"],  $query ) or die( '<pre>' . ((is_object($GLOBALS["___mysqli_ston"])) ? mysqli_error($GLOBALS["___mysqli_ston"]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . '</pre>' );
-$number_of_rows = mysqli_fetch_row( $result )[0];
-
-mysqli_close($GLOBALS["___mysqli_ston"]);
-?> 
-```
-
-
 
 ## Security: High
+> [Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/sqli/sqli_high_source_code.php)
 
 > _This is very similar to the low level, however this time the attacker is inputting the value in a different manner. The input values are being transferred to the vulnerable query via session variables using another page, rather than a direct GET request._
 
-```php
-# source code for high security
-<?php
 
-if( isset( $_SESSION [ 'id' ] ) ) {
-    // Get input
-    $id = $_SESSION[ 'id' ];
-
-    switch ($_DVWA['SQLI_DB']) {
-        case MYSQL:
-            // Check database
-            $query  = "SELECT first_name, last_name FROM users WHERE user_id = '$id' LIMIT 1;";
-            $result = mysqli_query($GLOBALS["___mysqli_ston"], $query ) or die( '<pre>Something went wrong.</pre>' );
-
-            // Get results
-            while( $row = mysqli_fetch_assoc( $result ) ) {
-                // Get values
-                $first = $row["first_name"];
-                $last  = $row["last_name"];
-
-                // Feedback for end user
-                echo "<pre>ID: {$id}<br />First name: {$first}<br />Surname: {$last}</pre>";
-            }
-
-            ((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);        
-            break;
-        case SQLITE:
-            global $sqlite_db_connection;
-
-            $query  = "SELECT first_name, last_name FROM users WHERE user_id = '$id' LIMIT 1;";
-            #print $query;
-            try {
-                $results = $sqlite_db_connection->query($query);
-            } catch (Exception $e) {
-                echo 'Caught exception: ' . $e->getMessage();
-                exit();
-            }
-
-            if ($results) {
-                while ($row = $results->fetchArray()) {
-                    // Get values
-                    $first = $row["first_name"];
-                    $last  = $row["last_name"];
-
-                    // Feedback for end user
-                    echo "<pre>ID: {$id}<br />First name: {$first}<br />Surname: {$last}</pre>";
-                }
-            } else {
-                echo "Error in fetch ".$sqlite_db->lastErrorMsg();
-            }
-            break;
-    }
-}
-
-?> 
-```
 
 ## Security: Impossible
+> [Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/sqli/sqli_impossible_source_code.php)
 
 > _The queries are now parameterized queries (rather than being dynamic). This means the query has been defined by the developer, and has distinguish which sections are code, and the rest is data._
-
-```php
-# source code for impossible security
-<?php
-
-if( isset( $_GET[ 'Submit' ] ) ) {
-    // Check Anti-CSRF token
-    checkToken( $_REQUEST[ 'user_token' ], $_SESSION[ 'session_token' ], 'index.php' );
-
-    // Get input
-    $id = $_GET[ 'id' ];
-
-    // Was a number entered?
-    if(is_numeric( $id )) {
-        $id = intval ($id);
-        switch ($_DVWA['SQLI_DB']) {
-            case MYSQL:
-                // Check the database
-                $data = $db->prepare( 'SELECT first_name, last_name FROM users WHERE user_id = (:id) LIMIT 1;' );
-                $data->bindParam( ':id', $id, PDO::PARAM_INT );
-                $data->execute();
-                $row = $data->fetch();
-
-                // Make sure only 1 result is returned
-                if( $data->rowCount() == 1 ) {
-                    // Get values
-                    $first = $row[ 'first_name' ];
-                    $last  = $row[ 'last_name' ];
-
-                    // Feedback for end user
-                    echo "<pre>ID: {$id}<br />First name: {$first}<br />Surname: {$last}</pre>";
-                }
-                break;
-            case SQLITE:
-                global $sqlite_db_connection;
-
-                $stmt = $sqlite_db_connection->prepare('SELECT first_name, last_name FROM users WHERE user_id = :id LIMIT 1;' );
-                $stmt->bindValue(':id',$id,SQLITE3_INTEGER);
-                $result = $stmt->execute();
-                $result->finalize();
-                if ($result !== false) {
-                    // There is no way to get the number of rows returned
-                    // This checks the number of columns (not rows) just
-                    // as a precaution, but it won't stop someone dumping
-                    // multiple rows and viewing them one at a time.
-
-                    $num_columns = $result->numColumns();
-                    if ($num_columns == 2) {
-                        $row = $result->fetchArray();
-
-                        // Get values
-                        $first = $row[ 'first_name' ];
-                        $last  = $row[ 'last_name' ];
-
-                        // Feedback for end user
-                        echo "<pre>ID: {$id}<br />First name: {$first}<br />Surname: {$last}</pre>";
-                    }
-                }
-
-                break;
-        }
-    }
-}
-
-// Generate Anti-CSRF token
-generateSessionToken();
-
-?> 
-```
 
 ## Resources
 
