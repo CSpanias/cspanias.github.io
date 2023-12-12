@@ -141,7 +141,7 @@ if( isset( $_REQUEST[ 'Submit' ] ) ) {
 ?> 
 ```
 
-1. If we put `1` as input we get back the `ID`, `First name`, and `Surname` fields. 
+1. If we put `1` as input we get back the `ID` (our input), `First name`, and `Surname` fields. 
 
     ![](home_id1.png)
 
@@ -157,7 +157,7 @@ if( isset( $_REQUEST[ 'Submit' ] ) ) {
     ![](single_quote.png)
 
 
-3. We can try the "Always True Scenario": if we input something that does not exist, such as `%'`, and follow that by something that is always `TRUE`, such as `'1'='1`, we will get everything back. We are essentially saying "display all records that are `FALSE` and all records that are `TRUE`:
+3. We can try the "[Always True Scenario](https://www.computersecuritystudent.com/SECURITY_TOOLS/DVWA/DVWAv107/lesson6/index.html)": if we input something that does not exist, such as `%'`, and follow that by something that is always `TRUE`, such as `'1'='1`, we will get everything back. We are essentially saying "_display all records that are `FALSE` and all records that are `TRUE`_":
 
     ![](sqli_users.png)
 
@@ -169,11 +169,11 @@ if( isset( $_REQUEST[ 'Submit' ] ) ) {
     OR '1'='1'
     ```
 
-3. So we have the `First name` and `Surname` fields of all 5 users. We need to first find out if more fields are available in the database. According to [PortSwigger](https://portswigger.net/web-security/sql-injection/union-attacks) one way of doing that is by a UNION attack and the use of `ORDER BY` clause:
+3. So we have the `First name` and `Surname` fields of all 5 users. We need to first find out if more fields are available in the database. According to [PortSwigger](https://portswigger.net/web-security/sql-injection/union-attacks) one way of doing that is by performing a **UNION attack** and the use of `ORDER BY` clause:
 
     > Notice that we are using [MariaDB](https://mariadb.com/kb/en/comment-syntax/), so we need to end our payload either with `#` or `-- `.
 
-    If we inject `' ORDER BY 1--` we get nothing back, so we increment the number until we get an error:
+    If we inject `' ORDER BY 1-- ` we get nothing back, so we increment the number until we get an error:
 
     ![](order_by_3.png)
 
@@ -185,7 +185,7 @@ if( isset( $_REQUEST[ 'Submit' ] ) ) {
 
     ![](user_success.png)
 
-6. Instead of plaintext passwords, the database has stored the hashes. We can find the hash type as follows:
+6. The database gaves the passwords in hash format instead of plaintext. We can find the hash type as follows:
 
     ```shell
     # check the hash type
@@ -211,7 +211,7 @@ if( isset( $_REQUEST[ 'Submit' ] ) ) {
     [+] RAdmin v2.x
     ```
 
-7. We can copy and paste all hashes (one per line) into a text file and use `john` to crack them:
+7. We can copy and paste all 5 hashes (one per line) into a text file and use `john` to crack them:
 
     ```shell
     # copy and paste the hashes into a txt file
