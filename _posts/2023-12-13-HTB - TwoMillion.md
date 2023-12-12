@@ -18,3 +18,4 @@ published: true
 |Focus||
 
 ## 1. Information Gathering
+
