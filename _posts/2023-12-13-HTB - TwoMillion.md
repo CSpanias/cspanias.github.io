@@ -15,7 +15,7 @@ published: true
 |Machine|[TwoMillion](https://app.hackthebox.com/machines/TwoMillion)|
 |Rank|Easy|
 |Time|-|
-|Focus||
+|Focus|HTTP, Command Injection, CVEs|
 
 ## Information Gathering
 
@@ -39,7 +39,7 @@ According to our Nmap results, the HTTP server redirects to the `2million.htb` d
 $ sudo nano /etc/hosts
 ```
 
-![](etc_hosts.png)
+![](etc_hosts.png){: .normal}
 
 Now we can access it:
 
@@ -412,7 +412,7 @@ uid=0(root) gid=0(root) groups=0(root),1000(admin)
 root@2million:/tmp/CVE-2023-0386# cat /root/root.txt
 ```
 
-![](twomillion_pwned.png)
+![](twomillion_pwned.png){: width="60%" .normal}
 
 ## Extra
 
