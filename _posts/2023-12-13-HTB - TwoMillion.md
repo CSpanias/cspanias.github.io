@@ -412,6 +412,8 @@ uid=0(root) gid=0(root) groups=0(root),1000(admin)
 root@2million:/tmp/CVE-2023-0386# cat /root/root.txt
 ```
 
+![](twomillion_pwned.png)
+
 ## Extra
 
 There is another file within the `/root` directory:
