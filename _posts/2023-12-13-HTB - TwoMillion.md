@@ -428,7 +428,7 @@ This string is URL-encoded, so we can URL-decode it on Cyberchef:
 
 The resulting output is encoded in hex:
 
-![](hex_decode)
+![](hex_decode.png)
 
 This time the output is encoded in XOR (using an encryption key) and Base64:
 
