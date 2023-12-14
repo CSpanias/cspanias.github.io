@@ -5,7 +5,6 @@ order: 4
 
 <script src="https://www.hackthebox.com/badge/1705946"></script>
 <script src="https://tryhackme.com/badge/2134791"></script>
-<script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
 
 ### Who Am I?
 
