@@ -1,8 +1,8 @@
 ---
 title: DVWA - SQL Injection (Blind)
 date: 2023-12-14
-categories: [DVWA, SQL Injection]
-tags: [dvwa, sqli, burp-suite, sqlmap, hash, john, md5]
+categories: [DVWA, SQL Injection (Blind)]
+tags: [dvwa, sqli, blind-sqli, burp-suite, sqlmap, md5, hash]
 img_path: /assets/dvwa/sqli_blind
 published: true
 ---
