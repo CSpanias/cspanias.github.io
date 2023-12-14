@@ -31,27 +31,26 @@ The DVWA server has **4 different security levels** which can be set as seen bel
 
 ## Weak Session IDs
 
+Knowledge of a session ID is often the only thing required to access a site as a specific user after they have logged in, if that session ID is able to be calculated or easily guessed, then an attacker will have an easy way to gain access to user accounts without having to brute force passwords or find other vulnerabilities, such as Cross-Site Scripting.
 
-
-**Objective**: 
-
+**Objective**: This module uses four different ways to set the `dvwaSession` cookie value, the objective of each level is to work out how the ID is generated and then infer the IDs of other system users.
 
 ## Security: Low
-> _ ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/sqli/sqli_low_source_code.php))._
+> _The cookie value should be very obviously predictable ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/weak_sessions_ids/weak_sessions_ids_low_source_code.php))._
 
 
 
 ## Security: Medium
-> _ ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/sqli/sqli_medium_source_code.php))._
+> _The value looks a little more random than on low but if you collect a few you should start to see a pattern ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/weak_sessions_ids/weak_sessions_ids_medium_source_code.php))._
 
 
 
 ## Security: High
-> _ ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/sqli/sqli_high_source_code.php))._
+> _First work out what format the value is in and then try to work out what is being used as the input to generate the values. Extra flags are also being added to the cookie, this does not affect the challenge but highlights extra protections that can be added to protect the cookies ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/weak_sessions_ids/weak_sessions_ids_high_source_code.php))._
 
 
 ## Security: Impossible
-> _ ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/sqli/sqli_impossible_source_code.php))._
+> _The cookie value should not be predictable at this level but feel free to try. As well as the extra flags, the cookie is being tied to the domain and the path of the challenge. ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/weak_sessions_ids/weak_sessions_ids_impossible_source_code.php))._
 
 ## Resources
 
