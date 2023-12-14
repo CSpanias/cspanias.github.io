@@ -1,7 +1,7 @@
 ---
 title: DVWA - Brute Force
 date: 2023-12-06
-categories: [DVWA, Brute Force]
+categories: [CTF, Web Exploitation]
 tags: [dvwa, brute-force, hydra, burp-suite, python, bs4, beautifulsoup, csrf, 2to3]
 img_path: /assets/dvwa/brute_force
 published: true
