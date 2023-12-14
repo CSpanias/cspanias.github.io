@@ -63,9 +63,9 @@ When an attacker executes SQLi attacks, sometimes the server responds with error
 
 ## Automated SLQi attack
 
-1. We can use [`sqlmap`](https://github.com/sqlmapproject/sqlmap) to automatically test for SQLi vulnerabilities. We need to define the URL (`--url`), cookie (`--cokie`), data (`--data`), and the parameter we want to test for SQLi (`-p`). Here we also pass the `--dbs` option asking it to enumerate DBMS databases.
+1. We can use [`sqlmap`](https://github.com/sqlmapproject/sqlmap) to automatically test for SQLi vulnerabilities. We need to define the URL (`--url`), cookie (`--cokie`), data (`--data`), and the parameter we want to test for SQLi (`-p`). Here we also pass the `--dbs` option asking it to enumerate DBMS databases since our objective is to find SQL database's version.
 
-> We can see all options with `sqlmap -hh`.
+    > We can see all options with `sqlmap -hh`.
 
     ![](burp_sqlmap_params.png)
 
