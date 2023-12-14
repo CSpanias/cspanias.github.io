@@ -2,7 +2,7 @@
 title: DVWA - Weak Sessions IDs
 date: 2023-12-14
 categories: [DVWA, Weak Sessions IDs]
-tags: [dvwa, session-ids, burp, burp-repeater, burp-sequencer, burp-intruder cookies]
+tags: [dvwa, session-ids, burp, burp-repeater, burp-sequencer, burp-intruder, hash, md5, john, cookies]
 img_path: /assets/dvwa/weak_session_ids
 published: true
 ---
@@ -59,17 +59,15 @@ Knowledge of a session ID is often the only thing required to access a site as a
 
     ![](medium_cookie2.png)
 
-3. So the first cookie has the value of `1702554076` and the second one the value of `1702554193`; only the last 4 digits changed. If we click a third time:
+3. So the first cookie has the value of `1702554076` and the second one the value of `1702554193`; only the last 4 digits changed. If we click a third time similar changes occur:
 
     ![](medium_cookie3.png)
 
-4. The value now has set to `1702554366`. If we click once again:
-
-    ![](medium_cookie4.png)
-
-5. So we can see that the first 6 digits are the same, and the last 4 are incremented in some way. This 10 digit sequence represents the [current epoch unix timestamp](https://www.unixtimestamp.com/). What that is:
+4. The value now has set to `1702554366`. So we can see that the first 6 digits are the same, and the last 4 are incremented in some way. This 10 digit sequence represents the [current epoch unix timestamp](https://www.unixtimestamp.com/):
 
     > _The unix time stamp is **a way to track time as a running total of seconds**. This count starts at the Unix Epoch on January 1st, 1970 at UTC. Therefore, **the unix time stamp is merely the number of seconds between a particular date and the Unix Epoch**. It should also be pointed out (thanks to the comments from visitors to this site) that this point in time technically does not change no matter where you are located on the globe. This is very useful to computer systems for tracking and sorting dated information in dynamic and distributed applications both online and client side._
+
+5. On this level, the cookie is taking the value of the current epoch unix timestamp.
 
 ## Security: High
 > _First work out what format the value is in and then try to work out what is being used as the input to generate the values. Extra flags are also being added to the cookie, this does not affect the challenge but highlights extra protections that can be added to protect the cookies ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/weak_sessions_ids/weak_sessions_ids_high_source_code.php))._
@@ -86,7 +84,7 @@ Knowledge of a session ID is often the only thing required to access a site as a
 
     ![](subl_cookies.png)
 
-3. So these strings look like MD5 hashes. If we generate 5 cookies in a row and then try to crack them with `john` we get this result:
+3. So these strings look like **MD5 hashes**. If we generate 5 cookies in a row and then try to crack them with `john` we get this result:
 
     ```shell
     # generate five cookies in a row
