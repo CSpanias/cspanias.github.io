@@ -7,13 +7,13 @@ img_path: /assets/picoctf/web_exploitation/scavenger_hunt
 published: true
 ---
 
-![](room_banner.png)
+![](room_banner.png){: width='80%'}
 
 1. Visiting the site:
 
-    ![](home_what.png){: width='60%' .normal}
+    ![](home_what.png){: width='70%' .normal}
 
-    ![](home_how.png){: width='60%' .normal}
+    ![](home_how.png){: width='70%' .normal}
 
 2. This looks (almost) identical to the [Insp3ct0r](https://cspanias.github.io/posts/PicoCTF-Insp3ct0r/) challenge. Let's see if by viewing the page's HTML, CSS, and JS code would be enough to get the flag. We will be using Burp Suite this time, so let's start by viewing the HTML:
 
