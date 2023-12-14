@@ -1,9 +1,9 @@
 ---
-title: DVWA - SQL Injection
-date: 2023-12-13
-categories: [DVWA, SQL Injection]
-tags: [dvwa, sqli, burp-suite, inspector, mariadb, hash, john, md5]
-img_path: /assets/dvwa/sqli
+title: DVWA - Weak Sessions IDs
+date: 2023-12-14
+categories: [DVWA, Weak Sessions IDs]
+tags: [dvwa, ]
+img_path: /assets/dvwa/weak_session_ids
 published: true
 ---
 
