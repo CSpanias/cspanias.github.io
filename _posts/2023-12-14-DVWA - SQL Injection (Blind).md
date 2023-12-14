@@ -45,21 +45,21 @@ When an attacker executes SQLi attacks, sometimes the server responds with error
 
 1. Let's start by see how this works:
 
-    ![](low_user_exist.png)
+    ![](low_user_exist.png){: .normal }
 
-    ![](low_user_missing.png)
+    ![](low_user_missing.png){: .normal }
 
 2. Next, let's try to perform a **time-based injection** to see if that works:
 
-    ![](low_sleep.png)
+    ![](low_sleep.png){: .normal }
 
 3. What is different here versus the previous SQLi attack, is that instead of data as an output we only get a `TRUE`, i.e., `User ID exists in the database.`, or a `FALSE`, i.e., `User ID is MISSING from the database.`, message which indicates if our query worked or not. For instance, if we try to use the `ORDER BY` clause in order to find the number of existing columns:
 
-    ![](low_orderby_1.png)
+    ![](low_orderby_1.png){: .normal }
 
-    ![](low_orderby_2.png)
+    ![](low_orderby_2.png){: .normal }
 
-    <!-- ![](low_orderby_3.png) -->
+    <!-- ![](low_orderby_3.png){: .normal } -->
 
 ## Automated SLQi attack
 
@@ -183,7 +183,7 @@ When an attacker executes SQLi attacks, sometimes the server responds with error
     [*] ending @ 10:18:03 /2023-12-14/
     ```
 
-2. So we found out that there are 2 databases: `dvwa` and `information_schema`. We can now proceed on enumerating the tables (`--tables`) of the `dvwa` database (`-D dvwa`). We also added the `--batch` option to avoid prompts and go with the defaults and `--threads` to speed up the process:
+2. So we found out that there are 2 databases: `dvwa` and `information_schema` as well as the SLQ's database version, `back-end DBMS: MySQL >= 5.0 (MariaDB fork)`. We can now proceed on enumerating the tables (`--tables`) of the `dvwa` database (`-D dvwa`). We also added the `--batch` option to avoid prompts and go with the defaults and `--threads` to speed up the process:
 
     ```shell
     $ sqlmap --url="http://127.0.0.1:42001/vulnerabilities/sqli_blind/?id=1&Submit=Submit#" --cookie="PHPSESSID=tnusaaspju33gd737338bcnhrl; security=low" --data="id=1&Submit=Submit" -p id -D dvwa --tables --batch --threads 5
@@ -234,7 +234,7 @@ When an attacker executes SQLi attacks, sometimes the server responds with error
     [*] ending @ 10:38:55 /2023-12-14/
     ```
 
-3. In just 1 second(!) we managed to found out the there are two tables: `guestbook` and `users`. Now all we have to do is to extract information from the `users` table (`-T users`). We also added the `--dump` option so it actually shows us what it have found:
+3. In just 1 second(!) we managed to found out the there are two tables: `guestbook` and `users`. Now all we have to do is to extract information from the `users` table (`-T users`). We also added the `--dump` option which instructs SQLMap to dump the DBMS database table entries so we can directly see the table's content:
 
     ```shell
     $ sqlmap --url="http://127.0.0.1:42001/vulnerabilities/sqli_blind/?id=1&Submit=Submit#" --cookie="PHPSESSID=tnusaaspju33gd737338bcnhrl; security=low" --data="id=1&Submit=Submit" -p id -T users --batch --threads 5 --dump
@@ -367,7 +367,8 @@ When an attacker executes SQLi attacks, sometimes the server responds with error
 
     [*] ending @ 10:42:56 /2023-12-14/
     ```
-4. It was able to enumerate the table and crack the hashes in just 5 seconds!
+
+    Not only `sqlmap` was able to enumerate the table and extract its content, but also cracked the hashes in just 5 seconds!
 
 ## Security: Medium
 > _The medium level uses a form of SQL injection protection, with the function of [`mysql_real_escape_string()`](https://www.php.net/manual/en/function.mysql-real-escape-string.php). However due to the SQL query not having quotes around the parameter, this will not fully protect the query from being altered. The text box has been replaced with a pre-defined dropdown list and uses POST to submit the form ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/sqli_blind/sqli_medium_source.php))._
