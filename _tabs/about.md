@@ -8,7 +8,7 @@ order: 4
 
 ### Who Am I?
 
-A [Strength & Conditioning (MSc)](https://scholar.google.com/citations?user=NEcbEUYAAAAJ&hl=en) coach turned Software Engineer turned Penetration Tester. A [Cybersecurity (BSc)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60) student trying to improve his pentesting and CTF skills through [HackTheBox](https://www.hackthebox.com/) and [TryHackMe](https://tryhackme.com/).
+A [Strength & Conditioning (MSc)](https://scholar.google.com/citations?user=NEcbEUYAAAAJ&hl=en) coach turned Penetration Tester with a short stop to Software Engineering. A [Cybersecurity (BSc)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60) student trying to improve his pentesting and CTF skills through [HackTheBox](https://www.hackthebox.com/), [TryHackMe](https://tryhackme.com/), and [PicoCTF](https://picoctf.org/).
 
 Up-to-date resume: [<i class="fa-solid fa-file"></i>](https://drive.google.com/file/d/10_o6X0mdp6ivJW7FZl-7LnuP01U0OtPI/view?usp=sharing).
 
