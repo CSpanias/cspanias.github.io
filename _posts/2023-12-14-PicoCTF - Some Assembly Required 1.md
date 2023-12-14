@@ -95,7 +95,7 @@ published: true
 
     ![](directory.png)
 
-6. If we visit the above directory, a file is downloading:
+6. If we visit the above directory, a file starts downloading:
 
     ![](download.png)
 
