@@ -7,7 +7,7 @@ img_path: /assets/picoctf/web_exploitation/assembly_required_1
 published: true
 ---
 
-![](room_banner.png){: width='80%'}
+![](room_banner.png)
 
 1. Visiting the site we encounter just an input box:
 
@@ -91,72 +91,25 @@ published: true
     }
     ```
 
-4. The second one looks like assembly code, and inside the `wasm` directory. So, let's find out what that is:
+5. If we notice closely, there is something that looks like a path:
+
+    ![](directory.png)
+
+6. If we visit the above directory, a file is downloading:
+
+    ![](download.png)
+
+7. Opening and scrolling at the end of the file we can find the flag:
+
+    ![](download_flag.png)
+
+8. The second file looks like assembly code, and is inside the `wasm` directory. So, let's find out what that is:
 
     _[WebAssembly](https://developer.mozilla.org/en-US/docs/WebAssembly) is a type of code that can be run in modern web browsers — it is a low-level assembly-like language with a compact binary format that runs with near-native performance and provides languages such as C/C++, C# and Rust with a compilation target so that they can run on the web. It is also designed to run alongside JavaScript, allowing both to work together._
 
-    The wasm script is quite large, but we can see its start and end below:
+    The wasm script is quite large, but we can find the flag at the end of it:
 
-    ```wasm
-        (module
-    (table $table0 1 1 funcref)
-    (memory $memory0 2)
-    (global $global0 (mut i32) (i32.const 66864))
-    (global $global1 i32 (i32.const 1072))
-    (global $global2 i32 (i32.const 1024))
-    (global $global3 i32 (i32.const 1328))
-    (global $global4 i32 (i32.const 1024))
-    (global $global5 i32 (i32.const 66864))
-    (global $global6 i32 (i32.const 0))
-    (global $global7 i32 (i32.const 1))
-    (export "memory" (memory $memory0))
-    (export "__wasm_call_ctors" (func $func0))
-    (export "strcmp" (func $func1))
-    (export "check_flag" (func $func2))
-    (export "input" (global $global1))
-    (export "copy_char" (func $func3))
-    (export "__dso_handle" (global $global2))
-    (export "__data_end" (global $global3))
-    (export "__global_base" (global $global4))
-    (export "__heap_base" (global $global5))
-    (export "__memory_base" (global $global6))
-    (export "__table_base" (global $global7))
-    (func $func0
-    ...
-
-    ...
-    (func $func3 (param $var0 i32) (param $var1 i32)
-        (local $var2 i32) (local $var3 i32) (local $var4 i32) (local $var5 i32) (local $var6 i32)
-        global.get $global0
-        local.set $var2
-        i32.const 16
-        local.set $var3
-        local.get $var2
-        local.get $var3
-        i32.sub
-        local.set $var4
-        local.get $var4
-        local.get $var0
-        i32.store offset=12
-        local.get $var4
-        local.get $var1
-        i32.store offset=8
-        local.get $var4
-        i32.load offset=12
-        local.set $var5
-        local.get $var4
-        i32.load offset=8
-        local.set $var6
-        local.get $var6
-        local.get $var5
-        i32.store8 offset=1072
-        return
-    )
-    (data (i32.const 1024) "picoCTF{d88090e679c48f3945fcaa6a7d6d70c5}\00\00")
-    )
-    ```
-
-    Our flag is just at the end of it!
+    ![](inspect_flag.png)
 
     ![](flag_correct.png)
 
