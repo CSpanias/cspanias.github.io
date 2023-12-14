@@ -80,14 +80,36 @@ Knowledge of a session ID is often the only thing required to access a site as a
 
 2. Another, and more efficient, way to this is to send the request to the Burp's **Sequencer**, configure it to generate a series of cookies, and then save its ouput which looks like this:
 
-> Check how to do this [here](https://braincoke.fr/write-up/dvwa/dvwa-weak-session-i-ds/).
+    > Check how to do this [here](https://braincoke.fr/write-up/dvwa/dvwa-weak-session-i-ds/).
 
     ![](subl_cookies.png)
 
-3. So these strings look like **MD5 hashes**. If we generate 5 cookies in a row and then try to crack them with `john` we get this result:
+3. These strings look like **MD5 hashes**. We can confirm this using `hashid`, generate 5 cookies in a row, and then try to crack them with `john`:
 
     ```shell
-    # generate five cookies in a row
+    # check the hash type
+    $ hashid 94bb077f18daa6620efa5cf6e6f178d2
+    Analyzing '94bb077f18daa6620efa5cf6e6f178d2'
+    [+] MD2
+    [+] MD5
+    [+] MD4
+    [+] Double MD5
+    [+] LM
+    [+] RIPEMD-128
+    [+] Haval-128
+    [+] Tiger-128
+    [+] Skein-256(128)
+    [+] Skein-512(128)
+    [+] Lotus Notes/Domino 5
+    [+] Skype
+    [+] Snefru-128
+    [+] NTLM
+    [+] Domain Cached Credentials
+    [+] Domain Cached Credentials 2
+    [+] DNSSEC(NSEC3)
+    [+] RAdmin v2.x
+
+    # generate and copy five cookies in a file
     $ cat cookie_hashes
     94bb077f18daa6620efa5cf6e6f178d2
     10ff0b5e85e5b85cc3095d431d8c08b4
@@ -95,7 +117,7 @@ Knowledge of a session ID is often the only thing required to access a site as a
     4ffbd5c8221d7c147f8363ccdc9a2a37
     8396b14c5dff55d13eea57487bf8ed26 
 
-    # crack the hashes with john
+    # crack the hashes by feeding that file to john
     $ john --format=Raw-MD5 cookie_hashes
     Using default input encoding: UTF-8
     Loaded 5 password hashes with no different salts (Raw-MD5 [MD5 512/512 AVX512BW 16x3])
@@ -115,7 +137,7 @@ Knowledge of a session ID is often the only thing required to access a site as a
     Session completed.
     ```
 
-4. So this time the cookie seems to be generated using an MD5 hash of the plaintext session ID. We can see an example of how this can be used for an attack using Burp's **Intruder**. We send the request used to generate the request to Intruder:
+4. So this time the cookie seems to be generated using an MD5 hash of the plaintext session ID. We can see an example of how this can be used for an attack using Burp's **Intruder**. We start by sending the request used to generate the request to the Intruder:
 
     ![](send_to_intruder.png)
 
@@ -129,7 +151,7 @@ Knowledge of a session ID is often the only thing required to access a site as a
 
     ![](intruder_config3.png)
 
-7. Now when we click *Start Attack*, Intruder will automatically hash the values 1 to 10, hash them use them MD5, and send them:
+7. When we click *Start Attack*, Intruder will automatically generate the values 1 to 10, hash them with MD5, and send them:
 
     ![](intruder_attack.png)
 
