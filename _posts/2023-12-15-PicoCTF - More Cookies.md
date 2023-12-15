@@ -49,7 +49,13 @@ published: true
 
 8. So at least we now know (kind of) what we are dealing with. After searching how you can break CBC, I learned that there is a common attack called the [**CBC Byte Flipping Attack**](https://www.techtarget.com/searchsecurity/definition/cipher-block-chaining) and I also found a [Python-written PoC](https://github.com/kelalaka153/CBC-Bit-Flipping-Attack/tree/main). 
 
-    Instead of reinventing the wheel, we can use HHousen's [code](https://github.com/HHousen/PicoCTF-2021/blob/master/Web%20Exploitation/More%20Cookies/improved_script.py) to perform this attack and get the flag:
+    Instead of reinventing the wheel, we can modify a bit HHousen's [code](https://github.com/HHousen/PicoCTF-2021/blob/master/Web%20Exploitation/More%20Cookies/improved_script.py) to perform the CBC Byte Flipping attack and get the flag as well as the encoded cookie value so we can pass it to the request if we need to:
 
-    ![](py_script.py)
+    ![](py_script.png)
+
+> You can find the modified code [here](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/picoctf/web_exploitation/more_cookies/cbc_byte_flipping_attack.py).
+
+9. We also replace the cookie in our browser, refresh the page, and confirm that it is working:
+
+    ![](flag_browser.png)
 
