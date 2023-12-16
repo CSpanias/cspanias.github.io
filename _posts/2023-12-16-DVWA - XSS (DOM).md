@@ -132,7 +132,7 @@ The DVWA server has **4 different security levels** which can be set as seen bel
 
 2. Reading OWASP's page for [DOM Based XSS](https://owasp.org/www-community/attacks/DOM_Based_XSS), on the *Advanced Techniques and Derivatives* section, we find this:
 
-    _The [DOM Based XSS](http://www.webappsec.org/projects/articles/071105.shtml) paper details a technique to avoid server side detection. It also describes several other possible locations for the payload, besides `document.location`. The technique to avoid sending the payload to the server hinges on the fact that **URI fragments (the part in the URI after the “#”) is not sent to the server by the browser**. Thus, any client side code that references, say, `document.location`, may be vulnerable to an attack which uses fragments, and in such case the payload is never sent to the server. For example, the above DOM based XSS can be modified into:_
+    _The DOM Based XSS paper details a technique to avoid server side detection. It also describes several other possible locations for the payload, besides `document.location`. The technique to avoid sending the payload to the server hinges on the fact that **URI fragments (the part in the URI after the “#”) is not sent to the server by the browser**. Thus, any client side code that references, say, `document.location`, may be vulnerable to an attack which uses fragments, and in such case the payload is never sent to the server. For example, the above DOM based XSS can be modified into:_
 
     ```javascript
     http://www.some.site/page.html#default=<script>alert(document.cookie)</script>
