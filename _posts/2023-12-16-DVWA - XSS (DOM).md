@@ -37,7 +37,7 @@ The DVWA server has **4 different security levels** which can be set as seen bel
 
 **Document Object Model (DOM) Based XSS** is a special case of reflected where the **JavaScript is hidden in the URL** and pulled out by JavaScript in the page while it is rendering rather than being embedded in the page when it is served. This can make it stealthier than other attacks and WAFs or other protections which are reading the page body do not see any malicious content.
 
-![](https://miro.medium.com/v2/resize:fit:786/1*yuRkBR6YroYLCGpka9KdRA.png)
+![](https://miro.medium.com/v2/resize:fit:786/1*yuRkBR6YroYLCGpka9KdRA.png){: width='70%' }
 
 **Objective**: Run your own JavaScript in another user's browser, use this to steal the cookie of a logged in user.
 
