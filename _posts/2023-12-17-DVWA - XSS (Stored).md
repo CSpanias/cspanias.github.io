@@ -74,9 +74,9 @@ The **stored XSS is stored in the database**. The **stored XSS is permanent**, u
 
     ![](low_redirection.png)
 
-    Now, if you go back to DVWA home, and you click on the `XSS (Stored)` tab, you will automatically be redirected to https://cspanias.github.io.
+    Now, if we go back to DVWA home, and we click on the `XSS (Stored)` tab, we will be automatically redirected to https://cspanias.github.io.
 
-5. For clearing the guestbook, we need to go to the DVWA homepage and change the security level to Impossible. Once that is done, we can safely go to the XSS (Stored) tab and clear the guestbook:
+5. For clearing the guestbook, we need to go to the DVWA homepage and change the security level to Impossible. Once this is done, we can safely go to the XSS (Stored) tab and clear the guestbook:
 
     ![](clear_guestbook_1.png)
 
@@ -85,7 +85,7 @@ The **stored XSS is stored in the database**. The **stored XSS is permanent**, u
 ## Security: Medium
 > _The developer had added some protection, however hasn't done every field the same way ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/xss_stored/xss_stored_medium_source.php))._
 
-1. This time the developer has put a great effort in sanitizing the `Message` field, but not so much the `Name` field. For the latter, it is just removing the `<script>` tag, so we can try any of the methods used on the [XSS (Reflected)](https://cspanias.github.io/posts/DVWA-XSS-(Reflected)/#security-medium) task, after first changing the field's `maxlength`:
+1. This time the developer has put a great effort in sanitizing the `Message` field, but not so much the `Name` field. For the latter, the `<script>` tag is getting removed, so we can try any of the methods used on the [XSS (Reflected)](https://cspanias.github.io/posts/DVWA-XSS-(Reflected)/#security-medium) task, after first changing the field's `maxlength`:
 
     ![](medium_max_length.png)
 
@@ -106,7 +106,7 @@ The **stored XSS is stored in the database**. The **stored XSS is permanent**, u
 ## Security: High
 > _The developer believe they have disabled all script usage by removing the pattern `<s*c*r*i*p*t` ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/xss_stored/xss_stored_high_source.php))._
 
-1. This time the developer changed the blacklisted pattern to `<s*c*r*i*p*t`, exactly like the High level of the [XSS (Reflected)](https://cspanias.github.io/posts/DVWA-XSS-(Reflected)/#security-medium) task. This blocks our last two attacks that include the `<script>` tag, but not the first one:
+1. This time the developer changed the blacklisted pattern to `<s*c*r*i*p*t`, exactly like the High level of the [XSS (Reflected)](https://cspanias.github.io/posts/DVWA-XSS-(Reflected)/#security-medium) task. This blocks our last two attacks from the Medium level as they include the `<script>` tag, but not the first one:
 
     ```javascript
     <svg/onload=window.location='https://cspanias.github.io/'>
