@@ -2,7 +2,7 @@
 title: DVWA - XSS (DOM)
 date: 2023-12-16
 categories: [CTF, Web Exploitation]
-tags: [dvwa, xss, xss-dom, burp, javascript]
+tags: [dvwa, xss, xss-dom, cross-site-scripting, burp, javascript]
 img_path: /assets/dvwa/xss_dom
 published: true
 ---
@@ -166,7 +166,7 @@ The DVWA server has **4 different security levels** which can be set as seen bel
     ```
 
 ## Security: Impossible
-> _The contents taken from the URL are encoded by default by most browsers which prevents any injected JavaScript from being executed ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/xss_dom/xss_dom_medium_source.php))._
+> _The contents taken from the URL are encoded by default by most browsers which prevents any injected JavaScript from being executed ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/xss_dom/xss_dom_impossible_source.php))._
 
 ## Resources
 
