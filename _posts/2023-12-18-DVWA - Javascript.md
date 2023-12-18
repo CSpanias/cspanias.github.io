@@ -1,8 +1,8 @@
 ---
 title: DVWA - Javascript
-date: 2023-12-19
+date: 2023-12-18
 categories: [CTF, Web Exploitation]
-tags: [dvwa, burp, javascript, js, firefox, debugger, console, inspector, burp]
+tags: [dvwa, burp, javascript, js, firefox, debugger, console, inspector, burp, obfuscation, deobfuscation, sha256, hash, rot13, md5, encoding, decoding]
 img_path: /assets/dvwa/javascript
 published: true
 ---
@@ -52,7 +52,7 @@ The attacks in this section are designed to help you learn about **how JavaScrip
 
     ![](low_source.png)
 
-4. So we can use [Cyberchef](https://gchq.github.io/CyberChef/) to perform the same process for the word `success`:
+4. We can use [Cyberchef](https://gchq.github.io/CyberChef/) to perform the same process for the word `success`:
 
     ![](low_enc.png)
 
@@ -80,7 +80,7 @@ The attacks in this section are designed to help you learn about **how JavaScrip
 
 ### Debugger
 
-1. We can also play around with the *Debugger* and find out what exactly is going on by inserting breakpoints on the function of interest:
+1. We can also play around with the *Debugger* and find out what exactly is going on by inserting breakpoints on the function(s) of interest:
 
     ![](low_debugger_config.png)
 
@@ -92,13 +92,13 @@ The attacks in this section are designed to help you learn about **how JavaScrip
 
 3. We can then go to the *Console* tab and set the `phrase` variable to `success`:
 
-    ![](console_phrase_success.png)
+    ![](console_phrase_success.png){: .normal }
 
-4. Then if we jump back to the *Debugger* and click the *Resume* button, we will notice that `phrase`'s value will change to `success`:
+4. Then, if we jump back to the *Debugger* and click the *Resume* button, we will notice that `phrase`'s value will change to `success`:
 
     ![](low_play_to_success.png)
 
-5. Then if we click *Step in* until we get inside the `rot13` function and then *Step over*, we will get `success` encoded in ROT13:
+5. If we click *Step in* until we get inside the `rot13` function and then *Step over*, we will get `success` encoded in ROT13:
 
     ![](low_step_in_rot13.png)
 
@@ -121,7 +121,7 @@ The attacks in this section are designed to help you learn about **how JavaScrip
 
     ![](medium_changeme_token.png)
 
-3. It is kind of obvious what it is doing: adding as both prefix and suffic the `XX` string, and reversing the input string, `ChangeMe` to `eMegnahC`. So we can try that with `success`:
+3. It is kind of obvious what it is doing: adding as both prefix and suffix the `XX` string, and reversing the input string, `ChangeMe` to `eMegnahC`. So we can try that with `success`:
 
     ![](medium_pass.png)
 
@@ -129,7 +129,7 @@ The attacks in this section are designed to help you learn about **how JavaScrip
 
     ![](medium_breakpoint_1.png)
 
-    ![](medium_phrase_success.png)
+    ![](medium_phrase_success.png){: .normal }
 
     ![](medium_resume.png)
 
@@ -166,7 +166,7 @@ The attacks in this section are designed to help you learn about **how JavaScrip
     Serving HTTP on 0.0.0.0 port 8888 (http://0.0.0.0:8888/) ...
     ```
 
-6. Once the HTTP is up, we must create a *Match and Replace rule*:
+6. Once the HTTP server is up, we can create a *Match and Replace rule*:
 
     ![](proxy_settings_config.png)
 
@@ -190,13 +190,13 @@ The attacks in this section are designed to help you learn about **how JavaScrip
 
 10. We submit the phrase `success`, *Step over* once, and check the value `document.getElementById("phrase").value` via *Console*. This is the hash of the existing token suffixed with `ZZ`:
 
-    ![](token_value_1.png)
+    ![](token_value_1.png){: .normal }
 
-11. If we *Step over* we will jump to `token_part_1()` function which uses the `document.getElementById("phrase").value`. If we *Step in* and then check the `document.getElementById("phrase").value`'s value will be set to nothing, so we need to set its value to `success`:
+11. If we *Step over* we will jump to `token_part_1()` function which uses the `document.getElementById("phrase").value`. If we *Step in* and then check its value will be set to nothing, so we need to set its value to `success`:
 
-    ![](high_phrase_success.png)
+    ![](high_phrase_success.png){: .normal }
 
-12. If we ump back to the *Debugger* and click *Step in* again we will notice that it was changed to `success`. If we continue *Stepping in* we will see that this function is reversing our string:
+12. If we jump back to the *Debugger* and click *Step in* again we will notice that it was changed to `success`. If we continue *Stepping in* we will see that this function is reversing our string:
 
     ![](token_value_2.png)
 
@@ -206,7 +206,7 @@ The attacks in this section are designed to help you learn about **how JavaScrip
 
 14. Our new token value is generated, and if we click *Resume*, remove our breakpoints, and submit the string `success`:
 
-    ![](high_success.png)
+    ![](high_success.png){: .normal }
 
 ## Security: Impossible
 > _You can never trust the user and have to assume that any code sent to the user can be manipulated or bypassed and so there is no impossible level._
