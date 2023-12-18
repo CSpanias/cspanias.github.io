@@ -100,7 +100,7 @@ CSP is used to **define where scripts and other resources can be loaded or execu
 
 1. On this level the pages makes a call to `jsonp.php` and executes whatever code is there:
 
-    ![](homg_high.png)
+    ![](home_high.png)
 
     ```shell
     $ cat /usr/share/dvwa/vulnerabilities/csp/source/jsonp.php
