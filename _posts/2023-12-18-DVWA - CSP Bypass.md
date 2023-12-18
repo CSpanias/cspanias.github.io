@@ -98,7 +98,7 @@ CSP is used to **define where scripts and other resources can be loaded or execu
 
 ## Reverse shell
 
-1. On this level the pages makes a call to `jsonp.php` and executes whatever code is there:
+1. On this level the page makes a call to `jsonp.php` and executes whatever code is there:
 
     ![](home_high.png)
 
@@ -119,7 +119,7 @@ CSP is used to **define where scripts and other resources can be loaded or execu
     ?>
     ```
 
-2. We can make a backup of this file and replace it with one that contains our code in it, such as a [php reveshe shell](https://highon.coffee/blog/reverse-shell-cheat-sheet/#php-reverse-shell):
+2. We can make a backup of this file and replace it with one that contains our code in it, such as a [php reverse shell](https://highon.coffee/blog/reverse-shell-cheat-sheet/#php-reverse-shell):
 
     ```shell
     $ sudo cp jsonp.php jsonp.php.bak

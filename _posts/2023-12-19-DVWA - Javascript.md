@@ -1,0 +1,58 @@
+---
+title: DVWA - Javascript
+date: 2023-12-19
+categories: [CTF, Web Exploitation]
+tags: [dvwa, burp, javascript, js]
+img_path: /assets/dvwa/javascript
+published: true
+---
+
+## Information
+
+- [How to install dvwa on Kali](https://www.kali.org/tools/dvwa/).
+- [Official GitHub repository](https://github.com/digininja/DVWA).
+
+> The DVWA server itself contains instructions about almost everything.
+
+_**Damn Vulnerable Web Application (DVWA)** is a PHP/MySQL web application that is damn vulnerable. Its main goal is to be an aid for security professionals to test their skills and tools in a legal environment, help web developers better understand the processes of securing web applications and to aid both students & teachers to learn about web application security in a controlled class room environment._
+
+_The aim of DVWA is to practice some of the most common web vulnerabilities, with various levels of difficultly, with a simple straightforward interface._
+
+![](dvwa_home.png){: width='70%' }
+
+The DVWA server has **4 different security levels** which can be set as seen below:
+
+![](security_levels.png){: width='70%' }
+
+- **Low**: This security level is completely vulnerable and has no security measures at all. It's use is to be as an example of how web application vulnerabilities manifest through bad coding practices and to serve as a platform to teach or learn basic exploitation techniques.
+- **Medium**: This setting is mainly to give an example to the user of bad security practices, where the developer has tried but failed to secure an application. It also acts as a challenge to users to refine their exploitation techniques.
+- **High**: This option is an extension to the medium difficulty, with a mixture of harder or alternative bad practices to attempt to secure the code. The vulnerability may not allow the same extent of the exploitation, similar in various Capture The Flags (CTFs) competitions.
+- **Impossible**: This level should be secure against all vulnerabilities. It is used to compare the vulnerable source code to the secure source code.
+
+## Javascript
+
+The attacks in this section are designed to help you learn about **how JavaScript is used in the browser and how it can be manipulated**. The attacks could be carried out by just analysing network traffic, but that isn't the point and it would also probably be a lot harder.
+
+**Objective**: Simply submit the phrase "success" to win the level. Obviously, it isn't quite that easy, each level implements different protection mechanisms, the JavaScript included in the pages has to be analysed and then manipulated to bypass the protections.
+
+## Security: Low
+> _All the JavaScript is included in the page. Read the source and work out what function is being used to generate the token required to match with the phrase and then call the function manually ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/javascript/javascript_low_source.php))._
+
+
+
+## Security: Medium
+> _The JavaScript has been broken out into its own file and then minimized. You need to view the source for the included file and then work out what it is doing. Both Firefox and Chrome have a Pretty Print feature which attempts to reverse the compression and display code in a readable way ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/javascript/javascript_medium_source.php))._
+
+
+
+## Security: High
+> _The JavaScript has been obfuscated by at least one engine. You are going to need to step through the code to work out what is useful, what is garbage and what is needed to complete the mission ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/javascript/javascript_high_source.php))._
+
+
+
+## Security: Impossible
+> _You can never trust the user and have to assume that any code sent to the user can be manipulated or bypassed and so there is no impossible level._
+
+## Resources
+
+- Cryptocat's [video walkthrough](https://www.youtube.com/watch?v=3IfHy97pog0).
