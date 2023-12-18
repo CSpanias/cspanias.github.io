@@ -7,6 +7,9 @@ img_path: /assets/dvwa/csp_bypass
 published: true
 ---
 
+> This task has an active issue: [CSP Bypass can't be solved with Hastebin anymore (once again) #539](https://github.com/digininja/DVWA/issues/539)
+{: .prompt-warning}
+
 ## Information
 
 - [How to install dvwa on Kali](https://www.kali.org/tools/dvwa/).
@@ -38,7 +41,17 @@ CSP is used to **define where scripts and other resources can be loaded or execu
 ## Security: Low
 > _Examine the policy to find all the sources that can be used to host external script files ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/csp_bypass/csp_bypass_low_source.php))._
 
+1. If we take a look at the source code, we will find a whitelist of sources that we can use to achieve our objective:
 
+    ```php
+    $headerCSP = "Content-Security-Policy: script-src 'self' https://pastebin.com hastebin.com www.toptal.com example.com code.jquery.com https://ssl.google-analytics.com ;"; // allows js from self, pastebin.com, hastebin.com, jquery and google analytics.
+
+    header($headerCSP);
+    
+    # These might work if you can't create your own for some reason
+    # https://pastebin.com/raw/R570EE00
+    # https://www.toptal.com/developers/hastebin/raw/cezaruzek
+    ```
 
 ## Security: Medium
 > _The CSP policy tries to use a nonce to prevent inline scripts from being added by attackers ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/csp_bypass/csp_bypass_medium_source.php))._
@@ -54,3 +67,6 @@ CSP is used to **define where scripts and other resources can be loaded or execu
 ## Resources
 
 - Cryptocat's [video walkthrough](https://www.youtube.com/watch?v=ERksJHl0DC0).
+- [Content Security Policy Reference](https://content-security-policy.com/).
+- Mozilla's [CSP for the web we have](https://blog.mozilla.org/security/2014/10/04/csp-for-the-web-we-have/).
+- PortSwigger's [Content Security Policy](https://portswigger.net/web-security/cross-site-scripting/content-security-policy).
