@@ -2,7 +2,7 @@
 title: DVWA - Javascript
 date: 2023-12-19
 categories: [CTF, Web Exploitation]
-tags: [dvwa, burp, javascript, js]
+tags: [dvwa, burp, javascript, js, firefox, debugger, console, inspector, burp]
 img_path: /assets/dvwa/javascript
 published: true
 ---
@@ -42,7 +42,7 @@ The attacks in this section are designed to help you learn about **how JavaScrip
 
 1. When we input `success` in the box, we get an `Invalid token.` message back:
 
-    ![](low_success_fail.png)
+    ![](low_success_fail.png){: .normal }
 
 2. We can find the token mentioned by inspecting the page:
 
@@ -52,15 +52,15 @@ The attacks in this section are designed to help you learn about **how JavaScrip
 
     ![](low_source.png)
 
-4. So we use [Cyberchef](https://gchq.github.io/CyberChef/) to perform the same process for the word `success`:
+4. So we can use [Cyberchef](https://gchq.github.io/CyberChef/) to perform the same process for the word `success`:
 
     ![](low_enc.png)
 
-5. Now, we can change the token's value and pass `success` to the input box:
+5. Now, we can change the token's value, pass `success` to the input box and click *Submit*:
 
     ![](low_submission.png)
 
-    ![](low_pass.png)
+    ![](low_pass.png){: .normal }
 
 ### Generate_token()
 
@@ -72,11 +72,11 @@ The attacks in this section are designed to help you learn about **how JavaScrip
 
     ![](low_generate_token.png)
 
-3. Once executed, it will generate the token we need which we can then submit and pass this level:
+3. Once executed, it will generate the new token which we can then submit:
 
     ![](low_token_generated.png)
 
-    ![](low_pass_2.png)
+    ![](low_pass_2.png){: .normal }
 
 ### Debugger
 
@@ -84,13 +84,13 @@ The attacks in this section are designed to help you learn about **how JavaScrip
 
     ![](low_debugger_config.png)
 
-> By just clicking on the number of the code, `88` in the above case, a breakpoint would be inserted.
+    > By just clicking on the number of the code line, `88` in the above case, a breakpoint would be inserted.
 
-2. When we click submit with the value of `ChangeMe` the code will run and stop on our breakpoint:
+2. Once the breakpoints are set and we click submit, with the value of `ChangeMe` in the input box, the code will run and stop on our breakpoint:
 
     ![](low_paused_on_bp.png)
 
-3. We can then go to the *Console* tab, set the `phrase` variable to `success`:
+3. We can then go to the *Console* tab and set the `phrase` variable to `success`:
 
     ![](console_phrase_success.png)
 
@@ -113,12 +113,100 @@ The attacks in this section are designed to help you learn about **how JavaScrip
 ## Security: Medium
 > _The JavaScript has been broken out into its own file and then minimized. You need to view the source for the included file and then work out what it is doing. Both Firefox and Chrome have a Pretty Print feature which attempts to reverse the compression and display code in a readable way ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/javascript/javascript_medium_source.php))._
 
+1. We can take a look at the code via the *Debugger* tab:
 
+    ![](medium_pretty_print.png)
+
+2. We can also check the token's value via the *Inspector* tab:
+
+    ![](medium_changeme_token.png)
+
+3. It is kind of obvious what it is doing: adding as both prefix and suffic the `XX` string, and reversing the input string, `ChangeMe` to `eMegnahC`. So we can try that with `success`:
+
+    ![](medium_pass.png)
+
+4. Similarly with what we did before, we can set a breakpoint on *Debugger* and repeat the above process to see the changes in a more detailed way:
+
+    ![](medium_breakpoint_1.png)
+
+    ![](medium_phrase_success.png)
+
+    ![](medium_resume.png)
+
+    ![](medium_breakpoint_2.png)
+
+    ![](medium_breakpoint_3.png)
 
 ## Security: High
 > _The JavaScript has been obfuscated by at least one engine. You are going to need to step through the code to work out what is useful, what is garbage and what is needed to complete the mission ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/javascript/javascript_high_source.php))._
 
+1. If we check the code, we will notice that is obfuscated:
 
+    ![](high_obf_code.png)
+
+2. We can use a [Java deobfuscator](https://lelinhtinh.github.io/de4js/) to see what we are dealing with:
+
+    ![](java_deobf.png)
+
+3. Skimming through the code, the last few lines seem to be the important part:
+
+    ![](high_code_end.png)
+
+4. We can't use the *Debugger* yet, as the code is still obfuscated. What we can do is replacing the obfuscated code, `high.js`, with the deobfuscated code, `high_deobf.js`, using Burp:
+
+    ![](high_js.png)
+
+5. To do that, we first need to launch an HTTP server where `high_deobf.js` is located:
+
+    ```shell
+    $ ls
+    high_deobf.js
+
+    $ python3 -m http.server 8888
+    Serving HTTP on 0.0.0.0 port 8888 (http://0.0.0.0:8888/) ...
+    ```
+
+6. Once the HTTP is up, we must create a *Match and Replace rule*:
+
+    ![](proxy_settings_config.png)
+
+7. When we refresh the page we will get a GET request on our HTTP server, and we will see that the file is now replaced:
+
+    ```shell
+    $ python3 -m http.server 8888
+    Serving HTTP on 0.0.0.0 port 8888 (http://0.0.0.0:8888/) ...
+    127.0.0.1 - - [18/Dec/2023 20:04:50] "GET /high_deobf.js HTTP/1.1" 200 -
+    ```
+
+    ![](high_deobf.png)
+
+8. Before we start working with the *Debugger* we can also set some addition settings on Burp:
+
+    ![](proxy_settings_config2.png)
+
+9. We can now work with the *Debugger* as before to examine how this works. We first set our breakpoints:
+
+    ![](high_bp_1.png)
+
+10. We submit the phrase `success`, *Step over* once, and check the value `document.getElementById("phrase").value` via *Console*. This is the hash of the existing token suffixed with `ZZ`:
+
+    ![](token_value_1.png)
+
+11. If we *Step over* we will jump to `token_part_1()` function which uses the `document.getElementById("phrase").value`. If we *Step in* and then check the `document.getElementById("phrase").value`'s value will be set to nothing, so we need to set its value to `success`:
+
+    ![](high_phrase_success.png)
+
+12. If we ump back to the *Debugger* and click *Step in* again we will notice that it was changed to `success`. If we continue *Stepping in* we will see that this function is reversing our string:
+
+    ![](token_value_2.png)
+
+13. After reversing, its jumps on `token_part_2()` function which prefixes `success` with `XX`:
+
+    ![](token_value_3.png)
+
+14. Our new token value is generated, and if we click *Resume*, remove our breakpoints, and submit the string `success`:
+
+    ![](high_success.png)
 
 ## Security: Impossible
 > _You can never trust the user and have to assume that any code sent to the user can be manipulated or bypassed and so there is no impossible level._
