@@ -96,7 +96,7 @@ CSP is used to **define where scripts and other resources can be loaded or execu
 ## Security: High
 > _The page makes a JSONP call to source/jsonp.php passing the name of the function to callback to, you need to modify the jsonp.php script to change the callback function ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/csp_bypass/csp_bypass_high_source.php))._
 
-## Reverse shell
+### Reverse shell
 
 1. On this level the page makes a call to `jsonp.php` and executes whatever code is there:
 
@@ -140,7 +140,7 @@ CSP is used to **define where scripts and other resources can be loaded or execu
 
     ![](medium_revshell.png)
 
-## Command execution
+### Command execution
 
 1. If we click the *Solve the sum* button and intercept the traffic with Burp, we will notice the `callback` parameter:
 

@@ -38,7 +38,45 @@ The attacks in this section are designed to help you learn about **how JavaScrip
 ## Security: Low
 > _All the JavaScript is included in the page. Read the source and work out what function is being used to generate the token required to match with the phrase and then call the function manually ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/javascript/javascript_low_source.php))._
 
+### CyberChef
 
+1. When we input `success` in the box, we get an `Invalid token.` message back:
+
+    ![](low_success_fail.png)
+
+2. We can find the token mentioned by inspecting the page:
+
+    ![](low_token.png)
+
+3. If we take a look at the source code, we see that there is a function called `generate_token()` which takes our input and encodes it with ROT13 and then hashes it using MD5:
+
+    ![](low_source.png)
+
+4. So we use [Cyberchef](https://gchq.github.io/CyberChef/) to perform the same process for the word `success`:
+
+    ![](low_enc.png)
+
+5. Now, we can change the token's value and pass `success` to the input box:
+
+    ![](low_submission.png)
+
+    ![](low_pass.png)
+
+### Generate_token()
+
+1. Another way we can solve this is by using the existing `generate_token()` function. We can begin by removing the `type`'s value `hidden` so we can see the token in the browser:
+
+    ![](low_hidden.png)
+
+2. Then we can write `success` in the input box, go to *Console*, and execute the `generate_token()` function. 
+
+    ![](low_generate_token.png)
+
+3. Once executed, it will generate the token we need which we can then submit and pass this level:
+
+    ![](low_token_generated.png)
+
+    ![](low_pass_2.png)
 
 ## Security: Medium
 > _The JavaScript has been broken out into its own file and then minimized. You need to view the source for the included file and then work out what it is doing. Both Firefox and Chrome have a Pretty Print feature which attempts to reverse the compression and display code in a readable way ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/javascript/javascript_medium_source.php))._
