@@ -78,6 +78,38 @@ The attacks in this section are designed to help you learn about **how JavaScrip
 
     ![](low_pass_2.png)
 
+### Debugger
+
+1. We can also play around with the *Debugger* and find out what exactly is going on by inserting breakpoints on the function of interest:
+
+    ![](low_debugger_config.png)
+
+> By just clicking on the number of the code, `88` in the above case, a breakpoint would be inserted.
+
+2. When we click submit with the value of `ChangeMe` the code will run and stop on our breakpoint:
+
+    ![](low_paused_on_bp.png)
+
+3. We can then go to the *Console* tab, set the `phrase` variable to `success`:
+
+    ![](console_phrase_success.png)
+
+4. Then if we jump back to the *Debugger* and click the *Resume* button, we will notice that `phrase`'s value will change to `success`:
+
+    ![](low_play_to_success.png)
+
+5. Then if we click *Step in* until we get inside the `rot13` function and then *Step over*, we will get `success` encoded in ROT13:
+
+    ![](low_step_in_rot13.png)
+
+    ![](changed_inp_to_success.png)
+
+6. If we repeat the above process, i.e., click *Step in* until we get inside the obfuscated function and then *Step over*, we will get the md5 hash value:
+
+    ![](low_step_in_obf.png)
+
+    ![](low_step_over_md5.png)
+
 ## Security: Medium
 > _The JavaScript has been broken out into its own file and then minimized. You need to view the source for the included file and then work out what it is doing. Both Firefox and Chrome have a Pretty Print feature which attempts to reverse the compression and display code in a readable way ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/javascript/javascript_medium_source.php))._
 
