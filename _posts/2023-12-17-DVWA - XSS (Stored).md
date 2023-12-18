@@ -40,7 +40,7 @@ The **stored XSS is stored in the database**. The **stored XSS is permanent**, u
 **Objective**: Redirect everyone to a web page of your choosing.
 
 ## Security: Low
-> _Low level will not check the requested input, before including it to be used in the output text. ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/xss_stored/xss_stored_low_source.php))._
+> _Low level will not check the requested input, before including it to be used in the output text ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/xss_stored/xss_stored_low_source.php))._
 
 1. There are 2 input fields: `Name` and `Message`. Let's start with something simple to see if it works:
 
