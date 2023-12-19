@@ -2,7 +2,7 @@
 title: PortSwigger SSVs - Authentication
 date: 2023-12-19
 categories: [Training, PortSwigger]
-tags: [portswigger, server-side-vulnerabilities, authentication, brute-force, burp-intruder]
+tags: [portswigger, server-side-vulnerabilities, authentication, brute-force, burp-intruder, two-factor-authentication]
 img_path: /assets/portswigger/server-side/authentication
 published: true
 ---
@@ -40,7 +40,7 @@ _To solve the lab, enumerate a valid username, brute-force this user's password,
 
 2. We will start with username enumeration. From the *Positions* tab on *Intruder*, we select *Sniper* as our attack type, then we highlight the value of the `username` parameter and click the `Add §` button, and finally we leave a random password as the value of the `password` parameter:
 
-    ![](lab1_username_payload_positions.png)
+    ![](lab1_username_payload_position.png)
 
 3. Next, on the *Payloads* tab, we set the given username list as the *Payload set*, either via uploading a text file (*Load ...*) or by a direct copy and *Paste*:
 
@@ -52,7 +52,7 @@ _To solve the lab, enumerate a valid username, brute-force this user's password,
 
 5. We will continue our attack by brute-forcing the password. First, on the *Positions* tab, we set the value of `username` to `atlanta` and add section signs to the value of the `password`'s parameter. Then, we move to the *Payloads* tab and set the given password list:
 
-    ![](lab1_password_payload_positions.png)
+    ![](lab1_password_payload_position.png)
 
     ![](lab1_password_payload.png)
 
@@ -64,6 +64,15 @@ _To solve the lab, enumerate a valid username, brute-force this user's password,
 
     ![](lab1_solved.png)
 
+## Bypassing two-factor authentication
+
+Some implementations of two-factor authentication happen in two separate stages:
+1. The user is first prompted to enter a password.
+2. The user is then prompted to enter a verification code on a separate page.
+
+As a result, the user is already in a "logged in" state before they have entered the verification code. In some cases, we can directly skip the second part.
+
+### 
 
 ## Resources
 
