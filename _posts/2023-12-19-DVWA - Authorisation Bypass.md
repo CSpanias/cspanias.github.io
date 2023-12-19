@@ -88,7 +88,7 @@ As a tester, you need to be looking at every call a system makes and then testin
 
     ![](high_gordon_mod_request.png)
 
-    ![](high_gordon_mod_request1.png)
+    ![](high_gordon_mod_request_1.png)
 
 3. If we now login with the `admin` acc, we can see that the data has indeed been modified:
 
