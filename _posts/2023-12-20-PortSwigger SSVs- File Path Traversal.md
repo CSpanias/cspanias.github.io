@@ -1,5 +1,5 @@
 ---
-title: Server-side vulnerabilities - File Path Traveral
+title: PortSwigger SSVs - File Path Traveral
 date: 2023-12-20
 categories: [Training, PortSwigger]
 tags: [portswigger, server-side-vulnerabilities, directory-traversal]
