@@ -11,7 +11,7 @@ published: true
 
 Access control is the application of constraints on who or what is authorized to perform actions or access resources. This is dependent on authentication (_the user is who they say they are_) and session management (_identifies which subsequent HTTP requests are being made by that same user_). Broken access control are common and often present a critical security vulnerability.
 
-## Unprotected functionality
+## Unprotected functionality (Vertical privilege escalation)
 
 This happens when an app does not enforce any protection for sensitive functionality. 
 
@@ -53,6 +53,8 @@ In some cases, sensitive functionality is concealed by obfuscating the URL, aka 
 ```
 
 ## Lab: Unprotected admin functionality with unpredictable URL
+
+**Objective**: _This lab has an unprotected admin panel. It's located at an unpredictable location, but the location is disclosed somewhere in the application. Solve the lab by accessing the admin panel, and using it to delete the user carlos._
 
 1. If we visit the page's source code, we will find an obfuscated URL:
 
@@ -97,6 +99,41 @@ For example, an app can make access control decisions based on the submitted val
     ![](lab3_delete.png)
 
     ![](lab3_solved.png)
+
+## Horizontal privilege escalation
+
+Let's assume that a user might access their account page using `https://domain//myaccount?id=123`. The user might be able to access another user's account by modifying the value of the `id` parameter.
+
+> _This is an example of an **Insecure Direct Object Reference (IDOR)**: user-controller parameter values are used to access resources/functions directly._
+
+In some apps, the exploitable parameter does not have a predictable value. For instance, an app might use Globally Unique IDs (GUIDs). This may prevent an attacker from predicting another user's identifier, but these values might be disclosed elsewhere in the app where users are referenced, such as user messages or reviews.
+
+## Lab: User ID controlled by request parameter, with unpredictable user IDs
+
+**Objective**:  _This lab has a horizontal privilege escalation vulnerability on the user account page, but identifies users with GUIDs. To solve the lab, find the GUID for `carlos`, then submit his API key as the solution. You can log in to your own account using the following credentials: `wiener:peter`._
+
+1. When we login with the acc `wiener`, we get an API key:
+
+    ![](lab4_home.png)
+
+    ![](lab4_home_burp.png)
+
+2. If we check the first blog post, we can see that it's written by `carlos` and by examining the response we can find his GUID:
+
+    ![](lab4_carlos_post.png)
+
+    ![](lab4_carlos_guid.png)
+
+3. Now that we know `carlos`'s GUID, we can re-login as `wiener`, intercept the request and replace the GUID to get his API key as a response:
+
+    ![](lab4_login_burp.png)
+
+    ![](lab4_carlos_api_key.png)
+
+4. Then we must submit `carlos`'s API key as a solution to mark this lab as solved:
+
+    ![](lab4_solved.png)
+
 
 
 ## Resources
