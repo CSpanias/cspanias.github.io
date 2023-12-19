@@ -1,0 +1,105 @@
+---
+title: PortSwigger SSVs - Access control
+date: 2023-12-19
+categories: [Training, PortSwigger]
+tags: [portswigger, server-side-vulnerabilities, access-control]
+img_path: /assets/portswigger/server-side/access_control
+published: true
+---
+
+## What is access control?
+
+Access control is the application of constraints on who or what is authorized to perform actions or access resources. This is dependent on authentication (_the user is who they say they are_) and session management (_identifies which subsequent HTTP requests are being made by that same user_). Broken access control are common and often present a critical security vulnerability.
+
+## Unprotected functionality
+
+This happens when an app does not enforce any protection for sensitive functionality. 
+
+For example, a website might host sensitive functionality at `https://domain.com/admin`. This might be accessible by any user and not only admins. In some cases, the admin URL might be disclosed in other locations, such as `https:://domain.com/robots.txt`, which can be brute-forced.
+
+## Lab: Unprotected admin functionality
+
+**Objective**: _This lab has an unprotected admin panel. Solve the lab by deleting the user `carlos`._
+
+1. The lab is the same e-shop as before:
+
+    ![](home.png)
+
+2. We can check if a `robots.txt` file is present:
+
+    ![](robots_txt.png)
+
+3. We then visit the `/admininstrator-panel` directory and solve the lab by deleting the user `carlos`:
+
+    ![](admin_panel.png)
+
+    ![](lab_solved.png)
+
+## Unprotected functionality - Continued
+
+In some cases, sensitive functionality is concealed by obfuscating the URL, aka **security by obscurity**. Imagine an app that hosts admin functions at `https://insecure-website.com/administrator-panel-yb556`. This is not directly guessable by an attacker, but the app might still leak it to users. For instance, it might be disclosed in JavaScript that constructs the user interface based on the user's role:
+
+```javascript
+<script>
+	var isAdmin = false;
+	if (isAdmin) {
+		...
+		var adminPanelTag = document.createElement('a');
+		adminPanelTag.setAttribute('https://insecure-website.com/administrator-panel-yb556');
+		adminPanelTag.innerText = 'Admin panel';
+		...
+	}
+</script>
+```
+
+## Lab: Unprotected admin functionality with unpredictable URL
+
+1. If we visit the page's source code, we will find an obfuscated URL:
+
+    ![](lab2_source.png)
+
+2. We can solve this lab, by visiting the `/admin-8893sq` directory and deleting the user `carlos`:
+
+    ![](lab2_solved.png)
+
+## Parameter-based access control methods
+
+Some apps determine the user's access rights or role at login, and then store this info in a user-controllable location, such as a hidden field, cookie or preset query string parameter.
+
+For example, an app can make access control decisions based on the submitted value, like `https://domain.com/login/home.jsp?admin=true` or `https://domain.com/login/home.jsp?role=1`. Since the user can modify these values this is highly insecure.
+
+## Lab: User role controlled by request parameter
+
+**Objective**:  _This lab has an admin panel at `/admin`, which identifies administrators using a forgeable cookie. Solve the lab by accessing the admin panel and using it to delete the user `carlos`. You can log in to your own account using the following credentials: `wiener:peter`._
+
+1. When we try to access the `/admin` directory, we get an unauthorized access message:
+
+    ![](lab3_admin.png)
+
+2. First, we need to enable *Reponse Interception* under *Proxy settings* > *Response interception rules*:
+
+    ![](lab3_proxy_settings.png)
+
+3. Now, we can turn *Intercept* to *On* and login with the given credentials:
+
+    ![](lab3_login_request.png)
+
+4. If we *Forward* the request, we will notice an `Admin` cookie set to `false`. We need to change this to `true` and then *Forward* the request:
+
+    ![](lab3_admin_cookie.png)
+
+5. We will notice that the *Admin panel* option is now available on our browser:
+
+    ![](lab3_admin_panel.png)
+
+6. With our *Intercept* still enabled, we keep changing the `Admin` cookie to `true` on very request, until we manage to delete user `carlos` and solve tha lab:
+
+    ![](lab3_delete.png)
+
+    ![](lab3_solved.png)
+
+
+## Resources
+
+- [Server-side vulnerabilities](https://portswigger.net/web-security/learning-paths/server-side-vulnerabilities-apprentice).
+- Related practice: [DVWA LFI](https://cspanias.github.io/posts/DVWA-File-Inclusion/).

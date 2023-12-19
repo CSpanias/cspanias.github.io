@@ -1,8 +1,8 @@
 ---
 title: PortSwigger SSVs - File Path Traveral
-date: 2023-12-20
+date: 2023-12-19
 categories: [Training, PortSwigger]
-tags: [portswigger, server-side-vulnerabilities, directory-traversal]
+tags: [portswigger, server-side-vulnerabilities, directory-traversal, burp, burp-repeater]
 img_path: /assets/portswigger/server-side/directory_traversal
 published: true
 ---
