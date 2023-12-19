@@ -44,7 +44,7 @@ As suggested above, a common use for this is to create a URL which initially goe
 
 1. The home page includes two links, and upon clicking the first one the address bar changes like this:
 
-    ![](low_home.png)
+    ![](low_home.png){: .normal }
 
     ![](low_quote_1.png)
 
@@ -82,7 +82,7 @@ As suggested above, a common use for this is to create a URL which initially goe
 
     ![](high_500.png)
 
-2. All the server is looking for is `info.php` within the URL. So we can add that after using a
+2. All the server is looking for is `info.php` within the URL. So we can add as a value to the `id` parameter:
 
     ![](high_302.png)
 
