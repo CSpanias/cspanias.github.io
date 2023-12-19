@@ -7,8 +7,6 @@ img_path: /assets/portswigger/server-side/directory_traversal
 published: true
 ---
 
-> PortSwigger's [Server-side vulnerabilities](https://portswigger.net/web-security/learning-paths/server-side-vulnerabilities-apprentice).
-
 ## Path traversal
 
 A path, aka directory or dot-dot-slash, vulneratibility enables the attacker to access (read or write) arbitrary files on the application server.
@@ -22,7 +20,7 @@ A path, aka directory or dot-dot-slash, vulneratibility enables the attacker to 
 
     The `loadImage` URL takes a `filename` parameter and returns the contents of `218.png`. The image is stored under `/var/www/images`, so it is essentially calling `/var/www/images/218.png`.
 
-2. We can use `../` to navigate directories and requested anything we want from other directories:
+2. We can use `../` to navigate directories and requeste any file we want from other directories:
 
     ```html
     https://insecure-website.com/loadImage?filename=../../../etc/passwd
@@ -32,9 +30,6 @@ A path, aka directory or dot-dot-slash, vulneratibility enables the attacker to 
 
     > On Windows, both `../` and `..\` are valid. 
 
-
-> Related practice: [DVWA LFI](https://cspanias.github.io/posts/DVWA-File-Inclusion/).
-
 ## Lab: File path traversal, simple case
 
 **Objective**: _This lab contains a path traversal vulnerability in the display of product images. To solve the lab, retrieve the contents of the `/etc/passwd` file._
@@ -43,27 +38,17 @@ A path, aka directory or dot-dot-slash, vulneratibility enables the attacker to 
 
     ![](dir_tra_home.png)
 
-2. When we click on a product, we are directed to the `product` URL which has the `productId` parameter:
-
-    ![](dir_tra_item.png)
-
-3. If we view the page's source, we can find the image's path:
-
-    ![](dir_tra_source.png)
-
-4. We can examine this request via Burp Proxy's HTTP History, send it to the Repeater, and attempt our path traversal attack:
-
-    ![](dir_tra_request.png)
-
-5. We notice that our filter settings are hiding Images, among other things, so we need to change that:
+2. We can click on a product and examine the traffic with Burp, but first we need to whitelist images via our filter settings:
 
     ![](dir_tra_filter_settings.png)
 
-6. Now, when we refresh the page, we can see a new GET request to `/image` with the `filename` parameter:
+    ![](dir_tra_filter_settings_2.png)
+
+3. We can now examine the request via Burp Proxy's HTTP History by refreshing the page. There we can see a GET request to the `/image` URL which takes the `filename` parameter:
 
     ![](dir_tra_request_image.png)
 
-7. We can send it to the Repeater and try our Path Traversal attack:
+4. We can send it to the Repeater and try our Path Traversal attack:
 
     ![](dir_tra_repeater.png)
 
@@ -74,3 +59,8 @@ A path, aka directory or dot-dot-slash, vulneratibility enables the attacker to 
     ![](dir_tra_intercept_forward.png)
 
     ![](dir_tra_solved.png)
+
+## Resources
+
+- [Server-side vulnerabilities](https://portswigger.net/web-security/learning-paths/server-side-vulnerabilities-apprentice).
+- Related practice: [DVWA LFI](https://cspanias.github.io/posts/DVWA-File-Inclusion/).
