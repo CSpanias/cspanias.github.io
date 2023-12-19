@@ -17,7 +17,7 @@ This happens when an app does not enforce any protection for sensitive functiona
 
 For example, a website might host sensitive functionality at `https://domain.com/admin`. This might be accessible by any user and not only admins. In some cases, the admin URL might be disclosed in other locations, such as `https:://domain.com/robots.txt`, which can be brute-forced.
 
-## Lab: Unprotected admin functionality
+### Lab: Unprotected admin functionality
 
 **Objective**: _This lab has an unprotected admin panel. Solve the lab by deleting the user `carlos`._
 
@@ -52,7 +52,7 @@ In some cases, sensitive functionality is concealed by obfuscating the URL, aka 
 </script>
 ```
 
-## Lab: Unprotected admin functionality with unpredictable URL
+### Lab: Unprotected admin functionality with unpredictable URL
 
 **Objective**: _This lab has an unprotected admin panel. It's located at an unpredictable location, but the location is disclosed somewhere in the application. Solve the lab by accessing the admin panel, and using it to delete the user carlos._
 
@@ -70,7 +70,7 @@ Some apps determine the user's access rights or role at login, and then store th
 
 For example, an app can make access control decisions based on the submitted value, like `https://domain.com/login/home.jsp?admin=true` or `https://domain.com/login/home.jsp?role=1`. Since the user can modify these values this is highly insecure.
 
-## Lab: User role controlled by request parameter
+### Lab: User role controlled by request parameter
 
 **Objective**:  _This lab has an admin panel at `/admin`, which identifies administrators using a forgeable cookie. Solve the lab by accessing the admin panel and using it to delete the user `carlos`. You can log in to your own account using the following credentials: `wiener:peter`._
 
@@ -108,7 +108,7 @@ Let's assume that a user might access their account page using `https://domain//
 
 In some apps, the exploitable parameter does not have a predictable value. For instance, an app might use Globally Unique IDs (GUIDs). This may prevent an attacker from predicting another user's identifier, but these values might be disclosed elsewhere in the app where users are referenced, such as user messages or reviews.
 
-## Lab: User ID controlled by request parameter, with unpredictable user IDs
+### Lab: User ID controlled by request parameter, with unpredictable user IDs
 
 **Objective**:  _This lab has a horizontal privilege escalation vulnerability on the user account page, but identifies users with GUIDs. To solve the lab, find the GUID for `carlos`, then submit his API key as the solution. You can log in to your own account using the following credentials: `wiener:peter`._
 
@@ -133,6 +133,30 @@ In some apps, the exploitable parameter does not have a predictable value. For i
 4. Then we must submit `carlos`'s API key as a solution to mark this lab as solved:
 
     ![](lab4_solved.png)
+
+## Horizontal to vertical privilege escalation
+
+An attacker aiming at horizontal privilege escalation might compromise a user with elevated privileges, thus, turn a horizontal privilege escaltion attempt into a vertical one.
+
+### Lab: User ID controlled by request parameter with password disclosure
+
+**Objective**:  _This lab has user account page that contains the current user's existing password, prefilled in a masked input. To solve the lab, retrieve the administrator's password, then use it to delete the user `carlos`. You can log in to your own account using the following credentials: `wiener:peter`._
+
+1. When we log in with the account `wiener`, the GET request includes the parameter `id` which is set with the account name, i.e., `wiener`. On our browser there is an option for changing the accounts password which is already pre-filled with our current password:
+
+    ![](lab5_password.png)
+
+    ![](lab5_login_request.png)
+
+2. We can change the `id` parameter's value to `administrator`, and *Forward* the request:
+
+    ![](lab5_admin_intercept.png)
+
+    ![](lab5_admin_login.png)
+
+3. Now we can login as `administrator`, delete `carlos`, and solve the lab:
+
+    ![](lab5_solved.png)
 
 
 
