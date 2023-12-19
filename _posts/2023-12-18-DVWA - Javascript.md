@@ -1,7 +1,7 @@
 ---
 title: DVWA - Javascript
 date: 2023-12-18
-categories: [CTF, Web Exploitation]
+categories: [Training, DVWA]
 tags: [dvwa, burp, javascript, js, firefox, debugger, console, inspector, burp, obfuscation, deobfuscation, sha256, hash, rot13, md5, encoding, decoding]
 img_path: /assets/dvwa/javascript
 published: true

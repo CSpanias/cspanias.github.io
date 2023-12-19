@@ -1,7 +1,7 @@
 ---
 title: DVWA - XSS (Reflected)
 date: 2023-12-17
-categories: [CTF, Web Exploitation]
+categories: [Training, DVWA]
 tags: [dvwa, xss, xss-reflected, cross-site-scripting, javascript]
 img_path: /assets/dvwa/xss_reflected
 published: true

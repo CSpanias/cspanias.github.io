@@ -1,7 +1,7 @@
 ---
 title: DVWA - Command Injection
 date: 2023-12-07
-categories: [CTF, Web Exploitation]
+categories: [Training, DVWA]
 tags: [dvwa, command-injection, boolean-operators, bitwise-operators, command-chaining]
 img_path: /assets/dvwa/command_injection
 published: true

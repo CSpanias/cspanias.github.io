@@ -1,7 +1,7 @@
 ---
 title: DVWA - XSS (DOM)
 date: 2023-12-16
-categories: [CTF, Web Exploitation]
+categories: [Training, DVWA]
 tags: [dvwa, xss, xss-dom, cross-site-scripting, burp, javascript]
 img_path: /assets/dvwa/xss_dom
 published: true

@@ -1,7 +1,7 @@
 ---
 title: DVWA - File Upload
 date: 2023-12-10
-categories: [CTF, Web Exploitation]
+categories: [Training, DVWA]
 tags: [dvwa, file-upload, burp-suite, file-inclusion, lfi, php, mime, magic-numbers, weevely3, msfvenom, meterpreter, metasploit, hexeditor, null-byte, exiftool]
 img_path: /assets/dvwa/file_upload
 published: true
