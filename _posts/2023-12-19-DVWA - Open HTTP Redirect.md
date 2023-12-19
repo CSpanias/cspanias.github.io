@@ -1,8 +1,8 @@
 ---
 title: DVWA - Open HTTP Redirect
-date: 2023-12-20
+date: 2023-12-19
 categories: [CTF, Web Exploitation]
-tags: [dvwa, burp, open-http-redirect]
+tags: [dvwa, burp, open-http-redirect, http, http-codes]
 img_path: /assets/dvwa/open_http_redirect
 published: true
 ---
@@ -42,20 +42,57 @@ As suggested above, a common use for this is to create a URL which initially goe
 ## Security: Low
 > _The redirect page has no limitations, you can redirect to anywhere you want ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/open_http_redirect/open_http_redirect_low_source.php))._
 
+1. The home page includes two links, and upon clicking the first one the address bar changes like this:
 
+    ![](low_home.png)
+
+    ![](low_quote_1.png)
+
+2. If we interecept the traffic with Burp, we will notice a `redirect` parameter:
+
+    ![](low_request.png)
+
+    > [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status).
+
+3. We can send this request to the Repeater, and try to manipulate the `redirect` parameter:
+
+    ![](low_redirection.png)
+
+4. If we now try this on our browser, we should be redirected to the target website:
+
+    ![](low_browser_redirection.png)
+
+    ![](low_browser_redirection_1.png)
 
 ## Security: Medium
 > _The code prevents you from using absolute URLs to take the user off the site, so you can either use relative URLs to take them to other pages on the same site or a [Protocol-relative URL](https://en.wikipedia.org/wiki/Wikipedia:Protocol-relative_URL) ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/open_http_redirect/open_http_redirect_medium_source.php))._
 
+1. When we try the same redirection method as before, we will find that this time does not work:
 
+    ![](medium_500_burp.png)
+
+2. That's easily bypassed by removing the `https://` and turning the absolute to a relative URL:
+
+    ![](medium_302_burp.png)
 
 ## Security: High
 > _The redirect page tries to lock you to only redirect to the info.php page, but does this by checking that the URL contains "info.php" ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/open_http_redirect/open_http_redirect_high_source.php))._
 
+1. This time we are only allowed to redirect to the info page:
 
+    ![](high_500.png)
+
+2. All the server is looking for is `info.php` within the URL. So we can add that after using a
+
+    ![](high_302.png)
+
+    ![](high_302_browser.png)
 
 ## Security: Impossible
 > _Rather than accepting a page or URL as the redirect target, the system uses ID values to tell the redirect page where to redirect to. This ties the system down to only redirect to pages it knows about and so there is no way for an attacker to modify things to go to a page of their choosing ([Source code](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/dvwa/open_http_redirect/open_http_redirect_impossible_source.php))._
 
 ## Resources
 
+- Cryptocat's [video walkthrough](https://www.youtube.com/watch?v=I5jko9mLNO4&list=PLHUKi1UlEgOJLPSFZaFKMoexpM6qhOb4Q&index=17).
+- Snyk's [Open redirect](https://learn.snyk.io/lesson/open-redirect/).
+- Mozilla's [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status).
