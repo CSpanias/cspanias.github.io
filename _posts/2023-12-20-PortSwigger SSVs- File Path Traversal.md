@@ -46,7 +46,7 @@ A path, aka directory or dot-dot-slash, vulneratibility enables the attacker to 
 
 3. We can now examine the request via Burp Proxy's HTTP History by refreshing the page. There we can see a GET request to the `/image` URL which takes the `filename` parameter:
 
-    ![](dir_tra_request_image.png)
+    ![](dir_tra_request_image.png){: .normal}
 
 4. We can send it to the Repeater and try our Path Traversal attack:
 
