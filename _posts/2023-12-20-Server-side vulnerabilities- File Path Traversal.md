@@ -40,7 +40,7 @@ A path, aka directory or dot-dot-slash, vulneratibility enables the attacker to 
 
 2. We can click on a product and examine the traffic with Burp, but first we need to whitelist images via our filter settings:
 
-    ![](dir_tra_filter_settings.png)
+    ![](dir_tra_filter_settings.png){: .normal}
 
     ![](dir_tra_filter_settings_2.png)
 
@@ -54,9 +54,9 @@ A path, aka directory or dot-dot-slash, vulneratibility enables the attacker to 
 
 8. To mark this lab as `solved`, we need to actually intercept the request via Proxy, modify it, and Forward it:
 
-    ![](dir_tra_intercept.png)
+    ![](dir_tra_intercept.png){: .normal}
 
-    ![](dir_tra_intercept_forward.png)
+    ![](dir_tra_intercept_forward.png){: .normal}
 
     ![](dir_tra_solved.png)
 
