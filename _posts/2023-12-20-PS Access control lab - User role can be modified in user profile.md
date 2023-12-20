@@ -1,5 +1,5 @@
 ---
-title: PortSwigger Access control vulnerabilities lab - User role can be modified in user profile
+title: PS Access control lab - User role can be modified in user profile
 date: 2023-12-20
 categories: [Training, PortSwigger]
 tags: [portswigger, lab, access_control]
