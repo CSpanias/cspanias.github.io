@@ -34,7 +34,7 @@ _To solve the lab, enumerate a valid username, brute-force this user's password,
 
 1. We can try to login using random credentials, i.e., `test:test`, *intercept* the request with *Burp Proxy* and sent it to *Intruder*:
 
-    ![](lab1_invalid_username.png)
+    ![](lab1_invalid_username.png){: width='70%' .normal }
 
     ![](lab1_send_to_intruder.png)
 
@@ -44,21 +44,21 @@ _To solve the lab, enumerate a valid username, brute-force this user's password,
 
 3. Next, on the *Payloads* tab, we set the given username list as the *Payload set*, either via uploading a text file (*Load ...*) or by a direct copy and *Paste*:
 
-    ![](lab1_payload_list_1.png)
+    ![](lab1_payload_list_1.png){: .normal }
 
 4. Now we are ready to click the *Start attack* button and wait. Once the attack is complete, we will notice just one username with a different length than the others: `atlanta`:
 
-    ![](lab1_username_found.png)
+    ![](lab1_username_found.png){: .normal }
 
 5. We will continue our attack by brute-forcing the password. First, on the *Positions* tab, we set the value of `username` to `atlanta` and add section signs to the value of the `password`'s parameter. Then, we move to the *Payloads* tab and set the given password list:
 
     ![](lab1_password_payload_position.png)
 
-    ![](lab1_password_payload.png)
+    ![](lab1_password_payload.png){: .normal }
 
 6. We are ready again to click *Start attack*. From the results, only one password value stands out, `monitor`:
 
-    ![](lab1_password_found.png)
+    ![](lab1_password_found.png){: .normal }
 
 7. We can now use our obtained credentials and solve the lab:
 
@@ -78,7 +78,7 @@ As a result, the user is already in a "logged in" state before they have entered
 - _Your credentials: `wiener:peter`_
 - _Victim's credentials: `carlos:montoya`_
 
-1. We can login with `wiener`'s credentials and examine how this works so we can find out where the process is vulnerable:
+1. We can login with `wiener`'s credentials, examine how the authentication process works, and see if we can find out where the process is vulnerable:
 
     ![](lab2_wiener_login.png)
 
@@ -86,9 +86,17 @@ As a result, the user is already in a "logged in" state before they have entered
 
     ![](lab2_wiener_account.png)
 
-2. Now, if we login with the victim's credentials, instead of passing through the whole process, we can just skip the 2FA and access the victim's account directly:
+    The authentication process seems quite straightforward:
+    1. First, the user authenticates with his credentials (`/login`).
+    2. He is then asked to enter a 4 digit code to access his account (`/login2`).
+    3. Next, the user visits his email (on another domain) to get his 4-digit code.
+    4. Finally, he enters the 4 digit code and gets redirected to his account (`/my-account`).
+
+2. Instead of doing all 4 steps, we could try ignoring the third step and try to "jump" directly from the second (`/login2`) to the fourth (`/my-account`), essentially skipping completely the 2FA mechanism:
 
     ![](lab2_carlos_login.png)
+
+    ![](lab2_carlos_bypass.png)
 
     ![](lab2_carlos_account.png)
 
