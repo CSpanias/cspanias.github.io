@@ -1,5 +1,5 @@
 ---
-title: PortSwigger SSVs - Authentication
+title: PortSwigger SSVs - 3. Authentication
 date: 2023-12-19
 categories: [Training, PortSwigger]
 tags: [portswigger, server-side-vulnerabilities, authentication, brute-force, burp-intruder, two-factor-authentication]

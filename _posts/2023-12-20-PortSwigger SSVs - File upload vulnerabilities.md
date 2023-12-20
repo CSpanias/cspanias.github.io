@@ -1,5 +1,5 @@
 ---
-title: PortSwigger SSVs - File upload vulnerabilities
+title: PortSwigger SSVs - 5. File upload vulnerabilities
 date: 2023-12-20
 categories: [Training, PortSwigger]
 tags: [portswigger, server-side-vulnerabilities, file-upload-vulnerabilities, mime, burp, webshell, rce, file-extensions]

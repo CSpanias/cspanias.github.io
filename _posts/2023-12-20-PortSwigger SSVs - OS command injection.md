@@ -1,5 +1,5 @@
 ---
-title: PortSwigger SSVs - OS command injection
+title: PortSwigger SSVs - 6. OS command injection
 date: 2023-12-20
 categories: [Training, PortSwigger]
 tags: [portswigger, server-side-vulnerabilities, command_injection, burp, command-operators, command-separators]

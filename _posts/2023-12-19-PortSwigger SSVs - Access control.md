@@ -1,5 +1,5 @@
 ---
-title: PortSwigger SSVs - Access control
+title: PortSwigger SSVs - 2. Access control
 date: 2023-12-19
 categories: [Training, PortSwigger]
 tags: [portswigger, server-side-vulnerabilities, access-control, idor]

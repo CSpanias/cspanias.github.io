@@ -1,5 +1,5 @@
 ---
-title: PortSwigger SSVs - SQL injection
+title: PortSwigger SSVs - 7. SQL injection
 date: 2023-12-20
 categories: [Training, PortSwigger]
 tags: [portswigger, server-side-vulnerabilities, sqli, burp, sql]
