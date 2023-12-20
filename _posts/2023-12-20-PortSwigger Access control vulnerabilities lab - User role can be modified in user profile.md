@@ -21,7 +21,7 @@ published: true
 
 3. We can see the POST request includes the `email` parameter, but the response includes the `roleid` parameter, among others. Thus, we can intercept the request with Proxy, add the `roleid` parameter and set its value to `2`:
 
-    ![](lab1_update_intercept.png)
+    ![](lab1_email_update_intercept.png)
 
     ![](lab1_admin_panel.png)
 
