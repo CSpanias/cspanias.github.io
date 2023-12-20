@@ -70,10 +70,38 @@ These kind of **trust relationships**, where requests originating from the local
 
 ## SSRF attacks against other back-end systems
 
+In some cases, the app server is able to interact with back-end systems that are not directly reachable by users. These often have non-routable private IP addresses and because they are protected by the network topology, they often have a weaker security posture.
+
+In the previous example, imagine there is an admin interface at the back-end URL `https://192.168.0.68/admin`. An attack can submit the following request to exploit the SSRF vulnerability, and access the admin interface:
+
+![](request_admin_if.png)
 
 ### Lab: Basic SSRF against another back-end system
 
-**Objective**: 
+**Objective**:  _This lab has a stock check feature which fetches data from an internal system. To solve the lab, use the stock check functionality to scan the internal `192.168.0.X` range for an admin interface on port `8080`, then use it to delete the user `carlos`._
+
+1. As before, we must go on a product's page and click *Check stock*:
+
+    ![](lab2_stock_request.png)
+
+2. We need to find out the host we need to use since we are only be given a range, `192.168.0.X`. We can do this using the *Intruder*:
+
+    ![](lab2_payload_position.png)
+
+    ![](lab2_payload_settings.png)
+
+    ![](lab2_intruder_results.png)
+
+3. Since we have identified the target host, we can access the `/admin` functionality which also includes on the request needed to delete `carlos`:
+
+    ![](lab2_modified_request.png)
+
+4. Now we can intercept the *Check stock* traffic, modified it as needed to delete the `carlos`, and check again the `/admin` panel to confirm that the lab is marked as solved:
+
+    ![](lab2_intercept_delete_request.png)
+
+    ![](lab2_solved.png)
+
 
 ## Resources
 
