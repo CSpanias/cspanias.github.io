@@ -12,16 +12,18 @@ published: true
 **OS command injection**, aka **shell injection**, allows an attacker to execute OS commands on the server that is running the app. This can be leveraged to compromise other parts of the hosting infrastructure, and exploit trust relationships to pivot the attack to other systems within the org.
 
 After such a vulnerability is found, it's useful to execute some commands to obtain info about the system:
+
 | | | 
 |:-:|:-:|:-:|
-| **Purpose of command** | **Linux** | **Windows** |
+| Purpose of command | Linux | Windows |
 | Name of current user | 	whoami | whoami|
 | Operating system | 	uname -a | ver|
 | Network configuration| ifconfig | ipconfig /all|
 | Network connections | netstat -an | netstat -an|
 | Running processes | ps -ef | tasklist |
 
-In this example, a shop app lets the user view whether an item is in stock in a particular store. This info is accessed via a URL: `https://domain.com/stockStatus?productID=381&storeID=29`.
+In this example, a shop app lets the user view whether an item is in stock in a particular store. This info is accessed via a URL:  
+`https://domain.com/stockStatus?productID=381&storeID=29`.
 
 To provide stock info, the app must query various legacy systems. For historical reasons, the functionality is implemented by calling out a shell command with the product and store IDs as arguments:
 
@@ -29,7 +31,9 @@ To provide stock info, the app must query various legacy systems. For historical
 stockreport.pl 381 29
 ```
 
-This command outputs the stock status for the specified item, which is returned to the user. The app implements no defences against OS command injection, so an attacker can submit the following input to execute an arbitrary command:
+This command outputs the stock status for the specified item, which is returned to the user.
+
+The app implements no defences against OS command injection, so an attacker can submit the following input to execute an arbitrary command:
 
 ```shell
 & echo aiwefwlguh &
@@ -62,7 +66,7 @@ Placing the additional command separator `&` after the injected command is usefu
 
 1. We can find the *Check stock* button on any product's page:
 
-    ![](lab1_stock.png){: .normal}
+    ![](lab1_stock.png)
 
     ![](lab1_stock_request.png)
 
