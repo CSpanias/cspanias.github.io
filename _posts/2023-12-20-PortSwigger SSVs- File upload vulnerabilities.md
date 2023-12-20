@@ -77,7 +77,44 @@ This script enables us to pass an arbitrary system command via a query parameter
 
     ![](lab1_solved.png)
 
+## Flawed file type validation
+
+When submitting HTML forms, the browser typically sends the provided data in a `POST` request with the content type `application/x-www-form-url-encoded`. This is fine for sending simple text, like your name or address. However, it isn't suitable for sending large amount of binary data, such as images or PDFs. In this case, the content type `multipart/form-data` is preferred.
+
+Consider a field containing fields for uploading an image, providing a description for it, and entering your username. This might results in a request that looks like this:
+
+![](request_image.png)
+
+The message body is split into separate parts for each of the form's inputs. Each part contains a `Content-Disposition` header, which provides some basic info about the input field it relates to. The individual parts may also contain their own `Content-Type` header, which tells the server the MIME type of the data that was submitted using this input.
+
+> _A **media type**, aka **Multipurpose Internet Mail Extensions (MIME) type**, indicates the nature and format of a document, file, or assortment of bytes. MIME types are defined and standardized in IETF's RFC 6838._
+
+One way that websites may attempt to validate file uploads is to check that this input-specific `Content-Type` header matches an expected MIME type. If the server is only expecting image files, for example, it may only allow types like `image/jpeg` and `image/png`. Problems can arise when the value of this header is implicitly trusted by the server. If no further validation is performed to check whether the contents of this file actually match the supposed MIME type, this defence can be easily bypassed.
+
+### Lab: Web shell upload via Content-Type restriction bypass
+
+**Objective**: _This lab contains a vulnerable image upload function. It attempts to prevent users from uploading unexpected file types, but relies on checking user-controllable input to verify this. To solve the lab, upload a basic PHP web shell and use it to exfiltrate the contents of the file `/home/carlos/secret`. Submit this secret using the button provided in the lab banner. You can log in to your own account using the following credentials: `wiener:peter`._
+
+1. If we know try to upload the same webshell as before, `webshell.php`, we will get the following message:
+
+    ![](lab2_error.png)
+
+    ![](lab2_upload_burp.png)
+
+2. We can see that the `Content-Type` of `webshell.php` file is `application/x-php`. If we change that to something that the site accepts, `image/jpeg` or `image/png`, we will be able to bypass this restriction:
+
+    ![](lab2_upload_modified.png)
+
+    ![](lab2_upload_webshell.png)
+
+3. We can now visit the URL that our webshell is stored, retrieved the content of the file, and submit our solution:
+
+    ![](lab2_content.png)
+
+    ![](lab2_solved.png)
+
 ## Resources
 
 - [Server-side vulnerabilities](https://portswigger.net/web-security/learning-paths/server-side-vulnerabilities-apprentice).
+- [MIME types (IANA media types)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types)
 - Relate practice: [DVWA File Upload](https://cspanias.github.io/posts/DVWA-File-Upload/).
