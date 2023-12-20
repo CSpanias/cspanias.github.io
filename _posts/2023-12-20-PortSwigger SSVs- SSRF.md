@@ -84,7 +84,7 @@ In the previous example, imagine there is an admin interface at the back-end URL
 
     ![](lab2_stock_request.png)
 
-2. We need to find out the host we need to use since we are only be given a range, `192.168.0.X`. We can do this using the *Intruder*:
+2. We need to find out the host we need to use as we have only a range reference, `192.168.0.X`. We can do this with the *Intruder*:
 
     ![](lab2_payload_position.png)
 
@@ -102,6 +102,7 @@ In the previous example, imagine there is an admin interface at the back-end URL
 
     ![](lab2_solved.png)
 
+    > The target host changed from `192.168.0.179` to `192.168.0.30` due to system issued which caused the lab to restart: the host changes dynamically each time the lab is restarted.
 
 ## Resources
 
