@@ -1,5 +1,5 @@
 ---
-title: PortSwigger SSVs - Server Side Rrequest Forgery
+title: PortSwigger SSVs - Server Side Request Forgery
 date: 2023-12-20
 categories: [Training, PortSwigger]
 tags: [portswigger, server-side-vulnerabilities, server-side-request-forgery, ssrf]
@@ -7,13 +7,66 @@ img_path: /assets/portswigger/server-side/ssrf
 published: true
 ---
 
+## CSRF vs. SSRF
+
+A **Cross-Site Request Forgery (or CSRF)** attack targets the user to execute malicious requests on behalf of the attacker. On the other hand, a **Server-Side Request Forgery** attack primarily targets the backend server to read or update internal resources from an external network.
+
 ## SSRF attacks against the server
 
-> _A **Cross-Site Request Forgery (or CSRF)** attack targets the user to execute malicious requests on behalf of the attacker. On the other hand, a **Server-Side Request Forgery** attack primarily targets the backend server to read or update internal resources from an external network._
+**SSRF** is a web security vulnerability that allows an attacker to cause the server-side app to make requests to an unintented location. Typically, the attacker might cause the server to make a connection to internal-only services within the org's infrastructure. In some cases, the attack can force the server to connect to arbitrary external systems which could leak sensitive data.
+
+In an SSRF attack, the attacker causes the app to make an HTTP request back to the host server using its **loopback network interface** (`127.0.0.1`/`localhost`).
+
+Imagine a shopping app that lets the user view whether an item is in stock in a specific store. To provide the stock info, the app must query various back-end REST APIs. It does this by passing the URL to the relevant back-end API endpoint via a front-end HTTP request. When a user views the stock status for an item, their browser makes the following request:
+
+![](legit_request.png)
+
+This causes the server to make a request to the specified URL, retrieve the stock status, and return this to the user.
+
+In this example, an attacker can modify the request to specify a URL local to the server:
+
+![](modified_request.png)
+
+The server fetches the contents of the `/admin` URL and returns it to the user. 
+
+An attacker can visit the `/admin` URL directly, but its functionality is normally only accessible to authenticated users. However, **if the request comes from the local machine, the normal access controls are bypassed** and the app grants full access to the admin functionality, because the request appears to originate from a trusted location.
+
+This behaviour, i.e., apps implicitly trust requests coming from local machines, can arise for various reasons:
+- The access control check might be implemented in a different component that sits in front of the app server. When a connection is made back to the server, the check is bypassed.
+- For disaster recovery purposes, the app might allow admin access without logging in, to any user coming from the local machine. This provides a way for an admin to recover the system if they lose their credentials. This assumes that only a fully trusted user would come directly to the server.
+- The admin interface might listen on a different port number to the main app, and might not be reachable directly by the users.
+
+These kind of **trust relationships**, where requests originating from the local machine are handled differently than ordinary requests, often make SSRF into a critical vulnerability.
 
 ### Lab: Basic SSRF against the local server
 
-**Objective**: 
+**Objective**:  _This lab has a stock check feature which fetches data from an internal system. To solve the lab, change the stock check URL to access the admin interface at `http://localhost/admin` and delete the user `carlos`._
+
+1. Our goal is to access the `/admin` directory, which we can't as unauthenticated users:
+
+    ![](lab1_admin_dir.png)
+
+2. If we click on a product, we can find a *Check stock* button, which makes the following POST request:
+
+    ![](lab1_check_stock.png)
+
+    ![](lab1_check_stock_request.png)
+
+3. We can modify the `stockApi` parameter to access the `/admin` directory:
+
+    ![](lab1_check_stock_request_modified.png)
+
+    ![](lab1_admin_panel.png)
+
+4. When we try to *Delete* `carlos` the following request is made:
+
+    ![](lab1_delete_request.png)
+
+5. We can now request the above URL via the `stockApi` paramemter. We go back on the product's page, click *Check stock*, and insert the desired URL:
+
+    ![](lab1_stock_delete_request.png)
+
+    ![](lab1_solved.png)
 
 ## SSRF attacks against other back-end systems
 
