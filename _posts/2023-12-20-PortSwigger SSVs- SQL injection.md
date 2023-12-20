@@ -1,82 +1,20 @@
 ---
-title: PortSwigger SSVs - OS command injection
+title: PortSwigger SSVs - SQL injection
 date: 2023-12-20
 categories: [Training, PortSwigger]
-tags: [portswigger, server-side-vulnerabilities, command_injection, burp, command-operators, command-separators]
-img_path: /assets/portswigger/server-side/command_injection
+tags: [portswigger, server-side-vulnerabilities, sqli, burp, sql]
+img_path: /assets/portswigger/server-side/sqli
 published: true
 ---
 
-## What is OS command injection?
+## What is SQL injection (SQLi)?
 
-**OS command injection**, aka **shell injection**, allows an attacker to execute OS commands on the server that is running the app. This can be leveraged to compromise other parts of the hosting infrastructure, and exploit trust relationships to pivot the attack to other systems within the org.
-
-After such a vulnerability is found, it's useful to execute some commands to obtain info about the system:
-
-| | | 
-|:-:|:-:|:-:|
-| Purpose of command | Linux | Windows |
-| Name of current user | 	whoami | whoami|
-| Operating system | 	uname -a | ver|
-| Network configuration| ifconfig | ipconfig /all|
-| Network connections | netstat -an | netstat -an|
-| Running processes | ps -ef | tasklist |
-
-In this example, a shop app lets the user view whether an item is in stock in a particular store. This info is accessed via a URL:  
-`https://domain.com/stockStatus?productID=381&storeID=29`.
-
-To provide stock info, the app must query various legacy systems. For historical reasons, the functionality is implemented by calling out a shell command with the product and store IDs as arguments:
-
-```shell
-stockreport.pl 381 29
-```
-
-This command outputs the stock status for the specified item, which is returned to the user.
-
-The app implements no defences against OS command injection, so an attacker can submit the following input to execute an arbitrary command:
-
-```shell
-& echo aiwefwlguh &
-```
-
-If this input is submitted in the `productID` parameter, the command executed by the app is:
-
-```shell
-stockreport.pl & echo aiwefwlguh & 29
-```
-
-The `echo` command causes the supplied string to be echoed in the output. This is a useful way to test for some types of OS command injection. The `&` character is a shell command operator. In this example, it causes three separate commands to execute, one after another. The output returned to the user is:
-
-```shell
-Error - productID was not provided
-aiwefwlguh
-29: command not found
-```
-
-The three lines of output demonstrate that:
-- The original `stockreport.pl` command was executed without its expected arguments, and so returned an error message.
-- The injected `echo` command was executed, and the supplied string was echoed in the output.
-- The original argument `29` was executed as a command, which caused an error.
-
-Placing the additional command separator `&` after the injected command is useful because it separates the injected command from whatever follows the injection point. This reduces the chance that what follows will prevent the injected command from executing.
 
 ### Lab: OS command injection, simple case
 
-**Objective**: _This lab contains an OS command injection vulnerability in the product stock checker. The application executes a shell command containing user-supplied product and store IDs, and returns the raw output from the command in its response. To solve the lab, execute the `whoami` command to determine the name of the current user._
-
-1. We can find the *Check stock* button on any product's page:
-
-    ![](lab1_stock.png)
-
-    ![](lab1_stock_request.png)
-
-2. We can perform an OS command injection using the `;` character, which allows a command to be executed after the previous is completed:
-
-    ![](lab1_whoami.png)
-
-    ![](lab1_solved.png)
+**Objective**: 
 
 ## Resources
 
 - [Server-side vulnerabilities](https://portswigger.net/web-security/learning-paths/server-side-vulnerabilities-apprentice).
-- Relate practice: [DVWA Command Injection](https://cspanias.github.io/posts/DVWA-Command-Injection/).
+- Relate practice: [DVWA SQLi](https://cspanias.github.io/posts/DVWA-SQL-Injection/), [DVWA SQLi (Blind)](https://cspanias.github.io/posts/DVWA-SQL-Injection-(Blind)/).

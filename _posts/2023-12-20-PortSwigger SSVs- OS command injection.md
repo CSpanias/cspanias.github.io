@@ -12,6 +12,7 @@ published: true
 **OS command injection**, aka **shell injection**, allows an attacker to execute OS commands on the server that is running the app. This can be leveraged to compromise other parts of the hosting infrastructure, and exploit trust relationships to pivot the attack to other systems within the org.
 
 After such a vulnerability is found, it's useful to execute some commands to obtain info about the system:
+
 | | | 
 |:-:|:-:|:-:|
 | **Purpose of command** | **Linux** | **Windows** |
