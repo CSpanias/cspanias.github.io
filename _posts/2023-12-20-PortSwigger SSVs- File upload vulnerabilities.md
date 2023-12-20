@@ -2,7 +2,7 @@
 title: PortSwigger SSVs - File upload vulnerabilities
 date: 2023-12-20
 categories: [Training, PortSwigger]
-tags: [portswigger, server-side-vulnerabilities, file-upload-vulnerabilities]
+tags: [portswigger, server-side-vulnerabilities, file-upload-vulnerabilities, mime, burp, webshell, rce, file-extensions]
 img_path: /assets/portswigger/server-side/file_upload
 published: true
 ---
@@ -11,7 +11,9 @@ published: true
 
 **File upload vulnerabilities** are when a web server allows users to upload files to its filesystem without sufficiently validating things like their name, type, contents, or size. As a result, the user can upload arbitrary and potentially dangerous files.
 
-Developers implement what they believe to be robust validation that is either inherently flawed or can be easily bypassed. For example, they may attempt to **blacking dangerous file types**, but fail to account for parsing discrepancies when checking the file extensions, or miss more obscure file types altogether. In other cases, the website may attempt to **check the file type by verifying properties that can be easily manipulated** by an attacker. Ultimately, even **robust validation measures may be applied inconsistenly** across the network of hosts and directories that form the website, resulting in discrepancies that can be exploited.
+Developers implement what they believe to be robust validation that is either inherently flawed or can be easily bypassed. For example, they may attempt to **blacking dangerous file types**, but fail to account for parsing discrepancies when checking the file extensions, or miss more obscure file types altogether. In other cases, the website may attempt to **check the file type by verifying properties that can be easily manipulated** by an attacker. 
+
+Ultimately, even **robust validation measures may be applied inconsistenly** across the network of hosts and directories that form the website, resulting in discrepancies that can be exploited.
 
 ## Exploiting unrestricted file uploads to deploy a web shell
 
@@ -21,7 +23,7 @@ For a security perspective, the worst possible scenario is when a website allows
 
 If we are able to upload a web shell, we effectively have full control over the server. For example, the following PHP one-liner could be used to read arbitrary files from the server's filesystem:
 
-```PHP
+```php
 <?php echo file_get_contents('/path/to/target/file'); ?>
 ```
 
@@ -33,7 +35,8 @@ A more versatile web shell may look like this:
 <?php echo system($_GET['command']); ?>
 ```
 
-This script enables us to pass an arbitrary system command via a query parameter as follows: `GET /example/exploit.php?command=id HTTP/1.1`.
+This script enables us to pass an arbitrary system command via a query parameter as follows:   
+`GET /example/exploit.php?command=id HTTP/1.1`.
 
 ### Lab: Remote code execution via web shell upload
 
@@ -41,7 +44,7 @@ This script enables us to pass an arbitrary system command via a query parameter
 
 1. Upon logging in, we can see an upload functionality:
 
-    ![](lab1_upload.png)
+    ![](lab1_upload.png){: width="60%" .normal}
 
 2. We notice that this functionality is intended for uploading images, so let's enable Image capturing on Burp:
 
@@ -49,9 +52,9 @@ This script enables us to pass an arbitrary system command via a query parameter
 
 3. We will upload a normal picture and examine how the upload process works:
 
-    ![](lab1_pic_upload.png)
+    ![](lab1_pic_upload.png){: width="60%" .normal}
 
-    ![](lab1_pic_uploaded.png)
+    ![](lab1_pic_uploaded.png){: width="60%" .normal}
 
     ![](lab1_files_dir.png)
 
@@ -71,7 +74,7 @@ This script enables us to pass an arbitrary system command via a query parameter
     -rwxr-xr-x 1 root root 56 Dec 20 14:49 webshell.php
     ```
 
-    ![](lab1_webshell_upload.png)
+    ![](lab1_webshell_upload.png){: .normal}
 
     ![](lab1_content.png)
 
@@ -105,7 +108,7 @@ One way that websites may attempt to validate file uploads is to check that this
 
     ![](lab2_upload_modified.png)
 
-    ![](lab2_upload_webshell.png)
+    ![](lab2_upload_webshell.png){: .normal}
 
 3. We can now visit the URL that our webshell is stored, retrieved the content of the file, and submit our solution:
 

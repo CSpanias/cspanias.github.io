@@ -2,7 +2,7 @@
 title: PortSwigger SSVs - Server Side Request Forgery
 date: 2023-12-20
 categories: [Training, PortSwigger]
-tags: [portswigger, server-side-vulnerabilities, server-side-request-forgery, ssrf]
+tags: [portswigger, server-side-vulnerabilities, server-side-request-forgery, ssrf, burp, burp-intruder, brute-force]
 img_path: /assets/portswigger/server-side/ssrf
 published: true
 ---
