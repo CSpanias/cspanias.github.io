@@ -9,10 +9,81 @@ published: true
 
 ## What is SQL injection (SQLi)?
 
+**SQLi** is a web security vulnerability that allows an attacker to interfere with the queries that an app makes to its database. In many cases, an attacker can not just view the data, but also modify or delete it. In some situations, an attacker can escalate an SQLi attack to compromise the underlying server or other back-end infrastructure. It can also enable them to peform Denial-of-Service (DoS) attacks.
 
-### Lab: OS command injection, simple case
+## How to detect SQLi vulnerabilities
 
-**Objective**: 
+We can detect SQLi vulnerabilities manually using a systemic set of tests against every entry point in the app by typically submitting:
+- The **single quote** character, `'`, and look for errors or other anomalies.
+- Some **SQL-specific syntax** that evaluates to the base (original) value of the entry point, and to a different value, and look for systematic differences in the app responses.
+- **Boolean conditions**, such as `1=1` and `OR 1=2`, and look for differences in the app's responses.
+- Payloads designed to trigger **time delays** when executed within a SQL query, and look for differences in response times.
+- **Out of band Application Security Testing (OAST)** payloads designed to trigger an out-of-band network interaction when executed within a SQL query, and monitor any resulting interactions.
+
+Alternatively, you can find the majority of SQLi vulnerabilities quickly and reliably using Burp Scanner.
+
+## Retrieving hidden data
+
+Imagine a shopping app that displays products in different categories. When the user clicks on the *Gifts* category, their browser requests the URL: `https://domain.com/products?category=Gifts`.
+
+This causes the app to make a SQL query to retrieve the details of the relevant products from the database:
+
+```sql
+SELECT * FROM products WHERE category = 'Gifts' AND released = 1
+```
+
+The restriction `released=1` is being used to hide products that are not released. We could assume for unreleased products this value would be set to `0`.
+
+The app does not implement any defences against SQLi attacks. This means an attacker can construct the following attack: `https://domain.com/products?category=Gifts'--`.
+
+This results in the SQL query:
+
+```sql
+SELECT * FROM products WHERE category = 'Gifts'--' AND released = 1
+```
+
+Crucially, note that `--` is a **comment indicator** in SQL. This means that the rest of the query is interpreted as a comment, effectively removing it. As a result, the query no longer includes `AND released = 1` and all products are displayed, including those that are not yet released.
+
+You can use a similar attack to cause the app to display all the products in any category, including categories that they don't know about: `https://domain.com/products?category=Gifts'+OR+1=1--`.
+
+This results in the SQL query:
+
+```sql
+SELECT * FROM products WHERE category = 'Gifts' OR 1=1--' AND released = 1
+```
+
+The modified query returns all items where either the `category` is `Gifts`, or `1` is equal to `1`. As `1=1` is always true, the query returns all items.
+
+> Take care when injecting the condition `OR 1=1` into a SQL query. Even if it appears to be harmless in the context you are injecting into, it is common for apps to use data from a single request in multiple different queries. If your condition reaches an `UPDATE` or `DELETE` statement, for example, it can result in an accidental loss of data.
+
+### Lab: SQL injection vulnerability in WHERE clause allowing retrieval of hidden data
+
+**Objective**: _This lab contains a SQLi vulnerability in the product category filter. When the user selects a category, the application carries out a SQL query like the following:_
+
+```sql
+SELECT * FROM products WHERE category = 'Gifts' AND released = 1
+```
+
+_To solve the lab, perform a SQL injection attack that causes the application to display one or more unreleased products._
+
+1. The homepage includes a filter based on product category:
+
+    ![](lab1_home.png)
+
+2. When we select a category, the address bar changes and includes a `category` parameter:
+
+    ![](lab1_pets_category.png)
+
+3. If we inject `'--` after `Pets`, this will comment out whatever follows, in this case `AND released = 1`, and the site will display all products:
+
+    ![](lab1_sqli.png)
+
+4. To mark this lab as solved, we will need to display all products:
+
+    ![](lab1_solved.png)
+
+## 
+
 
 ## Resources
 
