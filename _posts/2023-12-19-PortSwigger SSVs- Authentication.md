@@ -64,17 +64,35 @@ _To solve the lab, enumerate a valid username, brute-force this user's password,
 
     ![](lab1_solved.png)
 
-## Bypassing two-factor authentication
+## Bypassing two-factor authentication (2FA)
 
-Some implementations of two-factor authentication happen in two separate stages:
+Some implementations of 2FA happen in two separate stages:
 1. The user is first prompted to enter a password.
 2. The user is then prompted to enter a verification code on a separate page.
 
 As a result, the user is already in a "logged in" state before they have entered the verification code. In some cases, we can directly skip the second part.
 
-### 
+### Lab: 2FA simple bypass
+
+**Objective**: _This lab's 2FA can be bypassed. You have already obtained a valid username and password, but do not have access to the user's 2FA verification code. To solve the lab, access Carlos's account page._
+- _Your credentials: `wiener:peter`_
+- _Victim's credentials: `carlos:montoya`_
+
+1. We can login with `wiener`'s credentials and examine how this works so we can find out where the process is vulnerable:
+
+    ![](lab2_wiener_login.png)
+
+    ![](lab2_wiener_email.png)
+
+    ![](lab2_wiener_account.png)
+
+2. Now, if we login with the victim's credentials, instead of passing through the whole process, we can just skip the 2FA and access the victim's account directly:
+
+    ![](lab2_carlos_login.png)
+
+    ![](lab2_carlos_account.png)
 
 ## Resources
 
 - [Server-side vulnerabilities](https://portswigger.net/web-security/learning-paths/server-side-vulnerabilities-apprentice).
-- Related practice: [DVWA Authorization Bypass](https://cspanias.github.io/posts/DVWA-Authorisation-Bypass/).
+- Related practice: [DVWA Authorization Bypass](https://cspanias.github.io/posts/DVWA-Authorisation-Bypass/), [DVWA Insecure CAPTCHA](https://cspanias.github.io/posts/DVWA-Insecure-CAPTCHA/).
