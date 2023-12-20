@@ -76,4 +76,4 @@ Placing the additional command separator `&` after the injected command is usefu
 ## Resources
 
 - [Server-side vulnerabilities](https://portswigger.net/web-security/learning-paths/server-side-vulnerabilities-apprentice).
-- Relate practice: [DVWA Command Injection](https://cspanias.github.io/posts/DVWA-Command-Injection/).
+- Related practice: [DVWA Command Injection](https://cspanias.github.io/posts/DVWA-Command-Injection/).

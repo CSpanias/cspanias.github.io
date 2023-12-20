@@ -120,4 +120,4 @@ One way that websites may attempt to validate file uploads is to check that this
 
 - [Server-side vulnerabilities](https://portswigger.net/web-security/learning-paths/server-side-vulnerabilities-apprentice).
 - [MIME types (IANA media types)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types)
-- Relate practice: [DVWA File Upload](https://cspanias.github.io/posts/DVWA-File-Upload/).
+- Related practice: [DVWA File Upload](https://cspanias.github.io/posts/DVWA-File-Upload/).

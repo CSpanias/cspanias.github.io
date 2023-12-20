@@ -82,10 +82,33 @@ _To solve the lab, perform a SQL injection attack that causes the application to
 
     ![](lab1_solved.png)
 
-## 
+## Subverting application logic
 
+Imagine an app that lets user log in with a username and password. If a user submits the username `wiener` and the password `bluecheese`, the app checks the credentials by performing the following SQL query:
+
+```sql
+SELECT * FROM users WHERE username = 'wiener' AND password = 'bluecheese'
+```
+
+If the query returns a user's details, then the login is successful. Otherwise, is rejected. An attacker can leverage this and use an SQLi attack to log in as any user without needing a password:
+
+```sql
+SELECT * FROM users WHERE username = 'administrator'--' AND password = ''
+```
+
+This query returns the user whose `username` is `administrator` and successfully logs the attacker in as that user.
+
+### Lab: SQL injection vulnerability allowing login bypass
+
+**Objective**: _This lab contains a SQL injection vulnerability in the login function. To solve the lab, perform a SQL injection attack that logs in to the application as the `administrator` user._
+
+1. To solve this lab, we simply comment out the `password` field by injecting `'--` after the desired username:
+
+    ![](lab2_login.png)
+
+    ![](lab2_solved.png)
 
 ## Resources
 
 - [Server-side vulnerabilities](https://portswigger.net/web-security/learning-paths/server-side-vulnerabilities-apprentice).
-- Relate practice: [DVWA SQLi](https://cspanias.github.io/posts/DVWA-SQL-Injection/), [DVWA SQLi (Blind)](https://cspanias.github.io/posts/DVWA-SQL-Injection-(Blind)/).
+- Related practice: [DVWA SQLi](https://cspanias.github.io/posts/DVWA-SQL-Injection/), [DVWA SQLi (Blind)](https://cspanias.github.io/posts/DVWA-SQL-Injection-(Blind)/).
