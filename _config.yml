@@ -196,5 +196,4 @@ jekyll-archives:
 
 # Publish posts or collection documents with a future date.
 # future: BOOL
-# --future
 future: true
