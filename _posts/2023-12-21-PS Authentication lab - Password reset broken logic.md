@@ -13,17 +13,17 @@ published: true
 
 1. The site has a *Forgot password?* functionality, so let's use that for the account `wiener` to see how it works:
 
-    ![](lab1_forgot_password.png)
+    ![](lab1_forgot_password.png){: width="60%" .normal}
 
-    ![](lab1_forgot_user.png)
+    ![](lab1_forgot_user.png){: .normal}
 
 2. When we reset `wiener`'s password, it prompts up to check our email. So let's login and do that:
 
-    ![](lab1_wiener.png)
+    ![](lab1_wiener.png){: width="70%" .normal}
 
     ![](lab1_reset_email.png)
 
-    ![](lab1_forgot_new_pass.png)
+    ![](lab1_forgot_new_pass.png){: width="70%" .normal}
 
 3. If we examine the request when we submit a new password, we will see that it includes a `username` parameter which we might be able to manipulate:
 
