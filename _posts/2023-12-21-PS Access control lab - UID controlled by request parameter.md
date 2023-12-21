@@ -1,5 +1,5 @@
 ---
-title: PS Access control lab - User ID controlled by request parameter
+title: PS Access control lab - UID controlled by request parameter
 date: 2023-12-21
 categories: [Training, PortSwigger]
 tags: [portswigger, lab, access_control, burp]
