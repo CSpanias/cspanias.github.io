@@ -7,7 +7,7 @@ img_path: /assets/portswigger/labs/access_control/
 published: true
 ---
 
-**Objective**: _This lab contains an access control vulnerability where sensitive information is leaked in the body of a redirect response. To solve the lab, obtain the API key for the user `carlos` and submit it as the solution. You can log in to your own account using the following credentials: `wiener:peter`._
+> **Objective**: _This lab contains an access control vulnerability where sensitive information is leaked in the body of a redirect response. To solve the lab, obtain the API key for the user `carlos` and submit it as the solution. You can log in to your own account using the following credentials: `wiener:peter`._
 
 1. When we login with `wiener` a POST request is sent, and then we will notice a GET request which includes the `id` parameter:
 

@@ -7,7 +7,7 @@ img_path: /assets/portswigger/labs/access_control/
 published: true
 ---
 
-**Objective**: _This lab has a horizontal privilege escalation vulnerability on the user account page. To solve the lab, obtain the API key for the user `carlos` and submit it as the solution. You can log in to your own account using the following credentials: `wiener:peter`._
+> **Objective**: _This lab has a horizontal privilege escalation vulnerability on the user account page. To solve the lab, obtain the API key for the user `carlos` and submit it as the solution. You can log in to your own account using the following credentials: `wiener:peter`._
 
 1. When we login with the account `wiener`, we are given his API key:
 
