@@ -7,7 +7,7 @@ img_path: /assets/portswigger/labs/access_control/
 published: true
 ---
 
-**Objective**: _This lab has an admin panel at `/admin`. It's only accessible to logged-in users with a `roleid` of `2`. Solve the lab by accessing the admin panel and using it to delete the user `carlos`. You can log in to your own account using the following credentials: `wiener:peter`.
+**Objective**: _This lab has an admin panel at `/admin`. It's only accessible to logged-in users with a `roleid` of `2`. Solve the lab by accessing the admin panel and using it to delete the user `carlos`. You can log in to your own account using the following credentials: `wiener:peter`._
 
 1. When trying to access `/admin` with the user `wiener`:
 
