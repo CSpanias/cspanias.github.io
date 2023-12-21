@@ -1,24 +1,39 @@
 ---
-title: PS Access control lab - UID controlled by request parameter
+title: PS Authentication lab - Password reset broken logic
 date: 2023-12-21
 categories: [Training, PortSwigger]
-tags: [portswigger, lab, access_control, burp]
-img_path: /assets/portswigger/labs/access_control/
+tags: [portswigger, lab, authentication, burp]
+img_path: /assets/portswigger/labs/authentication/
 published: true
 ---
 
-**Objective**: _This lab has a horizontal privilege escalation vulnerability on the user account page. To solve the lab, obtain the API key for the user `carlos` and submit it as the solution. You can log in to your own account using the following credentials: `wiener:peter`._
+**Objective**: _This lab's password reset functionality is vulnerable. To solve the lab, reset Carlos's password then log in and access his "My account" page._
+- _Your credentials: `wiener:peter`._
+- _Victim's username: `carlos`._
 
-1. When we login with the account `wiener`, we are given his API key:
+1. The site has a *Forgot password?* functionality, so let's use that for the account `wiener` to see how it works:
 
-    ![](lab2_api_key_wiener.png)
+    ![](lab1_forgot_password.png)
 
-    ![](lab2_api_key_wiener_burp.png)
+    ![](lab1_forgot_user.png)
 
-2. If we change the `id` parameter to `carlos` we will be able to get his API key and submit our solution:
+2. When we reset `wiener`'s password, it prompts up to check our email. So let's login and do that:
 
-    ![](lab2_api_key_carlos.png)
+    ![](lab1_wiener.png)
 
-    ![](lab2_api_key_carlos_burp.png)
+    ![](lab1_reset_email.png)
 
-    ![](lab2_solved.png)
+    ![](lab1_forgot_new_pass.png)
+
+3. If we examine the request when we submit a new password, we will see that it includes a `username` parameter which we might be able to manipulate:
+
+    ![](lab1_forgot_new_pass_burp.png)
+
+4. We will do the process all over again, intercept the request when submitting our new password, and change the `username` parameter value to `carlos`:
+
+    ![](lab1_forgot_new_pass_carlos_burp.png)
+
+5. Then we will login with `carlos` account and his new password:
+
+    ![](lab1_solved.png)
+
