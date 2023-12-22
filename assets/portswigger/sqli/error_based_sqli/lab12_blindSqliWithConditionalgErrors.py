@@ -93,7 +93,6 @@ def main():
     print("(+) Retrieving administrator password...")
     sqli_password(url)
 
-
 # execute the main function
 if __name__ == "__main__":
     main()
