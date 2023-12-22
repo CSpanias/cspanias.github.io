@@ -14,7 +14,7 @@
 #   way to brute-force the password of the user 'administrator'.                                                                                          #
 #                                                                                                                                                         #
 # Changes:                                                                                                                                                #
-#   1. Remove proxies.                                                                                                                                    #
+#   1. Removed proxies.                                                                                                                                   #
 #   2. Created and used alphanumeric lists directly instead of using ASCII representations and then converting them to alphanumeric.                      #
 #   3. Used simplified payload.                                                                                                                           #
 #   4. Automated cookie grabbing.                                                                                                                         #
