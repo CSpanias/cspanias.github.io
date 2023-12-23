@@ -1,5 +1,5 @@
 ---
-title: PS Authentication lab - Password reset broken logic
+title: Authentication - Password reset broken logic
 date: 2023-12-21
 categories: [PortSwigger, Lab]
 tags: [portswigger, lab, authentication, burp]

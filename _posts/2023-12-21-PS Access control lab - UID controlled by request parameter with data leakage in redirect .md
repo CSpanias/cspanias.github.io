@@ -1,5 +1,5 @@
 ---
-title: PS Access control lab - UID controlled by request parameter with data leakage in redirect
+title: Access control - UID controlled by request parameter with data leakage in redirect
 date: 2023-12-21
 categories: [PortSwigger, Lab]
 tags: [portswigger, lab, access_control, burp]

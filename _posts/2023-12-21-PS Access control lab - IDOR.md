@@ -1,5 +1,5 @@
 ---
-title: PS Access control lab - Insecure Direct Object References
+title: Access control - Insecure Direct Object References
 date: 2023-12-21
 categories: [PortSwigger, Lab]
 tags: [portswigger, lab, access_control, burp, idor]
