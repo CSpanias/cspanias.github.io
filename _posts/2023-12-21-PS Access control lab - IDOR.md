@@ -1,7 +1,7 @@
 ---
 title: PS Access control lab - Insecure Direct Object References
 date: 2023-12-21
-categories: [Training, PortSwigger]
+categories: [PortSwigger, Lab]
 tags: [portswigger, lab, access_control, burp, idor]
 img_path: /assets/portswigger/labs/access_control/
 published: true
