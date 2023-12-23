@@ -1,7 +1,7 @@
 ---
 title: DVWA - File Inclusion
 date: 2023-12-09
-categories: [Training, DVWA]
+categories: [DVWA]
 tags: [dvwa, file-inclusion, burp-suite, directory-traversal, wfuzz, dir-busting]
 img_path: /assets/dvwa/file_inclusion
 published: true

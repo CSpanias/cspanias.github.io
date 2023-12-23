@@ -1,7 +1,7 @@
 ---
 title: DVWA - SQL Injection (Blind)
 date: 2023-12-14
-categories: [Training, DVWA]
+categories: [DVWA]
 tags: [dvwa, sqli, blind-sqli, burp-suite, sqlmap, md5, hash]
 img_path: /assets/dvwa/sqli_blind
 published: true

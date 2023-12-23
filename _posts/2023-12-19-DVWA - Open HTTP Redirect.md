@@ -1,7 +1,7 @@
 ---
 title: DVWA - Open HTTP Redirect
 date: 2023-12-19
-categories: [Training, DVWA]
+categories: [DVWA]
 tags: [dvwa, burp, open-http-redirect, http, http-codes]
 img_path: /assets/dvwa/open_http_redirect
 published: true

@@ -1,7 +1,7 @@
 ---
 title: DVWA - Insecure CAPTCHA
 date: 2023-12-11
-categories: [Training, DVWA]
+categories: [DVWA]
 tags: [dvwa, captcha, burp-suite, user-agent]
 img_path: /assets/dvwa/insecure_captcha
 published: true

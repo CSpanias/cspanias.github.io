@@ -1,7 +1,7 @@
 ---
 title: DVWA - SQL Injection
 date: 2023-12-13
-categories: [Training, DVWA]
+categories: [DVWA]
 tags: [dvwa, sqli, burp-suite, inspector, mariadb, hash, john, md5]
 img_path: /assets/dvwa/sqli
 published: true

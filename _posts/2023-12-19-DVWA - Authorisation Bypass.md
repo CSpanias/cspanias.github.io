@@ -1,7 +1,7 @@
 ---
 title: DVWA - Authorisation Bypass
 date: 2023-12-19
-categories: [Training, DVWA]
+categories: [DVWA]
 tags: [dvwa, auth-bypass, idor, authentication, authorization, burp, burp-repeater]
 img_path: /assets/dvwa/auth_bypass
 published: true

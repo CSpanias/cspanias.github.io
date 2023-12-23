@@ -1,7 +1,7 @@
 ---
 title: DVWA - Weak Sessions IDs
 date: 2023-12-14
-categories: [Training, DVWA]
+categories: [DVWA]
 tags: [dvwa, session-ids, burp, burp-repeater, burp-sequencer, burp-intruder, hash, md5, john, cookies]
 img_path: /assets/dvwa/weak_session_ids
 published: true

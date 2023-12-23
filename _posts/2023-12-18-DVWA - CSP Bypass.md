@@ -1,7 +1,7 @@
 ---
 title: DVWA - CSP Bypass
 date: 2023-12-18
-categories: [Training, DVWA]
+categories: [DVWA]
 tags: [dvwa, csp, csp-bypass, burp, xss, javascript, js, php, nonce]
 img_path: /assets/dvwa/csp_bypass
 published: true
