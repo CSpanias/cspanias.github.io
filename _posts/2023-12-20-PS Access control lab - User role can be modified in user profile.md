@@ -1,7 +1,7 @@
 ---
 title: PS Access control lab - User role can be modified in user profile
 date: 2023-12-20
-categories: [Training, PortSwigger]
+categories: [PortSwigger, Lab]
 tags: [portswigger, lab, access_control, burp]
 img_path: /assets/portswigger/labs/access_control/
 published: true
