@@ -9,9 +9,6 @@ published: true
 
 ![](room_banner.png){: width="70%" style="display:block; margin-left:auto; margin-right:auto"}
 
-
-![](room_banner.png){: width="70%" .center-image }
-
 1. The website looks like this:
 
     ![](home.png)
