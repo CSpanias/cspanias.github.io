@@ -7,13 +7,13 @@ img_path: /assets/picoctf/web_exploitation/where_are_the_robots
 published: true
 ---
 
-![](room_banner.png)
+![](room_banner.png){: width="70%" .normal}
 
 1. The website looks like this:
 
     ![](home.png)
 
-2. There is a `/robots.txt` directory:
+2. As the title suggests, there must be a `/robots.txt` directory:
 
     ![](robots_dir.png)
 
