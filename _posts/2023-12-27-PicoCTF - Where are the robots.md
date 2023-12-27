@@ -7,7 +7,7 @@ img_path: /assets/picoctf/web_exploitation/where_are_the_robots
 published: true
 ---
 
-![](room_banner.png){: width="70%" .normal}
+![](room_banner.png){: width="70%" }
 
 1. The website looks like this:
 
