@@ -7,7 +7,7 @@ img_path: /assets/picoctf/web_exploitation/logon
 published: true
 ---
 
-    ![](room_banner.png){: width="70%" .normal}
+![](room_banner.png){: width="70%" .normal}
 
 1. The website lands us on a login form:
 

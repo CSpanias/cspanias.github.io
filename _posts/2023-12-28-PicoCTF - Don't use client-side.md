@@ -7,7 +7,7 @@ img_path: /assets/picoctf/web_exploitation/dont_use_client_side
 published: true
 ---
 
-    ![](room_banner.png){: width="70%" .normal}
+![](room_banner.png){: width="70%" .normal}
 
 1. The website lands us on a secure login portal:
 
