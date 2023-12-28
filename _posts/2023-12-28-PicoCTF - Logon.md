@@ -15,7 +15,7 @@ published: true
 
 2. If we try to log in as `Joe` we get an error message:
 
-    ![](joe_failed_login.png)
+    ![](joe_failed_login.png){: width="60%" .normal}
 
 2. When we put random credentials as a test, e.g. `test:test`, we are able to log in:
 
