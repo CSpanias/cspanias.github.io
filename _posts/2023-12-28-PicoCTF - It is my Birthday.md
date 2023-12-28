@@ -2,34 +2,34 @@
 title: PicoCTF - It is my Birthday
 date: 2023-12-28
 categories: [CTF, Web Exploitation]
-tags: [picoctf, web-exploitation, it-is-my-birthday]
+tags: [picoctf, web-exploitation, it-is-my-birthday, hash, MD5, collision]
 img_path: /assets/picoctf/web_exploitation/it_is_my_birthday
 published: true
 ---
 
 ![](room_banner.png){: width="70%" .normal}
 
-1. The website lands us on a login form:
+1. The website lands us on an upload functionality:
 
     ![](home.png){: width="60%" .normal}
 
 2. Let's create a PDF file and try to upload it:
 
-    ![](test_pdf.png)
+    ![](test_pdf.png){: width="70%" .normal}
 
-    ![](test_upload.png)
+    ![](test_upload.png){: width="75%" .normal}
 
-    ![](error_message.png)
+    ![](error_message.png){: .normal}
 
 3. Let's create a different PDF file and try:
 
-    ![](test1_pdf.png)
+    ![](test1_pdf.png){: width="70%" .normal}
 
-    ![](test_upload_1.png)
+    ![](test_upload_1.png){: width="75%" .normal}
 
-    ![](error_message_2.png)
+    ![](error_message_2.png){: .normal}
 
-4. So we have to upload different files with the same MD5 hash! Let's calculate the md5 hashes of our PDFs:
+4. Let's calculate the MD5 hashes of our PDFs:
 
     ```shell
     $ md5sum test.pdf
@@ -59,9 +59,9 @@ published: true
 
 8. Now everything should be ready to go:
 
-    ![](upload_poems.png)
+    ![](upload_poems.png){: width="75%" .normal}
 
-    ![](flag.png)
+    ![](flag.png){: .normal}
 
 
 ## Solution 2
@@ -70,7 +70,7 @@ published: true
 
     ![](bins_md5.png)
 
-7. Let's check the bins' MD5 hashes, and then try to upload them:
+7. Let's check the binaries' MD5 hashes, and then try to upload them:
 
     ```shell
     $ md5sum erase
@@ -80,9 +80,9 @@ published: true
     da5c61e1edc0f18337e46418e48c1290  hello
     ```
 
-    ![](bin_upload_browser.png)
+    ![](bin_upload_browser.png){: width="75%" .normal}
 
-    ![](bin_upload_fail.png)
+    ![](bin_upload_fail.png){: .normal}
 
 8. We can try changing the [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types) of the binaries using Burp:
 
