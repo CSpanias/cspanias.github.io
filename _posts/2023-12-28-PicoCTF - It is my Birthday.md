@@ -29,7 +29,7 @@ published: true
 
     ![](error_message_2.png)
 
-4. So we have to upload different files with the same MD5 hash! Let's see the md5 hashes of our PDFs. `test.pdf` and `test2.pdf` has the same content, i.e. `test`:
+4. So we have to upload different files with the same MD5 hash! Let's calculate the md5 hashes of our PDFs:
 
     ```shell
     $ md5sum test.pdf
@@ -37,16 +37,17 @@ published: true
 
     $ md5sum test1.pdf
     db5a11f395bb3568f3fd03467049b5e7  test1.pdf
-
-    $ md5sum test2.pdf
-    7d2a156b9a52b714cdbbbd7f3b10dc67  test2.pdf
     ```
 
-5. If we search Google for "MD5 hash collision GitHub" we will find the [corkami's collisions](https://github.com/corkami/collisions) repository. There is a [PDF section](https://github.com/corkami/collisions#pdf) which includes the following examples:
+5. So we have to find two different files, ideally PDFs, with the same MD5 hash!
+
+## Solution 1
+
+6. If we search Google for "MD5 hash collision GitHub" we will find the [corkami's collisions](https://github.com/corkami/collisions) repository. There is a [PDF section](https://github.com/corkami/collisions#pdf) which includes the following examples:
 
     ![](pdf_repo.png)
 
-6. We can download these PDF files, [poeMD5_A.pdf](https://github.com/corkami/collisions/blob/master/examples/poeMD5_A.pdf) and [poeMD5_B.pdf](https://github.com/corkami/collisions/blob/master/examples/poeMD5_B.pdf), and check their MD5 hashes:
+7. We can download these PDF files, [poeMD5_A.pdf](https://github.com/corkami/collisions/blob/master/examples/poeMD5_A.pdf) and [poeMD5_B.pdf](https://github.com/corkami/collisions/blob/master/examples/poeMD5_B.pdf), and check their MD5 hashes:
 
     ```shell
     $ md5sum poeMD5_A.pdf
@@ -56,10 +57,35 @@ published: true
     b347b04fac568905706c04f3ba4e221d  poeMD5_B.pdf
     ```
 
-7. Now everything should be ready to go:
+8. Now everything should be ready to go:
 
     ![](upload_poems.png)
 
     ![](flag.png)
 
 
+## Solution 2
+
+6. There is also [Selinger's MD5 Collision Demo](https://www.mscs.dal.ca/~selinger/md5collision/) which includes different binaries with the same MD5 hash:
+
+    ![](bin_md5.png)
+
+7. Let's check the bins' MD5 hashes, and then try to upload them:
+
+    ```shell
+    $ md5sum erase
+    da5c61e1edc0f18337e46418e48c1290  erase
+
+    $ md5sum hello
+    da5c61e1edc0f18337e46418e48c1290  hello
+    ```
+
+    ![](bin_upload_browser.png)
+
+    ![](bin_upload_fail.png)
+
+8. We can try changing the [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types) of the binaries using Burp:
+
+    ![](erase_upload_burp.png)
+
+    ![](erase_upload_burp_mod.png)
