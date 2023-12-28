@@ -68,7 +68,7 @@ published: true
 
 6. There is also [Selinger's MD5 Collision Demo](https://www.mscs.dal.ca/~selinger/md5collision/) which includes different binaries with the same MD5 hash:
 
-    ![](bin_md5.png)
+    ![](bins_md5.png)
 
 7. Let's check the bins' MD5 hashes, and then try to upload them:
 
