@@ -17,8 +17,10 @@ published: true
 
 2. By viewing the page's source code, we can see two links: one for the CSS file, `style.css`, and the other for the JavaScript code, `script.js`:
 
-    ![](css.png)
+    ![](source_code.png){: .normal }
 
-    ![](js.png)
+3. By visiting these two links, we will finds that the required flag is separated in two parts:
 
-    By combining the two parts, we can submit the challenge's flag!
+    ![](css.png){: .normal }
+
+    ![](js.png){: .normal }
