@@ -2,14 +2,14 @@
 title: PicoCTF - Local Authority
 date: 2023-12-29
 categories: [CTF, Web Exploitation]
-tags: [picoctf, web-exploitation, local-authority]
+tags: [picoctf, web-exploitation, local-authority, burp, php, javascript]
 img_path: /assets/picoctf/web_exploitation/local_authority
 published: true
 ---
 
 ![](room_banner.png){: width="70%" .normal}
 
-1. The homepage is a *Secure Customer Portal* which constis of a login form:
+1. The homepage is a *Secure Customer Portal* which consists of a login form:
 
     ![](home.png){: .normal}
 
