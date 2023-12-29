@@ -11,13 +11,13 @@ published: true
 
 1. The homepage is a *Secure Customer Portal* which constis of a login form:
 
-    ![](home.png)
+    ![](home.png){: .normal}
 
 2. We can try logging in with random credentials, in this case `test:test`, and check what happens behind the scenes with Burp. There is a `POST` HTTP request to `login.php` which contains some interesting code snippets:
 
-    ![](login_failed.png)
+    ![](login_failed.png){: .normal}
 
-    ![](login_php.png)
+    ![](login_php.png){: .normal}
 
     There is hidden directory called `admin.php` that we can send a `POST` request to, which includes the parameter `hash` and it seems to has as its value a hashed string:
 
@@ -85,4 +85,4 @@ published: true
 
     ![](secure_js.png)
 
-    ![](flag.png)
+    ![](flag.png){: .normal}
