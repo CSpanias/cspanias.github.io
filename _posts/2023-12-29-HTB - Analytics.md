@@ -7,7 +7,7 @@ img_path: /assets/analytics/
 published: true
 ---
 
-![room_banner](blue_banner.png)
+![room_banner](room_banner.png)
 
 ## Overview
 
