@@ -17,7 +17,7 @@ published: true
 
 2. This challenge is focusing on HTTP headers, such having a [list of HTTP header fields](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields) open would be handy. Since it mentions `PicoBrowser` we can add that to the `User-Agent` HTTP header:
 
-    > _[User-Agent header](the User-Agent header is an HTTP header intended to identify the user agent responsible for making a given HTTP request)._
+    > _The [User-Agent](https://en.wikipedia.org/wiki/User-Agent_header) header is an HTTP header intended to identify the user agent responsible for making a given HTTP request._
 
     ![](add_picobrowser.png){: width="60%" .normal}
 
