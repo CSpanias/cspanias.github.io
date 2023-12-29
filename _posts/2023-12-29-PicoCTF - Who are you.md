@@ -15,37 +15,37 @@ published: true
 
     ![](home_burp.png)
 
-2. This challenge is focusing on HTTP headers, such having a [list of HTTP header fields](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields) open would be handy. Since it mentions `PicoBrowser` we can add that to the `User-Agent` HTTP header:
+2. This challenge is focusing on HTTP headers, so having a [list of HTTP header fields](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields) open would be handy. Since it mentions `PicoBrowser` we can add that to the `User-Agent` HTTP header:
 
     > _The [User-Agent](https://en.wikipedia.org/wiki/User-Agent_header) header is an HTTP header intended to identify the user agent responsible for making a given HTTP request._
 
-    ![](add_picobrowser.png){: width="60%" .normal}
-
     ![](add_picobrowser_burp.png)
 
-3.  Now the message directs us to the request's origin, so let's add the `Referer` HTTP header and set its value to the same original as the `Host`'s header:
+    ![](add_picobrowser.png){: width="60%" .normal}
 
-    > _In HTTP, "[Referer](https://en.wikipedia.org/wiki/HTTP_referer)" (a misspelling of Referrer[1]) is an optional HTTP header field that identifies the address of the web page (i.e., the URI or IRI), from which the resource has been requested. By checking the referrer, the server providing the new web page can see where the request originated._
+3.  Now the message directs us to the request's origin, so let's add the `Referer` HTTP header and set its value to the same origin as the `Host`'s header:
 
-    ![](referer_header.png){: width="60%" .normal}
+    > _In HTTP, "[Referer](https://en.wikipedia.org/wiki/HTTP_referer)" (a misspelling of Referrer) is an optional HTTP header field that identifies the address of the web page (i.e., the URI or IRI), from which the resource has been requested. By checking the referrer, the server providing the new web page can see where the request originated._
 
     ![](referer_header_burp.png)
+
+    ![](referer_header.png){: width="60%" .normal}
 
 4. Based on the message, we can now add the `Date` HTTP header:
 
     > _The [Date](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Date) general HTTP header contains the date and time at which the message originated._
 
-    ![](date_header.png){: width="60%" .normal}
-
     ![](date_header_burp.png)
+
+    ![](date_header.png){: width="60%" .normal}
 
 5. Next, let's add the `DNT` (Do-Not-Track) HTTP header:
 
     > _[Do Not Track (DNT)](https://en.wikipedia.org/wiki/Do_Not_Track) is a formerly official HTTP header field, designed to allow internet users to opt-out of tracking by websites._
 
-    ![](dnt_header.png){: width="60%" .normal}
-
     ![](dnt_header_burp.png)
+
+    ![](dnt_header.png){: width="60%" .normal}
 
 6. Now, we have to find a relevant header that identifies the origin of the IP address, that is, `X-Forwarded-For`, combined with a Swedish IP address:
 
@@ -55,9 +55,9 @@ published: true
 
     ![](swedish_ips.png){: .normal}
 
-    ![](xForwardedFor.png){: width="60%" .normal}
-
     ![](xForwardedFor_burp.png)
+
+    ![](xForwardedFor.png){: width="60%" .normal}
 
 7. Let's also add the `Accept-Language` HTTP header:
 
