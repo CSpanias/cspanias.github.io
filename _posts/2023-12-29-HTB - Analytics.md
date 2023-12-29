@@ -20,7 +20,7 @@ published: true
 > CONTENT HIDDEN - ACTIVE MACHINE!
 {: .prompt-warning}
 
-## Information gathering
+<!-- ## Information gathering
 
 ```shell
 # port-scanning
@@ -159,7 +159,7 @@ There is the [GameOver(lay) Ubuntu Privilege Escalation](https://github.com/g1vi
   uid=0(root) gid=1000(metalytics) groups=1000(metalytics)
   root@analytics:/tmp# ls /root/
   root.txt
-  ```
+  ``` -->
 
 <figure>
     <img src="machine_pwned.png"
