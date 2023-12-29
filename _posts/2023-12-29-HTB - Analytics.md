@@ -33,11 +33,11 @@ PORT   STATE SERVICE VERSION
 |_http-title: Did not follow redirect to http://analytical.htb/
 ```
 
-## Web enumeration
+## Initial foothold
 
 According to Nmap's output, the HTTP server redirects us to `http://analytical.htb/`, so we have to add it to our `/etc/hosts` file:
 
-  ![](etc_hosts.png)
+  ![](etc_hosts.png){: .normal }
 
   ![](home.png)
 
@@ -47,9 +47,9 @@ When clicking on `Login` we are redirected to `data.analytical.htb`:
 
 Let's us add this to `/etc/hosts` as well:
 
-  ![](etc_hosts_1.png)
+  ![](etc_hosts_1.png){: .normal }
 
-  ![](home_data.png)
+  ![](home_data.png){: .normal width="70%"}
 
 Viewing the page source, we can find Metabase's version:
 
@@ -57,7 +57,7 @@ Viewing the page source, we can find Metabase's version:
 
 Searching Google for a public exploit we find the [Metabase Pre-Auth RCE (CVE-2023-38646) POC](https://github.com/Pyr0sec/CVE-2023-38646). This requires the value of the `setup token` which can be found in the `/api/session/properties` directory:
 
-  ![](setup-token.png)
+  ![](setup-token.png){: .normal }
 
 All we have to do now, is to open a listener and run the PoC with a Bash reverse shell payload:
 
@@ -81,6 +81,8 @@ All we have to do now, is to open a listener and run the PoC with a Bash reverse
   bash: no job control in this shell
   59a5ee253db5:/$
   ```
+
+## Privilege escalation
 
 After exploring the environment, we can find some credentials listed on the `env` variable:
 
@@ -141,7 +143,7 @@ There isn't anything of interest laying around, so we can check the kernel's ver
   
   ```shell
   metalytics@analytics:/$ uname -a
-  Linux analytics 6.2.0-25-generic \#25~22.04.2-Ubuntu SMP PREEMPT_DYNAMIC Wed Jun 28 09:55:23 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
+  Linux analytics 6.2.0-25-generic #25~22.04.2-Ubuntu SMP PREEMPT_DYNAMIC Wed Jun 28 09:55:23 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
   ```
 
 There is the [GameOver(lay) Ubuntu Privilege Escalation](https://github.com/g1vi/CVE-2023-2640-CVE-2023-32629) which we can copy and paste on our target from the `/tmp` directory:
