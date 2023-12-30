@@ -16,7 +16,10 @@ published: true
 |Rank|Easy|
 |Category|Web|
 
-1. The home page is _a super secure Javascript calculator_:
+> CONTENT HIDDEN - ACTIVE MACHINE!
+{: .prompt-warning}
+
+<!-- 1. The home page is _a super secure Javascript calculator_:
 
     ![](home.png)
 
@@ -55,7 +58,7 @@ published: true
 
     ![](require_fs.png)
 
-    _The [Node.js file system module]((https://www.w3schools.com/nodejs/nodejs_filesystem.asp)) allows you to work with the file system on your computer. A common use for the File System module is to **read files**. To include the File System module, use the `require()` method:_
+    _The [Node.js file system module](https://www.w3schools.com/nodejs/nodejs_filesystem.asp) allows you to work with the file system on your computer. A common use for the File System module is to **read files**. To include the File System module, use the `require()` method:_
     
     ```javascript
     var fs = require('fs');
@@ -67,6 +70,6 @@ published: true
 
 6. We get a series of numbers, thus, we can use the [`toString()`](https://www.w3schools.com/jsref/jsref_tostring_number.asp) method which returns a number as a string:
 
-    ![](flag.png)
+    ![](flag.png) -->
 
     ![](machine_pwned.png){: width="60%" .normal}
