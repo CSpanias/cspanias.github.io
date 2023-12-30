@@ -20,20 +20,20 @@ published: true
 
 1. The home page includes a keypad which takes 4 digits:
 
-    ![](home.png){ .normal}
+    ![](home.png){: .normal}
 
 
 2. The name of the challenge, *Trapped Source*, suggests to view the page's source code. If we do, we can see the variable `correctPin` with its value set to `7551`:
 
     > If you get a pin with the number `0` in it, just restart the machine from HTB. I encountered this during my first attempt and waste much time trying stuff to manually input the `0` as I thought that inputting the `0` was the actual challenge! 
 
-    ![](source.png){ .normal}
+    ![](source.png){: .normal}
 
 3. We can submit the flag and mark this challenge as solved, either manually typing its value or by a copy and paste via inspector:
 
-    ![](flag.png){ .normal}
+    ![](flag.png){: .normal}
 
-    ![](flag_inspector.png){ .normal}
+    ![](flag_inspector.png){: .normal}
 
 
-    ![](machine_pwned.png){: width="60%" .normal}
+    ![](machine_pwned.png){: width="75%" .normal}
