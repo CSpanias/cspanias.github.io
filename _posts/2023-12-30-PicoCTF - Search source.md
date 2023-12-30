@@ -113,3 +113,7 @@ published: true
     $ grep -R "picoCTF"
     saturn.picoctf.net:65086/css/style.css:/** banner_main picoCTF{1nsp3ti0n_0f_w3bpag3s_587d12b8} **/
     ```
+
+    ## Resources
+
+    - John Hammond's [Search Across Web Elements (PicoCTF #22 'search-source')](https://www.youtube.com/watch?v=7PqL1g_25QQ).
