@@ -1,8 +1,8 @@
 ---
 title: PicoCTF - Who are you?
 date: 2023-12-29
-categories: [CTF, Web Exploitation]
-tags: [picoctf, web-exploitation, who-are-you, http, http-headers]
+categories: [CTF, Web]
+tags: [picoctf, web, web-exploitation, who-are-you, http, http-headers]
 img_path: /assets/picoctf/web_exploitation/who_are_you
 published: true
 ---

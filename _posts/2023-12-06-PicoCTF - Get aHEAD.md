@@ -1,8 +1,8 @@
 ---
 title: PicoCTF - Get aHEAD
 date: 2023-12-06
-categories: [CTF, Web Exploitation]
-tags: [picoctf, web-exploitation, html, http-requests, get, post, head, curl]
+categories: [CTF, Web]
+tags: [picoctf, web, web-exploitation, html, http-requests, get, post, head, curl]
 img_path: /assets/picoctf/web_exploitation/get_ahead
 published: true
 ---

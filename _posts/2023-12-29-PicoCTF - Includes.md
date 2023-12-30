@@ -1,8 +1,8 @@
 ---
 title: PicoCTF - Includes
 date: 2023-12-29
-categories: [CTF, Web Exploitation]
-tags: [picoctf, web-exploitation, includes]
+categories: [CTF, Web]
+tags: [picoctf, web-exploitation, web, includes]
 img_path: /assets/picoctf/web_exploitation/includes
 published: true
 ---

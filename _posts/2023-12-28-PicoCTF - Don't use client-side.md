@@ -1,8 +1,8 @@
 ---
 title: PicoCTF - Don't use client-side
 date: 2023-12-28
-categories: [CTF, Web Exploitation]
-tags: [picoctf, web-exploitation, dont-use-client-side]
+categories: [CTF, Web]
+tags: [picoctf, web, web-exploitation, dont-use-client-side]
 img_path: /assets/picoctf/web_exploitation/dont_use_client_side
 published: true
 ---

@@ -1,8 +1,8 @@
 ---
 title: PicoCTF - Inspect HTML
 date: 2023-12-29
-categories: [CTF, Web Exploitation]
-tags: [picoctf, web-exploitation, inspector, html]
+categories: [CTF, Web]
+tags: [picoctf, web, web-exploitation, inspector, html]
 img_path: /assets/picoctf/web_exploitation/inspect_html
 published: true
 ---

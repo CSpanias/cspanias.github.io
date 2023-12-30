@@ -1,8 +1,8 @@
 ---
 title: PicoCTF - It is my Birthday
 date: 2023-12-28
-categories: [CTF, Web Exploitation]
-tags: [picoctf, web-exploitation, it-is-my-birthday, hash, MD5, collision]
+categories: [CTF, Web]
+tags: [picoctf, web, web-exploitation, it-is-my-birthday, hash, MD5, collision]
 img_path: /assets/picoctf/web_exploitation/it_is_my_birthday
 published: true
 ---

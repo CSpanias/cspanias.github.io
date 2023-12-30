@@ -1,8 +1,8 @@
 ---
 title: PicoCTF - Where are the robots
 date: 2023-12-27
-categories: [CTF, Web Exploitation]
-tags: [picoctf, web-exploitation, robot]
+categories: [CTF, Web]
+tags: [picoctf, web, web-exploitation, robot]
 img_path: /assets/picoctf/web_exploitation/where_are_the_robots
 published: true
 ---

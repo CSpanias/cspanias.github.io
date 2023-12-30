@@ -1,8 +1,8 @@
 ---
 title: PicoCTF - Logon
 date: 2023-12-28
-categories: [CTF, Web Exploitation]
-tags: [picoctf, web-exploitation, logon, burp, parameters]
+categories: [CTF, Web]
+tags: [picoctf, web, web-exploitation, logon, burp, parameters]
 img_path: /assets/picoctf/web_exploitation/logon
 published: true
 ---
