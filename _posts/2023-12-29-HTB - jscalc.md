@@ -33,6 +33,7 @@ published: true
 4. In the `calculatorHelper.js` file, our input is directly passed into the `eval()` function:
 
     ```javascript
+    // calculatorHelper.js
         module.exports = {
         calculate(formula) {
             try {
@@ -54,29 +55,18 @@ published: true
 
     ![](require_fs.png)
 
-    The Node.js file system module allows you to work with the file system on your computer. To include the File System module, use the `require()` method:
+    _The [Node.js file system module]((https://www.w3schools.com/nodejs/nodejs_filesystem.asp)) allows you to work with the file system on your computer. A common use for the File System module is to **read files**. To include the File System module, use the `require()` method:_
     
     ```javascript
     var fs = require('fs');
     ```
-    
-    Common use for the File System module:
-    - **Read files**
-    - Create files
-    - Update files
-    - Delete files
-    - Rename files
 
-    > [Node.js File System Module](https://www.w3schools.com/nodejs/nodejs_filesystem.asp)
-
-5. We can try reading `flag.txt` using the `readFileSync()` function:
+5. We can try reading `flag.txt` using the [`readFileSync()`](https://www.geeksforgeeks.org/node-js-fs-readfilesync-method/) function:
 
     ![](flag_buffer.png)
-
-    > [Node JS fs.readFileSync() Method](https://www.geeksforgeeks.org/node-js-fs-readfilesync-method/)
 
 6. We get a series of numbers, thus, we can use the [`toString()`](https://www.w3schools.com/jsref/jsref_tostring_number.asp) method which returns a number as a string:
 
     ![](flag.png)
 
-    ![](machine_pwned.png)
+    ![](machine_pwned.png){: width="60%" .normal}
