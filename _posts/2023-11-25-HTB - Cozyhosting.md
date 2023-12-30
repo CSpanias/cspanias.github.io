@@ -3,7 +3,7 @@ title: HTB - Cozyhosting
 date: 2023-11-25
 categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, nmap, http, webserver, nginx, whatweb, wappalyzer, gobuster, dirsearch, cookies, burp-suite, jar, psql, postgres, hash, john, gtfobins]
-img_path: /assets/cozyhosting/
+img_path: /assets/htb/fullpwn/cozyhosting/
 published: true
 ---
 

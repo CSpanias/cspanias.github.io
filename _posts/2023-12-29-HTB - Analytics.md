@@ -3,7 +3,7 @@ title: HTB - Analytics
 date: 2023-12-29
 categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, nmap, analytics, cve-2023-38646, cve-2023-32629]
-img_path: /assets/analytics/
+img_path: /assets/htb/fullpwn/analytics/
 published: true
 ---
 

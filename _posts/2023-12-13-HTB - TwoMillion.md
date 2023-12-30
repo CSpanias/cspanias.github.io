@@ -3,7 +3,7 @@ title: HTB - TwoMillion
 date: 2023-12-13
 categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, nmap, fullpwn, http, js, cve-2023-0386, curl, burp-suite, cve-2023-4911, xor, base64, url-encoding, cyberchef, rot13, zap, glibc]
-img_path: /assets/two_million/
+img_path: /assets/htb/fullpwn/two_million/
 published: true
 ---
 
