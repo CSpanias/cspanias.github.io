@@ -3,7 +3,7 @@ title: THM - Data Exfiltration
 date: 2023-10-20
 categories: [Other, Notes]
 tags: [data-exfiltration, red-teaming, ssh, http, http-tunneling, icmp, dns, dns-tunneling, dns-records, neoreg, metasploit, icmp_exfil, hex, ping, tcpdump, icmpdoor, wireshark, tr, sed, encoding, base64, ebcdic, tar, curl, xxd, fold, dropper, iodine]
-img_path: /assets/red-teaming/data-exfiltration
+img_path: /assets/others/notes/data-exfiltration
 mermaid: true
 ---
 ![Data Exfiltration Banner](data-exfiltration-room-banner.png)
