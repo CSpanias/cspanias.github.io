@@ -7,11 +7,11 @@ img_path: /assets/picoctf/web_exploitation/search_source
 published: true
 ---
 
+![](room_banner.png){: width="70%"}
+
 > **Description**: _The developer of this website mistakenly left an important artifact in the website source, can you find it?_
 
 > **Hint**: _How could you mirror the website on your local machine so you could use more powerful tools for searching?_
-
-![](room_banner.png){: width="70%" .normal}
 
 1. The website lands us on an interesting page:
 
@@ -19,7 +19,7 @@ published: true
 
 2. The tile of the challenge, *Search source*, points on viewing the page's source code:
 
-    ![](source.png)
+    ![](source.png){: .normal}
 
 3. After searching all JavaScript and many CSS files, we can find the flag at the `style.css` file:
 
@@ -67,16 +67,6 @@ published: true
 
     2023-12-30 14:23:22 (277 KB/s) - ‘saturn.picoctf.net:65086/css/bootstrap.min.css’ saved [140421/140421]
 
-    --2023-12-30 14:23:22--  http://saturn.picoctf.net:65086/css/owl.carousel.min.css
-    Reusing existing connection to saturn.picoctf.net:65086.
-    HTTP request sent, awaiting response... 200 OK
-    Length: 3351 (3.3K) [text/css]
-    Saving to: ‘saturn.picoctf.net:65086/css/owl.carousel.min.css’
-
-    saturn.picoctf.net:65086/css/o 100%[====================================================>]   3.27K  --.-KB/s    in 0s
-
-    2023-12-30 14:23:22 (681 MB/s) - ‘saturn.picoctf.net:65086/css/owl.carousel.min.css’ saved [3351/3351]
-
     <SNIP>
 
     FINISHED --2023-12-30 14:23:36--
@@ -84,7 +74,7 @@ published: true
     Downloaded: 20 files, 655K in 11s (61.5 KB/s)
     ```
 
-2. We can see at the end of the above output the it has downloaded 20 files in total. We can see the structure using the `tree` command:
+2. We can see at the end of the above output that it has downloaded 20 files in total. We can see their structure using the `tree` command:
 
     ```shell
     ─$ tree
