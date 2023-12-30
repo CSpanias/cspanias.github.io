@@ -1,8 +1,8 @@
 ---
 title: PicoCTF - Some Assembly Required 1
 date: 2023-12-14
-categories: [CTF, Web Exploitation]
-tags: [picoctf, web-exploitation, assembly, ]
+categories: [CTF, Web]
+tags: [picoctf, web, web-exploitation, assembly, ]
 img_path: /assets/picoctf/web_exploitation/assembly_required_1
 published: true
 ---

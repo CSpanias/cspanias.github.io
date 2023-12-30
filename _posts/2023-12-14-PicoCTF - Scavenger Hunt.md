@@ -1,8 +1,8 @@
 ---
 title: PicoCTF - Scavenger Hunt
 date: 2023-12-14
-categories: [CTF, Web Exploitation]
-tags: [picoctf, web-exploitation, html, css, js, dirsearch, burp, burp-repeater, burp-target, dir-busting, apache]
+categories: [CTF, Web]
+tags: [picoctf, web, web-exploitation, html, css, js, dirsearch, burp, burp-repeater, burp-target, dir-busting, apache]
 img_path: /assets/picoctf/web_exploitation/scavenger_hunt
 published: true
 ---

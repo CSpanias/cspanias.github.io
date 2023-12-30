@@ -1,8 +1,8 @@
 ---
 title: PicoCTF - More Cookies
 date: 2023-12-15
-categories: [CTF, Web Exploitation]
-tags: [picoctf, web-exploitation, cookies]
+categories: [CTF, Web]
+tags: [picoctf, web, web-exploitation, cookies]
 img_path: /assets/picoctf/web_exploitation/more_cookies
 published: true
 ---
