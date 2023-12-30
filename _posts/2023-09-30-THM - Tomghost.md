@@ -3,7 +3,7 @@ title: THM - Tomghost
 date: 2023-09-30
 categories: [CTF, Fullpwn]
 tags: [thm, tryhackme, nmap, exploitdb, metasploit, hash, gpg, john, encryption, gtfobins, sudo, ajp]
-img_path: /assets/tomghost/
+img_path: /assets/thm/fullpwn/tomghost/
 mermaid: true
 ---
 

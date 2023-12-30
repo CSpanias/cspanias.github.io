@@ -3,7 +3,7 @@ title: THM - Marketplace
 date: 2023-10-20
 categories: [CTF, Fullpwn]
 tags: [thm, tryhackme, xss, idor, cookies, sqli, sudo, wildcard-injection, container-escape, tar]
-img_path: /assets/marketplace/
+img_path: /assets/thm/fullpwn/marketplace/
 mermaid: true
 ---
 

@@ -3,7 +3,7 @@ title: HTB - Trapped Source
 date: 2023-12-30
 categories: [CTF, Web]
 tags: [ctf, web, web-exploitation, htb, hack-the-box, trapped-source]
-img_path: /assets/ctf/web/htb/trapped_source
+img_path: /assets/htb/web/trapped_source
 published: true
 ---
 

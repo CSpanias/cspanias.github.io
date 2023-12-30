@@ -1,7 +1,7 @@
 ---
 title: HTB - Starting Point Review 
 date: 2023-11-19
-categories: [Review, HTB]
+categories: [Other, Review]
 tags: [penetration-testing, starting-point, hackthebox, htb-academy, ctf, capture-the-flag, ethical-hacking, review]
 img_path: /assets/htb-startingpoint/
 mermaid: true

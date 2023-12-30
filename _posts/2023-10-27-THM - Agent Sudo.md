@@ -3,7 +3,7 @@ title: THM - Agent Sudo
 date: 2023-10-27
 categories: [CTF, Fullpwn]
 tags: [thm, tryhackme, nmap, burpsuite, ssh, ftp, john, hydra, brute-force, dictionary-attack, steganography, binwalk, stegseek, john, encoding, base64, exploit-db, gtfobins, sudo, zip, compression]
-img_path: /assets/agent-sudo/
+img_path: /assets/thm/fullpwn/agent-sudo/
 mermaid: true
 ---
 

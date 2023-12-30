@@ -3,7 +3,7 @@ title: THM - Dogcat
 date: 2023-10-03
 categories: [CTF, Fullpwn]
 tags: [thm, tryhackme, nmap, lfi, burp-suite, metasploit, directory-traversal, gtfobins, container-escape, repeater]
-img_path: /assets/dogcat/
+img_path: /assets/thm/fullpwn/dogcat/
 mermaid: true
 ---
 

@@ -3,7 +3,7 @@ title: HTB - JSCalc
 date: 2023-12-29
 categories: [CTF, Web]
 tags: [ctf, web, web-exploitation, htb, hack-the-box, js, jscalc]
-img_path: /assets/ctf/web/htb/jscalc
+img_path: /assets/htb/web/jscalc
 published: true
 ---
 

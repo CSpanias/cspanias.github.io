@@ -1,7 +1,7 @@
 ---
 title: Nmap
 date: 2023-11-12
-categories: [Notes, Nmap]
+categories: [Other, Notes]
 tags: [nmap, networking, firewall, icmp, tcp, ttl, enumeration, arp]
 img_path: /assets/nmap/
 ---

@@ -3,7 +3,7 @@ title: THM - Git Happens
 date: 2023-10-06
 categories: [CTF, Fullpwn]
 tags: [thm, tryhackme, nmap, nikto, git, gittools]
-img_path: /assets/git_happens/
+img_path: /assets/thm/fullpwn/git_happens/
 mermaid: true
 ---
 

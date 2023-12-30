@@ -3,7 +3,7 @@ title: THM - Mr Robot
 date: 2023-09-27
 categories: [CTF, Fullpwn]
 tags: [tryhackme, thm, nmap, gobuster, hydra, burp-suite, wpscan, crackstation, hash, john, hashcat, gtfobins, suid, intruder]
-img_path: /assets/mr_robot/
+img_path: /assets/thm/fullpwn/mr_robot/
 mermaid: true
 ---
 
