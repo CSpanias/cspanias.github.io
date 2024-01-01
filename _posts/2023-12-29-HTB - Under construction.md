@@ -4,7 +4,7 @@ date: 2023-12-29
 categories: [CTF, Web]
 tags: [ctf, web, web-exploitation, under-construction, htb, hack-the-box]
 img_path: /assets/htb/web/under_construction
-published: true
+published: false
 ---
 
 ![](room_banner.png)
