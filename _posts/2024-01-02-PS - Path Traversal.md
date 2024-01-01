@@ -13,11 +13,7 @@ published: true
 
 ## Reading arbitrary files via path traversal
 
-Imagine a shopping application that displays images of items for sale. This might load an image using the following HTML:
-
-```html
-<img src="/loadImage?filename=218.png">
-```
+Imagine a shopping application that displays images of items for sale. This might load an image using the following HTML: `<img src="/loadImage?filename=218.png">`.
 
 The `loadImage` URL takes a `filename` parameter and returns the contents of the specified file. The image files are stored on disk in the location `/var/www/images/`. To return an image, the application appends the requested filename to this base directory and uses a filesystem API to read the contents of the file. In other words, the application reads from the following file path: `/var/www/images/218.png`.
 
@@ -49,13 +45,9 @@ On Unix-based operating systems, this is a standard file containing details of t
 
     ![](../server-side/directory_traversal/dir_tra_repeater.png)
 
-8. To mark this lab as `solved`, we need to actually intercept the request via Proxy, modify it, and Forward it:
-
-    ![](../server-side/directory_traversal/dir_tra_intercept.png){: .normal}
-
-    ![](../server-side/directory_traversal/dir_tra_intercept_forward.png){: .normal}
-
     ![](../server-side/directory_traversal/dir_tra_solved.png)
+
+## Common obstacles to exploiting path traversal vulnerabilities
 
 ## Resources
 
