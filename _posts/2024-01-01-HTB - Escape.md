@@ -197,7 +197,7 @@ We can first check if we can login with the provided creds using local authentic
 
 We can try capturing the MSSQL service hash using `xp_subdirs` or `xp_dirtree`.
 
-  > The below process is demonstrating in the following module: Attacking Commong Services - [Attacking SQL Databases](https://academy.hackthebox.com/module/116/section/1169).
+  > The below process is demonstrated in the following module: Attacking Commong Services - [Attacking SQL Databases](https://academy.hackthebox.com/module/116/section/1169).
 
   ```shell
   # start a fake smb server
@@ -301,7 +301,7 @@ Now we can attempt to crack the obtained NTLMv2 hash:
   Stopped: Mon Jan  1 16:08:50 2024
   ```
 
-We can now try the creds `sql_svc:REGGIE1234ronnie` to check if they can be used to any listening service, such as WinRM:
+Let's check if can we can use the newly-obtained creds `sql_svc:REGGIE1234ronnie` to any listening service, such as WinRM:
 
   ```shell
   # checking current creds on WinRM
@@ -552,7 +552,7 @@ Let's login as `ryan.cooper` and try to repeat the process using `certify.exe` n
 
 ## Vertical privilege escalation
 
-We can now visit the [Certify's GitHub page](https://github.com/GhostPack/Certify) which includes details instructions on what we can do when we find a vulnerable cert template. There are 3 potential scenarios listed on this page, and we currently are on the third one (*VulnTemplate*). Luckily for us, they show the abuse of scenario 3 step by step:
+We can now visit [Certify's GitHub page](https://github.com/GhostPack/Certify) which includes details instructions on what we can do when we find a vulnerable cert template. There are 3 potential scenarios listed on this page, and we currently are on the third one (*VulnTemplate*). Luckily for us, they show the abuse of scenario 3 step by step:
 
   ![](certify_github.png)
 
