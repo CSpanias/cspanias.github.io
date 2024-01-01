@@ -35,8 +35,8 @@ published: true
 
     So any string sequence that matches the above pattern will give us the flag:
 
-    ![](flag.png)
+    ![](flag.png){: .normal}
 
-    ![](flag1.png)
+    ![](flag1.png){: .normal}
 
-    ![](flag2.png)
+    ![](flag2.png){: .normal}
