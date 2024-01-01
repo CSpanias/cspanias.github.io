@@ -13,11 +13,9 @@ published: true
 
 1. Upon launching an instance we face a login form. When we use `test:test` as credentials, it instructs to use `test:test!` instead:
 
-    ![](home.png)
+    ![](home.png){: .normal}
 
-    ![](home.png)
-
-    ![](home_2.png)
+    ![](home_2.png){: .normal}
 
 2. When we login with `test:test!` as our creds, we get into the `/home` directory. Intercepting the traffic with Bup the request looks like this:
 
@@ -29,7 +27,7 @@ published: true
 
     ![](login_with_test!_burp_2.png)
 
-4. The latter seems like a base64 encoding string, so we can try decode it:
+4. The latter seems like a base64 encoding string, so we can try to decode it:
 
     ```shell
     # decoding the base64 encoded string
