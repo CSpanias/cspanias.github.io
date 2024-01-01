@@ -15,7 +15,7 @@ published: true
 
     ![](home.png){: .normal}
 
-2. When trying `test` as a test to see how this works we a `wrong match! Try again!` message:
+2. When trying `test` as a test to see how this works we get a `wrong match! Try again!` message:
 
     ![](home_test.png){: .normal}
 
@@ -27,13 +27,13 @@ published: true
 
     ![](source_code.png)
 
-5. As it seems it only needs a string sequence that matches the pattern in the comment, i.e., `^p.....F!?`. That means that:
+5. As it seems it only needs a string sequence that matches the pattern in the comment, i.e., `^p.....F!?`:
     1. We need a sequence starting with the letter `p` (`^p`).
     2. Followed by any 5 characters (`.....`).
     3. Followed by the letter `F` (`F`).
     4. And we can have an exclamation mark (or not) at the end (`!?`). The `?` signifies that the preceded character is optional.
 
-    So any string sequence that matches the above pattern will give u the flag:
+    So any string sequence that matches the above pattern will give us the flag:
 
     ![](flag.png)
 
