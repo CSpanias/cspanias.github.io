@@ -2,7 +2,7 @@
 title: PicoCTF - Findme
 date: 2024-01-01
 categories: [CTF, Web]
-tags: [picoctf, web, web-exploitation, findme]
+tags: [picoctf, web, web-exploitation, findme, encoding, decoding, base64]
 img_path: /assets/picoctf/web_exploitation/findme
 published: true
 ---
