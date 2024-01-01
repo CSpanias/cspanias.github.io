@@ -16,7 +16,7 @@ published: true
 |Rank|Medium|
 |Focus|crackmapexec, certificates, kerberos|
 
-## Information gathering
+## Initial foothold
 
 1. Let's start with a port-scan:
 
@@ -115,6 +115,7 @@ published: true
   SMB         escape          445    DC               Public          READ
   SMB         escape          445    DC               SYSVOL                          Logon server share
   ```
+  
   > We must pass a random username for the above command to work.
 
 4. Since we have `READ` permissions on the `Public` share we can connect to it and see what's inside:
@@ -192,9 +193,11 @@ published: true
     mask_query                 - mask query
   ```
 
+## Lateral privilege escalation
+
 7. We can try capturing the MSSQL service hash using `xp_subdirs` or `xp_dirtree`.
 
-  > Attacking Commong Services - [Attacking SQL Databases](https://academy.hackthebox.com/module/116/section/1169).
+  > The below process is demonstrating in the following module: Attacking Commong Services - [Attacking SQL Databases](https://academy.hackthebox.com/module/116/section/1169).
 
   ```shell
   # start a fake smb server
@@ -307,6 +310,8 @@ published: true
   HTTP        escape          5985   DC               [*] http://escape:5985/wsman
   WINRM       escape          5985   DC               [+] sequel.htb\sql_svc:REGGIE1234ronnie (Pwn3d!)
   ```
+
+## Lateral privilege escalation 2
 
 10. Since that worked, let's log into WinRM and see what we can find. We will use [SharpCollection](https://github.com/Flangvik/SharpCollection)'s `Certify.exe` since we know that this machine is a certified authority to check for vulnerable cert templates. 
 
@@ -458,7 +463,7 @@ published: true
   1. The user `ryan.cooper` tried to login with the wrong password.
   2. Then he probably thought that his username was saved, thus, he typed directly his password.
   
-  Next, we can check if the creds `ryan.cooper:NuclearMosquito3` get us anywhere, such a WinRM login:
+  So we can check if the creds `ryan.cooper:NuclearMosquito3` get us anywhere, such a WinRM login:
 
   ```shell
   # check creds at the WinRM server
@@ -544,6 +549,8 @@ published: true
   ```
 
   This time it seems that it managed to find a vulnerable certificate template called `UserAuthentication`.
+
+## Vertical privilege escalation
 
 13. We can now visit the [Certify's GitHub page](https://github.com/GhostPack/Certify) which includes details instructions on what we can do when we find a vulnerable cert template. There are 3 potential scenarios listed on this page, and we currently are on the third one (*VulnTemplate*). Luckily for us, they show the abuse of scenario 3 step by step:
 
