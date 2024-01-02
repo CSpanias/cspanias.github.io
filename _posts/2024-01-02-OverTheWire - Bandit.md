@@ -22,7 +22,6 @@ $ ssh bandit0@bandit.labs.overthewire.org -p 2220
 bandit0@bandit:~$
 ```
 
-## [Level 0 --> 1](https://overthewire.org/wargames/bandit/bandit1.html)
 ## [Level 0 &rarr; 1](https://overthewire.org/wargames/bandit/bandit1.html)
 
 > The password for the next level is stored in a file called `readme` located in the `home` directory. Use this password to log into `bandit1` using SSH. Whenever you find a password for a level, use SSH (on port 2220) to log into that level and continue the game.
@@ -35,87 +34,96 @@ bandit0@bandit:~$ cat readme
 NH2SXQwcBdpmTEzi3bvBHMM9H66vVXjL
 ```
 
-1. Level 0 --> 1
-```shell
-ssh bandit1@bandit.labs.overthewire.org -p 2220
-# bandit1:NH2SXQwcBdpmTEzi3bvBHMM9H66vVXjL
-```
-The password for the next level is stored in a file called **readme** located in the home directory. Use this password to log into bandit1 using SSH:
+## [Level 1 &rarr; 2](https://overthewire.org/wargames/bandit/bandit2.html)
+
+> The password for the next level is stored in a file called `-` located in the home directory.
 
 ```shell
-cat readme
-# NH2SXQwcBdpmTEzi3bvBHMM9H66vVXjL
-```
-2. Level 1 --> 2
-```shell
-ssh bandit1@bandit.labs.overthewire.org -p 2220
-# bandit1:NH2SXQwcBdpmTEzi3bvBHMM9H66vVXjL
-```
-The password for the next level is stored in a file called **-** located in the home directory:
-```shell
-find / -iname - -type f 2>/dev/null
-# /home/bandit1/-
-cat /home/bandit1/-
-# rRGizSaX8Mk1RTb1CNQoXTcYZWU6lgzi
+$ ssh bandit1@bandit.labs.overthewire.org -p 2220
+# use absolute path
+bandit1@bandit:~$ cat /home/bandit1/-
+rRGizSaX8Mk1RTb1CNQoXTcYZWU6lgzi
 # OR, "hide" the dash from the command
-cat ./-
+bandit1@bandit:~$ cat ./-
+rRGizSaX8Mk1RTb1CNQoXTcYZWU6lgzi
 ```
 
-3. Level 2 --> 3
+## [Level 2 &rarr; 3](https://overthewire.org/wargames/bandit/bandit3.html)
+
+> The password for the next level is stored in a file called `spaces in this filename` located in the home directory.
+
 ```shell
-ssh bandit2@bandit.labs.overthewire.org -p 2220
-# bandit2:rRGizSaX8Mk1RTb1CNQoXTcYZWU6lgzi
-```
-The password for the next level is stored in a file called **spaces in this filename** located in the home directory:
-```shell
-cat "/home/bandit2/spaces in this filename"
-# aBZ0W5EmUfAf7kHTQeOwd8bauFJ2lAiG
-# OR
-cat spaces\ in\ this\ filename
+$ ssh bandit2@bandit.labs.overthewire.org -p 2220
+bandit2@bandit:~$ cat "spaces in this filename"
+aBZ0W5EmUfAf7kHTQeOwd8bauFJ2lAiG
+# or use backslashes
+bandit2@bandit:~$ cat spaces\ in\ this\ filename
+aBZ0W5EmUfAf7kHTQeOwd8bauFJ2lAiG
 ```
 
-4. 3 --> 4
+## [Level 3 &rarr; 4](https://overthewire.org/wargames/bandit/bandit4.html)
+
+> The password for the next level is stored in a hidden file in the `inhere` directory.
+
 ```shell
-ssh bandit3@bandit.labs.overthewire.org -p 2220
-# aBZ0W5EmUfAf7kHTQeOwd8bauFJ2lAiG
-```
-The password for the next level is stored in a hidden file in the **inhere** directory:
-```shell
-ls -la
-# inhere
-cd .inhere
-ls -la
-# .hidden
-cat .hidden
-# 2EW7BBsr6aMMoJ2HjW067dm8EgX26xNe
+$ ssh bandit3@bandit.labs.overthewire.org -p 2220
+bandit3@bandit:~$ ls -la inhere/
+total 12
+drwxr-xr-x 2 root    root    4096 Oct  5 06:19 .
+drwxr-xr-x 3 root    root    4096 Oct  5 06:19 ..
+-rw-r----- 1 bandit4 bandit3   33 Oct  5 06:19 .hidden
+bandit3@bandit:~$ cat inhere/.hidden
+2EW7BBsr6aMMoJ2HjW067dm8EgX26xNe
 ```
 
-5. 4-->5
+## [Level 4 &rarr; 5](https://overthewire.org/wargames/bandit/bandit5.html)
+
+> The password for the next level is stored in the only human-readable file in the `inhere` directory. Tip: if your terminal is messed up, try the `reset` command.
+
 ```shell
-ssh bandit4@bandit.labs.overthewire.org -p 2220
-# 2EW7BBsr6aMMoJ2HjW067dm8EgX26xNe
+$ ssh bandit4@bandit.labs.overthewire.org -p 2220
+bandit4@bandit:~$ ls -la inhere/
+total 48
+drwxr-xr-x 2 root    root    4096 Oct  5 06:19 .
+drwxr-xr-x 3 root    root    4096 Oct  5 06:19 ..
+-rw-r----- 1 bandit5 bandit4   33 Oct  5 06:19 -file00
+-rw-r----- 1 bandit5 bandit4   33 Oct  5 06:19 -file01
+-rw-r----- 1 bandit5 bandit4   33 Oct  5 06:19 -file02
+-rw-r----- 1 bandit5 bandit4   33 Oct  5 06:19 -file03
+-rw-r----- 1 bandit5 bandit4   33 Oct  5 06:19 -file04
+-rw-r----- 1 bandit5 bandit4   33 Oct  5 06:19 -file05
+-rw-r----- 1 bandit5 bandit4   33 Oct  5 06:19 -file06
+-rw-r----- 1 bandit5 bandit4   33 Oct  5 06:19 -file07
+-rw-r----- 1 bandit5 bandit4   33 Oct  5 06:19 -file08
+-rw-r----- 1 bandit5 bandit4   33 Oct  5 06:19 -file09
+# using bash scripting
+bandit4@bandit:~$ for file in inhere/*; do cat "$file";echo \n; done
+# check content first
+bandit4@bandit:~$ file inhere/*
+inhere/-file00: data
+inhere/-file01: data
+inhere/-file02: data
+inhere/-file03: data
+inhere/-file04: data
+inhere/-file05: data
+inhere/-file06: data
+inhere/-file07: ASCII text
+inhere/-file08: data
+inhere/-file09: data
+bandit4@bandit:~$ cat inhere/-file07
+lrIWWI6bB37kxfiCQZqUdOIYfr6eEeqR
 ```
-The password for the next level is stored in the only human-readable file in the **inhere** directory. Tip: if your terminal is messed up, try the “reset” command:
+
+## ## [Level 5 &rarr; 6](https://overthewire.org/wargames/bandit/bandit6.html)
+
+> The password for the next level is stored in a file somewhere under the `inhere` directory and has all of the following properties:
+    - human-readable
+    - 1033 bytes in size
+    - not executable
+
 ```shell
-cd inhere
-file ./-file**
-# ./-file00: data
-# ./-file01: data
-# ./-file07: ASCII text
-cat ./-file07
+$ ssh bandit5@bandit.labs.overthewire.org -p 2220
 # lrIWWI6bB37kxfiCQZqUdOIYfr6eEeqR
-```
-
-6. 5-->6
-```shell
-ssh bandit5@bandit.labs.overthewire.org -p 2220
-# lrIWWI6bB37kxfiCQZqUdOIYfr6eEeqR
-```
-The password for the next level is stored in a file somewhere under the **inhere** directory and has all of the following properties:
-- human-readable
-- 1033 bytes in size
-- not executable
-```shell
 ls -la maybehere* | grep 1033
 # -rw-r-----  1 root bandit5 1033 Oct  5 06:19 .file2
 find . -type f -size 1033c 2>/dev/null
