@@ -137,6 +137,22 @@ If an app strips or blocks directory traversal sequences from the user-supplied 
 
 > **Objective**: _This lab contains a path traversal vulnerability in the display of product images. The application transmits the full file path via a request parameter, and validates that the supplied path starts with the expected folder. To solve the lab, retrieve the contents of the `/etc/passwd` file._
 
+1. The request of a product image includes the base path `/var/www/images/`:
+
+    ![](lab4_burp.png)
+
+2. If we try a simple path traversal attack, we get an error message:
+
+    ![](lab4_filename_param_missing.png)
+
+3. The `filename` parameter requires the base path (`/var/www/images/`) to be included in its value:
+
+    ![](lab4_base_path.png)
+
+    ![](lab4_solved.png)
+
+## Lab: File path traversal, validation of file extension with null byte bypass
+
 
 
 ## Resources
