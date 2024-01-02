@@ -61,7 +61,7 @@ Burp provides several engagement tools that we can use to find interesting info 
 - **Find comments**: We can use this tool to quickly extract any developer comments found in the selected item. It also provides tabs to instantly access the HTTP request/response cycle in which each comment was found.
 - **Discover content**: We can use this tool to identify additional content and functionality that is not linked from the website's visible content. This can be useful for findining additional directories and files that won't necessary appear in the site map automatically.
 
-![](burp_engagement_tools.png)
+![](burp_engagement_tools.jpg)
 
 ### Engineering informative responses
 
@@ -106,6 +106,40 @@ Differences between error messages can also reveal different app behavior that i
     ![](lab1_version.png)
 
     ![](lab1_solved.png)
+
+### Debugging data
+
+For debugging purposes, many websites generate custom error messages and logs that contain large amounts of info about the app's behavior. Debug messages can sometimes contain vital info for developing an attack, such as:
+- Values for key session variables that can be manipulated via user input
+- Hostnames and credentials for back-end components
+- File and directory names on the server
+- Keys used to encrypt data transmitted via the client
+
+Debugging info may sometimes be logged in a separate file. If an attacker is able to gain access to this file, it can serve as a useful reference for understanding the app's runtime state. It can also provide several clues as to how they can supply crafted input to manipulate the app state and control the information received.
+
+### Lab: Information disclosure on debug page
+
+> **Objective**: _This lab contains a debug page that discloses sensitive information about the application. To solve the lab, obtain and submit the `SECRET_KEY` environment variable._
+
+1. If we select any product from the homepage and visit its source code, we will find an HTML comment listing a directory used for Debug purposes:
+
+    ![](lab2_source.png)
+
+2. Upon visiting this directory, we can search and find the `SECRET_KEY` value:
+
+    ![](lab2_secret_key.png)
+
+    ![](lab2_solved.png)
+
+### User account pages
+
+Inherently a user's profile usually contains sensitive info, such as the user's email address, phone number, API key, etc. Normally, users have only access to their own account page, but some websites contain **logic flaws** that potentially allow an attacker to leverage these pages in order to view other user's data. For example, consider a website that determines which user's account page to load based on a `user` parameter: `GET /user/personal-info?user=carlos`. Most websites will take steps to prevent an attacker from simply changing this parameter to access arbitrary users' account pages. 
+
+However, sometimes the logic for loading individual items of data is not as robust. An attacker may not be able to load another user's account page entirely, but the logic for fetching and rendering the user's registered email address, for instance, might not check that the `user` parameter matches the user that is currently logged in. In this case, simply changing the `user` parameter would allow an attacker to display arbitrary users' email addresses on their own account page.
+
+### Source code disclosure via backup files
+
+
 
 ## How to prevent information disclosure vulnerabilities
 
