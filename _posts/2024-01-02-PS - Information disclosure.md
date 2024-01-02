@@ -99,11 +99,11 @@ Differences between error messages can also reveal different app behavior that i
 
 1. When we select an product, there is a `productId` parameter which has as a value an integer number:
 
-    ![](lab1_home.png)
+    ![](lab1_home.png){ .normal width="70%}
 
 2. If we change this value to something other than the integer that it expects, it will give us an error message that includes the web app framework's version:
 
-    ![](lab1_version.png)
+    ![](lab1_version.png){ .normal width="70%}
 
     ![](lab1_solved.png)
 
@@ -161,7 +161,7 @@ However, in some situations, we can trick a website into returning the contents 
 
     ![](lab3_solved.png)
 
-## Information disclosure due to insecure configuration
+### Information disclosure due to insecure configuration
 
 Websites are sometimes vulnerable as a result of misconfigurations. This is especially common due to the widespread use of third-party technologies, whose vast array of configuration options are not necessarily well-understood by those implementing them.
 
@@ -187,15 +187,15 @@ In other cases, developers might forget to disable various debugging options in 
 
     ![](lab4_solved.png)
 
-## Version control history
+### Version control history
 
 Virtually all websites are developed using some form of version control system, such as Git. By default, a Git project stores all of its version control data in a folder called `.git`. Occasionally, websites expose this directory in the production environment. In this case, we might be able to access it by simply browsing to `/.git`.
 
 While it is often impractical to manually browse the raw file structure and contents, there are various methods for the downloading the entire `.git` directory which may include logs containing committed changes and other interesting info. This might not give us access to the full source code, but comparing the diff will allow you to read small snippets of code and we might be lucky in finding sensitive data hard-coded within some changed lines.
 
-> Try Hack Me's [Git Happens](https://cspanias.github.io/posts/THM-Git-Happens/) machine.
+> Practice: Try Hack Me's [Git Happens](https://cspanias.github.io/posts/THM-Git-Happens/) machine.
 
-## Lab: Information disclosure in version control history
+### Lab: Information disclosure in version control history
 
 > **Objective**: _This lab discloses sensitive information via its version control history. To solve the lab, obtain the password for the `administrator` user then log in and delete the user `carlos`._
 
@@ -276,6 +276,8 @@ While it is often impractical to manually browse the raw file structure and cont
     We are interestingly mostly on the commits included in the log. We can achieve this by [chaining commands](https://www.diskinternals.com/linux-reader/bash-chain-commands/#:~:text=Chaining%20usually%20means%20binding%20things,by%20simply%20introducing%20an%20operator.) using the pipe operator (`|`):
 
     ```shell
+    $ git log | grep commig | cut -d " " -f2 | xargs git show > commits
+    
     $ cat commits
     commit dff527d734b5cfa13ef20f554309408fd16f68e6
     Author: Carlos Montoya <carlos@evil-user.net>
