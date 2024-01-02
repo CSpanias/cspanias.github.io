@@ -66,7 +66,7 @@ If an app strips or blocks directory traversal sequences from the user-supplied 
 
 2. Upon opening a product's image and intercepting the request we can see that there a `filename` parameter on the `/image` endpoint with the image's value, in this case, `18.jpg`:
 
-    ![](lab1_image_new_tab.png)
+    ![](lab1_image_new_tab.png){: width="60%" .normal}
 
     ![](lab1_image_burp.png)
 
@@ -124,13 +124,13 @@ If an app strips or blocks directory traversal sequences from the user-supplied 
 
     ![](lab3_payload_pos.png)
 
-    ![](lab3_payload_settings.png){: .normal}
+    ![](lab3_payload_settings.png){: width="70%"  .normal}
 
 2. After our attack is completed, we can see that none of the non-encoded payloads worked, but the three that were encoded worked fine:
 
-    ![](lab3_non_enc_payloads.png){: .normal}
+    ![](lab3_non_enc_payloads.png){: width="60%" .normal}
 
-    ![](lab3_enc_payloads.png){: .normal}
+    ![](lab3_enc_payloads.png){: width="60%"  .normal}
 
 
 ## Lab: File path traversal, validation of start of path
