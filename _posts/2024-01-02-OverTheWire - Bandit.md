@@ -19,6 +19,15 @@ The [Bandit](https://overthewire.org/wargames/bandit/) wargame is **aimed at abs
 
 ```shell
 $ ssh bandit0@bandit.labs.overthewire.org -p 2220
+bandit0@bandit:~$
+```
+
+## [Level 0 {% octicon arrow-right height:24 %} 1](https://overthewire.org/wargames/bandit/bandit0.html)
+## [Level 0 --> 1](https://overthewire.org/wargames/bandit/bandit0.html)
+## [Level 0 &rarr; -->]((https://overthewire.org/wargames/bandit/bandit0.html))
+
+```shell
+$ ssh bandit0@bandit.labs.overthewire.org -p 2220
 bandit0@bandit:~$ cat readme
 NH2SXQwcBdpmTEzi3bvBHMM9H66vVXjL
 ```
