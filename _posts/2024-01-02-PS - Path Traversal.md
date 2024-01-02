@@ -49,6 +49,79 @@ On Unix-based operating systems, this is a standard file containing details of t
 
 ## Common obstacles to exploiting path traversal vulnerabilities
 
+If an app strips or blocks directory traversal sequences from the user-supplied filename, it might be possible to bypass the defence using various techniques.
+- We might be able to used an absolute path from the filesystem root, such as `filename=/etc/passwd`, to directly reference a file without using any traversal sequences.
+- We might be able to use nested traversal sequences, such as `....//` or `....\/`. There reverse to simple traversal sequences when the inner sequence is stripped ([DVWA example](https://cspanias.github.io/posts/DVWA-File-Inclusion/#local-file-inclusion-1)).
+- In some contexts, such as in a URL path or the `filename` parameter of a `multipart/form-data` request, web servers may strip any directory traversal sequences before passing our input to the app. We can sometimes bypass this kind of sanitization by URL encoding, or even double URL encoding, the `../` characters. This results in `%2e%2e%2f` and `%252e%252e%252f`, respectively. Various non-standard encodings, such as `..%c0%af` or `..%ef%bc%8f`, may also work. In Burp Pro, Intruder provides the predefined payload list [**Fuzzing - path traversal**](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Directory%20Traversal/Intruder/directory_traversal.txt), which contains some encoded path traversal sequences we can try.
+- An app may require the user-supplied filename to start with the expected base folder, such as `/var/www/images`. In this case, it might be possible to include the require base folder followed by suitable traversal sequences: `filename=/var/www/images/../../../etc/passwd`.
+- An app may require the user-supplied filename to end with an expected file extension, such as `.png`. In this case, it might be possible to use a **null byte** to effectively terminate the file path before the required extension: `filename=../../../etc/passwd%00.png`.
+
+## Lab: File path traversal, traversal sequences blocked with absolute path bypass
+
+> **Objective**: _This lab contains a path traversal vulnerability in the display of product images. The application blocks traversal sequences but treats the supplied filename as being relative to a default working directory. To solve the lab, retrieve the contents of the `/etc/passwd` file._
+
+1. We first need to enable the Images MIME type:
+
+    ![](lab1_image_filter.png)
+
+2. Upon opening a product's image and intercepting the request we can see that there a `filename` parameter on the `/image` endpoint with the image's value, in this case, `18.jpg`:
+
+    ![](lab1_image_new_tab.png)
+
+    ![](lab1_image_burp.png)
+
+3. If we try to replicate the path traversal attack from the previous lab, we will notice that it fails:
+
+    ![](lab1_attack_fail.png)
+
+4. However, if we pass the absolute value of the file path we will be able to read the file:
+
+    ![](lab1_passwd.png)
+
+    ![](lab1_solved.png)
+
+## Lab: File path traversal, traversal sequences stripped non-recursively
+
+> **Objective**: _This lab contains a path traversal vulnerability in the display of product images. The application strips path traversal sequences from the user-supplied filename before using it. To solve the lab, retrieve the contents of the `/etc/passwd` file._
+
+1. When we attempt to use the two previous attack techniques both fail:
+
+    ![](lab2_attack_fail.png)
+
+    ![](lab2_attack_fail_1.png)
+
+2. We can try bypassing the defences by doubling-up our path traversal sequences:
+
+    ![](lab2_attack.png)
+
+    ![](lab2_solved.png)
+
+## Lab: File path traversal, traversal sequences stripped with superfluous URL-decode
+
+> **Objective**: _This lab contains a path traversal vulnerability in the display of product images. The application blocks input containing path traversal sequences. It then performs a URL-decode of the input before using it. To solve the lab, retrieve the contents of the `/etc/passwd` file._
+
+1. When we try a simple path traversal attack, it fails:
+
+    ![](lab3_simple_attack.png)
+
+2. We can try to URL-encode our path traversal sequences and try again:
+
+    ![](lab3_url_enc.png)
+
+    ![](lab3_url_enc_once.png)
+
+3. This did not work either, so we can try URL-encoding it for a second time:
+
+    ![](lab3_url_enc_twice.png)
+
+    ![](lab3_solved.png)
+
+## Lab: File path traversal, validation of start of path
+
+> **Objective**: _This lab contains a path traversal vulnerability in the display of product images. The application transmits the full file path via a request parameter, and validates that the supplied path starts with the expected folder. To solve the lab, retrieve the contents of the `/etc/passwd` file._
+
+
+
 ## Resources
 
 - [Path Traversal](https://portswigger.net/web-security/file-path-traversal).
