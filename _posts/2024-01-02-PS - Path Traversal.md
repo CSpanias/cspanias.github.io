@@ -1,8 +1,8 @@
 ---
-title: Path Traversal
+title: Path traversal
 date: 2024-01-01
-categories: [PortSwigger, Path Traversal]
-tags: [portswigger, path-traversal, directory-traversal, dot-dot-slash]
+categories: [PortSwigger, Path traversal]
+tags: [portswigger, path-traversal, directory-traversal, dot-dot-slash, burp, burp-intruder]
 img_path: /assets/portswigger/path_traversal
 published: true
 ---
@@ -124,7 +124,7 @@ If an app strips or blocks directory traversal sequences from the user-supplied 
 
     ![](lab3_payload_pos.png)
 
-    ![](lab3_payload_settings.png)
+    ![](lab3_payload_settings.png){: .normal}
 
 2. After our attack is completed, we can see that none of the non-encoded payloads worked, but the three that were encoded worked fine:
 
