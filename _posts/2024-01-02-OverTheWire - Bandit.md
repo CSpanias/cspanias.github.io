@@ -22,12 +22,15 @@ $ ssh bandit0@bandit.labs.overthewire.org -p 2220
 bandit0@bandit:~$
 ```
 
-## [Level 0 {% octicon arrow-right height:24 %} 1](https://overthewire.org/wargames/bandit/bandit0.html)
-## [Level 0 --> 1](https://overthewire.org/wargames/bandit/bandit0.html)
-## [Level 0 &rarr; -->]((https://overthewire.org/wargames/bandit/bandit0.html))
+## [Level 0 --> 1](https://overthewire.org/wargames/bandit/bandit1.html)
+## [Level 0 &rarr; 1](https://overthewire.org/wargames/bandit/bandit1.html)
+
+> The password for the next level is stored in a file called `readme` located in the `home` directory. Use this password to log into `bandit1` using SSH. Whenever you find a password for a level, use SSH (on port 2220) to log into that level and continue the game.
 
 ```shell
 $ ssh bandit0@bandit.labs.overthewire.org -p 2220
+bandit0@bandit:~$ ls
+readme
 bandit0@bandit:~$ cat readme
 NH2SXQwcBdpmTEzi3bvBHMM9H66vVXjL
 ```
@@ -38,6 +41,7 @@ ssh bandit1@bandit.labs.overthewire.org -p 2220
 # bandit1:NH2SXQwcBdpmTEzi3bvBHMM9H66vVXjL
 ```
 The password for the next level is stored in a file called **readme** located in the home directory. Use this password to log into bandit1 using SSH:
+
 ```shell
 cat readme
 # NH2SXQwcBdpmTEzi3bvBHMM9H66vVXjL
