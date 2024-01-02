@@ -52,7 +52,7 @@ We can also use the *Logger++* extension which allows us to define advanced filt
 
 **Burp Scanner** provides live scanning features for auditing items while we browse, or we can schedule automated scans to crawl and audit the target site on our behalf. Both approaches will automatically flag many info disclosure vulnerabilities for us. For example, it will alert us if it finds sensitive info, such as private keys, email addresses, credit card numbers, etc. It will also identify any backup files, directory listings, and so on.
 
-![](https://portswigger.net/cms/images/25/ac/d4b31263a79c-article-screen_shot_2018-09-13_at_13.13.54.png)
+![](burp_scanner.png)
 
 ### Using Burp's engagement tools (Pro version only)
 
@@ -61,7 +61,7 @@ Burp provides several engagement tools that we can use to find interesting info 
 - **Find comments**: We can use this tool to quickly extract any developer comments found in the selected item. It also provides tabs to instantly access the HTTP request/response cycle in which each comment was found.
 - **Discover content**: We can use this tool to identify additional content and functionality that is not linked from the website's visible content. This can be useful for findining additional directories and files that won't necessary appear in the site map automatically.
 
-![](https://portswigger.net/cms/images/13/e2/e233-article-burp-suite-pro-discover-content.jpg)
+![](burp_engagement_tools.png)
 
 ### Engineering informative responses
 
@@ -69,6 +69,43 @@ Verbose error messages can sometimes disclose interesting info while we go about
 
 One common method is to make the app logic attempt an invalid action on a specific item of data. For example, submitting an invalid parameter value might lead to a stack trace or debug response that contains interesting details. We can sometimes cause error messages to disclose the value of our desired data in the response.
 
+## Common sources of information disclosure
+
+### Files for web crawlers
+
+Many websites provide files at `/robots.txt` and `/sitemap.xml` to help crawlers navigate their site. Among other things, these files often list specific directories that the crawlers should skip, for example, because they may contain sensitive info. As these files are not usually linked from within the website, they may not immediately appear in Burp's site map. However, it is worth trying to navigate to these directories manually to see if we can find anything of use.
+
+### Directory listings
+
+Web servers can be configured to automatically list the contents of directories that do not have an index page present. This can aid an attacker by enabling them to quickly identify the resources at a given path, and proceed directly to analyzing and attacking those resources. It particularly increases the exposure of sensitive files within the directory that are not intended to be accessible to users, such as temp files and crash dumps.
+
+Directory listings themselves are not necessarily a security vulnerability. However, if a website also fails to implement proper access control, leaking the existence and location of sensitive resources in this way is clearly an issue.
+
+### Developer comments
+
+During development, in-line HTML comments are sometimes added to the markup. These are typically stripped before changes are deployed to the production environment. However, they can sometimes be forgotten, missed, or even left in deliberately because someone wasn't fully aware of the security implications. Although these comments are not visible on the rendered page, they can easily be access using Burp, or even the browser's built-in developer tools.
+
+### Error messages
+
+One of the most common causes of information disclosure is verbose error messages. Their content can reveal info about what **input or data type** is expected from a given parameter which can help us to narrow down our attack by identifying exploitable parameters or simply prevent us from wasting time trying to inject payloads that won't work.
+
+In addition, error messages can provide **info about different technologies being used** by the website, which can lead in expanding our attack surface. We might also discover that the website is using some kind of **open-source framework**, so we can study the publicly available source code and construct our own exploits.
+
+Differences between error messages can also reveal different app behavior that is occurring behind the scenes. This is a crucial aspect of many techniques, such as SQLi and username enumeration, among others.
+
+### Lab: Information disclosure in error messages
+
+> **Objective**: _This lab's verbose error messages reveal that it is using a vulnerable version of a third-party framework. To solve the lab, obtain and submit the version number of this framework._
+
+1. When we select an product, there is a `productId` parameter which has as a value an integer number:
+
+    ![](lab1_home.png)
+
+2. If we change this value to something other than the integer that it expects, it will give us an error message that includes the web app framework's version:
+
+    ![](lab1_version.png)
+
+    ![](lab1_solved.png)
 
 ## How to prevent information disclosure vulnerabilities
 
@@ -82,5 +119,4 @@ There are some general best practices that we can follow to minimize the risk of
 
 ## Resources
 
-- [Path Traversal](https://portswigger.net/web-security/file-path-traversal).
-- [Path Traversal (YouTube version)](https://www.youtube.com/watch?v=NQwUDLMOrHo&t=11s).
+- [Infromation disclosure](https://portswigger.net/web-security/information-disclosure).
