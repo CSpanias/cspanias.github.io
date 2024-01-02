@@ -123,7 +123,7 @@ Debugging info may sometimes be logged in a separate file. If an attacker is abl
 
 1. If we select any product from the homepage and visit its source code, we will find an HTML comment listing a directory used for Debug purposes:
 
-    ![](lab2_source.png)
+    ![](lab2_source.png){: .normal}
 
 2. Upon visiting this directory, we can search and find the `SECRET_KEY` value:
 
@@ -139,7 +139,164 @@ However, sometimes the logic for loading individual items of data is not as robu
 
 ### Source code disclosure via backup files
 
+Obtaining source code makes it much easier for an attacker to understand the app's behavior and construct high-severity attacks. Sensitive data is sometimes even hard-coded within it, such as API keys and credentials for accessing back-end components. If we can identify that a particular open-source technology is being used, this provides easy access to a limited amount of source code.
 
+Occasionally, it is even possible to cause the website to expose its own source code. When mapping out a website, we might find that some source code files are referenced explicitly. Unfortunately, requesting them does not usually reveal the code itself. When a server handles files with a particular extension, such as `.php`, it will typically execute the code, rather than simply sending it to the client as text. 
+
+However, in some situations, we can trick a website into returning the contents of the file instead. For example, text editors often generate temp backup files while the original file is being edited. These are usually indicated in some way, such as by appending a tilde (`~`) to the filename or adding a different file extension. Requesting a code file using a backup file extension can sometimes allow us to read the contents of the file in the response.
+
+### Lab: Source code disclosure via backup files
+
+> **Objective**: _This lab leaks its source code via backup files in a hidden directory. To solve the lab, identify and submit the database password, which is hard-coded in the leaked source code._
+
+1. This website includes a `/robots.txt` directory which contains a listing for a `/backup` directory:
+
+    ![](lab3_robots.png)
+
+2. The `/backup` directory contains a backup file (indicated by the `.bak` extension). This file has hardcoded the connection details needed for the PostgreSQL server which includes the password:
+
+    ![](lab3_backup_dir.png)
+
+    ![](lab3_pass.png)
+
+    ![](lab3_solved.png)
+
+## Information disclosure due to insecure configuration
+
+Websites are sometimes vulnerable as a result of misconfigurations. This is especially common due to the widespread use of third-party technologies, whose vast array of configuration options are not necessarily well-understood by those implementing them.
+
+In other cases, developers might forget to disable various debugging options in the production environment. For example, HTTP `TRACE` method is designed for diagnostic purposes. If enabled, the web server will respond to requests that use it by echoing in the response the exact request that was received. This may seem harmless, but occasionally leads to info disclosure, such as the name of internal authentication headers that may be appended to requests by reverse proxies.
+
+### Lab: Authentication bypass via information disclosure
+
+> **Objective**: _This lab's administration interface has an authentication bypass vulnerability, but it is impractical to exploit without knowledge of a custom HTTP header used by the front-end. To solve the lab, obtain the header name then use it to bypass the lab's authentication. Access the admin interface and delete the user `carlos`. You can log in to your own account using the following credentials: `wiener:peter`._
+
+1. When we try to access the `/admin` interface as the user `wiener`, we get a message saying that it is only accessble to local users:
+
+    ![](lab4_admin_error.png)
+
+    ![](lab4_admin_error_burp.png)
+
+2. If we change the HTTP method from `GET` to `TRACE`, we can see at the end of the response that the `X-Custom-IP-Authorization` header, containing our IP address, was automatically appended to our request. This header is used to determine whether or not the request came from the `localhost` IP address. Since the `/admin` interface is only available to `localhost` we can change this header as follows:
+
+    ![](lab4_match_and_replace.png)
+
+3. When we do that, the admin panel wil be available and we can use it to delete the user `carlos`:
+
+    ![](lab4_admin_panel.png)
+
+    ![](lab4_solved.png)
+
+## Version control history
+
+Virtually all websites are developed using some form of version control system, such as Git. By default, a Git project stores all of its version control data in a folder called `.git`. Occasionally, websites expose this directory in the production environment. In this case, we might be able to access it by simply browsing to `/.git`.
+
+While it is often impractical to manually browse the raw file structure and contents, there are various methods for the downloading the entire `.git` directory which may include logs containing committed changes and other interesting info. This might not give us access to the full source code, but comparing the diff will allow you to read small snippets of code and we might be lucky in finding sensitive data hard-coded within some changed lines.
+
+> Try Hack Me's [Git Happens](https://cspanias.github.io/posts/THM-Git-Happens/) machine.
+
+## Lab: Information disclosure in version control history
+
+> **Objective**: _This lab discloses sensitive information via its version control history. To solve the lab, obtain the password for the `administrator` user then log in and delete the user `carlos`._
+
+1. This website has a `/.git` directory:
+
+    ![](lab5_git.png)
+
+2. We can download the whole directory locally using [Gitools](https://github.com/internetwache/GitTools):
+
+    ```shell
+    # download .git directory
+    $ /opt/GitTools/Dumper/gitdumper.sh https://0afa00ea047350a68206bf7b001100ce.web-security-academy.net/.git/ ~/portswigger/info_disclosure/
+    ###########
+    # GitDumper is part of https://github.com/internetwache/GitTools
+    #
+    # Developed and maintained by @gehaxelt from @internetwache
+    #
+    # Use at your own risk. Usage might be illegal in certain circumstances.
+    # Only for educational purposes!
+    ###########
+
+    [*] Destination folder does not exist
+    [+] Creating /home/kali/portswigger/info_disclosure//.git/
+    [+] Downloaded: HEAD
+    [-] Downloaded: objects/info/packs
+    [+] Downloaded: description
+    [+] Downloaded: config
+    [+] Downloaded: COMMIT_EDITMSG
+    [+] Downloaded: index
+    [-] Downloaded: packed-refs
+    [+] Downloaded: refs/heads/master
+    [-] Downloaded: refs/remotes/origin/HEAD
+    [-] Downloaded: refs/stash
+    [+] Downloaded: logs/HEAD
+    [+] Downloaded: logs/refs/heads/master
+    [-] Downloaded: logs/refs/remotes/origin/HEAD
+    [-] Downloaded: info/refs
+    [+] Downloaded: info/exclude
+    [-] Downloaded: /refs/wip/index/refs/heads/master
+    [-] Downloaded: /refs/wip/wtree/refs/heads/master
+    [+] Downloaded: objects/df/f527d734b5cfa13ef20f554309408fd16f68e6
+    [-] Downloaded: objects/00/00000000000000000000000000000000000000
+    [+] Downloaded: objects/0f/119caba173aa611b01fac27ce40dc34f7edfca
+    [+] Downloaded: objects/21/54555944002791a4d27412bf6e9a6f29e942fa
+    [+] Downloaded: objects/ab/21e339e998069d4f315136e882e16f590c8ed8
+    [+] Downloaded: objects/21/d23f13ce6c704b81857379a3e247e3436f4b26
+    [+] Downloaded: objects/89/44e3b9853691431dc58d5f4978d3940cea4af2
+    [+] Downloaded: objects/90/55fb5b8127f7e82802db7ee9f66e61644fb3ef
+    ```
+
+    > We can also use `wget -r https://0afa00ea047350a68206bf7b001100ce.web-security-academy.net/.git/`.
+
+3. We can now interact with it as it was our own:
+
+    ```shell
+    $ cd ~/portswigger/info_disclosure/.git
+    $ ls
+    COMMIT_EDITMSG  config  description  HEAD  index  info  logs  objects  refs
+    ```
+
+    For example, we can check the logs using `git log`:
+
+    ```shell
+    $ git log
+    commit dff527d734b5cfa13ef20f554309408fd16f68e6 (HEAD -> master)
+    Author: Carlos Montoya <carlos@evil-user.net>
+    Date:   Tue Jun 23 14:05:07 2020 +0000
+
+        Remove admin password from config
+
+    commit 0f119caba173aa611b01fac27ce40dc34f7edfca
+    Author: Carlos Montoya <carlos@evil-user.net>
+    Date:   Mon Jun 22 16:23:42 2020 +0000
+
+        Add skeleton admin panel
+    ```
+
+    We are interestingly mostly on the commits included in the log. We can achieve this by [chaining commands](https://www.diskinternals.com/linux-reader/bash-chain-commands/#:~:text=Chaining%20usually%20means%20binding%20things,by%20simply%20introducing%20an%20operator.) using the pipe operator (`|`):
+
+    ```shell
+    $ cat commits
+    commit dff527d734b5cfa13ef20f554309408fd16f68e6
+    Author: Carlos Montoya <carlos@evil-user.net>
+    Date:   Tue Jun 23 14:05:07 2020 +0000
+
+        Remove admin password from config
+
+    diff --git a/admin.conf b/admin.conf
+    index 9055fb5..21d23f1 100644
+    --- a/admin.conf
+    +++ b/admin.conf
+    @@ -1 +1 @@
+    -ADMIN_PASSWORD=y2c7pbp5mfhxql197pjn
+    +ADMIN_PASSWORD=env('ADMIN_PASSWORD')
+    ```
+
+    > A detailed analysis of the command can be found [here](https://cspanias.github.io/posts/THM-Git-Happens/#33-git-repositories-and-gittools).
+
+4. Now that we got the password of the user `administrator`, we can log in and delete `carlos`:
+
+    ![](lab5_solved.png)
 
 ## How to prevent information disclosure vulnerabilities
 
