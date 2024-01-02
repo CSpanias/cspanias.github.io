@@ -1,6 +1,6 @@
 ---
 title: Information disclosure
-date: 2024-01-01
+date: 2024-01-02
 categories: [PortSwigger, Information disclosure]
 tags: [portswigger, information-disclosure]
 img_path: /assets/portswigger/info_disclosure
