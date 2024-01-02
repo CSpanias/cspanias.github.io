@@ -118,11 +118,11 @@ If an app strips or blocks directory traversal sequences from the user-supplied 
 
 ### Alternative automated solution
 
-1. PayloadsAllTheThings's GitHub includes the [directory traversal wordlist](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Directory%20Traversal/Intruder/directory_traversal.txt) which we can download locally and use then load it on Intruder:
+1. PayloadsAllTheThings's GitHub includes the [directory traversal wordlist](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Directory%20Traversal/Intruder/directory_traversal.txt) which we can download and then load on Intruder:
 
     ![](lab3_path_traversal_enc_wordlist.png)
 
-    ![](lab3_payload_pos.png)
+    ![](lab3_payload_pos.png){: .normal}
 
     ![](lab3_payload_settings.png)
 
@@ -130,7 +130,7 @@ If an app strips or blocks directory traversal sequences from the user-supplied 
 
     ![](lab3_non_enc_payloads.png)
 
-    ![](lab3_enc_payloads.png)
+    ![](lab3_enc_payloads.png){: .normal}
 
 
 ## Lab: File path traversal, validation of start of path
