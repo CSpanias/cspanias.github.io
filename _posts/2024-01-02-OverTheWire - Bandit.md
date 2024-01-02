@@ -114,12 +114,9 @@ bandit4@bandit:~$ cat inhere/-file07
 lrIWWI6bB37kxfiCQZqUdOIYfr6eEeqR
 ```
 
-## ## [Level 5 &rarr; 6](https://overthewire.org/wargames/bandit/bandit6.html)
+## [Level 5 &rarr; 6](https://overthewire.org/wargames/bandit/bandit6.html)
 
-> The password for the next level is stored in a file somewhere under the `inhere` directory and has all of the following properties:
-    - human-readable
-    - 1033 bytes in size
-    - not executable
+> The password for the next level is stored in a file somewhere under the `inhere` directory and has all of the following properties: human-readable, 1033 bytes in size, not executable.
 
 ```shell
 $ ssh bandit5@bandit.labs.overthewire.org -p 2220
