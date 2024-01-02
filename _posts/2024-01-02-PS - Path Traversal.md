@@ -153,7 +153,30 @@ If an app strips or blocks directory traversal sequences from the user-supplied 
 
 ## Lab: File path traversal, validation of file extension with null byte bypass
 
+**Objective**: _This lab contains a path traversal vulnerability in the display of product images. The application validates that the supplied filename ends with the expected file extension. To solve the lab, retrieve the contents of the `/etc/passwd` file._
 
+1. If we attempt a simple path traversal attack, it will fail:
+
+    ![](lab5_simple_attack.png)
+
+2. This is because it requires to have the `.png` string included in the `filename` parameter. We can add `.png` at the end of our payload and prefix it with a null byte (`%00`) so it gets ignored by the actual request:
+
+    ![](lab5_attack.png)
+
+## How to prevent a path traversal attack
+
+The most effective way to prevent path traversal vulnerabilities is to avoid passing user-supplied input to filesystem APIs altogether. If we can't avoid passing user-supplied input to filesystem APIs, we can use two layers of defence to prevent attacks:
+1. User input validation before processing it. Ideally, we should compare the user input with a whitelist of permitted values. If that is not possible, we should verify that the input contains only permitted content, such as alphanumeric characters only.
+2. After user input validation, we could append the input to the base directory and use a platform filesystem API to canocicalize the path, and then verify that the canonicalized path starts with the expected base directory.
+
+Below is an example of some simple Java code to validate the canonical path of a file based on user input:
+
+```java
+File file = new File(BASE_DIRECTORY, userInput);
+if (file.getCanonicalPath().startsWith(BASE_DIRECTORY)) {
+    // process file
+}
+```
 
 ## Resources
 
