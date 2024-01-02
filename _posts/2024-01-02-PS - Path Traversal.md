@@ -50,10 +50,10 @@ On Unix-based operating systems, this is a standard file containing details of t
 ## Common obstacles to exploiting path traversal vulnerabilities
 
 If an app strips or blocks directory traversal sequences from the user-supplied filename, it might be possible to bypass the defence using various techniques.
-- We might be able to used an absolute path from the filesystem root, such as `filename=/etc/passwd`, to directly reference a file without using any traversal sequences.
-- We might be able to use nested traversal sequences, such as `....//` or `....\/`. There reverse to simple traversal sequences when the inner sequence is stripped ([DVWA example](https://cspanias.github.io/posts/DVWA-File-Inclusion/#local-file-inclusion-1)).
-- In some contexts, such as in a URL path or the `filename` parameter of a `multipart/form-data` request, web servers may strip any directory traversal sequences before passing our input to the app. We can sometimes bypass this kind of sanitization by URL encoding, or even double URL encoding, the `../` characters. This results in `%2e%2e%2f` and `%252e%252e%252f`, respectively. Various non-standard encodings, such as `..%c0%af` or `..%ef%bc%8f`, may also work. In Burp Pro, Intruder provides the predefined payload list [**Fuzzing - path traversal**](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Directory%20Traversal/Intruder/directory_traversal.txt), which contains some encoded path traversal sequences we can try.
-- An app may require the user-supplied filename to start with the expected base folder, such as `/var/www/images`. In this case, it might be possible to include the require base folder followed by suitable traversal sequences: `filename=/var/www/images/../../../etc/passwd`.
+- We might be able to used an absolute path from the filesystem root, such as `filename=/etc/passwd`, to directly reference a file without using any traversal sequence ([Lab](https://cspanias.github.io/posts/PS-Path-Traversal/#lab-file-path-traversal-traversal-sequences-blocked-with-absolute-path-bypass)).
+- We might be able to use nested traversal sequences, such as `....//` or `....\/`. There reverse to simple traversal sequences when the inner sequence is stripped ([Lab](https://cspanias.github.io/posts/PS-Path-Traversal/#lab-file-path-traversal-traversal-sequences-stripped-non-recursively), [DVWA example](https://cspanias.github.io/posts/DVWA-File-Inclusion/#local-file-inclusion-1)).
+- In some contexts, such as in a URL path or the `filename` parameter of a `multipart/form-data` request, web servers may strip any directory traversal sequences before passing our input to the app. We can sometimes bypass this kind of sanitization by URL encoding, or even double URL encoding, the `../` characters. This results in `%2e%2e%2f` and `%252e%252e%252f`, respectively. Various non-standard encodings, such as `..%c0%af` or `..%ef%bc%8f`, may also work. In Burp Pro, Intruder provides the predefined payload list [**Fuzzing - path traversal**](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Directory%20Traversal/Intruder/directory_traversal.txt), which contains some encoded path traversal sequences we can try ([Lab](https://cspanias.github.io/posts/PS-Path-Traversal/#lab-file-path-traversal-traversal-sequences-stripped-with-superfluous-url-decode)).
+- An app may require the user-supplied filename to start with the expected base folder, such as `/var/www/images`. In this case, it might be possible to include the require base folder followed by suitable traversal sequences: `filename=/var/www/images/../../../etc/passwd` ([Lab](https://cspanias.github.io/posts/PS-Path-Traversal/#lab-file-path-traversal-traversal-sequences-stripped-with-superfluous-url-decode)).
 - An app may require the user-supplied filename to end with an expected file extension, such as `.png`. In this case, it might be possible to use a **null byte** to effectively terminate the file path before the required extension: `filename=../../../etc/passwd%00.png`.
 
 ## Lab: File path traversal, traversal sequences blocked with absolute path bypass
@@ -74,7 +74,7 @@ If an app strips or blocks directory traversal sequences from the user-supplied 
 
     ![](lab1_attack_fail.png)
 
-4. However, if we pass the absolute value of the file path we will be able to read the file:
+4. However, when we pass the absolute value of the file path we are able to read the file:
 
     ![](lab1_passwd.png)
 
@@ -115,6 +115,23 @@ If an app strips or blocks directory traversal sequences from the user-supplied 
     ![](lab3_url_enc_twice.png)
 
     ![](lab3_solved.png)
+
+### Alternative automated solution
+
+1. PayloadsAllTheThings's GitHub includes the [directory traversal wordlist](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Directory%20Traversal/Intruder/directory_traversal.txt) which we can download locally and use then load it on Intruder:
+
+    ![](lab3_path_traversal_enc_wordlist.png)
+
+    ![](lab3_payload_pos.png)
+
+    ![](lab3_payload_settings.png)
+
+2. After our attack is completed, we can see that none of the non-encoded payloads worked, but the three that were encoded worked fine:
+
+    ![](lab3_non_enc_payloads.png)
+
+    ![](lab3_enc_payloads.png)
+
 
 ## Lab: File path traversal, validation of start of path
 
