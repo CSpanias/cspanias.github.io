@@ -398,7 +398,7 @@ kAWpXbv5tbkkzbS0eaLPTKgLzavXtQoTtKwrjpolHKIHUz6Wu+n4abfAIRFubOdN
 -----END RSA PRIVATE KEY-----
 ```
 
-We have to create a file and copy paste the key on our local machine and use it to connect to the next level:
+We have to create a file, copy paste the key on our local machine, and then use it to connect to the next level:
 
 ```bash
 # create a file called 'id_rsa'
@@ -456,3 +456,146 @@ jN2kgmIXJ6fShzhT2avhotn4Zcka6tnt
 ```
 
 ## [Level 15 &rarr; 16](https://overthewire.org/wargames/bandit/bandit16.html)
+
+> The password for the next level can be retrieved by submitting the password of the current level to port `30001` on `localhost` using SSL encryption.
+
+> Helpful note: Getting `HEARTBEATING` and `Read R BLOCK`? Use `-ign_eof` and read the `CONNECTED COMMANDS` section in the manpage. Next to `R` and `Q`, the `B` command also works in this version of that command…
+
+```bash
+$ ssh bandit15@bandit.labs.overthewire.org -p 2220
+
+bandit15@bandit:~$ openssl s_client -connect localhost:30001
+CONNECTED(00000003)
+Can't use SSL_get_servername
+depth=0 CN = localhost
+verify error:num=18:self-signed certificate
+verify return:1
+depth=0 CN = localhost
+verify error:num=10:certificate has expired
+notAfter=Dec 31 16:51:29 2023 GMT
+verify return:1
+depth=0 CN = localhost
+notAfter=Dec 31 16:51:29 2023 GMT
+verify return:1
+---
+Certificate chain
+ 0 s:CN = localhost
+   i:CN = localhost
+   a:PKEY: rsaEncryption, 2048 (bit); sigalg: RSA-SHA1
+   v:NotBefore: Dec 31 16:50:29 2023 GMT; NotAfter: Dec 31 16:51:29 2023 GMT
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIIDCzCCAfOgAwIBAgIEd2zsFjANBgkqhkiG9w0BAQUFADAUMRIwEAYDVQQDDAls
+b2NhbGhvc3QwHhcNMjMxMjMxMTY1MDI5WhcNMjMxMjMxMTY1MTI5WjAUMRIwEAYD
+VQQDDAlsb2NhbGhvc3QwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDa
+I/3T3+5jb1P6JKLTAiKno5vP4XblDAMrz5DXYPPp2xMChk9qt/gJIk0DFqqBAaMT
+NdeQAwbOE7p/vFUYr2VK/lRLD1hwPYvUWDcnaM54POA5DZWtsxkNmlf8TsV+CJbq
+Wy/HF7wGxCIJTU85/BCAvjztaB6GiwNF1tK67gY3OMi17Y/OZcup5OlfsOc2Z1K8
+JQTxUpLL+dKctD0MPm5wyRG3k7Er4nE+Ww+wQl+tvibxYdmI8ln5p7R302bFbMny
+tYrEMwcMnXiZ/as2lC918s+mkMDF2N29vdc2z+yh8nxpbvB9Wnm8caWnz8Bgzlhm
+Uf6Dr1X/OW9Sqr52CoafAgMBAAGjZTBjMBQGA1UdEQQNMAuCCWxvY2FsaG9zdDBL
+BglghkgBhvhCAQ0EPhY8QXV0b21hdGljYWxseSBnZW5lcmF0ZWQgYnkgTmNhdC4g
+U2VlIGh0dHBzOi8vbm1hcC5vcmcvbmNhdC8uMA0GCSqGSIb3DQEBBQUAA4IBAQAD
+Axuf0o+lYLoAwbYBQ9u4TQGXVDP8THKIGvLA5YoQ66WTS+Yqz6UyU2KKWIXIJOPg
+3m4pjssfW61KbE76ALqGNoXqX3/3zhhFEOxeKdu7oto54xeC9E6pLF+VRkOLBsER
+vkVV04gIHvW6bJPJcqroW/hpkj8gFErOcKnV5Q+XWdjFs7mFNzMQWEViaU4Tv8Vb
+VHvFd1H7QVO5jTqDeReKa1EX1TKhsFN5ZdeGFNW4lGMOMagretF0SggYQ/jXxTQq
+ZlE48UQ2UjPmJ2Q93A7Zz9Q79SzdoxjAysD/z7r1V8cRM8XsUUt4EQsc/LcISu/5
+shdDpgGChFBkzNY/2zYw
+-----END CERTIFICATE-----
+subject=CN = localhost
+issuer=CN = localhost
+---
+No client certificate CA names sent
+Peer signing digest: SHA256
+Peer signature type: RSA-PSS
+Server Temp Key: X25519, 253 bits
+---
+SSL handshake has read 1339 bytes and written 373 bytes
+Verification error: certificate has expired
+---
+New, TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384
+Server public key is 2048 bit
+Secure Renegotiation IS NOT supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+Early data was not sent
+Verify return code: 10 (certificate has expired)
+---
+---
+Post-Handshake New Session Ticket arrived:
+SSL-Session:
+    Protocol  : TLSv1.3
+    Cipher    : TLS_AES_256_GCM_SHA384
+    Session-ID: 3B86333C302F8578A6176621393A0747016984714B27D1A6A5FEDE2597D652D5
+    Session-ID-ctx:
+    Resumption PSK: 244515B670C10CA822DBF2F4060EDCB0CEE099447770D7A6E5DE75E8CFA2D75C61071DE462546EEC6CABAD3D7BE44DCC
+    PSK identity: None
+    PSK identity hint: None
+    SRP username: None
+    TLS session ticket lifetime hint: 7200 (seconds)
+    TLS session ticket:
+    0000 - 35 fa 11 f4 72 e4 41 40-5c 24 4b 0a 01 db d5 57   5...r.A@\$K....W
+    0010 - da c8 8d 16 25 05 b7 38-1a b2 17 31 a4 d2 6e f3   ....%..8...1..n.
+    0020 - af be 8e 98 19 70 71 f0-15 ae 2d a1 73 ab cd 03   .....pq...-.s...
+    0030 - ec 5c b7 06 a9 7e 86 8a-0d ae 74 33 a1 6c 5b 92   .\...~....t3.l[.
+    0040 - 05 ba fe 65 be fb e7 91-eb a5 e6 f5 56 ed d3 1f   ...e........V...
+    0050 - 22 20 0d 1d e1 3a a4 e2-04 5e 97 8b d8 6b c8 be   " ...:...^...k..
+    0060 - c0 1c 1b 29 89 0a ff c6-2b 2f b1 ca d5 32 60 89   ...)....+/...2`.
+    0070 - e6 50 02 8b 6c 7f 20 85-8a fc f9 7a 08 88 74 f0   .P..l. ....z..t.
+    0080 - ab d7 7d b2 f1 36 61 47-aa d2 10 97 c2 3d 48 65   ..}..6aG.....=He
+    0090 - 5c 3b a4 f7 0c 99 d2 57-73 24 8a 71 22 72 6f 99   \;.....Ws$.q"ro.
+    00a0 - 69 f7 bf d9 ee c6 24 9b-44 2f e7 4f 88 df b9 85   i.....$.D/.O....
+    00b0 - dc 64 91 c8 08 2e b4 5a-07 4b af 19 f2 45 a2 9a   .d.....Z.K...E..
+    00c0 - c5 0e 74 1c 65 54 c1 ba-c3 70 c3 6b f5 f1 bf a5   ..t.eT...p.k....
+
+    Start Time: 1704279091
+    Timeout   : 7200 (sec)
+    Verify return code: 10 (certificate has expired)
+    Extended master secret: no
+    Max Early Data: 0
+---
+read R BLOCK
+---
+Post-Handshake New Session Ticket arrived:
+SSL-Session:
+    Protocol  : TLSv1.3
+    Cipher    : TLS_AES_256_GCM_SHA384
+    Session-ID: 83BF2A44BE2577608B8B5425F48D6F30CE1E84F2188616F6F8F5501A263B656F
+    Session-ID-ctx:
+    Resumption PSK: 9752FC0B4274A14E9BF9515B11E6107787089D5F7909E15BF0785A33814390BB54FC7DF33BBE8AE405933B5FDC9CA88A
+    PSK identity: None
+    PSK identity hint: None
+    SRP username: None
+    TLS session ticket lifetime hint: 7200 (seconds)
+    TLS session ticket:
+    0000 - 35 fa 11 f4 72 e4 41 40-5c 24 4b 0a 01 db d5 57   5...r.A@\$K....W
+    0010 - bb a0 fa 0a 70 eb 0e 18-cf 8c a4 11 87 d8 d4 e9   ....p...........
+    0020 - 2f 43 15 19 4e 86 35 85-9f bf 32 ce 7e 64 b3 dc   /C..N.5...2.~d..
+    0030 - 5a 4e 0f c3 5c b2 90 34-89 24 4c 13 c0 90 71 4c   ZN..\..4.$L...qL
+    0040 - 9f 3a 4f 5a d5 85 26 81-ae 28 cf f9 3a 71 73 2f   .:OZ..&..(..:qs/
+    0050 - e6 83 8b e0 7b 91 8a 51-e5 f2 0f 86 ce e5 d0 78   ....{..Q.......x
+    0060 - 97 f7 cf a6 e1 22 5c 95-21 17 30 95 49 8d f8 b4   ....."\.!.0.I...
+    0070 - da 6e 77 5a ad f6 0b c6-1c 60 b0 f5 da a2 6c 40   .nwZ.....`....l@
+    0080 - 0c 18 50 33 d5 49 1b 1d-33 cc 13 5a 91 8b e6 5a   ..P3.I..3..Z...Z
+    0090 - 0c 66 a9 3b 8d a5 79 d7-ea 14 a3 79 9d 50 11 23   .f.;..y....y.P.#
+    00a0 - e3 40 d5 ec 6c e7 62 ac-19 78 63 cf 2c 21 e5 33   .@..l.b..xc.,!.3
+    00b0 - 34 5f 65 f6 cb 26 b7 9c-a7 73 71 16 04 a8 88 9a   4_e..&...sq.....
+    00c0 - 54 05 b4 e0 3e 56 7c 10-bd ee ed 10 5f d4 46 e9   T...>V|....._.F.
+
+    Start Time: 1704279091
+    Timeout   : 7200 (sec)
+    Verify return code: 10 (certificate has expired)
+    Extended master secret: no
+    Max Early Data: 0
+---
+read R BLOCK
+jN2kgmIXJ6fShzhT2avhotn4Zcka6tnt
+Correct!
+JQttfApK4SeyHwDlI9SXGR50qclOAil1
+```
+
+## [Level 16 &rarr; 17](https://overthewire.org/wargames/bandit/bandit17.html)
+
