@@ -158,7 +158,6 @@ P4L4vucdmLnm8I7Vl7jG1ApGSfjYKqJU
 
 > The password for the next level is stored somewhere on the server and has all of the following properties: owned by user `bandit7`, owned by group `bandit6`, `33` bytes in size.
 
-7. 6-->7
 ```shell
 $ ssh bandit6@bandit.labs.overthewire.org -p 2220
 
@@ -227,7 +226,7 @@ The password is 6zPeziLdR2RKNdNYFNb6nVCKzphlXHBM
 
 > The password for the next level is stored in the file `data.txt`, where all lowercase (a-z) and uppercase (A-Z) letters have been rotated by 13 positions.
 
-```shell
+```console
 $ ssh bandit11@bandit.labs.overthewire.org -p 2220
 
 # decode ROT13
