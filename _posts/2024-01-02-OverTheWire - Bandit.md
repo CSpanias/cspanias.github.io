@@ -289,8 +289,8 @@ compressed_data  hexdump_data
 ```
 
 This generated a file named `compressed_data` so we can repeat the process as many times as necessary until we get the password:
-    1. Identify the type of the file.
-    2. Act accordingly.
+1. Identify the type of the file.
+2. Act accordingly.
 
 ```bash
 # check the type of the file (based on its magic number)
@@ -499,18 +499,20 @@ tcp6       0      0 :::30001                :::*                    LISTEN
 tcp6       0      0 :::30002                :::*                    LISTEN
 ```
 
-We found just two ports in the required range: `31518` and `31790`. We can use `nmap` with a version scan (`-sV`) to check which one uses SSL, and then submit the flag to it:
+We found just two ports within the required range: `31518` and `31790`. We can use `nmap` with the version scan option (`-sV`) to check which one uses SSL, and then submit the flag to it:
 
 ```bash
 # use nmap to scan the ports found above to check which one uses SSL
-bandit16@bandit:~$ nmap localhost -sV -p 31518, 31790 -T4
+bandit16@bandit:~$ nmap localhost -sV -p 31518,31790 -T4
 
-PORT      STATE SERVICE  VERSION
+PORT      STATE SERVICE     VERSION
 31518/tcp open  ssl/echo
+31790/tcp open  ssl/unknown
+```
 
-PORT      STATE  SERVICE VERSION
-31518/tcp closed unknown
+We can see that both use SSL but the port `31518` will just echo back whatever will pass to it. So we will use port `31790`:
 
+```bash
 # connecting on port 31790
 bandit16@bandit:~$ openssl s_client -connect localhost:31790
 
@@ -631,3 +633,12 @@ bandit19@bandit:~$ ./bandit20-do cat /etc/bandit_pass/bandit20
 VxCazJaVykI6W36BkBU0mJTCM8rR95XT
 ```
 
+## [Level 20 &rarr; 21](https://overthewire.org/wargames/bandit/bandit21.html)
+
+> There is a `setuid` binary in the `home` directory that does the following: it makes a connection to `localhost` on the port you specify as a command-line argument. It then reads a line of text from the connection and compares it to the password in the previous level (`bandit20`). If the password is correct, it will transmit the password for the next level (`bandit21`).
+
+> NOTE: Try connecting to your own network daemon to see if it works as you think.
+
+```bash
+$ ssh bandit19@bandit.labs.overthewire.org -p 2220
+```
