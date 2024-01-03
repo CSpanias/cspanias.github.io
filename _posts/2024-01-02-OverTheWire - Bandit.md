@@ -599,3 +599,204 @@ JQttfApK4SeyHwDlI9SXGR50qclOAil1
 
 ## [Level 16 &rarr; 17](https://overthewire.org/wargames/bandit/bandit17.html)
 
+> The credentials for the next level can be retrieved by submitting the password of the current level to a port on `localhost` in the range `31000` to `32000`. First find out which of these ports have a server listening on them. Then find out which of those speak SSL and which don’t. There is only 1 server that will give the next credentials, the others will simply send back to you whatever you send to it.
+
+```bash
+$ ssh bandit16@bandit.labs.overthewire.org -p 2220
+
+# check what ports are listening
+bandit16@bandit:~$ netstat -nlt
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State
+netstat: no support for `AF INET (tcp)' on this system.
+tcp6       0      0 :::31518                :::*                    LISTEN
+tcp6       0      0 :::2220                 :::*                    LISTEN
+tcp6       0      0 :::2232                 :::*                    LISTEN
+tcp6       0      0 :::2230                 :::*                    LISTEN
+tcp6       0      0 :::2231                 :::*                    LISTEN
+tcp6       0      0 :::22                   :::*                    LISTEN
+tcp6       0      0 :::31790                :::*                    LISTEN
+tcp6       0      0 :::30001                :::*                    LISTEN
+tcp6       0      0 :::30002                :::*                    LISTEN
+
+# use nmap to scan the ports found above to check which one uses SSL
+bandit16@bandit:~$ nmap localhost -sV -p 31518, 31790 -T4
+Starting Nmap 7.80 ( https://nmap.org ) at 2024-01-03 11:37 UTC
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.00010s latency).
+
+PORT      STATE SERVICE  VERSION
+31518/tcp open  ssl/echo
+
+Nmap scan report for 31790 (0.0.124.46)
+Host is up (0.00019s latency).
+
+PORT      STATE  SERVICE VERSION
+31518/tcp closed unknown
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 2 IP addresses (2 hosts up) scanned in 52.93 seconds
+
+# connecting on port 31790
+bandit16@bandit:~$ openssl s_client -connect localhost:31790
+CONNECTED(00000003)
+Can't use SSL_get_servername
+depth=0 CN = localhost
+verify error:num=18:self-signed certificate
+verify return:1
+depth=0 CN = localhost
+verify error:num=10:certificate has expired
+notAfter=Dec 31 16:51:30 2023 GMT
+verify return:1
+depth=0 CN = localhost
+notAfter=Dec 31 16:51:30 2023 GMT
+verify return:1
+---
+Certificate chain
+ 0 s:CN = localhost
+   i:CN = localhost
+   a:PKEY: rsaEncryption, 2048 (bit); sigalg: RSA-SHA1
+   v:NotBefore: Dec 31 16:50:30 2023 GMT; NotAfter: Dec 31 16:51:30 2023 GMT
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIIDCzCCAfOgAwIBAgIESXSR6jANBgkqhkiG9w0BAQUFADAUMRIwEAYDVQQDDAls
+b2NhbGhvc3QwHhcNMjMxMjMxMTY1MDMwWhcNMjMxMjMxMTY1MTMwWjAUMRIwEAYD
+VQQDDAlsb2NhbGhvc3QwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDf
+zwpJ6DLZ0kO/ln7nmNz0hMpvNOT2Fhn/BxEFWpFUxlb/0/QWhPC5JSfMlxhM7H3H
+pvDOzN1aG21I55wXB2OCtWK7EPjSY3Kb2woA4L4No80acYINoiEiR7U1qG5rNE+T
+okH4d7xvQa8I45NG5JTm4yIdpbjP6SP9z/W8eYWHkuceF3zirkCixtvObJG0+cJK
+qEWD/FrVQ9E+qmFrOEGlXTzcK3M5XAkdAwg84yDmOTEF76b69o5j+g5bm+X6w1m0
+LRpxr0XSDBpHJ6Fgb4gKc3MmHxF8Qbhig6kJB77r5uYJgKLo2nebzsYUIdhAVCj0
+bLzKZY9F2QjZ6BowxES5AgMBAAGjZTBjMBQGA1UdEQQNMAuCCWxvY2FsaG9zdDBL
+BglghkgBhvhCAQ0EPhY8QXV0b21hdGljYWxseSBnZW5lcmF0ZWQgYnkgTmNhdC4g
+U2VlIGh0dHBzOi8vbm1hcC5vcmcvbmNhdC8uMA0GCSqGSIb3DQEBBQUAA4IBAQC7
+k7wv/qUszdJGE92/QZuUaDYd16yhHQX7fnqL9i7op/C+zsLljj5srXb9qGyhwn0o
+s0YBL5vVFpXU7Q6GX2n9eUvaHIT/iXCUTq4/RmjGJ9n165zN8JVRe5gzvDNmkpuu
+cAyFT3f4yCZmZK8EQcAmINwzCUGwiKccrUNxA3bf6kafc59qhgg5+IrqY4D5XjLr
+b4yOXzIK1qTMWR9utI5fpmwjAkrAW4EWZAEr8N/Ww7dyqiN4cO8HJgCWXEbGK4eP
+1dOGKqZGy7vtqlfqYqu5V794GxvEqgh2UQDxJfqA65SYjn7TJsORjwisiCpvod/U
+eVdny9PstWp8PUe7GFQJ
+-----END CERTIFICATE-----
+subject=CN = localhost
+issuer=CN = localhost
+---
+No client certificate CA names sent
+Peer signing digest: SHA256
+Peer signature type: RSA-PSS
+Server Temp Key: X25519, 253 bits
+---
+SSL handshake has read 1339 bytes and written 373 bytes
+Verification error: certificate has expired
+---
+New, TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384
+Server public key is 2048 bit
+Secure Renegotiation IS NOT supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+Early data was not sent
+Verify return code: 10 (certificate has expired)
+---
+---
+Post-Handshake New Session Ticket arrived:
+SSL-Session:
+    Protocol  : TLSv1.3
+    Cipher    : TLS_AES_256_GCM_SHA384
+    Session-ID: 6474427E7761D5C5DF814B16498F70D464320D43B99F13E2ECBB37A99FA2FD4D
+    Session-ID-ctx:
+    Resumption PSK: 7F6A839E58576DCDEA901882BBEFEB04ADBA8230552EDFE2C8EAA8C6CA2971903872FE6E796477CE76B62C48120981AA
+    PSK identity: None
+    PSK identity hint: None
+    SRP username: None
+    TLS session ticket lifetime hint: 7200 (seconds)
+    TLS session ticket:
+    0000 - 2d 36 88 37 92 9e 74 f5-2c d7 85 e8 62 8b 89 87   -6.7..t.,...b...
+    0010 - 60 d1 35 62 f1 30 4a 1a-63 11 a1 f5 14 3d ce 5e   `.5b.0J.c....=.^
+    0020 - a8 a5 88 15 0a 1d cb ee-27 86 00 ad 69 cf 4f 16   ........'...i.O.
+    0030 - 5d 22 73 df ab 50 0a b3-3c 56 41 f2 b1 8f 13 9a   ]"s..P..<VA.....
+    0040 - 34 4b 41 0d 64 72 59 0a-fb e2 b8 1f 5e ef 98 81   4KA.drY.....^...
+    0050 - e9 14 fc 3c 1c 13 5e 32-ee 39 e7 59 2b 80 5b 89   ...<..^2.9.Y+.[.
+    0060 - c6 86 33 6b b0 14 77 ca-68 27 18 ee 53 99 6b 74   ..3k..w.h'..S.kt
+    0070 - 70 96 a8 dc 38 d0 cf c7-86 9b e9 af a9 d0 6b ab   p...8.........k.
+    0080 - fd 5e 50 72 53 0b d0 99-3d cb 17 35 8c 85 59 2d   .^PrS...=..5..Y-
+    0090 - 08 97 e6 5e 5a d4 c2 d1-80 ca a8 c6 1f e1 1f 10   ...^Z...........
+    00a0 - c1 72 10 b1 ea 12 b3 2d-68 94 ae a0 b2 94 3b 1c   .r.....-h.....;.
+    00b0 - af f1 e7 76 f0 08 a7 73-bd 6a 33 3d 0c 1f f3 9e   ...v...s.j3=....
+    00c0 - 60 1d ee dd fd b2 37 65-54 20 c5 a2 50 84 37 c9   `.....7eT ..P.7.
+
+    Start Time: 1704281686
+    Timeout   : 7200 (sec)
+    Verify return code: 10 (certificate has expired)
+    Extended master secret: no
+    Max Early Data: 0
+---
+read R BLOCK
+---
+Post-Handshake New Session Ticket arrived:
+SSL-Session:
+    Protocol  : TLSv1.3
+    Cipher    : TLS_AES_256_GCM_SHA384
+    Session-ID: 6098570B673D4550A391465206111B4763E716B57E46E596621C74044780BBFA
+    Session-ID-ctx:
+    Resumption PSK: 64ECC786DFE93C5147C4357D9221289A4825737C9E084047C57CBB92828E460C3422BDC7BCF5C101FF8E7C0585658257
+    PSK identity: None
+    PSK identity hint: None
+    SRP username: None
+    TLS session ticket lifetime hint: 7200 (seconds)
+    TLS session ticket:
+    0000 - 2d 36 88 37 92 9e 74 f5-2c d7 85 e8 62 8b 89 87   -6.7..t.,...b...
+    0010 - 83 7c 4d 3e 44 c6 ea 75-f5 db 65 c7 85 b5 ce 16   .|M>D..u..e.....
+    0020 - e8 84 f5 a4 98 fa 2b b6-e2 1c e2 a7 37 cd 95 ab   ......+.....7...
+    0030 - 0c 84 b4 97 7f bf 3f 56-55 72 24 4e 2a 1c ce ba   ......?VUr$N*...
+    0040 - e4 c5 55 c6 27 5c 2a 82-bc c1 cf 95 12 38 47 05   ..U.'\*......8G.
+    0050 - 9f 8c 4d 39 ea 54 23 25-ed 89 5c 4e 8c a2 1d ca   ..M9.T#%..\N....
+    0060 - c7 0a b0 ba ea 50 ed 88-1c 85 41 d1 4e f5 ab db   .....P....A.N...
+    0070 - b2 c0 16 fe cb 50 d1 bc-b1 7f 25 b6 0b 1b c8 b8   .....P....%.....
+    0080 - 8d d9 35 d0 48 89 dc 1e-05 85 1c f0 e4 67 83 f4   ..5.H........g..
+    0090 - bf 35 bd a1 69 44 f1 04-42 18 ce 8a 1c db ac 62   .5..iD..B......b
+    00a0 - 07 af 7f 6f f7 1b 7b 36-1d bd 8c ac e3 fb 3b fb   ...o..{6......;.
+    00b0 - 10 18 a8 28 b2 aa 36 7b-75 76 1c 5b 66 bf cf 98   ...(..6{uv.[f...
+    00c0 - 0f bf 8f 16 9d 22 8d 1e-ec a2 22 d5 7c c1 8f 1d   ....."....".|...
+
+    Start Time: 1704281687
+    Timeout   : 7200 (sec)
+    Verify return code: 10 (certificate has expired)
+    Extended master secret: no
+    Max Early Data: 0
+---
+read R BLOCK
+JQttfApK4SeyHwDlI9SXGR50qclOAil1
+Correct!
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvmOkuifmMg6HL2YPIOjon6iWfbp7c3jx34YkYWqUH57SUdyJ
+imZzeyGC0gtZPGujUSxiJSWI/oTqexh+cAMTSMlOJf7+BrJObArnxd9Y7YT2bRPQ
+Ja6Lzb558YW3FZl87ORiO+rW4LCDCNd2lUvLE/GL2GWyuKN0K5iCd5TbtJzEkQTu
+DSt2mcNn4rhAL+JFr56o4T6z8WWAW18BR6yGrMq7Q/kALHYW3OekePQAzL0VUYbW
+JGTi65CxbCnzc/w4+mqQyvmzpWtMAzJTzAzQxNbkR2MBGySxDLrjg0LWN6sK7wNX
+x0YVztz/zbIkPjfkU1jHS+9EbVNj+D1XFOJuaQIDAQABAoIBABagpxpM1aoLWfvD
+KHcj10nqcoBc4oE11aFYQwik7xfW+24pRNuDE6SFthOar69jp5RlLwD1NhPx3iBl
+J9nOM8OJ0VToum43UOS8YxF8WwhXriYGnc1sskbwpXOUDc9uX4+UESzH22P29ovd
+d8WErY0gPxun8pbJLmxkAtWNhpMvfe0050vk9TL5wqbu9AlbssgTcCXkMQnPw9nC
+YNN6DDP2lbcBrvgT9YCNL6C+ZKufD52yOQ9qOkwFTEQpjtF4uNtJom+asvlpmS8A
+vLY9r60wYSvmZhNqBUrj7lyCtXMIu1kkd4w7F77k+DjHoAXyxcUp1DGL51sOmama
++TOWWgECgYEA8JtPxP0GRJ+IQkX262jM3dEIkza8ky5moIwUqYdsx0NxHgRRhORT
+8c8hAuRBb2G82so8vUHk/fur85OEfc9TncnCY2crpoqsghifKLxrLgtT+qDpfZnx
+SatLdt8GfQ85yA7hnWWJ2MxF3NaeSDm75Lsm+tBbAiyc9P2jGRNtMSkCgYEAypHd
+HCctNi/FwjulhttFx/rHYKhLidZDFYeiE/v45bN4yFm8x7R/b0iE7KaszX+Exdvt
+SghaTdcG0Knyw1bpJVyusavPzpaJMjdJ6tcFhVAbAjm7enCIvGCSx+X3l5SiWg0A
+R57hJglezIiVjv3aGwHwvlZvtszK6zV6oXFAu0ECgYAbjo46T4hyP5tJi93V5HDi
+Ttiek7xRVxUl+iU7rWkGAXFpMLFteQEsRr7PJ/lemmEY5eTDAFMLy9FL2m9oQWCg
+R8VdwSk8r9FGLS+9aKcV5PI/WEKlwgXinB3OhYimtiG2Cg5JCqIZFHxD6MjEGOiu
+L8ktHMPvodBwNsSBULpG0QKBgBAplTfC1HOnWiMGOU3KPwYWt0O6CdTkmJOmL8Ni
+blh9elyZ9FsGxsgtRBXRsqXuz7wtsQAgLHxbdLq/ZJQ7YfzOKU4ZxEnabvXnvWkU
+YOdjHdSOoKvDQNWu6ucyLRAWFuISeXw9a/9p7ftpxm0TSgyvmfLF2MIAEwyzRqaM
+77pBAoGAMmjmIJdjp+Ez8duyn3ieo36yrttF5NSsJLAbxFpdlc1gvtGCWW+9Cq0b
+dxviW8+TFVEBl1O4f7HVm6EpTscdDxU+bCXWkfjuRb7Dy9GOtt9JPsX8MBTakzh3
+vBgsyi/sN3RqRBcGU40fOoZyfAMT8s1m/uYv52O6IgeuZ/ujbjY=
+-----END RSA PRIVATE KEY-----
+
+closed
+```
+
+
