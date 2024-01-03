@@ -28,8 +28,10 @@ bandit0@bandit:~$
 
 ```shell
 $ ssh bandit0@bandit.labs.overthewire.org -p 2220
+
 bandit0@bandit:~$ ls
 readme
+
 bandit0@bandit:~$ cat readme
 NH2SXQwcBdpmTEzi3bvBHMM9H66vVXjL
 ```
@@ -40,9 +42,11 @@ NH2SXQwcBdpmTEzi3bvBHMM9H66vVXjL
 
 ```shell
 $ ssh bandit1@bandit.labs.overthewire.org -p 2220
+
 # use absolute path
 bandit1@bandit:~$ cat /home/bandit1/-
 rRGizSaX8Mk1RTb1CNQoXTcYZWU6lgzi
+
 # OR, "hide" the dash from the command
 bandit1@bandit:~$ cat ./-
 rRGizSaX8Mk1RTb1CNQoXTcYZWU6lgzi
@@ -54,8 +58,10 @@ rRGizSaX8Mk1RTb1CNQoXTcYZWU6lgzi
 
 ```shell
 $ ssh bandit2@bandit.labs.overthewire.org -p 2220
+
 bandit2@bandit:~$ cat "spaces in this filename"
 aBZ0W5EmUfAf7kHTQeOwd8bauFJ2lAiG
+
 # or use backslashes
 bandit2@bandit:~$ cat spaces\ in\ this\ filename
 aBZ0W5EmUfAf7kHTQeOwd8bauFJ2lAiG
@@ -67,11 +73,13 @@ aBZ0W5EmUfAf7kHTQeOwd8bauFJ2lAiG
 
 ```shell
 $ ssh bandit3@bandit.labs.overthewire.org -p 2220
+
 bandit3@bandit:~$ ls -la inhere/
 total 12
 drwxr-xr-x 2 root    root    4096 Oct  5 06:19 .
 drwxr-xr-x 3 root    root    4096 Oct  5 06:19 ..
 -rw-r----- 1 bandit4 bandit3   33 Oct  5 06:19 .hidden
+
 bandit3@bandit:~$ cat inhere/.hidden
 2EW7BBsr6aMMoJ2HjW067dm8EgX26xNe
 ```
@@ -82,6 +90,7 @@ bandit3@bandit:~$ cat inhere/.hidden
 
 ```shell
 $ ssh bandit4@bandit.labs.overthewire.org -p 2220
+
 bandit4@bandit:~$ ls -la inhere/
 total 48
 drwxr-xr-x 2 root    root    4096 Oct  5 06:19 .
@@ -96,8 +105,10 @@ drwxr-xr-x 3 root    root    4096 Oct  5 06:19 ..
 -rw-r----- 1 bandit5 bandit4   33 Oct  5 06:19 -file07
 -rw-r----- 1 bandit5 bandit4   33 Oct  5 06:19 -file08
 -rw-r----- 1 bandit5 bandit4   33 Oct  5 06:19 -file09
+
 # using bash scripting
 bandit4@bandit:~$ for file in inhere/*; do cat "$file";echo \n; done
+
 # check content first
 bandit4@bandit:~$ file inhere/*
 inhere/-file00: data
@@ -110,6 +121,7 @@ inhere/-file06: data
 inhere/-file07: ASCII text
 inhere/-file08: data
 inhere/-file09: data
+
 bandit4@bandit:~$ cat inhere/-file07
 lrIWWI6bB37kxfiCQZqUdOIYfr6eEeqR
 ```
@@ -120,93 +132,115 @@ lrIWWI6bB37kxfiCQZqUdOIYfr6eEeqR
 
 ```shell
 $ ssh bandit5@bandit.labs.overthewire.org -p 2220
-# lrIWWI6bB37kxfiCQZqUdOIYfr6eEeqR
-ls -la maybehere* | grep 1033
-# -rw-r-----  1 root bandit5 1033 Oct  5 06:19 .file2
-find . -type f -size 1033c 2>/dev/null
-# ./maybehere07/.file2
-find . -type f -size 1033c 2>/dev/null | xargs file
-# ./maybehere07/.file2: ASCII text, with very long lines (1000)
-cat ./maybehere07/.file2
-# P4L4vucdmLnm8I7Vl7jG1ApGSfjYKqJU
+
+bandit5@bandit:~$ ls inhere/
+maybehere00  maybehere03  maybehere06  maybehere09  maybehere12  maybehere15  maybehere18
+maybehere01  maybehere04  maybehere07  maybehere10  maybehere13  maybehere16  maybehere19
+maybehere02  maybehere05  maybehere08  maybehere11  maybehere14  maybehere17
+
+# using grep based on size
+bandit5@bandit:~$ ls -la inhere/maybehere*/ | grep 1033
+-rw-r-----  1 root bandit5 1033 Oct  5 06:19 .file2
+
+# using find base on size
+bandit5@bandit:~$ find -size 1033c 2>/dev/null
+./inhere/maybehere07/.file2
+
+# using find's output as argument for file 
+bandit5@bandit:~$ find -size 1033c 2>/dev/null | xargs file
+./inhere/maybehere07/.file2: ASCII text, with very long lines (1000)
+
+bandit5@bandit:~$ cat inhere/maybehere07/.file2
+P4L4vucdmLnm8I7Vl7jG1ApGSfjYKqJU
 ```
+
+## [Level 6 &rarr; 7](https://overthewire.org/wargames/bandit/bandit7.html)
+
+> The password for the next level is stored somewhere on the server and has all of the following properties: owned by user `bandit7`, owned by group `bandit6`, `33` bytes in size.
 
 7. 6-->7
 ```shell
-ssh bandit6@bandit.labs.overthewire.org -p 2220
-# P4L4vucdmLnm8I7Vl7jG1ApGSfjYKqJU
-```
-The password for the next level is stored **somewhere on the server** and has all of the following properties:
-- owned by user bandit7
-- owned by group bandit6
-- 33 bytes in size
-```shell
-find / -type f -size 33c 2>/dev/null | grep bandit7 | xargs ls -la
-# -r-------- 1 bandit7 bandit7 33 Oct  5 06:19 /etc/bandit_pass/bandit7
-# -rw-r----- 1 bandit7 bandit6 33 Oct  5 06:19 /var/lib/dpkg/info/bandit7.password
-cat /var/lib/dpkg/info/bandit7.password
-# z7WtoNQU2XfjmMtWA8u5rN4vzqu4v99S
+$ ssh bandit6@bandit.labs.overthewire.org -p 2220
+
+bandit6@bandit:/$ find / -type f -size 33c -user bandit7 -group bandit6 2>/dev/null
+/var/lib/dpkg/info/bandit7.password
+
+bandit6@bandit:/$ cat /var/lib/dpkg/info/bandit7.password
+z7WtoNQU2XfjmMtWA8u5rN4vzqu4v99S
 ```
 
-8. 7-->8
+## [Level 7 &rarr; 8](https://overthewire.org/wargames/bandit/bandit8.html)
+
+> The password for the next level is stored in the file `data.txt` next to the word `millionth`.
+
 ```shell
-ssh bandit7@bandit.labs.overthewire.org -p 2220
-# z7WtoNQU2XfjmMtWA8u5rN4vzqu4v99S
-```
-The password for the next level is stored in the file **data.txt** next to the word **millionth**.
-```shell
-find / -type f -iname data.txt 2>/dev/null | grep bandit7 | xargs cat | grep "millionth"
-# millionth TESKZC0XvTetK0S9xNwm25STk5iWrBvP
+$ ssh bandit7@bandit.labs.overthewire.org -p 2220
+
+bandit7@bandit:~$ ls
+data.txt
+
+bandit7@bandit:~$ cat data.txt | grep millionth
+millionth       TESKZC0XvTetK0S9xNwm25STk5iWrBvP
+
+# or in a one-liner
+bandit7@bandit:~$ ls | xargs cat | grep millionth
+millionth       TESKZC0XvTetK0S9xNwm25STk5iWrBvP
 ```
 
-9. 8-->9
+## [Level 8 &rarr; 9](https://overthewire.org/wargames/bandit/bandit9.html)
+
+> The password for the next level is stored in the file `data.txt` and is the only line of text that occurs only once.
+
 ```shell
-ssh bandit8@bandit.labs.overthewire.org -p 2220
-# TESKZC0XvTetK0S9xNwm25STk5iWrBvP
-```
-The password for the next level is stored in the file **data.txt** and is the only line of text that occurs only once.
-```shell
-find / -type f -iname data.txt 2>/dev/null | grep bandit8
-# /home/bandit8/data.txt
-cat /home/bandit8/data.txt | sort | uniq -u
-# EN632PlfYiZbn3PhVK3XOGSlNInNE00t
+$ ssh bandit8@bandit.labs.overthewire.org -p 2220
+
+bandit8@bandit:~$ sort data.txt | uniq -u
+EN632PlfYiZbn3PhVK3XOGSlNInNE00t
 ```
 
-10. 9-->10
+## [Level 9 &rarr; 10](https://overthewire.org/wargames/bandit/bandit10.html)
+
+> The password for the next level is stored in the file `data.txt` in one of the few human-readable strings, preceded by several `=` characters.
+
 ```shell
-ssh bandit9@bandit.labs.overthewire.org -p 2220
-# EN632PlfYiZbn3PhVK3XOGSlNInNE00t
-```
-The password for the next level is stored in the file **data.txt** in one of the few human-readable strings, preceded by several ‘=’ characters.
-```shell
-cd /home/bandit9
-ls
-# data.txt
-xxd data.txt | grep "====*"
-# 00000460: 785d 543d 3d3d 3d3d 3d3d 3d3d 3d20 7468  x]T========== th
-# 000014a0: a1a7 4f5b 970e b936 fe5e 4653 bf3d 3d3d  ..O[...6.^FS.===
-# 000014b0: 3d3d 3d3d 3d3d 3d20 7061 7373 776f 7264  ======= password
-# 00001b40: c8ff 3d3d 3d3d 3d3d 3d3d 3d3d 2069 73ba  ..========== is.
-# 00003f40: 3d3d 3d3d 3d3d 3d3d 2047 3777 384c 4969  ======== G7w8LIi
-# ======== G7w8LIi6J3kTb8A7j9LgrywtEUlyyp6s
+$ ssh bandit9@bandit.labs.overthewire.org -p 2220
+
+bandit9@bandit:~$ strings data.txt | grep ==
+x]T========== theG)"
+========== passwordk^
+========== is
+========== G7w8LIi6J3kTb8A7j9LgrywtEUlyyp6s
 ```
 
-11. 10-->11
+## [Level 10 &rarr; 11](https://overthewire.org/wargames/bandit/bandit11.html)
+
+> The password for the next level is stored in the file `data.txt`, which contains `base64` encoded data.
+
 ```shell
-ssh bandit10@bandit.labs.overthewire.org -p 2220
-# G7w8LIi6J3kTb8A7j9LgrywtEUlyyp6s
-```
-The password for the next level is stored in the file **data.txt**, which contains base64 encoded data.
-```shell
-base64 -d data.txt
-# The password is 6zPeziLdR2RKNdNYFNb6nVCKzphlXHBM
+$ ssh bandit10@bandit.labs.overthewire.org -p 2220
+
+bandit10@bandit:~$ base64 -d data.txt
+The password is 6zPeziLdR2RKNdNYFNb6nVCKzphlXHBM
 ```
 
-12. 11-->12
-```shell
-ssh bandit11@bandit.labs.overthewire.org -p 2220
-# 6zPeziLdR2RKNdNYFNb6nVCKzphlXHBM
-```
-The password for the next level is stored in the file **data.txt**, where all lowercase (a-z) and uppercase (A-Z) letters have been rotated by 13 positions.
+## [Level 11 &rarr; 12](https://overthewire.org/wargames/bandit/bandit12.html)
 
-Reading: [Rot13 on Wikipedia](https://en.wikipedia.org/wiki/Rot13)
+> The password for the next level is stored in the file `data.txt`, where all lowercase (a-z) and uppercase (A-Z) letters have been rotated by 13 positions.
+
+```shell
+$ ssh bandit11@bandit.labs.overthewire.org -p 2220
+
+# decode ROT13
+bandit11@bandit:~$ cat data.txt | tr '[a-zA-Z]' '[n-za-mN-ZA-M]'
+The password is JVNBBFSmZwKKOP0XbFXOoW8chDz5yVRv
+```
+
+## [Level 12 &rarr; 13](https://overthewire.org/wargames/bandit/bandit13.html)
+
+> The password for the next level is stored in the file `data.txt`, which is a hexdump of a file that has been repeatedly compressed. For this level it may be useful to create a directory under `/tmp` in which you can work using `mkdir`. For example: `mkdir /tmp/myname123`. Then copy the datafile using `cp`, and rename it using `mv` (read the manpages!).
+
+```shell
+$ ssh bandit12@bandit.labs.overthewire.org -p 2220
+
+
+```
