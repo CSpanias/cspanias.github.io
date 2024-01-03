@@ -749,7 +749,7 @@ bandit22@bandit:~$ echo I am user bandit23 | md5sum | cut -d ' ' -f 1
 8ca319486bfbbc3663ea0fbe81326349
 ```
 
-So the password it should be stored in the following location `/tmp/8ca319486bfbbc3663ea0fbe81326349`.
+So the password should be stored in the following file `/tmp/8ca319486bfbbc3663ea0fbe81326349`.
 
 ```bash
 bandit22@bandit:~$ cat /tmp/8ca319486bfbbc3663ea0fbe81326349
