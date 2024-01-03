@@ -640,5 +640,130 @@ VxCazJaVykI6W36BkBU0mJTCM8rR95XT
 > NOTE: Try connecting to your own network daemon to see if it works as you think.
 
 ```bash
-$ ssh bandit19@bandit.labs.overthewire.org -p 2220
+$ ssh bandit20@bandit.labs.overthewire.org -p 2220
+```
+
+We can create a **onetime server**, a server that sends one message and then disconnects, using `nc -lp` and then pass it a message with the combination of the `echo` command and the pipe (`|`) operator. We can background this operation using `&` at the end so we can continue to use our terminal instead of opening a new one:
+
+```bash
+bandit20@bandit:~$ echo -n 'VxCazJaVykI6W36BkBU0mJTCM8rR95XT' | nc -lp 1337 &
+[1] 3062056
+```
+
+Now we need to run the binary using the same port as our server (`1337`) so it can connect to it, receive the password inputted through `echo`, and sends us back the new one:
+
+```bash
+bandit20@bandit:~$ ./suconnect 1337 VxCazJaVykI6W36BkBU0mJTCM8rR95XT
+Read: VxCazJaVykI6W36BkBU0mJTCM8rR95XT
+Password matches, sending next password
+NvEJF7oVjkddltPSrdKEFOllh9V1IBcq
+[1]+  Done                    echo -n 'VxCazJaVykI6W36BkBU0mJTCM8rR95XT' | nc -lp 1337
+```
+
+## [Level 21 &rarr; 22](https://overthewire.org/wargames/bandit/bandit22.html)
+
+> A program is running automatically at regular intervals from `cron`, the time-based job scheduler. Look in `/etc/cron.d/` for the configuration and see what command is being executed.
+
+```bash
+$ ssh bandit21@bandit.labs.overthewire.org -p 2220
+
+# list directory files
+bandit21@bandit:~$ ls /etc/cron.d
+cronjob_bandit15_root  cronjob_bandit22  cronjob_bandit24       e2scrub_all  sysstat
+cronjob_bandit17_root  cronjob_bandit23  cronjob_bandit25_root  otw-tmp-dir
+
+# display the file content
+bandit21@bandit:/etc/cron.d$ cat cronjob_bandit22
+@reboot bandit22 /usr/bin/cronjob_bandit22.sh &> /dev/null
+* * * * * bandit22 /usr/bin/cronjob_bandit22.sh &> /dev/null
+
+# display the file content
+bandit21@bandit:/etc/cron.d$ cat /usr/bin/cronjob_bandit22.sh
+#!/bin/bash
+chmod 644 /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+cat /etc/bandit_pass/bandit22 > /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+```
+
+The above bash script modifies the permissions (`chmod 644`) of the `/tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv` file and then copies the next level's password to that file. The `644` permissions correspond to the owner of the file (`bandit22`) having read (`r`) and write (`w`) permissions and the group and others having read permissions only. As a result, everyone can read it. 
+
+```bash
+# check file's permissions
+bandit21@bandit:/etc/cron.d$ ls -l /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+-rw-r--r-- 1 bandit22 bandit22 33 Jan  3 20:22 /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+
+bandit21@bandit:/etc/cron.d$ cat /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+WdDozAdTM2z9DiFEQ2mGlwngMfj4EZff
+```
+
+## [Level 22 &rarr; 23](https://overthewire.org/wargames/bandit/bandit23.html)
+
+> A program is running automatically at regular intervals from cron, the time-based job scheduler. Look in `/etc/cron.d/` for the configuration and see what command is being executed.
+
+> NOTE: Looking at shell scripts written by other people is a very useful skill. The script for this level is intentionally made easy to read. If you are having problems understanding what it does, try executing it to see the debug information it prints.
+
+```bash
+$ ssh bandit22@bandit.labs.overthewire.org -p 2220
+
+bandit22@bandit:~$ ls -l /etc/cron.d
+total 36
+-rw-r--r-- 1 root root  62 Oct  5 06:19 cronjob_bandit15_root
+-rw-r--r-- 1 root root  62 Oct  5 06:19 cronjob_bandit17_root
+-rw-r--r-- 1 root root 120 Oct  5 06:19 cronjob_bandit22
+-rw-r--r-- 1 root root 122 Oct  5 06:19 cronjob_bandit23
+-rw-r--r-- 1 root root 120 Oct  5 06:19 cronjob_bandit24
+-rw-r--r-- 1 root root  62 Oct  5 06:19 cronjob_bandit25_root
+-rw-r--r-- 1 root root 201 Jan  8  2022 e2scrub_all
+-rwx------ 1 root root  52 Oct  5 06:20 otw-tmp-dir
+-rw-r--r-- 1 root root 396 Feb  2  2021 sysstat
+
+bandit22@bandit:~$ cat /etc/cron.d/cronjob_bandit23
+@reboot bandit23 /usr/bin/cronjob_bandit23.sh  &> /dev/null
+* * * * * bandit23 /usr/bin/cronjob_bandit23.sh  &> /dev/null
+
+bandit22@bandit:~$ cat /usr/bin/cronjob_bandit23.sh
+#!/bin/bash
+
+myname=$(whoami)
+mytarget=$(echo I am user $myname | md5sum | cut -d ' ' -f 1)
+
+echo "Copying passwordfile /etc/bandit_pass/$myname to /tmp/$mytarget"
+
+cat /etc/bandit_pass/$myname > /tmp/$mytarget
+```
+
+Let's break down what this bash script does:
+1. `myname=$(whoami)` The `whoami` commands outputs the current user and since this is written by `bandit23`, the `myname` variable will be assigned that name.
+2. `mytarget=$(echo I am user $myname | md5sum | cut -d ' ' -f 1)` The first part just outputs 'I am user bandit23', the second part hashes that string using the MD5 hashing algorithm, and then third part splits the output using space as the delimiter and picks the first field. The latter is then assigned to the variable `mytarget`.
+3. Then goes on to echo the following string: "Copying passwordfile /etc/bandit_pass/bandit23 to /tmp/<mytarget>".
+4. Finally, it copies the password from `/etc/bandit_pass/bandit23` the a file under the `/tmp/` directory with the `mytarget`'s value as its name.
+
+An example of what's happening:
+
+```bash
+# hashing the string using MD5
+bandit22@bandit:~$ echo I am user bandit23 | md5sum
+8ca319486bfbbc3663ea0fbe81326349  -
+
+# selecting the first field of the output
+bandit22@bandit:~$ echo I am user bandit23 | md5sum | cut -d ' ' -f 1
+8ca319486bfbbc3663ea0fbe81326349
+```
+
+So the password it should be stored in the following location `/tmp/8ca319486bfbbc3663ea0fbe81326349`.
+
+```bash
+bandit22@bandit:~$ cat /tmp/8ca319486bfbbc3663ea0fbe81326349
+QYw0Y2aiA672PsMmh9puTQuhoz8SyR2G
+```
+
+## [Level 23 &rarr; 24](https://overthewire.org/wargames/bandit/bandit24.html)
+
+> A program is running automatically at regular intervals from cron, the time-based job scheduler. Look in `/etc/cron.d/` for the configuration and see what command is being executed.
+
+> NOTE: This level requires you to create your own first shell-script. This is a very big step and you should be proud of yourself when you beat this level!
+
+> NOTE 2: Keep in mind that your shell script is removed once executed, so you may want to keep a copy around…
+
+```bash
+$ ssh bandit23@bandit.labs.overthewire.org -p 2220
 ```
