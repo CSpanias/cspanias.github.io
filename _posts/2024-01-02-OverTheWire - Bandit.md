@@ -550,4 +550,84 @@ vBgsyi/sN3RqRBcGU40fOoZyfAMT8s1m/uYv52O6IgeuZ/ujbjY=
 closed
 ```
 
+## [Level 17 &rarr; 18](https://overthewire.org/wargames/bandit/bandit18.html)
+
+> There are 2 files in the `home` directory: `passwords.old` and `passwords.new`. The password for the next level is in `passwords.new` and is the only line that has been changed between `passwords.old` and `passwords.new`.
+
+> NOTE: if you have solved this level and see `Byebye!` when trying to log into `bandit18`, this is related to the next level, `bandit19`.
+
+```bash
+# connect to SSH using the key found in the previous level
+$ ssh bandit17@bandit.labs.overthewire.org -p 2220 -i id_rsa
+
+# display the differences of the two files
+bandit17@bandit:~$ diff passwords.old passwords.new
+42c42
+< p6ggwdNHncnmCNxuAt0KtKVq185ZU7AW
+---
+> hga5tuuCLF6fFzUpnagiMN8ssu9LFrdg
+```
+
+## [Level 18 &rarr; 19](https://overthewire.org/wargames/bandit/bandit19.html)
+
+> The password for the next level is stored in a file `readme` in the `home` directory. Unfortunately, someone has modified `.bashrc` to log you out when you log in with SSH.
+
+We can pass command to an SSH server without logging in to it:
+
+```bash
+$ ssh bandit18@bandit.labs.overthewire.org -p 2220 cat readme
+
+bandit18@bandit.labs.overthewire.org's password:
+awhqfNnAbc1naukrpqDYcF95h7HoMTrC
+```
+
+We can also spawn a terminal and read the file that way:
+
+```bash
+$ ssh bandit18@bandit.labs.overthewire.org -p 2220 /bin/bash
+
+bandit18@bandit.labs.overthewire.org's password:
+cat readme
+awhqfNnAbc1naukrpqDYcF95h7HoMTrC
+```
+
+## [Level 19 &rarr; 20](https://overthewire.org/wargames/bandit/bandit20.html)
+
+> To gain access to the next level, you should use the `setuid` binary in the `home` directory. Execute it without arguments to find out how to use it. The password for this level can be found in the usual place (`/etc/bandit_pass`), after you have used the `setuid` binary.
+
+```bash
+$ ssh bandit19@bandit.labs.overthewire.org -p 2220
+# list directory's files
+bandit19@bandit:~$ ls
+bandit20-do
+# check the file's type
+bandit19@bandit:~$ file bandit20-do
+bandit20-do: setuid ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, BuildID[sha1]=037b97b430734c79085a8720c90070e346ca378e, for GNU/Linux 3.2.0, not stripped
+# execute binary
+bandit19@bandit:~$ ./bandit20-do
+Run a command as another user.
+  Example: ./bandit20-do id
+# check file's permissions
+bandit19@bandit:~$ ls -l bandit20-do
+-rwsr-x--- 1 bandit20 bandit19 14876 Oct  5 06:19 bandit20-do
+# list directory's files
+bandit19@bandit:~$ ls /etc/bandit_pass
+bandit0  bandit10  bandit12  bandit14  bandit16  bandit18  bandit2   bandit21  bandit23  bandit25  bandit27  bandit29  bandit30  bandit32  bandit4  bandit6  bandit8
+bandit1  bandit11  bandit13  bandit15  bandit17  bandit19  bandit20  bandit22  bandit24  bandit26  bandit28  bandit3   bandit31  bandit33  bandit5  bandit7  bandit9
+# check file's permissions
+bandit19@bandit:~$ ls -l /etc/bandit_pass/bandit20
+-r-------- 1 bandit20 bandit20 33 Oct  5 06:19 /etc/bandit_pass/bandit20
+```
+
+1. We have a binary file (`bandit20-do`) which is used to run a command as the user `bandit20`.
+2. We can execute this file because it belongs to the `bandit19` group which has execute permissions (`x`). 
+3. The `bandit20` password file can only be read by the user `bandit20`.
+
+As a result, we have to use the binary and pass the command to read the file as `bandit20`:
+
+```bash
+# read the file as the user 'bandit20'
+bandit19@bandit:~$ ./bandit20-do cat /etc/bandit_pass/bandit20
+VxCazJaVykI6W36BkBU0mJTCM8rR95XT
+```
 
