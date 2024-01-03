@@ -226,7 +226,7 @@ The password is 6zPeziLdR2RKNdNYFNb6nVCKzphlXHBM
 
 > The password for the next level is stored in the file `data.txt`, where all lowercase (a-z) and uppercase (A-Z) letters have been rotated by 13 positions.
 
-```console
+```bash
 $ ssh bandit11@bandit.labs.overthewire.org -p 2220
 
 # decode ROT13
@@ -236,10 +236,223 @@ The password is JVNBBFSmZwKKOP0XbFXOoW8chDz5yVRv
 
 ## [Level 12 &rarr; 13](https://overthewire.org/wargames/bandit/bandit13.html)
 
-> The password for the next level is stored in the file `data.txt`, which is a hexdump of a file that has been repeatedly compressed. For this level it may be useful to create a directory under `/tmp` in which you can work using `mkdir`. For example: `mkdir /tmp/myname123`. Then copy the datafile using `cp`, and rename it using `mv` (read the manpages!).
+> The password for the next level is stored in the file `data.txt`, which is a **hexdump** of a file that has been **repeatedly compressed**. For this level it may be useful to create a directory under `/tmp` in which you can work using `mkdir`. For example: `mkdir /tmp/myname123`. Then copy the datafile using `cp`, and rename it using `mv` (read the manpages!).
 
-```shell
+```bash
 $ ssh bandit12@bandit.labs.overthewire.org -p 2220
 
-
+# create a new directory within the tmp directory
+bandit12@bandit:~$ mkdir /tmp/xhi4m
+# copy the file into the newly-created directory
+bandit12@bandit:~$ cp data.txt /tmp/xhi4m
+# move within the newly-created directory
+bandit12@bandit:~$ cd /tmp/xhi4m
+# check the type of the file (based on its magic number)
+bandit12@bandit:/tmp/xhi4m$ file data.txt
+data.txt: ASCII text
 ```
+
+We know that the file is a [**hexdump**](https://intentionalprivacy.files.wordpress.com/2019/02/hexdumpprimer.pdf). These can be used to figure out the file type based on the **file signature**, aka [**magic number**](https://en.wikipedia.org/wiki/List_of_file_signatures). This file's magic number is `We can start by renaming the file, checking its magic number and then reverting the hexdump:
+
+```bash
+# renaming the file
+bandit12@bandit:/tmp/xhi4m$ mv hexdump hexdump_data
+# checking the file's magic number (first 4 characters)
+bandit12@bandit:/tmp/xhi4m$ head -1 data.txt
+00000000: 1f8b 0808 6855 1e65 0203 6461 7461 322e  ....hU.e..data2.
+# reverting the hexdump
+bandit12@bandit:/tmp/xhi4m$ xxd -r hexdump_data compressed_data
+# displaying the first line of the file
+bandit12@bandit:/tmp/xhi4m$ head -1 compressed_data
+�h44�z��A����@=�h4hh�⸮⸮⸮��hd����������������9���1����������;,�
+�����2�3d*58�~  �S�ZP^��luY��Br$�FP!%�s��h�?�)[=�h��O(B��2A���)�tZc��:�pã)�A�ˈ�0���΅A�yjeϢx,�(����z�E�+"�2�/�-��e"���^����t�j���$�d�@�dJơ'7\���$��m1c��#>�aԽ�EV��F��OCӐc@M�C���]��Y2^h8���D=��~      O�I��NDpF�+�|b#Jv�#�J��d�LފW$�Û�͖y�`
+                              �\&       ��[�@*w�M�0θ��nr��C��`e$b�
+                                                                  ~�{���
+                                                                        ��`�<����a��?e:T���e�T4±b����)
+```
+
+Based on the file's magic number (`1f8b`) and the [wiki list](https://en.wikipedia.org/wiki/List_of_file_signatures) we know that it's a `gzip` file. Therefore, we can add the proper extension (`.gz`) and decompress it:
+
+> Renaming the file with the proper extension is necessary only for `gzip`.
+
+```bash
+# check the type of the file (based on its magic number)
+bandit12@bandit:/tmp/xhi4m$ file compressed_data
+compressed_data: gzip compressed data, was "data2.bin", last modified: Thu Oct  5 06:19:20 2023, max compression, from Unix, original size modulo 2^32 573
+# add the proper extension
+bandit12@bandit:/tmp/xhi4m$ mv compressed_data compressed_data.gz
+# decompress the file
+bandit12@bandit:/tmp/xhi4m$ gzip -d compressed_data.gz
+# list the directory contents
+bandit12@bandit:/tmp/xhi4m$ ls
+compressed_data  hexdump_data
+```
+
+This generated a file named `compressed_data` so we can repeat the process as many times as necessary until we get the password:
+    1. Identify the type of the file.
+    2. Act accordingly.
+
+```bash
+# check the type of the file (based on its magic number)
+bandit12@bandit:/tmp/xhi4m$ file compressed_data
+compressed_data: bzip2 compressed data, block size = 900k
+# add the proper extension
+bandit12@bandit:/tmp/xhi4m$ mv compressed_data compressed_data.bz2
+# decompress the file
+bandit12@bandit:/tmp/xhi4m$ bzip2 -d compressed_data.bz2
+# list the directory contents
+bandit12@bandit:/tmp/xhi4m$ ls
+compressed_data  hexdump_data
+
+# repeat the process for decompressing the gzipped file
+bandit12@bandit:/tmp/xhi4m$ file compressed_data
+compressed_data: gzip compressed data, was "data4.bin", last modified: Thu Oct  5 06:19:20 2023, max compression, from Unix, original size modulo 2^32 20480
+bandit12@bandit:/tmp/xhi4m$ mv compressed_data compressed_data.gz
+bandit12@bandit:/tmp/xhi4m$ gzip -d compressed_data.gz
+# list the directory contents
+bandit12@bandit:/tmp/xhi4m$ ls
+compressed_data  hexdump_data
+
+# repeat the process for extracting the tar archive file
+bandit12@bandit:/tmp/xhi4m$ file compressed_data
+compressed_data: POSIX tar archive (GNU)
+bandit12@bandit:/tmp/xhi4m$ mv compressed_data compressed_data.tar
+bandit12@bandit:/tmp/xhi4m$ tar -xf compressed_data.tar
+bandit12@bandit:/tmp/xhi4m$ ls
+compressed_data.tar  data5.bin  hexdump_data
+
+# repeat the process for extracting the tar archive file
+bandit12@bandit:/tmp/xhi4m$ file data5.bin
+data5.bin: POSIX tar archive (GNU)
+bandit12@bandit:/tmp/xhi4m$ tar -xf data5.bin
+bandit12@bandit:/tmp/xhi4m$ ls
+compressed_data.tar  data5.bin  data6.bin  hexdump_data
+
+# repeat the process for decompressing the bzipped2 file
+bandit12@bandit:/tmp/xhi4m$ file data6.bin
+data6.bin: bzip2 compressed data, block size = 900k
+bandit12@bandit:/tmp/xhi4m$ bzip2 -d data6.bin
+# bzip2: Can't guess original name for data6.bin -- using data6.bin.out
+bandit12@bandit:/tmp/xhi4m$ ls
+compressed_data.tar  data5.bin  data6.bin.out  hexdump_data
+
+# repeat the process for extracting the tar archive file
+bandit12@bandit:/tmp/xhi4m$ file data6.bin.out
+data6.bin.out: POSIX tar archive (GNU)
+bandit12@bandit:/tmp/xhi4m$ tar -xf data6.bin.out
+bandit12@bandit:/tmp/xhi4m$ ls
+compressed_data.tar  data5.bin  data6.bin.out  data8.bin  hexdump_data
+
+# repeat the process for decompressing the gzipped file
+bandit12@bandit:/tmp/xhi4m$ file data8.bin
+data8.bin: gzip compressed data, was "data9.bin", last modified: Thu Oct  5 06:19:20 2023, max compression, from Unix, original size modulo 2^32 49
+bandit12@bandit:/tmp/xhi4m$ mv data8.gz data8.bin.gz
+bandit12@bandit:/tmp/xhi4m$ gzip -d data8.bin.gz
+bandit12@bandit:/tmp/xhi4m$ ls
+compressed_data.tar  data5.bin  data6.bin.out  data8.bin  hexdump_data
+
+bandit12@bandit:/tmp/xhi4m$ file data8.bin
+data8.bin: ASCII text
+bandit12@bandit:/tmp/xhi4m$ cat data8.bin
+The password is wbWdlBxEir4CaE8LaPhauuOo6pwRmrDw
+```
+
+## [Level 13 &rarr; 14](https://overthewire.org/wargames/bandit/bandit14.html)
+
+> The password for the next level is stored in `/etc/bandit_pass/bandit14` and can only be read by user `bandit14`. For this level, you don’t get the next password, but you get a private SSH key that can be used to log into the next level. 
+
+> Note: `localhost` is a hostname that refers to the machine you are working on.
+
+```bash
+$ ssh bandit13@bandit.labs.overthewire.org -p 2220
+
+bandit13@bandit:~$ ls
+sshkey.private
+bandit13@bandit:~$ cat sshkey.private
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEAxkkOE83W2cOT7IWhFc9aPaaQmQDdgzuXCv+ppZHa++buSkN+
+gg0tcr7Fw8NLGa5+Uzec2rEg0WmeevB13AIoYp0MZyETq46t+jk9puNwZwIt9XgB
+ZufGtZEwWbFWw/vVLNwOXBe4UWStGRWzgPpEeSv5Tb1VjLZIBdGphTIK22Amz6Zb
+ThMsiMnyJafEwJ/T8PQO3myS91vUHEuoOMAzoUID4kN0MEZ3+XahyK0HJVq68KsV
+ObefXG1vvA3GAJ29kxJaqvRfgYnqZryWN7w3CHjNU4c/2Jkp+n8L0SnxaNA+WYA7
+jiPyTF0is8uzMlYQ4l1Lzh/8/MpvhCQF8r22dwIDAQABAoIBAQC6dWBjhyEOzjeA
+J3j/RWmap9M5zfJ/wb2bfidNpwbB8rsJ4sZIDZQ7XuIh4LfygoAQSS+bBw3RXvzE
+pvJt3SmU8hIDuLsCjL1VnBY5pY7Bju8g8aR/3FyjyNAqx/TLfzlLYfOu7i9Jet67
+xAh0tONG/u8FB5I3LAI2Vp6OviwvdWeC4nOxCthldpuPKNLA8rmMMVRTKQ+7T2VS
+nXmwYckKUcUgzoVSpiNZaS0zUDypdpy2+tRH3MQa5kqN1YKjvF8RC47woOYCktsD
+o3FFpGNFec9Taa3Msy+DfQQhHKZFKIL3bJDONtmrVvtYK40/yeU4aZ/HA2DQzwhe
+ol1AfiEhAoGBAOnVjosBkm7sblK+n4IEwPxs8sOmhPnTDUy5WGrpSCrXOmsVIBUf
+laL3ZGLx3xCIwtCnEucB9DvN2HZkupc/h6hTKUYLqXuyLD8njTrbRhLgbC9QrKrS
+M1F2fSTxVqPtZDlDMwjNR04xHA/fKh8bXXyTMqOHNJTHHNhbh3McdURjAoGBANkU
+1hqfnw7+aXncJ9bjysr1ZWbqOE5Nd8AFgfwaKuGTTVX2NsUQnCMWdOp+wFak40JH
+PKWkJNdBG+ex0H9JNQsTK3X5PBMAS8AfX0GrKeuwKWA6erytVTqjOfLYcdp5+z9s
+8DtVCxDuVsM+i4X8UqIGOlvGbtKEVokHPFXP1q/dAoGAcHg5YX7WEehCgCYTzpO+
+xysX8ScM2qS6xuZ3MqUWAxUWkh7NGZvhe0sGy9iOdANzwKw7mUUFViaCMR/t54W1
+GC83sOs3D7n5Mj8x3NdO8xFit7dT9a245TvaoYQ7KgmqpSg/ScKCw4c3eiLava+J
+3btnJeSIU+8ZXq9XjPRpKwUCgYA7z6LiOQKxNeXH3qHXcnHok855maUj5fJNpPbY
+iDkyZ8ySF8GlcFsky8Yw6fWCqfG3zDrohJ5l9JmEsBh7SadkwsZhvecQcS9t4vby
+9/8X4jS0P8ibfcKS4nBP+dT81kkkg5Z5MohXBORA7VWx+ACohcDEkprsQ+w32xeD
+qT1EvQKBgQDKm8ws2ByvSUVs9GjTilCajFqLJ0eVYzRPaY6f++Gv/UVfAPV4c+S0
+kAWpXbv5tbkkzbS0eaLPTKgLzavXtQoTtKwrjpolHKIHUz6Wu+n4abfAIRFubOdN
+/+aLoRQ0yBDRbdXMsZN/jvY44eM+xRLdRVyMmdPtP8belRi2E2aEzA==
+-----END RSA PRIVATE KEY-----
+```
+
+We have to create a file and copy paste the key on our local machine and use it to connect to the next level:
+
+```bash
+# create a file called 'id_rsa'
+$ sudo nano id_rsa
+# display the file contents
+$ cat id_rsa
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEAxkkOE83W2cOT7IWhFc9aPaaQmQDdgzuXCv+ppZHa++buSkN+
+gg0tcr7Fw8NLGa5+Uzec2rEg0WmeevB13AIoYp0MZyETq46t+jk9puNwZwIt9XgB
+ZufGtZEwWbFWw/vVLNwOXBe4UWStGRWzgPpEeSv5Tb1VjLZIBdGphTIK22Amz6Zb
+ThMsiMnyJafEwJ/T8PQO3myS91vUHEuoOMAzoUID4kN0MEZ3+XahyK0HJVq68KsV
+ObefXG1vvA3GAJ29kxJaqvRfgYnqZryWN7w3CHjNU4c/2Jkp+n8L0SnxaNA+WYA7
+jiPyTF0is8uzMlYQ4l1Lzh/8/MpvhCQF8r22dwIDAQABAoIBAQC6dWBjhyEOzjeA
+J3j/RWmap9M5zfJ/wb2bfidNpwbB8rsJ4sZIDZQ7XuIh4LfygoAQSS+bBw3RXvzE
+pvJt3SmU8hIDuLsCjL1VnBY5pY7Bju8g8aR/3FyjyNAqx/TLfzlLYfOu7i9Jet67
+xAh0tONG/u8FB5I3LAI2Vp6OviwvdWeC4nOxCthldpuPKNLA8rmMMVRTKQ+7T2VS
+nXmwYckKUcUgzoVSpiNZaS0zUDypdpy2+tRH3MQa5kqN1YKjvF8RC47woOYCktsD
+o3FFpGNFec9Taa3Msy+DfQQhHKZFKIL3bJDONtmrVvtYK40/yeU4aZ/HA2DQzwhe
+ol1AfiEhAoGBAOnVjosBkm7sblK+n4IEwPxs8sOmhPnTDUy5WGrpSCrXOmsVIBUf
+laL3ZGLx3xCIwtCnEucB9DvN2HZkupc/h6hTKUYLqXuyLD8njTrbRhLgbC9QrKrS
+M1F2fSTxVqPtZDlDMwjNR04xHA/fKh8bXXyTMqOHNJTHHNhbh3McdURjAoGBANkU
+1hqfnw7+aXncJ9bjysr1ZWbqOE5Nd8AFgfwaKuGTTVX2NsUQnCMWdOp+wFak40JH
+PKWkJNdBG+ex0H9JNQsTK3X5PBMAS8AfX0GrKeuwKWA6erytVTqjOfLYcdp5+z9s
+8DtVCxDuVsM+i4X8UqIGOlvGbtKEVokHPFXP1q/dAoGAcHg5YX7WEehCgCYTzpO+
+xysX8ScM2qS6xuZ3MqUWAxUWkh7NGZvhe0sGy9iOdANzwKw7mUUFViaCMR/t54W1
+GC83sOs3D7n5Mj8x3NdO8xFit7dT9a245TvaoYQ7KgmqpSg/ScKCw4c3eiLava+J
+3btnJeSIU+8ZXq9XjPRpKwUCgYA7z6LiOQKxNeXH3qHXcnHok855maUj5fJNpPbY
+iDkyZ8ySF8GlcFsky8Yw6fWCqfG3zDrohJ5l9JmEsBh7SadkwsZhvecQcS9t4vby
+9/8X4jS0P8ibfcKS4nBP+dT81kkkg5Z5MohXBORA7VWx+ACohcDEkprsQ+w32xeD
+qT1EvQKBgQDKm8ws2ByvSUVs9GjTilCajFqLJ0eVYzRPaY6f++Gv/UVfAPV4c+S0
+kAWpXbv5tbkkzbS0eaLPTKgLzavXtQoTtKwrjpolHKIHUz6Wu+n4abfAIRFubOdN
+/+aLoRQ0yBDRbdXMsZN/jvY44eM+xRLdRVyMmdPtP8belRi2E2aEzA==
+-----END RSA PRIVATE KEY-----
+
+# use the key to connect to the next level
+$ ssh bandit14@bandit.labs.overthewire.org -p 2220 -i id_rsa
+bandit14@bandit:~$
+```
+
+## [Level 14 &rarr; 15](https://overthewire.org/wargames/bandit/bandit15.html)
+
+> The password for the next level can be retrieved by submitting the password of the current level to port `30000` on localhost.
+
+```bash
+$ ssh bandit14@bandit.labs.overthewire.org -p 2220 -i id_rsa
+
+# read the password (location mentioned on the previous level)
+bandit14@bandit:~$ cat /etc/bandit_pass/bandit14
+fGrHPx402xGC7U7rXKDaxiWFTOiF0ENq
+# submit the data on the required socket
+bandit14@bandit:~$ nc localhost 30000
+fGrHPx402xGC7U7rXKDaxiWFTOiF0ENq
+Correct!
+jN2kgmIXJ6fShzhT2avhotn4Zcka6tnt
+```
+
+## [Level 15 &rarr; 16](https://overthewire.org/wargames/bandit/bandit16.html)
