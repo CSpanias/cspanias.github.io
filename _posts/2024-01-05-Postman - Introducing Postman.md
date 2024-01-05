@@ -1,0 +1,84 @@
+---
+title: Introducing Postman
+date: 2024-01-05
+categories: [Postman, Student Expert Certification]
+tags: [postman, api]
+img_path: /assets/postman/student_expert_cert
+published: true
+---
+
+## An API Platform
+
+**Postman** is an API platform for building and using APIs. 
+
+![](https://voyager.postman.com/illustration/what-is-postman-illustration-4.svg){: .width="60%" .normal}
+
+### Working with APIs then and now: cURL vs. Postman
+
+Before Postman, it was common practice to poke APIs with the command-line tool `curl`. This tool is still used today but has its limitations when it comes to collaboration and sharing. 
+
+This is an example of what an API call using `curl` looks like:
+
+```bash
+$ curl https://api.github.com/users/postmanlabs
+{
+  "login": "postmanlabs",
+  "id": 10251060,
+  "node_id": "MDEyOk9yZ2FuaXphdGlvbjEwMjUxMDYw",
+  "avatar_url": "https://avatars.githubusercontent.com/u/10251060?v=4",
+  "gravatar_id": "",
+  "url": "https://api.github.com/users/postmanlabs",
+  "html_url": "https://github.com/postmanlabs",
+  "followers_url": "https://api.github.com/users/postmanlabs/followers",
+  "following_url": "https://api.github.com/users/postmanlabs/following{/other_user}",
+  "gists_url": "https://api.github.com/users/postmanlabs/gists{/gist_id}",
+  "starred_url": "https://api.github.com/users/postmanlabs/starred{/owner}{/repo}",
+  "subscriptions_url": "https://api.github.com/users/postmanlabs/subscriptions",
+  "organizations_url": "https://api.github.com/users/postmanlabs/orgs",
+  "repos_url": "https://api.github.com/users/postmanlabs/repos",
+  "events_url": "https://api.github.com/users/postmanlabs/events{/privacy}",
+  "received_events_url": "https://api.github.com/users/postmanlabs/received_events",
+  "type": "Organization",
+  "site_admin": false,
+  "name": "Postman Inc.",
+  "company": null,
+  "blog": "https://www.postman.com/",
+  "location": "United States of America",
+  "email": "help@postman.com",
+  "hireable": null,
+  "bio": "An API platform for building and using APIs",
+  "twitter_username": "getpostman",
+  "public_repos": 174,
+  "public_gists": 0,
+  "followers": 2008,
+  "following": 0,
+  "created_at": "2014-12-20T08:13:58Z",
+  "updated_at": "2022-11-28T22:51:35Z"
+}
+```
+
+It works great, but once you make the call, the API response data is lost in the river of the terminal. You also don't have visibility of the metadata of the response without adding more details to the command.
+
+Here is the same call done with Postman: it shows the response with clan indents and colors and allows you to save, organize and share your requests. You can also see the components of the request and response broken down into tabs and other helpful details, such as the response time and status code.
+
+![](https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2F26fp2261340y1ukokimvca8su%2Fpublic%2F1651760511%2Fedit-apiresponse.1651760511674.png)
+
+## The API First World
+
+Postman has a **vision for an API-First World** - one where 100 million developers are connected through APIs, and APIs take center stage as primary building blocks. In the API-first world:
+- APIs are considered a #1 priority.
+- APIs are easily consumable.
+- APIs are easily discoverable.
+
+> [The API-FIRST WORLD](https://api-first-world.com/) novel.
+
+## Gettings started with Postman
+
+> Follow along because you must submit your Postman Workspace later to complete this course.
+
+### Open Postman for web
+
+You can use Postman as a desktop app or web browser. We will use the latter for the course.
+1. Navigate to https://www.postman.com/.
+2. Sign in or sign up (it's free).
+3. Install [**Postmane Agent**](https://www.postman.com/downloads/postman-agent/). This micro-app will help you overcome the [browser's limitations]((https://blog.postman.com/introducing-the-postman-agent-send-api-requests-from-your-browser-without-limits/)) when making API calls.
