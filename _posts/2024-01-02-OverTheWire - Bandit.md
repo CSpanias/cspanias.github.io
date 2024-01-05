@@ -1034,7 +1034,18 @@ Now, we can press `v` to go into `vi` and follow GTFOBins instructions:
 bandit26@bandit:~$
 ```
 
-Now, we can go back to maximzing our terminal's display and see what's happening:
+Now, we can just read the password of `bandit26` and proceed to the next level:
+
+```bash
+bandit26@bandit:~$ cat /etc/bandit_pass/bandit26
+c7GvcKlw9mC7aUQaPx7nwFstuAIBw1o1
+```
+
+## [Level 26 &rarr; 27](https://overthewire.org/wargames/bandit/bandit27.html)
+
+> Good job getting a shell! Now hurry and grab the password for `bandit27`!
+
+To get the password for `bandit27`, we have to login using the solution of the previous level. Once we reach the point that we have dropped on a shell we can see what's within the user's home directory:
 
 ```bash
 # list directory's files
@@ -1048,8 +1059,288 @@ bandit26@bandit:~$ ./bandit27-do cat /etc/bandit_pass/bandit27
 YnQpBuifNMas1hcUFk70ZmqkhUU2EuaS
 ```
 
-## [Level 26 &rarr; 27](https://overthewire.org/wargames/bandit/bandit27.html)
+## [Level 27 &rarr; 28](https://overthewire.org/wargames/bandit/bandit28.html)
+
+> There is a git repository at `ssh://bandit27-git@localhost/home/bandit27-git/repo` via the port `2220`. The password for the user `bandit27-git` is the same as for the user `bandit27`. Clone the repository and find the password for the next level.
 
 ```bash
 $ ssh bandit27@bandit.labs.overthewire.org -p 2220
+
+# create a new directory within /tmp
+bandit27@bandit:~$ mkdir /tmp/lvl_27
+# move the the /tmp directory
+bandit27@bandit:~$ cd /tmp/lvl27
+# clone the git repo
+bandit27@bandit:/tmp/lvl_27$ git clone ssh://bandit27-git@localhost:2220/home/bandit27-git/repo
+Cloning into 'repo'...
+The authenticity of host '[localhost]:2220 ([127.0.0.1]:2220)' can't be established.
+ED25519 key fingerprint is SHA256:C2ihUBV7ihnV1wUXRb4RrEcLfXC5CXlhmAAM/urerLY.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Could not create directory '/home/bandit27/.ssh' (Permission denied).
+Failed to add the host to the list of known hosts (/home/bandit27/.ssh/known_hosts).
+                         _                     _ _ _
+                        | |__   __ _ _ __   __| (_) |_
+                        | '_ \ / _` | '_ \ / _` | | __|
+                        | |_) | (_| | | | | (_| | | |_
+                        |_.__/ \__,_|_| |_|\__,_|_|\__|
+
+
+                      This is an OverTheWire game server.
+            More information on http://www.overthewire.org/wargames
+
+bandit27-git@localhost's password:
+remote: Enumerating objects: 3, done.
+remote: Counting objects: 100% (3/3), done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+Receiving objects: 100% (3/3), done.
+# list directory's contents
+bandit27@bandit:/tmp/lvl_27$ ls
+repo
+bandit27@bandit:/tmp/lvl_27$ cd repo
+bandit27@bandit:/tmp/lvl_27/repo$ ls
+README
+bandit27@bandit:/tmp/lvl_27/repo$ cat README
+The password to the next level is: AVanL161y9rsbcJIsFHuw35rjaOM19nR
+```
+
+## [Level 28 &rarr; 29](https://overthewire.org/wargames/bandit/bandit29.html)
+
+> There is a git repository at `ssh://bandit28-git@localhost/home/bandit28-git/repo` via the port `2220`. The password for the user `bandit28-git` is the same as for the user `bandit28`. Clone the repository and find the password for the next level.
+
+```bash
+$ ssh bandit28@bandit.labs.overthewire.org -p 2220
+
+# create a new directory within /tmp and move into it
+bandit28@bandit:~$ mkdir /tmp/lvl_28 && cd /tmp/lvl_28
+# clone the repo
+bandit28@bandit:/tmp/lvl_28$ git clone ssh://bandit28-git@localhost:2220/home/bandit28-git/repo
+Cloning into 'repo'...
+The authenticity of host '[localhost]:2220 ([127.0.0.1]:2220)' can't be established.
+ED25519 key fingerprint is SHA256:C2ihUBV7ihnV1wUXRb4RrEcLfXC5CXlhmAAM/urerLY.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Could not create directory '/home/bandit28/.ssh' (Permission denied).
+Failed to add the host to the list of known hosts (/home/bandit28/.ssh/known_hosts).
+                         _                     _ _ _
+                        | |__   __ _ _ __   __| (_) |_
+                        | '_ \ / _` | '_ \ / _` | | __|
+                        | |_) | (_| | | | | (_| | | |_
+                        |_.__/ \__,_|_| |_|\__,_|_|\__|
+
+
+                      This is an OverTheWire game server.
+            More information on http://www.overthewire.org/wargames
+
+bandit28-git@localhost's password:
+remote: Enumerating objects: 9, done.
+remote: Counting objects: 100% (9/9), done.
+remote: Compressing objects: 100% (6/6), done.
+remote: Total 9 (delta 2), reused 0 (delta 0), pack-reused 0
+Receiving objects: 100% (9/9), done.
+Resolving deltas: 100% (2/2), done.
+# display file's content
+bandit28@bandit:/tmp/lvl_28$ cat repo/README.md
+# Bandit Notes
+Some notes for level29 of bandit.
+
+## credentials
+
+- username: bandit29
+- password: xxxxxxxxxx
+```
+
+We can interact with this repository as it was ours and we can use all `git` commands on it. We can see the logs as follows:
+
+```bash
+# check the git's logs
+bandit28@bandit:/tmp/lvl_28/repo$ git log
+commit 14f754b3ba6531a2b89df6ccae6446e8969a41f3 (HEAD -> master, origin/master, origin/HEAD)
+Author: Morla Porla <morla@overthewire.org>
+Date:   Thu Oct 5 06:19:41 2023 +0000
+
+    fix info leak
+
+commit f08b9cc63fa1a4602fb065257633c2dae6e5651b
+Author: Morla Porla <morla@overthewire.org>
+Date:   Thu Oct 5 06:19:41 2023 +0000
+
+    add missing data
+
+commit a645bcc508c63f081234911d2f631f87cf469258
+Author: Ben Dover <noone@overthewire.org>
+Date:   Thu Oct 5 06:19:41 2023 +0000
+
+    initial commit of README.md
+```
+
+From the above output we notice the following:
+1. The first commit was the creation of the `README.md` file.
+2. The second one has as comment "*add missing data*" so this is when `Morla` probably wrote the credentials.
+3. The thild and last commit has as comment "*fix info leak*" which is problably when the plaintext password was changed to its current form, i.e., `xxxxxxxxxx`.
+
+So we can find the second commit and get the plaintext password:
+
+```bash
+# show the defined commit
+bandit28@bandit:/tmp/lvl_28/repo$ git show f08b9cc63fa1a4602fb065257633c2dae6e5651b
+commit f08b9cc63fa1a4602fb065257633c2dae6e5651b
+Author: Morla Porla <morla@overthewire.org>
+Date:   Thu Oct 5 06:19:41 2023 +0000
+
+    add missing data
+
+diff --git a/README.md b/README.md
+index 7ba2d2f..b302105 100644
+--- a/README.md
++++ b/README.md
+@@ -4,5 +4,5 @@ Some notes for level29 of bandit.
+ ## credentials
+
+ - username: bandit29
+-- password: <TBD>
++- password: tQKvmcwNYcFS6vmPHIUSI3ShmsrQZK8S
+```
+
+## [Level 29 &rarr; 30](https://overthewire.org/wargames/bandit/bandit30.html)
+
+> There is a git repository at `ssh://bandit29-git@localhost/home/bandit29-git/repo` via the port `2220`. The password for the user `bandit29-git` is the same as for the user `bandit29`. Clone the repository and find the password for the next level.
+
+```bash
+$ ssh bandit29@bandit.labs.overthewire.org -p 2220
+
+# create a new directory within /tmp and move into it
+bandit29@bandit:~$ mkdir /tmp/lvl_29 && cd /tmp/lvl_29
+# clone the repo
+bandit29@bandit:/tmp/lvl_29$ git clone ssh://bandit29-git@localhost:2220/home/bandit29-git/repo
+Cloning into 'repo'...
+The authenticity of host '[localhost]:2220 ([127.0.0.1]:2220)' can't be established.
+ED25519 key fingerprint is SHA256:C2ihUBV7ihnV1wUXRb4RrEcLfXC5CXlhmAAM/urerLY.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Could not create directory '/home/bandit29/.ssh' (Permission denied).
+Failed to add the host to the list of known hosts (/home/bandit29/.ssh/known_hosts).
+                         _                     _ _ _
+                        | |__   __ _ _ __   __| (_) |_
+                        | '_ \ / _` | '_ \ / _` | | __|
+                        | |_) | (_| | | | | (_| | | |_
+                        |_.__/ \__,_|_| |_|\__,_|_|\__|
+
+
+                      This is an OverTheWire game server.
+            More information on http://www.overthewire.org/wargames
+
+bandit29-git@localhost's password:
+remote: Enumerating objects: 16, done.
+remote: Counting objects: 100% (16/16), done.
+remote: Compressing objects: 100% (11/11), done.
+remote: Total 16 (delta 2), reused 0 (delta 0), pack-reused 0
+Receiving objects: 100% (16/16), done.
+Resolving deltas: 100% (2/2), done.
+# display the file's contents
+bandit29@bandit:/tmp/lvl_29$ cat repo/README.md
+# Bandit Notes
+Some notes for bandit30 of bandit.
+
+## credentials
+
+- username: bandit30
+- password: <no passwords in production!>
+```
+
+We can repeat the process of the previous level to see what we can find:
+
+```bash
+# check logs
+bandit29@bandit:/tmp/lvl_29$ cd repo && git log
+commit 4364630b3b27c92aff7b36de7bb6ed2d30b60f88 (HEAD -> master, origin/master, origin/HEAD)
+Author: Ben Dover <noone@overthewire.org>
+Date:   Thu Oct 5 06:19:43 2023 +0000
+
+    fix username
+
+commit fca34ddb7d1ff1f78df36538252aea650b0b040d
+Author: Ben Dover <noone@overthewire.org>
+Date:   Thu Oct 5 06:19:43 2023 +0000
+
+    initial commit of README.md
+```
+
+After checking both logs, it does not seem that they include anything of interest. The `README.md` file mentioned "*no password in production!*" which suggests that there might be more than one branch, a development one and a production one. We can list all branches as follows:
+
+```bash
+# list branches
+bandit29@bandit:/tmp/lvl_29/repo$ git branch -a
+* master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/dev
+  remotes/origin/master
+  remotes/origin/sploits-dev
+```
+
+There is indeed a development branch (`dev`), so we can switch to it and check what's in there:
+
+```bash
+# switch to the dev branch
+bandit29@bandit:/tmp/lvl_29/repo$ git checkout dev
+Branch 'dev' set up to track remote branch 'dev' from 'origin'.
+Switched to a new branch 'dev'
+# check directory's contents
+bandit29@bandit:/tmp/lvl_29/repo$ ls -la
+total 20
+drwxrwxr-x 4 bandit29 bandit29 4096 Jan  5 09:35 .
+drwxrwxr-x 3 bandit29 bandit29 4096 Jan  5 09:27 ..
+drwxrwxr-x 2 bandit29 bandit29 4096 Jan  5 09:35 code
+drwxrwxr-x 8 bandit29 bandit29 4096 Jan  5 09:35 .git
+-rw-rw-r-- 1 bandit29 bandit29  134 Jan  5 09:35 README.md
+# display file's contents
+bandit29@bandit:/tmp/lvl_29/repo$ cat README.md
+# Bandit Notes
+Some notes for bandit30 of bandit.
+
+## credentials
+
+- username: bandit30
+- password: xbhV3HpNGlTIdnjUrdAlPzc2L6y9EOnS
+```
+
+## [Level 30 &rarr; 31](https://overthewire.org/wargames/bandit/bandit31.html)
+
+> There is a git repository at `ssh://bandit30-git@localhost/home/bandit30-git/repo` via the port `2220`. The password for the user `bandit30-git` is the same as for the user `bandit30`. Clone the repository and find the password for the next level.
+
+```bash
+$ ssh bandit30@bandit.labs.overthewire.org -p 2220
+
+# create a new directory within /tmp and move into it
+bandit29@bandit:~$ mkdir /tmp/lvl_30 && cd /tmp/lvl_30
+# clone the repo
+bandit29@bandit:/tmp/lvl_29$ git clone ssh://bandit30-git@localhost:2220/home/bandit30-git/repo
+Cloning into 'repo'...
+The authenticity of host '[localhost]:2220 ([127.0.0.1]:2220)' can't be established.
+ED25519 key fingerprint is SHA256:C2ihUBV7ihnV1wUXRb4RrEcLfXC5CXlhmAAM/urerLY.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Could not create directory '/home/bandit29/.ssh' (Permission denied).
+Failed to add the host to the list of known hosts (/home/bandit29/.ssh/known_hosts).
+                         _                     _ _ _
+                        | |__   __ _ _ __   __| (_) |_
+                        | '_ \ / _` | '_ \ / _` | | __|
+                        | |_) | (_| | | | | (_| | | |_
+                        |_.__/ \__,_|_| |_|\__,_|_|\__|
+
+
+                      This is an OverTheWire game server.
+            More information on http://www.overthewire.org/wargames
+
+bandit29-git@localhost's password:
+remote: Enumerating objects: 16, done.
+remote: Counting objects: 100% (16/16), done.
+remote: Compressing objects: 100% (11/11), done.
+remote: Total 16 (delta 2), reused 0 (delta 0), pack-reused 0
+Receiving objects: 100% (16/16), done.
+Resolving deltas: 100% (2/2), done.
+# display the file's contents
+bandit30@bandit:/tmp/lvl_30$ cat repo/README.md
+just an epmty file... muahaha
 ```
