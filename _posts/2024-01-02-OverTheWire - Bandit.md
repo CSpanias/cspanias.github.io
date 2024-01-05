@@ -1024,7 +1024,7 @@ After logging in we are in `vi`'s command mode:
 
 ![](more_login.png){: .normal}
 
-Now, we can press `v` to go into `vi` and we can follow GTFOBins instructions:
+Now, we can press `v` to go into `vi` and follow GTFOBins instructions:
 
 ```bash
 # set the user's shell to /bin/bash
