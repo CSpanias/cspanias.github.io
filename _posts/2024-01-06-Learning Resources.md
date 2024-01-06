@@ -55,25 +55,25 @@ published: true
 - [Bug Bounty Hunter (HTB)](https://academy.hackthebox.com/path/preview/bug-bounty-hunter) 🎯
 - [Senior Web Penetration Tester (HTB)](https://academy.hackthebox.com/path/preview/senior-web-penetration-tester) 🎯
 - [PostSwigger Academy](https://portswigger.net/web-security/all-topics) ✍️
-    -[Server-side topics](https://portswigger.net/web-security/all-topics) ✍️
-    -[API testing](https://portswigger.net/web-security/api-testing)
-    -[NoSQL injection](https://portswigger.net/web-security/nosql-injection)
-    -[XXE injection](https://portswigger.net/web-security/xxe)
-    -[SSRF](https://portswigger.net/web-security/ssrf)
-    -[Race conditions](https://portswigger.net/web-security/race-conditions)
-    -[File upload vulnerabilities](https://portswigger.net/web-security/file-upload)
-    -[Access control](https://portswigger.net/web-security/access-control)
-    -[Business logic vulnerabilities](https://portswigger.net/web-security/logic-flaws)
-    -[Command injection](https://portswigger.net/web-security/os-command-injection)
-    -[Authentication](https://portswigger.net/web-security/authentication)
-    -[SQLi](https://portswigger.net/web-security/sql-injection) ✅
-    -[Path Traversal](https://portswigger.net/web-security/file-path-traversal) ✅
-    -[Information disclosure](https://portswigger.net/web-security/information-disclosure) ✅
+    - [Server-side topics](https://portswigger.net/web-security/all-topics) ✍️
+    - [API testing](https://portswigger.net/web-security/api-testing)
+    - [NoSQL injection](https://portswigger.net/web-security/nosql-injection)
+    - [XXE injection](https://portswigger.net/web-security/xxe)
+    - [SSRF](https://portswigger.net/web-security/ssrf)
+    - [Race conditions](https://portswigger.net/web-security/race-conditions)
+    - [File upload vulnerabilities](https://portswigger.net/web-security/file-upload)
+    - [Access control](https://portswigger.net/web-security/access-control)
+    - [Business logic vulnerabilities](https://portswigger.net/web-security/logic-flaws)
+    - [Command injection](https://portswigger.net/web-security/os-command-injection)
+    - [Authentication](https://portswigger.net/web-security/authentication)
+    - [SQLi](https://portswigger.net/web-security/sql-injection) ✅
+    - [Path Traversal](https://portswigger.net/web-security/file-path-traversal) ✅
+    - [Information disclosure](https://portswigger.net/web-security/information-disclosure) ✅
 
 ## Terminal skills
 
 - [OverTheWire (Bash)](https://overthewire.org/wargames/) ✍️
-    -[Bandit](https://overthewire.org/wargames/bandit/) ✍️
+    - [Bandit](https://overthewire.org/wargames/bandit/) ✍️
 - [UnderTheWire (PowerShell)](https://underthewire.tech/wargames) 🎯
 
 ## CTFs
