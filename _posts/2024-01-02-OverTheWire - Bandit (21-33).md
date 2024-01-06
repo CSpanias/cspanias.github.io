@@ -7,9 +7,9 @@ img_path: /assets/overthewire/bandit
 published: true
 ---
 
----
+---  
 [Levels 0-10](https://cspanias.github.io/posts/OverTheWire-Bandit-(0-10)/) | [Level 11-20](https://cspanias.github.io/posts/OverTheWire-Bandit-(11-20)/)
----
+---  
 
 ## [Level 20 &rarr; 21](https://overthewire.org/wargames/bandit/bandit21.html)
 
