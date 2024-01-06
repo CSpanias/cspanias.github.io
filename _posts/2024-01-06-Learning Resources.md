@@ -52,8 +52,8 @@ published: true
     - [OWASP API Security Top 10 and Beyond!](https://www.apisecuniversity.com/courses/owasp-api-security-top-10-and-beyond) 🎯
 - [Postman Classroom Program](https://www.postman.com/postman/workspace/postman-classroom-program/overview) 🎯
 - [PostSwigger Academy](https://portswigger.net/web-security/all-topics)
-    - [Client-side topics](https://portswigger.net/web-security/all-topics)
-    - [Advanced topics](https://portswigger.net/web-security/all-topics)
+    - [Client-side topics](https://portswigger.net/web-security/all-topics) 🎯
+    - [Advanced topics](https://portswigger.net/web-security/all-topics) 🎯
 - [Attacking and Defending AWS (THM)](https://tryhackme.com/path/outline/attackinganddefendingaws) 🎯
 - [Pwnedlabs](https://pwnedlabs.io/dashboard) 🎯
 - [Postman API Fundamentals Student Expert certification](https://academy.postman.com/postman-api-fundamentals-student-expert-certification-1) ✅
