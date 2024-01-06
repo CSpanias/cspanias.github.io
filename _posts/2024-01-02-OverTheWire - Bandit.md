@@ -1344,3 +1344,176 @@ Resolving deltas: 100% (2/2), done.
 bandit30@bandit:/tmp/lvl_30$ cat repo/README.md
 just an epmty file... muahaha
 ```
+
+Like most VCSs, Git has the ability to **tag** specific points in a repository’s history as being important. Typically, people use this functionality to mark release points (v1.0, v2.0 and so on).
+
+> [Git Basics - Tagging](https://git-scm.com/book/en/v2/Git-Basics-Tagging)
+
+```bash
+# check the current tags
+bandit30@bandit:/tmp/lvl_30/repo$ git tag
+secret
+# show the tag's content
+bandit30@bandit:/tmp/lvl_30/repo$ git show secret
+OoffzGDlzhAlerFJ2cAiz1D41JW1Mhmt
+```
+
+## [Level 31 &rarr; 32](https://overthewire.org/wargames/bandit/bandit32.html)
+
+> There is a git repository at `ssh://bandit31-git@localhost/home/bandit31-git/repo` via the port `2220`. The password for the user `bandit31-git` is the same as for the user `bandit31`. Clone the repository and find the password for the next level.
+
+```bash
+$ ssh bandit31@bandit.labs.overthewire.org -p 2220
+
+# create a new directory within /tmp and move into it
+bandit31@bandit:~$ mkdir /tmp/lvl_31 && cd /tmp/lvl_31
+# clone the repo
+bandit31@bandit:/tmp/lvl_31$ git clone ssh://bandit31-git@localhost:2220/home/bandit31-git/repo
+Cloning into 'repo'...
+The authenticity of host '[localhost]:2220 ([127.0.0.1]:2220)' can't be established.
+ED25519 key fingerprint is SHA256:C2ihUBV7ihnV1wUXRb4RrEcLfXC5CXlhmAAM/urerLY.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Could not create directory '/home/bandit31/.ssh' (Permission denied).
+Failed to add the host to the list of known hosts (/home/bandit31/.ssh/known_hosts).
+                         _                     _ _ _
+                        | |__   __ _ _ __   __| (_) |_
+                        | '_ \ / _` | '_ \ / _` | | __|
+                        | |_) | (_| | | | | (_| | | |_
+                        |_.__/ \__,_|_| |_|\__,_|_|\__|
+
+
+                      This is an OverTheWire game server.
+            More information on http://www.overthewire.org/wargames
+
+bandit31-git@localhost's password:
+remote: Enumerating objects: 4, done.
+remote: Counting objects: 100% (4/4), done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 4 (delta 0), reused 0 (delta 0), pack-reused 0
+Receiving objects: 100% (4/4), done.
+# display file's content
+bandit31@bandit:/tmp/lvl_31$ cat repo/README.md
+This time your task is to push a file to the remote repository.
+
+Details:
+    File name: key.txt
+    Content: 'May I come in?'
+    Branch: master
+```
+
+According to the `README.md` file, we will need to create a file meetings the required specifications and then push it to the repo. 
+
+```bash
+# create the file
+bandit31@bandit:/tmp/lvl_31/repo$ echo "May I come in?" > key.txt
+# check that the file is created
+bandit31@bandit:/tmp/lvl_31/repo$ ls -la
+total 24
+drwxrwxr-x 3 bandit31 bandit31 4096 Jan  6 21:35 .
+drwxrwxr-x 3 bandit31 bandit31 4096 Jan  6 21:33 ..
+drwxrwxr-x 8 bandit31 bandit31 4096 Jan  6 21:38 .git
+-rw-rw-r-- 1 bandit31 bandit31    6 Jan  6 21:33 .gitignore
+-rw-rw-r-- 1 bandit31 bandit31   15 Jan  6 21:35 key.txt
+-rw-rw-r-- 1 bandit31 bandit31  147 Jan  6 21:33 README.md
+# display file's content
+bandit31@bandit:/tmp/lvl_31/repo$ cat key.txt
+May I come in?
+```
+
+The sequence for pushing a file to a Git repo is:
+1. Record changes to the repo via [`git commit`](https://git-scm.com/docs/git-commit).
+2. Update remote refs along with associated object via [`git push`](https://git-scm.com/docs/git-push).
+
+Before doing that, we can see that there is a [`.gitignore`](https://git-scm.com/docs/gitignore) file in our directory:
+
+```bash
+# display file's content
+bandit31@bandit:/tmp/lvl_31/repo$ cat .gitignore
+*.txt
+```
+
+`.gitignore` specifies intentionally untracked files to ignore. In this case, it ignores all `.txt` files (`*.txt`). So trying to go over the above 2-step sequence won't work in this case.
+
+To add the file anyway we can use [`git add`](https://git-scm.com/docs/git-add), which add file contents to the index, before using `git commit`:
+
+```bash
+# add file contents to the index
+bandit31@bandit:/tmp/lvl_31/repo$ git add -f key.txt
+# record the changes to the repo
+bandit31@bandit:/tmp/lvl_31/repo$ git commit -a
+Unable to create directory /home/bandit31/.local/share/nano/: No such file or directory
+It is required for saving/loading search history or cursor positions.
+
+[master 625a650] A random message!
+ 1 file changed, 1 insertion(+)
+ create mode 100644 key.txt
+# update remote refs
+bandit31@bandit:/tmp/lvl_31/repo$ git push
+<SNIP>
+Delta compression using up to 2 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 327 bytes | 327.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+remote: ### Attempting to validate files... ####
+remote:
+remote: .oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.
+remote:
+remote: Well done! Here is the password for the next level:
+remote: rmCBvG56y58BXzv98yZGdO7ATVL5dW8y
+remote:
+remote: .oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.
+remote:
+To ssh://localhost:2220/home/bandit31-git/repo
+ ! [remote rejected] master -> master (pre-receive hook declined)
+error: failed to push some refs to 'ssh://localhost:2220/home/bandit31-git/repo'
+```
+
+## [Level 32 &rarr; 33](https://overthewire.org/wargames/bandit/bandit33.html)
+
+> After all this git stuff its time for another escape. Good luck!
+
+```bash
+$ ssh bandit32@bandit.labs.overthewire.org -p 2220
+WELCOME TO THE UPPERCASE SHELL
+>> ls
+sh: 1: LS: Permission denied
+```
+
+It seems that everything we type is automatically converted to uppercase! All the Linux commands are lowercase, so we can't really pass any command. But we can use [environment variables](https://linuxize.com/post/how-to-set-and-list-environment-variables-in-linux/) which, by convention, have uppercase names.
+
+More specifically, there is the [`$0`](https://linuxhandbook.com/bash-dollar-0/) special variable which can be used in two ways:
+1. To find the logged-in shell.
+2. To print the name of the script that is being executed.
+
+We are interested in the first use!
+
+```bash
+# drop into the logged-in shell
+>> $0
+# read the password
+$ cat /etc/bandit_pass/bandit33
+odHo63fHiFqcWWJG9rLiLDtPm45KzUKy
+```
+
+## [Level 32 &rarr; 33](https://overthewire.org/wargames/bandit/bandit33.html)
+
+> At this moment, level 34 does not exist yet.
+
+```bash
+$ ssh bandit33@bandit.labs.overthewire.org -p 2220
+
+# list directory's files
+bandit33@bandit:~$ ls
+README.txt
+# display file's content
+bandit33@bandit:~$ cat README.txt
+Congratulations on solving the last level of this game!
+
+At this moment, there are no more levels to play in this game. However, we are constantly working
+on new levels and will most likely expand this game with more levels soon.
+Keep an eye out for an announcement on our usual communication channels!
+In the meantime, you could play some of our other wargames.
+
+If you have an idea for an awesome new level, please let us know!
+```
