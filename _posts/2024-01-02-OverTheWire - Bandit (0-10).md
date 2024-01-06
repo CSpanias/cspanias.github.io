@@ -213,6 +213,6 @@ x]T========== theG)"
 
 ---
 
-<center> [Level 11-20](https://cspanias.github.io/posts/OverTheWire-Bandit-(11-20)/) </center>
+<center> <a href="https://cspanias.github.io/posts/OverTheWire-Bandit-(11-20)/">[Level 11-20]</a> </center>
 
 ---

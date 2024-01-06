@@ -22,6 +22,8 @@ Each level has access to the password of the next level. Your job is to somehow 
 
 <!--
 ---
-[Level 11-20](https://cspanias.github.io/posts/OverTheWire-Bandit-(11-20)/)
+
+<center> <a href="https://cspanias.github.io/posts/OverTheWire-Natas-(0-10)/">[Level 0-10]</a> </center>
+
 ---
 -->

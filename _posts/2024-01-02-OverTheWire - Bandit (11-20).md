@@ -9,7 +9,7 @@ published: true
 
 ---
 
-[Levels 0-10](https://cspanias.github.io/posts/OverTheWire-Bandit-(0-10)/)
+<center> <a href="https://cspanias.github.io/posts/OverTheWire-Bandit-(0-10)/">[Level 0-10]</a> </center>
 
 ---
 
@@ -437,6 +437,6 @@ VxCazJaVykI6W36BkBU0mJTCM8rR95XT
 
 ---
 
-[Levels 21-33](https://cspanias.github.io/posts/OverTheWire-Bandit-(21-33)/)
+<center> <a href="https://cspanias.github.io/posts/OverTheWire-Bandit-(21-33)/">[Level 21-33]</a> </center>
 
 ---
