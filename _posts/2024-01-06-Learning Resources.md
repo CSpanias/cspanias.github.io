@@ -8,6 +8,7 @@ published: true
 ---
 
 > [Security Certification Roadmap](https://pauljerimy.com/security-certification-roadmap/)
+> [Hack The Box Meetup:UK](https://www.meetup.com/hack-the-box-meetup-uk/)
 
 ✍️ Ongoing | 🎯 To-do | ✅ Done
 
@@ -23,6 +24,9 @@ published: true
     - [Information security](https://msds.open.ac.uk/module-chooser/module-description.aspx?mod=TM311)
     - [Systems penetration testing](https://msds.open.ac.uk/module-chooser/module-description.aspx?mod=TM359)
     - [Communication and information technologies](https://msds.open.ac.uk/module-chooser/module-description.aspx?mod=TM255)
+- [API Penetration Testing Course (APISEC University)](https://www.apisecuniversity.com/courses/api-penetration-testing)
+- [Senior Web Penetration Tester (HTB)](https://academy.hackthebox.com/path/preview/senior-web-penetration-tester)
+- [UnderTheWire (PowerShell)](https://underthewire.tech/wargames)
 
 ## 2025 🎯
 
@@ -43,8 +47,13 @@ published: true
 - [picoCTF](https://picoctf.org/index.html#picogym)
     - [Web exploitation](https://play.picoctf.org/practice?category=1&page=1) ✍️
 - [CREST CPSA/CRT Preparation (HTB)](https://academy.hackthebox.com/path/preview/crest-cpsacrt-preparation) 🎯
-- [API University](https://www.apisecuniversity.com/#courses) 🎯
+- [API University](https://www.apisecuniversity.com/#courses)
+    - [API Security Fundamentals](https://www.apisecuniversity.com/courses/api-security-fundamentals) 🎯
+    - [OWASP API Security Top 10 and Beyond!](https://www.apisecuniversity.com/courses/owasp-api-security-top-10-and-beyond) 🎯
 - [Postman Classroom Program](https://www.postman.com/postman/workspace/postman-classroom-program/overview) 🎯
+- [PostSwigger Academy](https://portswigger.net/web-security/all-topics)
+    - [Client-side topics](https://portswigger.net/web-security/all-topics)
+    - [Advanced topics](https://portswigger.net/web-security/all-topics)
 - [Attacking and Defending AWS (THM)](https://tryhackme.com/path/outline/attackinganddefendingaws) 🎯
 - [Pwnedlabs](https://pwnedlabs.io/dashboard) 🎯
 - [Postman API Fundamentals Student Expert certification](https://academy.postman.com/postman-api-fundamentals-student-expert-certification-1) ✅
@@ -76,15 +85,10 @@ published: true
     - [TM111 Introduction to computing and information technology 1](https://msds.open.ac.uk/students/module.aspx?c=TM111_2021D&cr=1)
     - [TM112 Introduction to computing and information technology 2](https://msds.open.ac.uk/students/module.aspx?c=TM112_2021J&cr=1)
 
-## Might-do 🎯
+## Interesting ❓
 
-- [UnderTheWire (PowerShell)](https://underthewire.tech/wargames)
 - [Hacker101](https://www.hacker101.com/videos)
 - [Ethical Hacker (CISCO)](https://skillsforall.com/course/ethical-hacker?courseLang=en-US)
 - [Hacking The Cloud](https://hackingthe.cloud/)
 - [AWS Certified Security - Specialty](https://aws.amazon.com/certification/certified-security-specialty/)
 - [Bug Bounty Hunter (HTB)](https://academy.hackthebox.com/path/preview/bug-bounty-hunter)
-- [Senior Web Penetration Tester (HTB)](https://academy.hackthebox.com/path/preview/senior-web-penetration-tester)
-- [PostSwigger Academy](https://portswigger.net/web-security/all-topics)
-    - [Client-side topics](https://portswigger.net/web-security/all-topics)
-    - [Advanced topics](https://portswigger.net/web-security/all-topics)
