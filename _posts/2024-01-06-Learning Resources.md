@@ -13,6 +13,8 @@ published: true
 - 🎯 To-do
 - ✅ Done
 
+## 2024
+
 ## Cybersecurity
 
 - [BSc (Honours) Cyber Security (OU)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60) ✍️
@@ -24,17 +26,10 @@ published: true
     - [Cisco networking (CCNA) part 1](https://msds.open.ac.uk/module-chooser/module-description.aspx?mod=TM257) 🎯
     - [Web technologies](https://msds.open.ac.uk/module-chooser/module-description.aspx?mod=TT284) (TBC) 🎯
     - [TM256 Cyber security](https://msds.open.ac.uk/students/module.aspx?c=TM256_2024B&cr=1) ✍️
-    - [TM129 Technologies in practice](https://msds.open.ac.uk/students/module.aspx?c=TM129_2023J&cr=1) ✍️
-    - [MST124 Essential mathematics 1](https://msds.open.ac.uk/students/module.aspx?c=MST124_2022B&cr=1) ✅
-    - [MST224 Mathematical methods](https://msds.open.ac.uk/students/module.aspx?c=MST224_2022J&cr=1) ✅
-    - [M140 Introducing statistics](https://msds.open.ac.uk/students/module.aspx?c=M140_2021J&cr=1) ✅
-    - [TM111 Introduction to computing and information technology 1](https://msds.open.ac.uk/students/module.aspx?c=TM111_2021D&cr=1) ✅
-    - [TM112 Introduction to computing and information technology 2](https://msds.open.ac.uk/students/module.aspx?c=TM112_2021J&cr=1) ✅
 
 ## General Penetration Testing
 
 - [Penetration Tester Job Role Path (HTB CPTS)](https://academy.hackthebox.com/path/preview/penetration-tester) ✍️
-- [Jr Penetration Tester (THM)](https://tryhackme.com/path/outline/jrpenetrationtester) ✅
 - [CREST CPSA/CRT Preparation (HTB)](https://academy.hackthebox.com/path/preview/crest-cpsacrt-preparation) 🎯
 
 
@@ -51,7 +46,6 @@ published: true
 
 ## Web application testing
 
-- [Web Fundamentals (THM)](https://tryhackme.com/path/outline/web) ✅
 - [Bug Bounty Hunter (HTB)](https://academy.hackthebox.com/path/preview/bug-bounty-hunter) 🎯
 - [Senior Web Penetration Tester (HTB)](https://academy.hackthebox.com/path/preview/senior-web-penetration-tester) 🎯
 - [PostSwigger Academy](https://portswigger.net/web-security/all-topics) ✍️
@@ -82,10 +76,6 @@ published: true
 - [Hack The Box](https://app.hackthebox.com/) ✍️
 - [Try Hack Me](https://tryhackme.com/) ✍️
 
-## Networking
-
-- [Junior Cybersecurity Analyst](https://skillsforall.com/career-path/cybersecurity?courseLang=en-US) ✅
-
 ## Other
 
 - [HackerSploit's YouTube](https://www.youtube.com/HackerSploit/playlists)
@@ -93,3 +83,24 @@ published: true
 - [Ethical Hacker (CISCO)](https://skillsforall.com/course/ethical-hacker?courseLang=en-US)
 - [Hacking The Cloud](https://hackingthe.cloud/)
 - [AWS Certified Security - Specialty](https://aws.amazon.com/certification/certified-security-specialty/)
+
+## 2023
+- [NatWest Certified Infrastructure Security Tester](https://drive.google.com/file/d/1viyFopGSW36Lu58TiFbYRsqqlIu3pNw4/view?pli=1) ✅
+- [Try Hack Me](https://tryhackme.com/hacktivities#learning-paths): Pre Security (40h), Complete Beginner (64h), Introduction to Cyber Security (24h), Web Fundamentals (32h), CompTIA Pentest+ (32h), Jr Penetration Tester (64h), Red Teaming (48h) ✅
+- [Hacking With Kali Linux](https://hackersacademy.com/courses/hacking-with-kali-linux) ✅
+- [Junior Cybersecurity Analyst](https://skillsforall.com/career-path/cybersecurity?courseLang=en-US) ✅
+- [BSc (Honours) Cyber Security (OU)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60): 
+    - [TM129 Technologies in practice](https://msds.open.ac.uk/students/module.aspx?c=TM129_2023J&cr=1) ✍️
+
+## 2022
+
+- [BSc (Honours) Cyber Security (OU)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60): 
+    - [MST224 Mathematical methods](https://msds.open.ac.uk/students/module.aspx?c=MST224_2022J&cr=1) ✅
+    - [MST124 Essential mathematics 1](https://msds.open.ac.uk/students/module.aspx?c=MST124_2022B&cr=1) ✅
+
+## 2021
+
+- [BSc (Honours) Cyber Security (OU)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60): 
+    - [TM111 Introduction to computing and information technology 1](https://msds.open.ac.uk/students/module.aspx?c=TM111_2021D&cr=1) ✅
+    - [TM112 Introduction to computing and information technology 2](https://msds.open.ac.uk/students/module.aspx?c=TM112_2021J&cr=1) ✅
+    - [M140 Introducing statistics](https://msds.open.ac.uk/students/module.aspx?c=M140_2021J&cr=1) ✅
