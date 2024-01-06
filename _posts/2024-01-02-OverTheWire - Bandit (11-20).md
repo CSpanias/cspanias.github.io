@@ -7,7 +7,9 @@ img_path: /assets/overthewire/bandit
 published: true
 ---
 
-
+---
+[Levels 0-10](https://cspanias.github.io/posts/OverTheWire-Bandit-(0-10)/)
+---
 
 ## [Level 10 &rarr; 11](https://overthewire.org/wargames/bandit/bandit11.html)
 
@@ -430,3 +432,7 @@ As a result, we have to use the binary and pass the command to read the file as 
 bandit19@bandit:~$ ./bandit20-do cat /etc/bandit_pass/bandit20
 VxCazJaVykI6W36BkBU0mJTCM8rR95XT
 ```
+
+---
+[Levels 21-33](https://cspanias.github.io/posts/OverTheWire-Bandit-(21-33)/)
+---
