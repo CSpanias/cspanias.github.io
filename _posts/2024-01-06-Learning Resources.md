@@ -44,7 +44,7 @@ published: true
     - [Server-side topics](https://portswigger.net/web-security/all-topics) ✍️
 - [OverTheWire (Bash)](https://overthewire.org/wargames/)
     - [Bandit](https://overthewire.org/wargames/bandit/) ✅
-    - []
+    - [Natas](https://overthewire.org/wargames/natas/) ✍️
 - [picoCTF](https://picoctf.org/index.html#picogym)
     - [Web exploitation](https://play.picoctf.org/practice?category=1&page=1) ✍️
 - [CREST CPSA/CRT Preparation (HTB)](https://academy.hackthebox.com/path/preview/crest-cpsacrt-preparation) 🎯
