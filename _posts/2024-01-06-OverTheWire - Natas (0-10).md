@@ -69,43 +69,41 @@ Within the `files/` directory many files exists, including `users.txt`:
 
 Viewing the page source with `CTRL + U`:
 
-![](natas3_source.png)
+![](natas3_source.png){: .normal width="65%"}
 
-The comment about Google points us to the [`robots.txt`](https://developers.google.com/search/docs/crawling-indexing/robots/intro) file:
+The comment about Google points us to the existence of the [`robots.txt`](https://developers.google.com/search/docs/crawling-indexing/robots/intro) file: *A `robots.txt` file is used primarily to manage crawler traffic to your site, and **usually to keep a file off Google**, depending on the file type.*
 
-*A `robots.txt` file is used primarily to manage crawler traffic to your site, and **usually to keep a file off Google**, depending on the file type.*
-
-![](natas3_robots.png)
+![](natas3_robots.png){: .normal width="70%"}
 
 The `robots.txt` file has blacklisted the `/s3cr3t` directory:
 
-![](natas3_secret.png)
+![](natas3_secret.png){: .normal width="70%"}
 
-![](natas3_pass.png)
+![](natas3_pass.png){: .normal width="70%"}
 
 ## [Level 3 &rarr; 4](https://overthewire.org/wargames/natas/natas4.html)
 
 > Password: tKOcJIbzM4lTs8hbCmzn5Zr4434fGZQm
 
-![](natas4_home.png)
+![](natas4_home.png){: .normal}
 
 This challenge requires some familiarity with [**HTTP headers**](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields), and specifically the [**Referer**](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer) header:
 
 *The **Referer HTTP request header** contains the absolute or partial address from which a resource has been requested. The Referer header allows a server to identify referring pages that people are visiting from or where requested resources are being used.*
 
-So all we have to do is modify this request header before reaching the server. We can achieve this in many ways using browser extensions such as [Tamper Data For FF Quantum](https://addons.mozilla.org/en-US/firefox/addon/tamper-data-for-ff-quantum/), [Burp Suite](https://portswigger.net/burp), or [Postman](https://www.postman.com/).
+All we have to do is modify this request header before reaching the server. We can achieve this in many ways. We will do it using the browser extension [Tamper Data For FF Quantum](https://addons.mozilla.org/en-US/firefox/addon/tamper-data-for-ff-quantum/) and the web application testing suite [Burp](https://portswigger.net/burp), and the API testing app [Postman](https://www.postman.com/).
 
 ### Tamper Data For FF Quantum
 
 After adding the extension on our browser, we can click on it and click **Start**:
 
-![](natas4_tamper_data_config.png)
+![](natas4_tamper_data_config.png){: .normal width="60%"}
 
 After refreshing the page, we will find a list with all the HTTP headers used for this `GET` request. We need to modify the **Referer** value to http://natas5.natas.labs.overthewire.org/ and then click OK:
 
-![](natas4_tamper_data_referer.png)
+![](natas4_tamper_data_referer.png){: .normal width="60%"}
 
-![](natas4_pass_browser.png)
+![](natas4_pass_browser.png){: .normal}
 
 ### Burp Suite
 
