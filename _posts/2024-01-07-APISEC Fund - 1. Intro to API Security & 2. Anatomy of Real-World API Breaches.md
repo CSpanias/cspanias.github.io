@@ -88,10 +88,9 @@ In the schematic above, you have got the **backend app** where all the data live
 - A researcher could call the API directly and not through the website without authentication ([**Broken Object Level Authorization (BOLA)**](https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/)).
 - They could find a user's credit score using just a name and address (and a DOB in theory but it was just a placeholder).
 
-<!-->
 ---
 
-<center> <a href="https://cspanias.github.io/posts/OverTheWire-Bandit-(0-10)/">[Level 0-10]</a> </center>
+<center> <a href="https://cspanias.github.io/posts/APISEC-Fund-3.-OWASP-Top-10-Background/">[3. OWASP Top 10 Background]</a> </center>
 
 ---
 

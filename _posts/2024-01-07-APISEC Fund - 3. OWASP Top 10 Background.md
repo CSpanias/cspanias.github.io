@@ -12,7 +12,7 @@ published: true
 <!--
 ---
 
-<center> <a href="https://cspanias.github.io/posts/OverTheWire-Bandit-(0-10)/">[Level 0-10]</a> </center>
+<center> <a href="https://cspanias.github.io/posts/APISEC-Fund-1.-Intro-to-API-Security-&-2.-Anatomy-of-Real-World-API-Breaches/">1. Intro to API Security & 2. Anatomy of Real-World API Breaches</a> </center>
 
 ---
 -->
@@ -23,7 +23,7 @@ published: true
 <!--
 ---
 
-<center> <a href="https://cspanias.github.io/posts/OverTheWire-Bandit-(0-10)/">[Level 0-10]</a> </center>
+<center> <a href="">[Level 0-10]</a> </center>
 
 ---
 -->
