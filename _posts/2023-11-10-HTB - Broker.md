@@ -9,14 +9,12 @@ published: true
 
 ![room_banner](machine_banner.png)
 
-## Overview
-
 |:-:|:-:|
 |Machine|[Broker](https://app.hackthebox.com/machines/578)|
 |Rank|Easy|
-|Focus|Default creds, ActiveMQ, nginx configurations|
+|Focus|Default creds, ActiveMQ, nginx configuration|
 
-## 1. Initial Enumeration
+## Initial Enumeration
 
 What we know:
 - Target IP: 10.10.11.243
@@ -104,7 +102,7 @@ What we know:
 
     > [**Eclipse Jetty**](https://en.wikipedia.org/wiki/Jetty_(web_server)) is a Java web server and Java Servlet container. While web servers are usually associated with serving documents to people, Jetty is now often **used for machine to machine communications**, usually within larger software frameworks. Jetty is developed as a free and open source project as part of the Eclipse Foundation and is often used in products such as Apache ActiveMQ.
 
-## 2. Initial Foothold
+## Initial Foothold
 
 4. It seems that they are are both back-end communication technologies. Since we are asked for credentials, let's search if these technologies are shipped with any known default creds. Instead of Googling, we can use [`creds`](https://github.com/ihebski/DefaultCreds-cheat-sheet) which includes a database with the default credentials of many apps:
 
@@ -202,7 +200,7 @@ What we know:
     </beans>
     ```
 
-    Next, we have to start a Python HTTP server from the directory that the `test.elf` file resides and also open up a listener:
+    Next, we have to start a Python HTTP server from the directory that the `test.elf` file resides and open up a listener:
 
     ```bash
     # starting an HTTP server
@@ -264,7 +262,7 @@ What we know:
         (ALL : ALL) NOPASSWD: /usr/sbin/nginx
     ```
 
-10. It seems that we can run the webserver as `root`, so let's see its configuration:
+10. It seems that we can run the `nginx` app as `root`, so let's examine its configuration:
 
     ```bash
     # move to the webserver directory
@@ -374,4 +372,4 @@ What we know:
     <SNIP>
     ```
 
-    ![](broker_pwned.png){: .normal width="60%"}
+    ![](broker_pwned.png){: .normal width="80%"}
