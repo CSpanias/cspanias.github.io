@@ -16,7 +16,7 @@ Each level has access to the password of the next level. Your job is to somehow 
 - Password: `natas0`
 - URL: `http://natas0.natas.labs.overthewire.org`
 
-## [Level 0](http://natas0.natas.labs.overthewire.org/)
+## [Level 0](https://overthewire.org/wargames/natas/natas0.html)
 
 The homepage says this:
 
@@ -29,7 +29,7 @@ If we just right click > *View Page Source* and check the page's source code, we
 ![](natas0_pass.png){: .normal width="60%"}
 
 
-## [Level 0 &rarr; 1](http://natas1.natas.labs.overthewire.org/)
+## [Level 0 &rarr; 1](https://overthewire.org/wargames/natas/natas1.html)
 
 > Password: g9D9cREhslqBKtcA2uocGHPfMZVzeFK6
 
@@ -43,7 +43,7 @@ We need to find the hotkey for viewing the page source by clicking the **three l
 
 ![](natas1_pass.png)
 
-## [Level 1 &rarr; 2](http://natas2.natas.labs.overthewire.org/)
+## [Level 1 &rarr; 2](https://overthewire.org/wargames/natas/natas2.html)
 
 > Password: h4ubbcXrWqsTo7GGnnUMLppXbOogfBZ7
 
