@@ -91,7 +91,7 @@ This challenge requires some familiarity with [**HTTP headers**](https://en.wiki
 
 *The **Referer HTTP request header** contains the absolute or partial address from which a resource has been requested. The Referer header allows a server to identify referring pages that people are visiting from or where requested resources are being used.*
 
-All we have to do is modify this request header before reaching the server. We can achieve this in many ways. We will do it using the browser extension [Tamper Data For FF Quantum](https://addons.mozilla.org/en-US/firefox/addon/tamper-data-for-ff-quantum/) and the web application testing suite [Burp](https://portswigger.net/burp), and the API testing app [Postman](https://www.postman.com/).
+All we have to do is modify this request header before reaching the server. We can achieve this in many ways. We will do it using the browser extension [Tamper Data For FF Quantum](https://addons.mozilla.org/en-US/firefox/addon/tamper-data-for-ff-quantum/), the web app testing suite [Burp](https://portswigger.net/burp), and the API testing app [Postman](https://www.postman.com/).
 
 ### Tamper Data For FF Quantum
 
