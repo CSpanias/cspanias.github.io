@@ -87,14 +87,77 @@ The `robots.txt` file has blacklisted the `/s3cr3t` directory:
 
 > Password: tKOcJIbzM4lTs8hbCmzn5Zr4434fGZQm
 
+![](natas4_home.png)
 
+This challenge requires some familiarity with [**HTTP headers**](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields), and specifically the [**Referer**](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer) header:
+
+*The **Referer HTTP request header** contains the absolute or partial address from which a resource has been requested. The Referer header allows a server to identify referring pages that people are visiting from or where requested resources are being used.*
+
+So all we have to do is modify this request header before reaching the server. We can achieve this in many ways using browser extensions such as [Tamper Data For FF Quantum](https://addons.mozilla.org/en-US/firefox/addon/tamper-data-for-ff-quantum/), [Burp Suite](https://portswigger.net/burp), or [Postman](https://www.postman.com/).
+
+### Tamper Data For FF Quantum
+
+After adding the extension on our browser, we can click on it and click **Start**:
+
+![](natas4_tamper_data_config.png)
+
+After refreshing the page, we will find a list with all the HTTP headers used for this `GET` request. We need to modify the **Referer** value to http://natas5.natas.labs.overthewire.org/ and then click OK:
+
+![](natas4_tamper_data_referer.png)
+
+![](natas4_pass_browser.png)
+
+### Burp Suite
+
+We can interecept and `GET` request and send it to the **Repeater** by pressing `CTRL + R`. The request looks like this: 
+
+![](natas4_home_burp.png)
+
+Again, we need to modify the value of the **Referer** header and then send the request:
+
+![](natas4_pass_burp.png)
+
+### Postman
+
+We also use Postman's web GUI to do the same thing:
+
+![](natas4_referer.png)
+
+![](natas4_pass.png)
 
 ## [Level 4 &rarr; 5](https://overthewire.org/wargames/natas/natas5.html)
+
+> Password: Z0NsrtIkJoKALBCLi5eqFfcRN82Au2oD
+
+
+
 ## [Level 5 &rarr; 6](https://overthewire.org/wargames/natas/natas6.html)
+
+> Password:
+
+
+
 ## [Level 6 &rarr; 7](https://overthewire.org/wargames/natas/natas7.html)
+
+> Password: 
+
+
+
 ## [Level 7 &rarr; 8](https://overthewire.org/wargames/natas/natas8.html)
+
+> Password: 
+
+
+
 ## [Level 8 &rarr; 9](https://overthewire.org/wargames/natas/natas9.html)
+
+> Password: 
+
+
 ## [Level 9 &rarr; 10](https://overthewire.org/wargames/natas/natas10.html)
+
+> Password: 
+
 
 
 <!--
