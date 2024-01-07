@@ -7,13 +7,13 @@ img_path: /assets/apisec/apisec_fund
 published: true
 ---
 
-##  Intro to API Security
+## Intro to API Security
 
 ### Why API Security
 
 **API** stands for ***Application Programming Interface*** and can be used both externally and internally. For example, booking a taxi ride through Google maps or sending money through a payment app, would represent the **external** use of APIs: they are ***shared across organizations***. APIs also power our **internal** apps, the **microservices**. For instance, an authentication microservice can be exposed to third parties, to trusted partners and customers who may want to integrate with your platform.
 
-![](https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/site/2147573912/products/510155-4c2b-1c8c-ef0-3e0dfe4aa7a5_7.jpg)
+![](https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/site/2147573912/products/510155-4c2b-1c8c-ef0-3e0dfe4aa7a5_7.jpg){: .normal width="70%"}
 
 ![](https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/site/2147573912/products/41ef8c-d3c-af4d-dfe0-61f2dea565c2_9.jpg)
 
@@ -37,10 +37,8 @@ In the schematic above, you have got the **backend app** where all the data live
 
     ![](https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/site/2147573912/products/0a87883-7b05-36fe-de70-b8627604552_15.jpg)
 
-- He essentially overwrote the `source_account_id` with an acc that did not belong to him.
+- He essentially overwrote the `source_account_id` with an acc that did not belong to him ([**Broken Object Level Authorization (BOLA)**](https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/)).
 - The bug cause was a missing logic validation check: the app wasn't confirming that the user submitting the transaction owned the accs related to the transaction.
-
-> This is a [**Broken Object Level Authorization (BOLA)**](https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/) vulnerability where `UserA` is able to act on behalf of `UserB`.
 
 #### Peloton
 

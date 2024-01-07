@@ -46,10 +46,10 @@ published: true
     - [Bandit](https://overthewire.org/wargames/bandit/) ✅
     - [Natas](https://overthewire.org/wargames/natas/) ✍️
 - [picoCTF](https://picoctf.org/index.html#picogym)
-    - [Web exploitation](https://play.picoctf.org/practice?category=1&page=1) ✍️
+    - [Web exploitation](https://play.picoctf.org/practice?category=1&page=1) 
 - [CREST CPSA/CRT Preparation (HTB)](https://academy.hackthebox.com/path/preview/crest-cpsacrt-preparation) 🎯
 - [API University](https://www.apisecuniversity.com/#courses)
-    - [API Security Fundamentals](https://www.apisecuniversity.com/courses/api-security-fundamentals) 🎯
+    - [API Security Fundamentals](https://www.apisecuniversity.com/courses/api-security-fundamentals) ✍️
     - [OWASP API Security Top 10 and Beyond!](https://www.apisecuniversity.com/courses/owasp-api-security-top-10-and-beyond) 🎯
 - [Postman Classroom Program](https://www.postman.com/postman/workspace/postman-classroom-program/overview) 🎯
 - [PostSwigger Academy](https://portswigger.net/web-security/all-topics)
