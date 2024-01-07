@@ -47,22 +47,48 @@ We need to find the hotkey for viewing the page source by clicking the **three l
 
 On the page's source code there is an image called `pixel.png`:
 
-![](natas2_source.png)
+![](natas2_source.png){: .normal width="65%"}
 
 When we click on it, we can see that is indeed only a pixel:
 
-![](natas2_pixel.png)
+![](natas2_pixel.png){: .normal width="60%"}
 
 However, this image resides within a `files/` directory, so we can try accessing that:
 
-![](natas2_source2.png)
+![](natas2_source2.png){: .normal width="70%"}
 
 Within the `files/` directory many files exists, including `users.txt`:
 
-![](natas2_pass.png)
+![](natas2_pass.png){: .normal width="70%"}
 
 ## [Level 2 &rarr; 3](https://overthewire.org/wargames/natas/natas3.html)
+
+> Passwrod: G6ctbMJ5Nb4cbFwhpMPSvxGHhQ7I6W8Q
+
+![](natas2_home.png){: .normal}
+
+Viewing the page source with `CTRL + U`:
+
+![](natas3_source.png)
+
+The comment about Google points us to the [`robots.txt`](https://developers.google.com/search/docs/crawling-indexing/robots/intro) file:
+
+*A `robots.txt` file is used primarily to manage crawler traffic to your site, and **usually to keep a file off Google**, depending on the file type.*
+
+![](natas3_robots.png)
+
+The `robots.txt` file has blacklisted the `/s3cr3t` directory:
+
+![](natas3_secret.png)
+
+![](natas3_pass.png)
+
 ## [Level 3 &rarr; 4](https://overthewire.org/wargames/natas/natas4.html)
+
+> Password: tKOcJIbzM4lTs8hbCmzn5Zr4434fGZQm
+
+
+
 ## [Level 4 &rarr; 5](https://overthewire.org/wargames/natas/natas5.html)
 ## [Level 5 &rarr; 6](https://overthewire.org/wargames/natas/natas6.html)
 ## [Level 6 &rarr; 7](https://overthewire.org/wargames/natas/natas7.html)
