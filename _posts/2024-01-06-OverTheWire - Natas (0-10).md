@@ -18,7 +18,15 @@ Each level has access to the password of the next level. Your job is to somehow 
 
 ## [Level 0](https://overthewire.org/wargames/natas/natas0.html)
 
+The homepage says this:
 
+![](natas0_home.png)
+
+If we just right click > *View Page Source* and check the page's source code, we can find the pass:
+
+![](natas0_source.png)
+
+![](natas0_pass.png)
 
 <!--
 ---
