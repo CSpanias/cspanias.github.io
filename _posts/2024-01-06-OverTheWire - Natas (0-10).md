@@ -18,8 +18,6 @@ Each level has access to the password of the next level. Your job is to somehow 
 
 ## [Level 0](https://overthewire.org/wargames/natas/natas0.html)
 
-The homepage says this:
-
 ![](natas0_home.png){: .normal}
 
 If we just right click > *View Page Source* and check the page's source code, we can find the pass:
@@ -33,21 +31,35 @@ If we just right click > *View Page Source* and check the page's source code, we
 
 > Password: g9D9cREhslqBKtcA2uocGHPfMZVzeFK6
 
-Homepage:
-
 ![](natas1_home.png){: .normal}
 
 We need to find the hotkey for viewing the page source by clicking the **three lines at the top right corner** > **More Tools** > **Page Source** or just hitting `CTRL + U`:
 
-![](natas1_page_source_hotkey.png)
+![](natas1_page_source_hotkey.png){: .normal width="60%"}
 
-![](natas1_pass.png)
+![](natas1_pass.png){: .normal width="60%"}
 
 ## [Level 1 &rarr; 2](https://overthewire.org/wargames/natas/natas2.html)
 
 > Password: h4ubbcXrWqsTo7GGnnUMLppXbOogfBZ7
 
+![](natas2_home.png){: .normal}
 
+On the page's source code there is an image called `pixel.png`:
+
+![](natas2_source.png)
+
+When we click on it, we can see that is indeed only a pixel:
+
+![](natas2_pixel.png)
+
+However, this image resides within a `files/` directory, so we can try accessing that:
+
+![](natas2_source2.png)
+
+Within the `files/` directory many files exists, including `users.txt`:
+
+![](natas2_pass.png)
 
 ## [Level 2 &rarr; 3](https://overthewire.org/wargames/natas/natas3.html)
 ## [Level 3 &rarr; 4](https://overthewire.org/wargames/natas/natas4.html)
