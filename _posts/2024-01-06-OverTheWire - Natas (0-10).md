@@ -16,17 +16,48 @@ Each level has access to the password of the next level. Your job is to somehow 
 - Password: `natas0`
 - URL: `http://natas0.natas.labs.overthewire.org`
 
-## [Level 0](https://overthewire.org/wargames/natas/natas0.html)
+## [Level 0](http://natas0.natas.labs.overthewire.org/)
 
 The homepage says this:
 
-![](natas0_home.png)
+![](natas0_home.png){: .normal}
 
 If we just right click > *View Page Source* and check the page's source code, we can find the pass:
 
-![](natas0_source.png)
+![](natas0_source.png){: .normal width="60%"}
 
-![](natas0_pass.png)
+![](natas0_pass.png){: .normal width="60%"}
+
+
+## [Level 0 &rarr; 1](http://natas1.natas.labs.overthewire.org/)
+
+> Password: g9D9cREhslqBKtcA2uocGHPfMZVzeFK6
+
+Homepage:
+
+![](natas1_home.png){: .normal}
+
+We need to find the hotkey for viewing the page source by clicking the **three lines at the top right corner** > **More Tools** > **Page Source** or just hitting `CTRL + U`:
+
+![](natas1_page_source_hotkey.png)
+
+![](natas1_pass.png)
+
+## [Level 1 &rarr; 2](http://natas2.natas.labs.overthewire.org/)
+
+> Password: h4ubbcXrWqsTo7GGnnUMLppXbOogfBZ7
+
+
+
+## [Level 2 &rarr; 3](https://overthewire.org/wargames/natas/natas3.html)
+## [Level 3 &rarr; 4](https://overthewire.org/wargames/natas/natas4.html)
+## [Level 4 &rarr; 5](https://overthewire.org/wargames/natas/natas5.html)
+## [Level 5 &rarr; 6](https://overthewire.org/wargames/natas/natas6.html)
+## [Level 6 &rarr; 7](https://overthewire.org/wargames/natas/natas7.html)
+## [Level 7 &rarr; 8](https://overthewire.org/wargames/natas/natas8.html)
+## [Level 8 &rarr; 9](https://overthewire.org/wargames/natas/natas9.html)
+## [Level 9 &rarr; 10](https://overthewire.org/wargames/natas/natas10.html)
+
 
 <!--
 ---
