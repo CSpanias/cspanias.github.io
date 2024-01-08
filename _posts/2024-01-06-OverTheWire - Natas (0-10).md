@@ -147,11 +147,11 @@ If we send the request now, we should receive next level's password in the respo
 
 > Password: fOIvE0MDtPTgRhqmmvvAOt2EfXR6uQgR
 
-![](natas6_home.png){: .normal}
+![](natas6_home.png){: .normal width="70%"}
 
 It seems that we have to find a secret query in order to get the next level's password. Let's check the page's source code:
 
-![](natas6_source.png)
+![](natas6_source.png){: .normal}
 
 The code tell us all we need: we need to submit a `POST` request to `/includes/secret.inc` directory for revealing the secret query:
 
@@ -159,7 +159,7 @@ The code tell us all we need: we need to submit a `POST` request to `/includes/s
 
 We can now submit the secret query and obtain the password for the next level:
 
-![](natas6_pass.png)
+![](natas6_pass.png){: .normal width="70%"}
 
 ## [Level 6 &rarr; 7](https://overthewire.org/wargames/natas/natas7.html)
 
