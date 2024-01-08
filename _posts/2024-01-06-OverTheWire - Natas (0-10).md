@@ -135,9 +135,9 @@ If we intercept the traffic with Postman, we will see that this is a `GET` reque
 
 We can modify the cookie's value by first clicking to **Cookies** and then setting the value to `1`:
 
-![](natas5_cookies.png)
+![](natas5_cookies.png){: .normal width="75%"}
 
-![](natas5_cookies1.png)
+![](natas5_cookies1.png){: .normal width="75%"}
 
 If we send the request now, we should receive next level's password in the response:
 
@@ -169,7 +169,7 @@ We can now submit the secret query and obtain the password for the next level:
 
 There are two hyperlinks to click on: `Home` and `About`. When we click on one of them, for example, `Home`, we notice that a parameter called `page` appears on the address bass with the value of `home`:
 
-![](natas7_page_param.png)
+![](natas7_page_param.png){: .normal}
 
 If we check the response with Burp, we can see that there is a hint disguised as a comment:
 
@@ -181,7 +181,7 @@ We can set the value of the `page` parameter to `/etc/natas_webpass/natas8` and 
 
 ## [Level 7 &rarr; 8](https://overthewire.org/wargames/natas/natas8.html)
 
-> Password: 
+> Password: a6bZCNYwdKqN5cGP11ZdtPg0iImQQhAB
 
 
 
