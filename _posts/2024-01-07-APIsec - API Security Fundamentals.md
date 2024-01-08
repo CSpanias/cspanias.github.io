@@ -1,8 +1,8 @@
 ---
 title: API Security Fundamentals
 date: 2024-01-07
-categories: [APISEC, APISEC Fundamentals]
-tags: [apisec, api]
+categories: [APIsec, APISEC Fundamentals]
+tags: [apisec, api, api-testing]
 img_path: /assets/apisec/apisec_fund
 published: true
 ---
