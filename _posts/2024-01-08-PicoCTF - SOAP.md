@@ -11,7 +11,7 @@ published: true
 
 > **Description**: _The web project was rushed and no security assessment was done. Can you read the `/etc/passwd` file?_
 
-1. The homepage looks like this:
+1. The homepage looks like this: 
 
     ![](home.png){: .normal}
 
