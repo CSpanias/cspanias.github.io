@@ -3,7 +3,7 @@ title: PicoCTF - SOAP
 date: 2024-01-08
 categories: [CTF, Web]
 tags: [picoctf, web, web-exploitation, soap, xml, xxe]
-img_path: /assets/picoctf/web_exploitation/soap
+img_path: /assets/picoctf/web_exploitation/SOAP
 published: true
 ---
 

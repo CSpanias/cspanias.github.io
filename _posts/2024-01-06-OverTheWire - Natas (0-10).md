@@ -127,11 +127,25 @@ We also use Postman's web GUI to do the same thing:
 
 > Password: Z0NsrtIkJoKALBCLi5eqFfcRN82Au2oD
 
+![](natas5_home.png){: .normal}
 
+If we intercept the traffic with Postman, we will see that this is a `GET` request which includes a `loggedin` cookie with the value of `0`:
+
+![](natas5_postman_request.png)
+
+We can modify the cookie's value by first clicking to **Cookies** and then setting the value to `1`:
+
+![](natas5_cookies.png)
+
+![](natas5_cookies1.png)
+
+If we send the request now, we should receive next level's password in the response:
+
+![](natas5_pass.png)
 
 ## [Level 5 &rarr; 6](https://overthewire.org/wargames/natas/natas6.html)
 
-> Password:
+> Password: fOIvE0MDtPTgRhqmmvvAOt2EfXR6uQgR
 
 
 
