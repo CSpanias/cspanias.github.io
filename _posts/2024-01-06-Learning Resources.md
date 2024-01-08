@@ -1,5 +1,5 @@
 ---
-title: Learning Resources Tracking
+title: Learning Resources
 date: 2024-01-06
 categories: [Other, Notes]
 tags: [education, cybersecurity, openuniversity, ou, hack-the-box, try-hack-me, web-security, api-testing, penetration-testing, htb, thm, ethical-hacking]
@@ -36,14 +36,19 @@ published: true
     - [API Penetration Testing Course](https://www.apisecuniversity.com/courses/api-penetration-testing) 🎯
 - [Postman API Fundamentals Student Expert certification](https://academy.postman.com/postman-api-fundamentals-student-expert-certification-1) (2024) 🆓✅
 
-## Recommended ✅
+## Recommended Platforms 👍
 
-- [Try Hack Me](https://tryhackme.com/hacktivities#learning-paths): Pre Security (40h), Complete Beginner (64h), Introduction to Cyber Security (24h), Web Fundamentals (32h), CompTIA Pentest+ (32h), Jr Penetration Tester (64h), Red Teaming (48h) (2023) ✅
+- [APIsec University](https://www.apisecuniversity.com/#courses) 🆓
+- [PostSwigger Academy](https://portswigger.net/web-security/all-topics) 🆓
+- [UnderTheWire (PowerShell)](https://underthewire.tech/wargames) 🆓
+- [OverTheWire (Bash)](https://overthewire.org/wargames/) 🆓
+- [picoCTF](https://picoctf.org/index.html#picogym) 🆓
+- [Hack The Box](https://www.hackthebox.com/)
+- [Try Hack Me](https://tryhackme.com/)
 - [CISCO](https://skillsforall.com/catalog?subject=Cybersecurity) 🆓
-    - [Networking Essentials (CISCO)](https://www.netacad.com/courses/networking/networking-essentials) (2023) ✅
-    - [Junior Cybersecurity Analyst](https://skillsforall.com/career-path/cybersecurity?courseLang=en-US) (2023) ✅
 
-## Formal Studies
+
+## OU Studies Tracker 📋
 
 - [BSc (Honours) Cyber Security (OU)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60):
     - [The computing and IT project](https://msds.open.ac.uk/module-chooser/module-description.aspx?mod=TM470) (2027) 🎯
