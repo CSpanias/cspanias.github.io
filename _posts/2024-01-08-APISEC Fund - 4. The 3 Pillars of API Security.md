@@ -1,6 +1,6 @@
 ---
-title: 3. OWASP Top 10 Background
-date: 2024-01-07
+title: 4. The 3 Pillars of API Security
+date: 2024-01-08
 categories: [APISEC, APISEC Fundamentals]
 tags: [apisec, api]
 img_path: /assets/apisec/apisec_fund

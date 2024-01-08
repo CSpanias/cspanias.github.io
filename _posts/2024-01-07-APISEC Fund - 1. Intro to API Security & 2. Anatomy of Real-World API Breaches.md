@@ -1,6 +1,6 @@
 ---
 title: 1. Intro to API Security & 2. Anatomy of Real-World API Breaches
-date: 2024-01-05
+date: 2024-01-07
 categories: [APISEC, APISEC Fundamentals]
 tags: [apisec, api]
 img_path: /assets/apisec/apisec_fund
