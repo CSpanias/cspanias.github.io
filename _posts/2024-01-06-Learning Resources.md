@@ -23,7 +23,6 @@ published: true
     - [Information security](https://msds.open.ac.uk/module-chooser/module-description.aspx?mod=TM311)
     - [Systems penetration testing](https://msds.open.ac.uk/module-chooser/module-description.aspx?mod=TM359)
     - [Communication and information technologies](https://msds.open.ac.uk/module-chooser/module-description.aspx?mod=TM255)
-- [API Penetration Testing Course (APISEC University)](https://www.apisecuniversity.com/courses/api-penetration-testing) 🆓
 - [Senior Web Penetration Tester (HTB)](https://academy.hackthebox.com/path/preview/senior-web-penetration-tester)
 - [UnderTheWire (PowerShell)](https://underthewire.tech/wargames) 🆓
 
@@ -48,8 +47,8 @@ published: true
     - [Web exploitation](https://play.picoctf.org/practice?category=1&page=1) 
 - [CREST CPSA/CRT Preparation (HTB)](https://academy.hackthebox.com/path/preview/crest-cpsacrt-preparation) 🎯
 - [API University](https://www.apisecuniversity.com/#courses) 🆓
-    - [API Security Fundamentals](https://www.apisecuniversity.com/courses/api-security-fundamentals) ✍️
-    - [OWASP API Security Top 10 and Beyond!](https://www.apisecuniversity.com/courses/owasp-api-security-top-10-and-beyond) 🎯
+    - [API Security Fundamentals](https://www.apisecuniversity.com/courses/api-security-fundamentals) ✅
+    - [API Penetration Testing Course (APISEC University)](https://www.apisecuniversity.com/courses/api-penetration-testing) 🆓🎯
 - [Postman Classroom Program](https://www.postman.com/postman/workspace/postman-classroom-program/overview) 🆓🎯
 - [PostSwigger Academy](https://portswigger.net/web-security/all-topics) 🆓
     - [Client-side topics](https://portswigger.net/web-security/all-topics) 🎯
@@ -85,7 +84,7 @@ published: true
     - [TM111 Introduction to computing and information technology 1](https://msds.open.ac.uk/students/module.aspx?c=TM111_2021D&cr=1)
     - [TM112 Introduction to computing and information technology 2](https://msds.open.ac.uk/students/module.aspx?c=TM112_2021J&cr=1)
 
-## Interesting ❓
+## Interesting 🤔
 
 - [Hacker101](https://www.hacker101.com/videos)
 - [Ethical Hacker (CISCO)](https://skillsforall.com/course/ethical-hacker?courseLang=en-US)
