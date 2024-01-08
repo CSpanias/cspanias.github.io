@@ -13,11 +13,11 @@ published: true
 
 1. The homepage looks like this: 
 
-    ![](home.png){: .normal}
+    ![](home.png){: .normal width="70%"}
 
 2. If we click on "*Details* some extra info about each institution is shown:
 
-    ![](request_browser.png){: .normal}
+    ![](request_browser.png){: .normal width="70%"}
 
     ![](request_burp.png){: .normal}
 

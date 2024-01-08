@@ -13,11 +13,11 @@ published: true
 
 1. The homepage consists of a login form:
 
-    ![](home.png){: .normal}
+    ![](home.png){: .normal width="70%"}
 
 2. While viewing the page's source code, we can see a JavaScript script called `index.js`:
 
-    ![](source.png){: .normal}
+    ![](source.png){: .normal width="70%"}
 
 3. Opening the JS file, there is a string that looks encoded. If we put that into [Cyberchef](https://gchq.github.io/CyberChef) and let it work its magic, we will get the flag:
 
