@@ -1,42 +1,26 @@
 ---
-title: PicoCTF - MatchTheRegex
-date: 2024-01-01
+title: PicoCTF - Login
+date: 2024-01-08
 categories: [CTF, Web]
-tags: [picoctf, web, web-exploitation, matchtheregex, regex]
-img_path: /assets/picoctf/web_exploitation/match_the_regex
+tags: [picoctf, web, web-exploitation, login]
+img_path: /assets/picoctf/web_exploitation/login
 published: true
 ---
 
 ![](room_banner.png){: width="70%"}
 
-> **Description**: _How about trying to match a regular expression?_
+> **Description**: _My dog-sitter's brother made this website but I can't get in; can you help?_
 
-1. The homepage consists of an input box where we can try putting our regular expression, aka regex, to try and match the flag:
+1. The homepage consists of a login form:
 
     ![](home.png){: .normal}
 
-2. When trying `test` as a test to see how this works we get a `wrong match! Try again!` message:
+2. While viewing the page's source code, we can see a JavaScript script called `index.js`:
 
-    ![](home_test.png){: .normal}
+    ![](source.png){: .normal}
 
-3. We could try a site like [regex101](https://regex101.com/) and build a regex that match the general picoCTF flag structure, such as the following:
+3. Opening the JS file, there is a string that looks encoded. If we put that into [Cyberchef](https://gchq.github.io/CyberChef) and let it work its magic, we will get the flag:
 
-    ![](regex_101.png)
-
-4. Unfortunately, that did not work. We can take a look at the page's source code:
-
-    ![](source_code.png)
-
-5. As it seems it only needs a string sequence that matches the pattern in the comment, i.e., `^p.....F!?`:
-    1. We need a sequence starting with the letter `p` (`^p`).
-    2. Followed by any 5 characters (`.....`).
-    3. Followed by the letter `F` (`F`).
-    4. And we can have an exclamation mark (or not) at the end (`!?`). The `?` signifies that the preceded character is optional.
-
-    So any string sequence that matches the above pattern will give us the flag:
+    ![](js_script.png){: .normal}
 
     ![](flag.png){: .normal}
-
-    ![](flag1.png){: .normal}
-
-    ![](flag2.png){: .normal}
