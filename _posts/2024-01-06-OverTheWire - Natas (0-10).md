@@ -165,7 +165,19 @@ We can now submit the secret query and obtain the password for the next level:
 
 > Password: jmxSiH3SP6Sonf8dv66ng8v1cIEdjXWr
 
+![](natas7_home.png){: .normal width="70%"}
 
+There are two hyperlinks to click on: `Home` and `About`. When we click on one of them, for example, `Home`, we notice that a parameter called `page` appears on the address bass with the value of `home`:
+
+![](natas7_page_param.png)
+
+If we check the response with Burp, we can see that there is a hint disguised as a comment:
+
+![](natas7_home_burp.png)
+
+We can set the value of the `page` parameter to `/etc/natas_webpass/natas8` and we will receive the next level's password in the response:
+
+![](natas7_pass.png)
 
 ## [Level 7 &rarr; 8](https://overthewire.org/wargames/natas/natas8.html)
 
