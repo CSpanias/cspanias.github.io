@@ -1,6 +1,6 @@
 ---
 title: OverTheWire - Natas (0-10)
-date: 2024-01-06
+date: 2024-01-09
 categories: [OverTheWire, Natas]
 tags: [overthewire, natas, web-security]
 img_path: /assets/overthewire/natas
@@ -253,7 +253,7 @@ Now that we have confirmed the CI vulnerability, we can replace the `id` command
 
 ![](natas10_source.png){: .normal}
 
-Now the developer removes the usual characters that are used for a [command injection](https://cspanias.github.io/posts/DVWA-Command-Injection/#command-injection) attack, such as `;`, `|`, and `&`. We can leverage the `grep` utility itself this time, since our input is still passed directly to it. 
+Now the developer filters our input and removes characters that are commonly used for a [command injection](https://cspanias.github.io/posts/DVWA-Command-Injection/#command-injection) attack, such as `;`, `|`, and `&`. Howenver, we can leverage the `grep` utility itself this time, since our input is still passed directly to it. 
 
 We can use the regex `.*` which matches any sequence of characters and then search for `/etc/natas_webpass/natas11` and `dictionary.txt` (which is already within the command). This will result in grepping everything that matches these 2 strings:
 
@@ -267,7 +267,7 @@ We can use the regex `.*` which matches any sequence of characters and then sear
 <!--
 ---
 
-<center> <a href="https://cspanias.github.io/posts/OverTheWire-Natas-(0-10)/">[Level 0-10]</a> </center>
+<center> <a href="https://cspanias.github.io/posts/OverTheWire-Natas-(11-20)/">[Level 11-20]</a> </center>
 
 ---
 -->

@@ -1,5 +1,5 @@
 ---
-title: OverTheWire - Natas (0-10)
+title: OverTheWire - Natas (11-20)
 date: 2024-01-09
 categories: [OverTheWire, Natas]
 tags: [overthewire, natas, web-security]
