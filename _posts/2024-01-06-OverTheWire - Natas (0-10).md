@@ -183,7 +183,45 @@ We can set the value of the `page` parameter to `/etc/natas_webpass/natas8` and 
 
 > Password: a6bZCNYwdKqN5cGP11ZdtPg0iImQQhAB
 
+![](natas8_home.png){: .normal width="70%"}
 
+Let's check the source code:
+
+![](natas8_source.png){: .normal}
+
+The source code includes the `encondedSecret` variable assigned the value of `3d3d516343746d4d6d6c315669563362`. Right below that there is the `encodeSecret` function from which we can see how the secret was encoded:
+1. ASCII --> Base64
+2. The output was reversed.
+3. The reverse output was encoded to hexadecimal which produced the `encodedSecret`'s value.
+
+So we will need to reverse that process in order to get the original ASCII string back:
+1. Hex --> ASCII.
+2. Reverse string.
+3. Base64 --> ASCII.
+
+To achieve that, we can either use [CyberChef](https://gchq.github.io/CyberChef), or Bash:
+
+![](natas8_cyberchef.png)
+
+```bash
+# convert hex to ASCII
+$ echo 3d3d516343746d4d6d6c315669563362 | xxd -r -p
+==QcCtmMml1ViV3b
+# reverse string
+$ echo ==QcCtmMml1ViV3b | rev
+b3ViV1lmMmtCcQ==
+# base64 to ASCII
+$ $ echo b3ViV1lmMmtCcQ== | base64 -d
+oubWYf2kBq
+
+# in a single command
+$ echo 3d3d516343746d4d6d6c315669563362 | xxd -r -p | rev | base64 -d
+oubWYf2kBq
+```
+
+When we submit this query as our secret string, we get the password for the next level:
+
+![](natas8_pass.png)
 
 ## [Level 8 &rarr; 9](https://overthewire.org/wargames/natas/natas9.html)
 
