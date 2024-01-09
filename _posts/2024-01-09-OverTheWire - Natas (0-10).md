@@ -190,14 +190,14 @@ Let's check the source code:
 ![](natas8_source.png){: .normal}
 
 The source code includes the `encondedSecret` variable assigned the value of `3d3d516343746d4d6d6c315669563362`. Right below that there is the `encodeSecret` function from which we can see how the secret was encoded:
-1. ASCII --> Base64
+1. ASCII &rarr; Base64
 2. The output was reversed.
 3. The reverse output was encoded to hexadecimal which produced the `encodedSecret`'s value.
 
 So we will need to reverse that process in order to get the original ASCII string back:
-1. Hex --> ASCII.
+1. Hex &rarr; ASCII.
 2. Reverse string.
-3. Base64 --> ASCII.
+3. Base64 &rarr; ASCII.
 
 To achieve that, we can either use [CyberChef](https://gchq.github.io/CyberChef), or Bash:
 
@@ -241,16 +241,28 @@ Based on the page's source code, whatever we input in the search box, goes strai
 
 Now that we have confirmed the CI vulnerability, we can replace the `id` command and instead read `natas10`'s password:
 
+> Highlight the payload and press `CTRL+U` to URL encode it before sending the request.
+
 ![](natas9_pass.png)
 
 ## [Level 9 &rarr; 10](https://overthewire.org/wargames/natas/natas10.html)
 
 > Password: D44EcsFkLxPIkAAKLosx8z3hxX1Z4MCE
 
+![](natas10_home.png){: .normal width="70%"}
+
+![](natas10_source.png){: .normal}
+
+Now the developer removes the usual characters that are used for a [command injection](https://cspanias.github.io/posts/DVWA-Command-Injection/#command-injection) attack, such as `;`, `|`, and `&`. We can leverage the `grep` utility itself this time, since our input is still passed directly to it. 
+
+We can use the regex `.*` which matches any sequence of characters and then search for `/etc/natas_webpass/natas11` and `dictionary.txt` (which is already within the command). This will result in grepping everything that matches these 2 strings:
+
+![](natas10_pass.png)
+
 
 ## [Level 10 &rarr; 11](https://overthewire.org/wargames/natas/natas11.html)
 
-> Password: 
+> Password: 1KFqoJXi6hRaPluAmk8ESDW4fSysRoIg
 
 <!--
 ---
