@@ -259,15 +259,8 @@ We can use the regex `.*` which matches any sequence of characters and then sear
 
 ![](natas10_pass.png)
 
-
-## [Level 10 &rarr; 11](https://overthewire.org/wargames/natas/natas11.html)
-
-> Password: 1KFqoJXi6hRaPluAmk8ESDW4fSysRoIg
-
-<!--
 ---
 
 <center> <a href="https://cspanias.github.io/posts/OverTheWire-Natas-(11-20)/">[Level 11-20]</a> </center>
 
 ---
--->
