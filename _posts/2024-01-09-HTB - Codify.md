@@ -19,7 +19,7 @@ published: true
 > CONTENT HIDDEN - ACTIVE MACHINE!
 {: .prompt-warning}
 
-## Info gathering
+<!-- ## Info gathering
 
 ```bash
 $ sudo nmap -sS -A -Pn --min-rate 10000 -p- codify
@@ -53,7 +53,7 @@ The website looks likes a sandbox environment for testing Node.js code. It also 
 
 ![](codify_home.png)
 
-![](limitations_page.png)
+![](limitations_page.png){: .normal width="65%"}
 
 Searching about [Node.js Express](https://expressjs.com/) we did not find anything particularly interesting about it: _it is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications_. 
 
@@ -101,7 +101,11 @@ cat tickets.db
 r]r�h%%�Joe WilliamsLocal setup?I use this site lot of the time. Is it possible to set this up locally? Like instead of coming to this site, can I download this and set it up in my own computer? A feature like that would be nice.open� ;�wTom HanksNeed networking modulesI think it would be better if you can implement a way to handle network-based stuff. Would help me out a lot. Thanks!open
 ```
 
-We can see that there is the hashed password of `joshua`: `$2a$12$SOn8Pf6z8fO/nVsNbAAequ/P6vLRJJl7gCUEiYBU2iLHn4G/p/Zw2`. The first part of the hash indicates the hash type, so if we search for "*$2a\$ hash*" on Google we get [this](https://bitcoinwiki.org/wiki/bcrypt#:~:text=The%20prefix%20%E2%80%9C%242a%24%E2%80%9D,hash%20in%20modular%20crypt%20format.):
+We can see that there is the hashed password of `joshua`: 
+
+`$2a$12$SOn8Pf6z8fO/nVsNbAAequ/P6vLRJJl7gCUEiYBU2iLHn4G/p/Zw2`.
+
+The first part of the hash indicates the hash type, so if we search for "*$2a\$ hash*" on Google we get [this](https://bitcoinwiki.org/wiki/bcrypt#:~:text=The%20prefix%20%E2%80%9C%242a%24%E2%80%9D,hash%20in%20modular%20crypt%20format.):
 
 *The prefix “$2a\$” or “$2b\$” (or “$2y\$”) in a hash string in a shadow password file indicates that hash string is a **bcrypt** hash in modular crypt format.*
 
@@ -174,7 +178,7 @@ done
 /usr/bin/echo 'Done!'
 ```
 
-Although we can run `/opt/scripts/mysql-backup.sh` as root, when we do it asks us for the `root`'s password which we don't have. We can check which services are listening internally and try to enumerate those:
+Although we can run `/opt/scripts/mysql-backup.sh` as root, when we do, it asks us for the `root`'s password which we don't have. We can check which services are listening internally and try to enumerate those:
 
 ```bash
 joshua@codify:~$ netstat -ltn
@@ -184,7 +188,7 @@ tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN
 <SNIP>
 ```
 
-There is a `MySQL` server listening on port `3306` let's try to connect to it:
+There is a `MySQL` server listening on port `3306`. Let's try to connect to it:
 
 ```bash
 joshua@codify:~$ mysql -u joshua -p"spongebob1" -h 127.0.0.1
@@ -236,7 +240,7 @@ mysql> SELECT User, Password FROM user WHERE User='root';
 3 rows in set (0.00 sec)
 ```
 
-We found the `root`'s hash, so let's check its type:
+We found the `root`'s hash. We can check its type using `hash-identifier`:
 
 ```bash
 $ hash-identifier
@@ -247,7 +251,7 @@ Possible Hashs:
 [+] MySQL5 - SHA-1(SHA-1($pass))
 ```
 
-Sadly, it seems that we can't crack the hash! Let's go back to the `mysql-backup.sh` script.
+Sadly, after trying everything in our toolset, it seems that we can't crack the hash! Let's go back to the `mysql-backup.sh` script.
 
 ```python
 import string
@@ -304,6 +308,6 @@ joshua@codify:~$ su root
 Password:
 root@codify:/home/joshua# cat /root/root.txt
 1f62fde8d681b1567d8d4e677f7b0c3c
-```
+``` -->
 
 ![](machine_pwned.png){: width="65%" .normal}
