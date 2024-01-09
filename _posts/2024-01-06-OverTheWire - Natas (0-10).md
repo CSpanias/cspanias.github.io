@@ -225,14 +225,32 @@ When we submit this query as our secret string, we get the password for the next
 
 ## [Level 8 &rarr; 9](https://overthewire.org/wargames/natas/natas9.html)
 
-> Password: 
+> Password: Sda6t0vkOPkM8YeOZkAGVhFoaplvlJFd
 
+![](natas9_home.png){.normal}
+
+![](natas9_source.png){.normal}
+
+If we input the string `random` and intercept the traffic with Burp, this is what the request looks like:
+
+![](natas9_params_burp.png)
+
+Based on the page's source code, whatever we input in the search box, goes straight into the `grep` command without any validation or sanitization. That makes this app vulnerable to a [**command injection**](https://cspanias.github.io/posts/DVWA-Command-Injection/#command-injection). Let's try if it works:
+
+![](natas9_ci.png)
+
+Now that we have confirmed the CI vulnerability, we can replace the `id` command and instead read `natas10`'s password:
+
+![](natas9_pass.png)
 
 ## [Level 9 &rarr; 10](https://overthewire.org/wargames/natas/natas10.html)
 
+> Password: D44EcsFkLxPIkAAKLosx8z3hxX1Z4MCE
+
+
+## [Level 10 &rarr; 11](https://overthewire.org/wargames/natas/natas11.html)
+
 > Password: 
-
-
 
 <!--
 ---
