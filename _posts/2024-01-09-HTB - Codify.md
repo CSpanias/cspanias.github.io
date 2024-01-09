@@ -2,8 +2,8 @@
 title: HTB - Codify
 date: 2023-01-09
 categories: [CTF, Fullpwn]
-tags: [htb, hackthebox, nmap, http, webserver, ]
-img_path: /assets/htb/fullpwn/coodify/
+tags: [htb, hackthebox, nmap, http, webserver, mysql, vm2, node-js, hash, hashcat, bcrypt]
+img_path: /assets/htb/fullpwn/codify/
 published: true
 ---
 
