@@ -12,7 +12,7 @@ published: true
 ## Overview
 
 |:-:|:-:|
-|Machine|[Cozyhosting](https://app.hackthebox.com/machines/574)|
+|Machine|[Codify](https://app.hackthebox.com/machines/574)|
 |Rank|Easy|
 |Focus|-|
 
