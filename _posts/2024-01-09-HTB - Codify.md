@@ -282,7 +282,7 @@ For executing this process, the `root` user's credentials are used.
 
 > [The complete `mysqldump` guide with examples](https://simplebackups.com/blog/the-complete-mysqldump-guide-with-examples/#what-is-mysqldump).
 
-After some time re-reading the script several times, the issue lies within the lines below:
+After some time re-reading the script several times, we realize that there is an issue within the script itself. In particular, within the below lines:
 
 ```bash
 if [[ $DB_PASS == $USER_PASS ]]; then
@@ -293,31 +293,11 @@ This is an issue known as **unquoted variables**: how double quoted and unquoted
 
 > Info about [Quoting Variables](https://tldp.org/LDP/abs/html/quotingvar.html).
 
-Here is an example:
-
-```bash
-# defining a variable 
-$ variable1="a var containing five words"
-
-# passing the unquoted variable as an argument to a command
-$ echo This is $variable1
-This is a var containing five words
-```
-
-The `echo` command above interpreted the variable as five different arguments which is identical with the code below:
-
-```bash
-$ echo This is a var containing five words
-This is a var containing five words
-```
-
-If we know enclose the variable in double quotes, the command will interpret the variable as one single argument instead of 5 separate ones, which is usually the intended purpose of defining a variable! 
-
-In the example below, we create the variable `list` and because we then use it unquoted, instead of echoing the whole list, echoes its elements as separate arguments:
+Let's see an example, taken from the link above. Below, we create the variable `list` and because we then use it unquoted, instead of echoing the whole list, echoes its elements as separate arguments:
 
 ```bash
 $ list="one two three"
-$ for a in $list # unquoted variable
+$ for a in $list # unquoted variable, this is the same as writing "one" "two" "three"
 > do
 > echo "$a"
 > done
@@ -336,11 +316,11 @@ $ for a in "$list" # double-quoted variable
 one two three
 ```
 
-> [Bash | Why should you put shell variables always between quotation marks ? (+ real world example)](https://medium.com/@stefan.paladuta17/bash-why-should-you-put-shell-variables-always-between-quotation-marks-real-world-example-ac794dd53a84).
+> [Bash \| Why should you put shell variables always between quotation marks ? (+ real world example)](https://medium.com/@stefan.paladuta17/bash-why-should-you-put-shell-variables-always-between-quotation-marks-real-world-example-ac794dd53a84).
 
-So, that is the base of the vulnerability that lies within the `[[ $DB_PASS == $USER_PASS ]]` lines. In brief, as mentioned [here](https://mywiki.wooledge.org/BashPitfalls#if_.5B.5B_.24foo_.3D_.24bar_.5D.5D_.28depending_on_intent.29): 
+The unquoted variable issue is the base of the vulnerability that lies within the `[[ $DB_PASS == $USER_PASS ]]` lines. As mentioned [here](https://mywiki.wooledge.org/BashPitfalls#if_.5B.5B_.24foo_.3D_.24bar_.5D.5D_.28depending_on_intent.29): 
 
-> When the right-hand side of an `=` operator inside [`[[`](https://mywiki.wooledge.org/BashFAQ/031) is not quoted, bash does [**pattern matching**](https://mywiki.wooledge.org/glob) against it, instead of treating it as a string.
+_"When the right-hand side of an `=` operator inside [`[[`](https://mywiki.wooledge.org/BashFAQ/031) is not quoted, bash does [**pattern matching**](https://mywiki.wooledge.org/glob) against it, instead of treating it as a string"._
 
 As a result of that, we can create a simple [brute-forcing script](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/htb/fullpwn/codify/brute_force.py) leveraging the ability to "*pattern-match*" each character and obtain `root`'s password:
 
@@ -411,4 +391,4 @@ root@codify:/home/joshua# cat /root/root.txt
 1f62fde8d681b1567d8d4e677f7b0c3c
 ```
 
-![](machine_pwned.png){: width="65%" .normal}
+<!-- ![](machine_pwned.png){: width="65%" .normal} -->
