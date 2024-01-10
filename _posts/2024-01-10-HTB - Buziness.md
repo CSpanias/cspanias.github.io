@@ -3,7 +3,7 @@ title: HTB - Buziness
 date: 2023-01-10
 categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, nmap, http, webserver, apache, apache-ofbiz, ofbiz, hash]
-img_path: /assets/htb/fullpwn/codify/
+img_path: /assets/htb/fullpwn/bizness/
 published: true
 ---
 
@@ -19,7 +19,7 @@ published: true
 > CONTENT HIDDEN - ACTIVE MACHINE!
 {: .prompt-warning}
 
-## Info Gathering
+<!-- ## Info Gathering
 
 Let's start with a **port scanning**:
 
@@ -319,6 +319,6 @@ ofbiz@bizness:~$ su root
 Password:
 root@bizness:/home/ofbiz# cat /root/root.txt
 b90bcb5567cdac3791d313c8bc43e785
-```
+``` -->
 
 ![](machine_pwned.png){: width="65%" .normal}
