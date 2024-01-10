@@ -19,7 +19,7 @@ published: true
 > CONTENT HIDDEN - ACTIVE MACHINE!
 {: .prompt-warning}
 
-## Info gathering
+<!-- ## Info gathering
 
 ```bash
 $ sudo nmap -sS -A -Pn --min-rate 10000 -p- codify
@@ -389,6 +389,6 @@ joshua@codify:~$ su root
 Password:
 root@codify:/home/joshua# cat /root/root.txt
 1f62fde8d681b1567d8d4e677f7b0c3c
-```
+``` -->
 
-<!-- ![](machine_pwned.png){: width="65%" .normal} -->
+![](machine_pwned.png){: width="65%" .normal}
