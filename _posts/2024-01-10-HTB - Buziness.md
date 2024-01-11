@@ -1,6 +1,6 @@
 ---
 title: HTB - Buziness
-date: 2023-01-10
+date: 2024-01-10
 categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, nmap, http, webserver, apache, apache-ofbiz, ofbiz, hash]
 img_path: /assets/htb/fullpwn/bizness/
