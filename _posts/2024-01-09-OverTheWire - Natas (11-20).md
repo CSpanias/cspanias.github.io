@@ -6,7 +6,7 @@ tags: [overthewire, natas, web-security]
 img_path: /assets/overthewire/natas
 published: true
 image:
-    path: bandit.png
+    path: natas.jpg
 ---
 
 ---
