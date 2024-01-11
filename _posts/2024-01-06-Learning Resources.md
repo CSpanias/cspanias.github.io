@@ -5,6 +5,8 @@ categories: [Other, Notes]
 tags: [education, cybersecurity, openuniversity, ou, hack-the-box, try-hack-me, web-security, api-testing, penetration-testing, htb, thm, ethical-hacking]
 img_path: /assets/general
 published: true
+image:
+    path: hacker_studying.png
 ---
 
 > [Security Certification Roadmap](https://pauljerimy.com/security-certification-roadmap/)

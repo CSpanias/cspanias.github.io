@@ -5,6 +5,8 @@ categories: [CTF, Web]
 tags: [picoctf, web, web-exploitation, login]
 img_path: /assets/picoctf/web_exploitation/login
 published: true
+image:
+    path: ../../picoctf_logo.png
 ---
 
 ![](room_banner.png){: width="70%"}
