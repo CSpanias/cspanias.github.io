@@ -6,7 +6,7 @@ tags: [penetration-testing, starting-point, hackthebox, htb-academy, ctf, captur
 img_path: /assets/other/reviews/htb-startingpoint/
 mermaid: true
 image:
-    path: startingPoint_logo.png
+    path: startingPoint_logo.jpg
 ---
 
 ## TryHackMe vs. HackTheBox
