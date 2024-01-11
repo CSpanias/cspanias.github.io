@@ -5,9 +5,9 @@ categories: [CTF, Fullpwn]
 tags: [thm, tryhackme, nmap, lfi, burp-suite, metasploit, directory-traversal, gtfobins, container-escape, repeater]
 img_path: /assets/thm/fullpwn/dogcat/
 mermaid: true
+image:
+    path: dogcatbanner.png
 ---
-
-![dogcat banner](dogcatbanner.png)
 
 ## 1 Summary
 

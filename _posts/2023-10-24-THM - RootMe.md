@@ -5,9 +5,9 @@ categories: [CTF, Fullpwn]
 tags: [thm, tryhackme, gtfobins, suid, gobuster, nmap, webshell, apache]
 img_path: /assets/thm/fullpwn/rootme/
 mermaid: true
+image:
+    path: room-banner.png
 ---
-
-![room_banner](room-banner.png)
 
 ## 1 Summary
 

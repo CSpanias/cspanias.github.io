@@ -5,9 +5,9 @@ categories: [CTF, Fullpwn]
 tags: [thm, tryhackme, xss, idor, cookies, sqli, sudo, wildcard-injection, container-escape, tar]
 img_path: /assets/thm/fullpwn/marketplace/
 mermaid: true
+image:
+    path: marketplace_banner.png
 ---
-
-![marketplace_banner](marketplace_banner.png)
 
 ## 1 Summary
 

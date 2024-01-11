@@ -5,9 +5,9 @@ categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, nmap, http, webserver, nginx, whatweb, wappalyzer, gobuster, dirsearch, cookies, burp-suite, jar, psql, postgres, hash, john, gtfobins]
 img_path: /assets/htb/fullpwn/cozyhosting/
 published: true
+image:
+    path: cozy_banner.png
 ---
-
-![room_banner](cozy_banner.png)
 
 ## Overview
 

@@ -5,9 +5,9 @@ categories: [CTF, Crypto]
 tags: [crypto, rsa, wieners-attack, python, pycryptodomex, pycryptodome, owiener]
 img_path: /assets/htb/crypto/weak_rsa/
 published: true
+image:
+    path: chall_banner.png
 ---
-
-![](chall_banner.png)
 
 ## Overview
 

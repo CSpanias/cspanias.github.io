@@ -5,9 +5,9 @@ categories: [CTF, Fullpwn]
 tags: [tryhackme, thm, nmap, gobuster, hydra, burp-suite, wpscan, crackstation, hash, john, hashcat, gtfobins, suid, intruder]
 img_path: /assets/thm/fullpwn/mr_robot/
 mermaid: true
+image:
+    path: mr-robot-logo.jpg
 ---
-
-![mrrobot_banner](mr-robot-logo.jpg){: width="70%" height="70%" .w77 .normal}
 
 ## 1 Process Summary
 

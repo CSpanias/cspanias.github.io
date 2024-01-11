@@ -5,9 +5,9 @@ categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, nmap, ftp, prtg, metasploit, cve-2018-9276]
 img_path: /assets/htb/fullpwn/netmon/
 published: true
+image:
+    path: netmon_banner.png
 ---
-
-![room_banner](netmon_banner.png)
 
 ## Overview
 

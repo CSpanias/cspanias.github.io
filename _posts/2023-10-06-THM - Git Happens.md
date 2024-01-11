@@ -5,9 +5,9 @@ categories: [CTF, Fullpwn]
 tags: [thm, tryhackme, nmap, nikto, git, gittools]
 img_path: /assets/thm/fullpwn/git_happens/
 mermaid: true
+image:
+    path: git_happens_banner.png
 ---
-
-![room_banner](git_happens_banner.png)
 
 ## 1 Summary
 

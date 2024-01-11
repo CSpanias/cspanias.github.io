@@ -5,6 +5,8 @@ categories: [DVWA]
 tags: [dvwa, brute-force, hydra, burp-suite, python, bs4, beautifulsoup, csrf, 2to3]
 img_path: /assets/dvwa/brute_force
 published: true
+image:
+    path: ../dvwa_logo.png
 ---
 
 ## Information

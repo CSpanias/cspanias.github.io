@@ -5,9 +5,9 @@ categories: [CTF, Web]
 tags: [ctf, web, web-exploitation, under-construction, htb, hack-the-box]
 img_path: /assets/htb/web/under_construction
 published: false
+image:
+    path: room_banner.png
 ---
-
-![](room_banner.png)
 
 ## Overview
 

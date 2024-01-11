@@ -5,9 +5,9 @@ categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, nmap, http, webserver, nginx, whatweb, wappalyzer, gobuster, dirsearch, robots-txt, vhost-busting, cve-2023-23752, ssti, mysql, hash, john, aport-cli, cve-2023-1326]
 img_path: /assets/htb/fullpwn/devvortex/
 published: true
+image:
+    path: machine_banner.png
 ---
-
-![room_banner](machine_banner.png)
 
 ## Overview
 

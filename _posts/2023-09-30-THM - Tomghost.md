@@ -5,9 +5,9 @@ categories: [CTF, Fullpwn]
 tags: [thm, tryhackme, nmap, exploitdb, metasploit, hash, gpg, john, encryption, gtfobins, sudo, ajp]
 img_path: /assets/thm/fullpwn/tomghost/
 mermaid: true
+image:
+    path: tomghost_banner.png
 ---
-
-![tomghost banner](tomghost_banner.png)
 
 ## 1 Summary
 

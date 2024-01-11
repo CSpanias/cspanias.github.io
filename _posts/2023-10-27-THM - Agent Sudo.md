@@ -5,9 +5,9 @@ categories: [CTF, Fullpwn]
 tags: [thm, tryhackme, nmap, burpsuite, ssh, ftp, john, hydra, brute-force, dictionary-attack, steganography, binwalk, stegseek, john, encoding, base64, exploit-db, gtfobins, sudo, zip, compression]
 img_path: /assets/thm/fullpwn/agent-sudo/
 mermaid: true
+image:
+    path: agent-sudo-banner.png
 ---
-
-![room_banner](agent-sudo-banner.png)
 
 ## 1 Summary
 

@@ -4,9 +4,9 @@ date: 2023-11-10
 categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, nibbleblog, http, nc, nmap, wappalyzer, whatweb, gobuster, cve-2015-6967, metasploit, php, rce, webshell]
 img_path: /assets/htb/fullpwn/nibbles/
+image:
+    path: nibbles_banner.png
 ---
-
-![room_banner](nibbles_banner.png)
 
 ## Overview
 

@@ -5,9 +5,11 @@ categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, nmap, default-credentials, creds, activemq, cve-2023-46604, metasploit]
 img_path: /assets/htb/fullpwn/broker/
 published: true
+image:
+    path: machine_banner.png
 ---
 
-![room_banner](machine_banner.png)
+## Overview
 
 |:-:|:-:|
 |Machine|[Broker](https://app.hackthebox.com/machines/578)|

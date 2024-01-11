@@ -5,9 +5,9 @@ categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, nmap, whatweb, wappalyzer, curl, request-tracker, default-credentials, ssh, netstat, keepass, cve-2023-32784, dmp, kdbx, putty, ppk, puttygen, pem]
 img_path: /assets/htb/fullpwn/keeper/
 published: true
+image:
+    path: keeper_banner.png
 ---
-
-![room_banner](keeper_banner.png)
 
 ## Overview
 
