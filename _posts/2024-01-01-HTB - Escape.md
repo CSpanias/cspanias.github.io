@@ -5,9 +5,9 @@ categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, nmap, escape, certify, rubeus, smb, mssql, responder, xp_dirtree, ntlm, hash, hashcat, kerberos, tgt, psexec]
 img_path: /assets/htb/fullpwn/escape/
 published: true
+image:
+    path: room_banner.png
 ---
-
-![room_banner](room_banner.png)
 
 ## Overview
 

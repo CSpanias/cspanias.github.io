@@ -5,9 +5,9 @@ categories: [CTF, Web]
 tags: [ctf, web, web-exploitation, htb, hack-the-box, spookifier, ssti]
 img_path: /assets/htb/web/spookifier
 published: true
+image:
+    path: room_banner.png
 ---
-
-![](room_banner.png)
 
 ## Overview
 
