@@ -5,6 +5,8 @@ categories: [OverTheWire, Bandit]
 tags: [overthewire, bandit, linux]
 img_path: /assets/overthewire/bandit
 published: true
+image:
+    path: bandit.png
 ---
 
 ---

@@ -5,6 +5,8 @@ categories: [OverTheWire, Natas]
 tags: [overthewire, natas, web-security]
 img_path: /assets/overthewire/natas
 published: true
+image:
+    path: natas.png
 ---
 
 [Natas](https://overthewire.org/wargames/natas/) teaches the basics of **serverside web-security**.
