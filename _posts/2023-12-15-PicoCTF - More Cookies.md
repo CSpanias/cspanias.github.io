@@ -5,6 +5,8 @@ categories: [CTF, Web]
 tags: [picoctf, web, web-exploitation, cookies]
 img_path: /assets/picoctf/web_exploitation/more_cookies
 published: true
+image:
+    path: ../../picoctf_logo.png
 ---
 
 ![](room_banner.png)

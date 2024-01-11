@@ -5,6 +5,8 @@ categories: [CTF, Web]
 tags: [picoctf, web, web-exploitation, it-is-my-birthday, hash, MD5, collision]
 img_path: /assets/picoctf/web_exploitation/it_is_my_birthday
 published: true
+image:
+    path: ../../picoctf_logo.png
 ---
 
 ![](room_banner.png){: width="70%" .normal}

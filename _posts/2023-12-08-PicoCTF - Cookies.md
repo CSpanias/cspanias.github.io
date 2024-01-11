@@ -5,6 +5,8 @@ categories: [CTF, Web]
 tags: [picoctf, web, web-exploitation, cookies, http-requests, burp-suite, curl]
 img_path: /assets/picoctf/web_exploitation/cookies
 published: true
+image:
+    path: ../../picoctf_logo.png
 ---
 
 ![](cookie_banner.png){: width='60%' .normal}

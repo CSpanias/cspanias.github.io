@@ -5,6 +5,8 @@ categories: [CTF, Web]
 tags: [picoctf, web, web-exploitation, findme, encoding, decoding, base64]
 img_path: /assets/picoctf/web_exploitation/findme
 published: true
+image:
+    path: ../../picoctf_logo.png
 ---
 
 ![](room_banner.png){: width="70%"}

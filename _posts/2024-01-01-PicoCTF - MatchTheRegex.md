@@ -5,6 +5,8 @@ categories: [CTF, Web]
 tags: [picoctf, web, web-exploitation, matchtheregex, regex]
 img_path: /assets/picoctf/web_exploitation/match_the_regex
 published: true
+image:
+    path: ../../picoctf_logo.png
 ---
 
 ![](room_banner.png){: width="70%"}

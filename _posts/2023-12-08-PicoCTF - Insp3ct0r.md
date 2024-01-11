@@ -5,6 +5,8 @@ categories: [CTF, Web]
 tags: [picoctf, web, web-exploitation, inspector, html, css, javascript]
 img_path: /assets/picoctf/web_exploitation/insp3ct0r
 published: true
+image:
+    path: ../../picoctf_logo.png
 ---
 
 ![](insp3ct0r_banner.png){: width='60%' .normal}

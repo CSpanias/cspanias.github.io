@@ -5,6 +5,8 @@ categories: [CTF, Web]
 tags: [picoctf, web, web-exploitation, search-source, html, css, microsoft-edge]
 img_path: /assets/picoctf/web_exploitation/search_source
 published: true
+image:
+    path: ../../picoctf_logo.png
 ---
 
 ![](room_banner.png){: width="70%"}

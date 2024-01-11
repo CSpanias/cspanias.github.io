@@ -6,7 +6,7 @@ tags: [education, cybersecurity, openuniversity, ou, hack-the-box, try-hack-me, 
 img_path: /assets/general
 published: true
 image:
-    path: hacker_studying.png
+    path: hacker_studying.jpg
 ---
 
 > [Security Certification Roadmap](https://pauljerimy.com/security-certification-roadmap/)

@@ -5,6 +5,8 @@ categories: [CTF, Web]
 tags: [picoctf, web-exploitation, web, includes]
 img_path: /assets/picoctf/web_exploitation/includes
 published: true
+image:
+    path: ../../picoctf_logo.png
 ---
 
 ![](room_banner.png){: width="70%" .normal}

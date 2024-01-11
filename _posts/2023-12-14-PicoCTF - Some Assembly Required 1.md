@@ -5,6 +5,8 @@ categories: [CTF, Web]
 tags: [picoctf, web, web-exploitation, assembly, ]
 img_path: /assets/picoctf/web_exploitation/assembly_required_1
 published: true
+image:
+    path: ../../picoctf_logo.png
 ---
 
 ![](room_banner.png)

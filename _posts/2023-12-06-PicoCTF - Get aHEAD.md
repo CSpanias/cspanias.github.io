@@ -5,6 +5,8 @@ categories: [CTF, Web]
 tags: [picoctf, web, web-exploitation, html, http-requests, get, post, head, curl]
 img_path: /assets/picoctf/web_exploitation/get_ahead
 published: true
+image:
+    path: ../../picoctf_logo.png
 ---
 
 ![](get_ahead_banner.png)

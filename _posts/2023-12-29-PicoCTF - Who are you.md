@@ -5,6 +5,8 @@ categories: [CTF, Web]
 tags: [picoctf, web, web-exploitation, who-are-you, http, http-headers]
 img_path: /assets/picoctf/web_exploitation/who_are_you
 published: true
+image:
+    path: ../../picoctf_logo.png
 ---
 
 ![](room_banner.png){: width="70%" .normal}

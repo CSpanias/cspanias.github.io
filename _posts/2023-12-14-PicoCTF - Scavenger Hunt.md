@@ -5,6 +5,8 @@ categories: [CTF, Web]
 tags: [picoctf, web, web-exploitation, html, css, js, dirsearch, burp, burp-repeater, burp-target, dir-busting, apache]
 img_path: /assets/picoctf/web_exploitation/scavenger_hunt
 published: true
+image:
+    path: ../../picoctf_logo.png
 ---
 
 ![](room_banner.png){: width='80%'}
