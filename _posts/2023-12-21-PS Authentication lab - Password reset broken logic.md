@@ -5,6 +5,8 @@ categories: [PortSwigger, Lab]
 tags: [portswigger, lab, authentication, burp]
 img_path: /assets/portswigger/labs/authentication/
 published: true
+image:
+    path: ../../portswigger_acad_logo.png
 ---
 
 > **Objective**: _This lab's password reset functionality is vulnerable. To solve the lab, reset Carlos's password then log in and access his "My account" page._

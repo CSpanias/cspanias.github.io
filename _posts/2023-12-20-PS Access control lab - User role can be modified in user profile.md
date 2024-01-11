@@ -5,6 +5,8 @@ categories: [PortSwigger, Lab]
 tags: [portswigger, lab, access_control, burp]
 img_path: /assets/portswigger/labs/access_control/
 published: true
+image:
+    path: ../../portswigger_acad_logo.png
 ---
 
 > **Objective**: _This lab has an admin panel at `/admin`. It's only accessible to logged-in users with a `roleid` of `2`. Solve the lab by accessing the admin panel and using it to delete the user `carlos`. You can log in to your own account using the following credentials: `wiener:peter`._

@@ -5,6 +5,8 @@ categories: [PortSwigger, Path traversal]
 tags: [portswigger, path-traversal, directory-traversal, dot-dot-slash, burp, burp-intruder]
 img_path: /assets/portswigger/path_traversal
 published: true
+image:
+    path: ../portswigger_acad_logo.png
 ---
 
 ## What is Path Traversal?

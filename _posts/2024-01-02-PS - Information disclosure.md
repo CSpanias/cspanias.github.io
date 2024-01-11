@@ -5,6 +5,8 @@ categories: [PortSwigger, Information disclosure]
 tags: [portswigger, information-disclosure]
 img_path: /assets/portswigger/info_disclosure
 published: true
+image:
+    path: ../portswigger_acad_logo.png
 ---
 
 ## What is information disclosure?

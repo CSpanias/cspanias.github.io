@@ -5,6 +5,8 @@ categories: [PortSwigger, Lab]
 tags: [portswigger, lab, access_control, burp, idor]
 img_path: /assets/portswigger/labs/access_control/
 published: true
+image:
+    path: ../../portswigger_acad_logo.png
 ---
 
 > **Objective**: _This lab stores user chat logs directly on the server's file system, and retrieves them using static URLs. Solve the lab by finding the password for the user `carlos`, and logging into their account._
