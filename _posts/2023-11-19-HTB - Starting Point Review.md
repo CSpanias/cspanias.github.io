@@ -5,6 +5,8 @@ categories: [Other, Reviews]
 tags: [penetration-testing, starting-point, hackthebox, htb-academy, ctf, capture-the-flag, ethical-hacking, review]
 img_path: /assets/other/reviews/htb-startingpoint/
 mermaid: true
+image:
+    path: startingPoint_logo.png
 ---
 
 ## TryHackMe vs. HackTheBox

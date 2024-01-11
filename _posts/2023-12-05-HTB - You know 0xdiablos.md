@@ -5,9 +5,9 @@ categories: [CTF, Pwn]
 tags: [pwn, ghidra, gdb, gdb-peda, debugging, python, buffer-overflow]
 img_path: /assets/htb/pwn/0xdiablos/
 published: true
+image:
+    path: 0xdiablos_banner.png
 ---
-
-![room_banner](0xdiablos_banner.png)
 
 ## Overview
 

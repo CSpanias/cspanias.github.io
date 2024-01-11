@@ -5,10 +5,11 @@ categories: [Other, Notes]
 tags: [data-exfiltration, red-teaming, ssh, http, http-tunneling, icmp, dns, dns-tunneling, dns-records, neoreg, metasploit, icmp_exfil, hex, ping, tcpdump, icmpdoor, wireshark, tr, sed, encoding, base64, ebcdic, tar, curl, xxd, fold, dropper, iodine]
 img_path: /assets/other/notes/data-exfiltration
 mermaid: true
+image:
+    path: data-exfiltration-room-banner.png
 ---
-![Data Exfiltration Banner](data-exfiltration-room-banner.png)
 
-> This is content from THM's [Data Exfiltration](https://tryhackme.com/room/dataxexfilt) room, part of the **Red Teaming** learning path.
+> This content is from THM's [Data Exfiltration](https://tryhackme.com/room/dataxexfilt) room, part of the **Red Teaming** learning path.
 
 ## 1. What is Data Exfiltration?
 

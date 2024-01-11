@@ -4,6 +4,8 @@ date: 2023-11-12
 categories: [Other, Notes]
 tags: [nmap, networking, firewall, icmp, tcp, ttl, enumeration, arp]
 img_path: /assets/other/notes/nmap/
+image:
+    path: nmap_logo.png
 ---
 
 ## Introduction
