@@ -5,9 +5,9 @@ categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, nmap, analytics, cve-2023-38646, cve-2023-32629]
 img_path: /assets/htb/fullpwn/analytics/
 published: true
+image:
+    path: room_banner.png
 ---
-
-![room_banner](room_banner.png)
 
 ## Overview
 
