@@ -9,8 +9,6 @@ image:
   path: room_banner.png
 ---
 
-![room_banner](room_banner.png)
-
 ## Overview
 
 |:-:|:-:|

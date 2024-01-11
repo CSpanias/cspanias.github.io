@@ -5,9 +5,9 @@ categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, nmap, http, webserver, mysql, mysqldump, vm2, node-js, hash, hashcat, bcrypt]
 img_path: /assets/htb/fullpwn/codify/
 published: true
+image:
+    path: room_banner.png
 ---
-
-![room_banner](room_banner.png)
 
 ## Overview
 
