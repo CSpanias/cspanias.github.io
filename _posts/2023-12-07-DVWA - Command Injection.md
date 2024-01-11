@@ -5,6 +5,8 @@ categories: [DVWA]
 tags: [dvwa, command-injection, boolean-operators, bitwise-operators, command-chaining]
 img_path: /assets/dvwa/command_injection
 published: true
+image:
+    path: ../dvwa_logo.png
 ---
 
 ## Information

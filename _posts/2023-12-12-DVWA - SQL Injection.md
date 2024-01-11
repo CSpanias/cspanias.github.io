@@ -5,6 +5,8 @@ categories: [DVWA]
 tags: [dvwa, sqli, burp-suite, inspector, mariadb, hash, john, md5]
 img_path: /assets/dvwa/sqli
 published: true
+image:
+    path: ../dvwa_logo.png
 ---
 
 ## Information

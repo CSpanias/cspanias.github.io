@@ -5,6 +5,8 @@ categories: [DVWA]
 tags: [dvwa, sqli, blind-sqli, burp-suite, sqlmap, md5, hash]
 img_path: /assets/dvwa/sqli_blind
 published: true
+image:
+    path: ../dvwa_logo.png
 ---
 
 > SECTION NOT WORKING PROPERLY - WRITE UP NOT COMPLETE!

@@ -5,6 +5,8 @@ categories: [DVWA]
 tags: [dvwa, file-inclusion, burp-suite, directory-traversal, wfuzz, dir-busting]
 img_path: /assets/dvwa/file_inclusion
 published: true
+image:
+    path: ../dvwa_logo.png
 ---
 
 ## Information

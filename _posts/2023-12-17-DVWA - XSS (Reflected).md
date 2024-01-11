@@ -5,6 +5,8 @@ categories: [DVWA]
 tags: [dvwa, xss, xss-reflected, cross-site-scripting, javascript]
 img_path: /assets/dvwa/xss_reflected
 published: true
+image:
+    path: ../dvwa_logo.png
 ---
 
 ## Information

@@ -5,6 +5,8 @@ categories: [DVWA]
 tags: [dvwa, auth-bypass, idor, authentication, authorization, burp, burp-repeater]
 img_path: /assets/dvwa/auth_bypass
 published: true
+image:
+    path: ../dvwa_logo.png
 ---
 
 ## Information

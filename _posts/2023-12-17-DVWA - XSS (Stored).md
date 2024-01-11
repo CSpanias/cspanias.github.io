@@ -5,6 +5,8 @@ categories: [DVWA]
 tags: [dvwa, xss, xss-stored, cross-site-scripting, javascript]
 img_path: /assets/dvwa/xss_stored
 published: true
+image:
+    path: ../dvwa_logo.png
 ---
 
 ## Information

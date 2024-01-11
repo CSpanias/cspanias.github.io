@@ -5,6 +5,8 @@ categories: [DVWA]
 tags: [dvwa, captcha, burp-suite, user-agent]
 img_path: /assets/dvwa/insecure_captcha
 published: true
+image:
+    path: ../dvwa_logo.png
 ---
 
 ## Information

@@ -5,6 +5,8 @@ categories: [DVWA]
 tags: [dvwa, xss, xss-dom, cross-site-scripting, burp, javascript]
 img_path: /assets/dvwa/xss_dom
 published: true
+image:
+    path: ../dvwa_logo.png
 ---
 
 ## Information

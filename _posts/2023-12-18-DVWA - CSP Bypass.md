@@ -5,6 +5,8 @@ categories: [DVWA]
 tags: [dvwa, csp, csp-bypass, burp, xss, javascript, js, php, nonce]
 img_path: /assets/dvwa/csp_bypass
 published: true
+image:
+    path: ../dvwa_logo.png
 ---
 
 ## Information

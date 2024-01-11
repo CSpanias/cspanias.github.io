@@ -5,6 +5,8 @@ categories: [DVWA]
 tags: [dvwa, burp, open-http-redirect, http, http-codes]
 img_path: /assets/dvwa/open_http_redirect
 published: true
+image:
+    path: ../dvwa_logo.png
 ---
 
 ## Information

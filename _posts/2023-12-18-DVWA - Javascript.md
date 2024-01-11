@@ -5,6 +5,8 @@ categories: [DVWA]
 tags: [dvwa, burp, javascript, js, firefox, debugger, console, inspector, burp, obfuscation, deobfuscation, sha256, hash, rot13, md5, encoding, decoding]
 img_path: /assets/dvwa/javascript
 published: true
+image:
+    path: ../dvwa_logo.png
 ---
 
 ## Information
