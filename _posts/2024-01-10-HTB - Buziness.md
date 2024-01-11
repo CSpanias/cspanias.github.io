@@ -5,6 +5,8 @@ categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, nmap, http, webserver, apache, apache-ofbiz, ofbiz, hash]
 img_path: /assets/htb/fullpwn/bizness/
 published: true
+img:
+  path: room_banner.png
 ---
 
 ![room_banner](room_banner.png)
