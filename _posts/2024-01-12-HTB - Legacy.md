@@ -6,7 +6,7 @@ tags: [htb, hackthebox, legacy, nmap, nmap-nse, smb, ms08-067, ms17-010]
 img_path: /assets/htb/fullpwn/legacy/
 published: true
 image:
-    path: room_banner.jpg
+    path: room_banner.png
 ---
 
 ## Overview
