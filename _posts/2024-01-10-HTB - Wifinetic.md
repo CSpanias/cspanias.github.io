@@ -11,7 +11,17 @@ image:
 
 ## Overview
 
-[Wifinetic](https://app.hackthebox.com/machines/Wifinetic) is an easy difficulty Linux machine which presents an intriguing **network challenge, focusing on wireless security and network monitoring**. An exposed **FTP service has anonymous authentication enabled** which allows us to download available files. One of the file being an OpenWRT backup which contains Wireless Network configuration that discloses an Access Point password. **The contents of passwd files further disclose usernames on the server**. With this information, a **password reuse attack** can be carried out on the SSH service, allowing us to gain a foothold as the `netadmin` user. Using standard tools and with the provided wireless interface in monitoring mode, we can **brute force the WPS PIN** for the Access Point to obtain the pre-shared key (PSK). The pass phrase can be reused on SSH service to obtain `root` access on the server.
+1. **General**
+
+    > [Wifinetic](https://app.hackthebox.com/machines/Wifinetic) is an easy difficulty Linux machine which presents an intriguing **network challenge, focusing on wireless security and network monitoring**. 
+
+2. **Initial foothold**
+
+    > An exposed **FTP service has anonymous authentication enabled** which allows us to download available files. One of the file being an OpenWRT backup which contains Wireless Network configuration that discloses an Access Point password. **The contents of passwd files further disclose usernames on the server**. With this information, a **password reuse attack** can be carried out on the SSH service, allowing us to gain a foothold as the `netadmin` user.
+
+3. **Privilege escalation**
+
+    > Using standard tools and with the provided wireless interface in monitoring mode, we can **brute force the WPS PIN** for the Access Point to obtain the pre-shared key (PSK). The pass phrase can be reused on SSH service to obtain `root` access on the server.
 
 ## Information gathering
 
