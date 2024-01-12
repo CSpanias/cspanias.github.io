@@ -6,7 +6,7 @@ tags: [ctf, web, web-exploitation, htb, hack-the-box, js, jscalc]
 img_path: /assets/htb/web/jscalc
 published: true
 image:
-    path: room_banner.png
+    path: ../../challenges_logo.png
 ---
 
 ## Overview

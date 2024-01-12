@@ -6,7 +6,7 @@ tags: [reverse-enginnering, exe, binary, windows, xxd, subl, ghidra, ollydbg]
 img_path: /assets/htb/rev_eng/find-the-easy-pass/
 published: true
 image:
-    path: chall_banner.png
+    path: ../../challenges_logo.png
 ---
 
 ## Overview

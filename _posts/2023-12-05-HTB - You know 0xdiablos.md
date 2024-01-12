@@ -6,7 +6,7 @@ tags: [pwn, ghidra, gdb, gdb-peda, debugging, python, buffer-overflow]
 img_path: /assets/htb/pwn/0xdiablos/
 published: true
 image:
-    path: 0xdiablos_banner.png
+    path: ../../challenges_logo.png
 ---
 
 ## Overview
