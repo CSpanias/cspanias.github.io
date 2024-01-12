@@ -6,7 +6,7 @@ tags: [htb, hackthebox, nmap, fullpwn, http, js, cve-2023-0386, curl, burp-suite
 img_path: /assets/htb/fullpwn/two_million/
 published: true
 image:
-    path: room_banner.png
+    path: room_banner.jpg
 ---
 
 ## Overview
