@@ -1,6 +1,6 @@
 ---
 title: HTB - Wifinetic
-date: 2024-01-10
+date: 2024-01-11
 categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, wifinetic, nmap, ftp, wifi, reaver, password-spray, brute-force, openwrt, wps]
 img_path: /assets/htb/fullpwn/wifinetic/
