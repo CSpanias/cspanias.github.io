@@ -6,7 +6,7 @@ tags: [htb, hackthebox, nmap, whatweb, wappalyzer, curl, request-tracker, defaul
 img_path: /assets/htb/fullpwn/keeper/
 published: true
 image:
-    path: keeper_banner.png
+    path: room_banner.jpg
 ---
 
 ## Overview

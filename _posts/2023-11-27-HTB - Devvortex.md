@@ -6,7 +6,7 @@ tags: [htb, hackthebox, nmap, http, webserver, nginx, whatweb, wappalyzer, gobus
 img_path: /assets/htb/fullpwn/devvortex/
 published: true
 image:
-    path: machine_banner.png
+    path: room_banner.jpg
 ---
 
 ## Overview

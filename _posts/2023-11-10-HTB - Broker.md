@@ -6,7 +6,7 @@ tags: [htb, hackthebox, nmap, default-credentials, creds, activemq, cve-2023-466
 img_path: /assets/htb/fullpwn/broker/
 published: true
 image:
-    path: machine_banner.png
+    path: room_banner.jpg
 ---
 
 ## Overview

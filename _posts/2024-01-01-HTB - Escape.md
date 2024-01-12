@@ -6,7 +6,7 @@ tags: [htb, hackthebox, nmap, escape, certify, rubeus, smb, mssql, responder, xp
 img_path: /assets/htb/fullpwn/escape/
 published: true
 image:
-    path: room_banner.png
+    path: room_banner.jpg
 ---
 
 ## Overview
