@@ -2,19 +2,16 @@
 title: HTB - Wifinetic
 date: 2024-01-10
 categories: [CTF, Fullpwn]
-tags: [htb, hackthebox, wifinetic, nmap, ftp, wifi, reaver, password-spray]
+tags: [htb, hackthebox, wifinetic, nmap, ftp, wifi, reaver, password-spray, brute-force, openwrt, wps]
 img_path: /assets/htb/fullpwn/wifinetic/
 published: true
 image:
-    path: room_banner.png
+    path: room_banner.jpg
 ---
 
 ## Overview
 
-|:-:|:-:|
-|Machine|[Wifinetic](https://app.hackthebox.com/machines/Wifinetic)|
-|Rank|Easy|
-|Focus|Password spray, WiFi|
+[Wifinetic](https://app.hackthebox.com/machines/Wifinetic) is an easy difficulty Linux machine which presents an intriguing **network challenge, focusing on wireless security and network monitoring**. An exposed **FTP service has anonymous authentication enabled** which allows us to download available files. One of the file being an OpenWRT backup which contains Wireless Network configuration that discloses an Access Point password. **The contents of passwd files further disclose usernames on the server**. With this information, a **password reuse attack** can be carried out on the SSH service, allowing us to gain a foothold as the `netadmin` user. Using standard tools and with the provided wireless interface in monitoring mode, we can **brute force the WPS PIN** for the Access Point to obtain the pre-shared key (PSK). The pass phrase can be reused on SSH service to obtain `root` access on the server.
 
 ## Information gathering
 
