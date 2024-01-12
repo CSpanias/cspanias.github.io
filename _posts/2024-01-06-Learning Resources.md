@@ -7,6 +7,7 @@ img_path: /assets/general
 published: true
 image:
     path: hacker_studying.jpg
+featured: true
 ---
 
 > [Security Certification Roadmap](https://pauljerimy.com/security-certification-roadmap/)
