@@ -6,7 +6,7 @@ tags: [htb, hackthebox, nmap, http, webserver, mysql, mysqldump, vm2, node-js, h
 img_path: /assets/htb/fullpwn/codify/
 published: true
 image:
-    path: room_banner.jpg
+    path: room_banner.png
 ---
 
 ## Overview
