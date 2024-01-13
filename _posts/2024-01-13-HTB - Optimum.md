@@ -43,11 +43,11 @@ Later in the same article, it has a security section which mentions:
 
 Visiting the website via our browser looks like this:
 
-![](home.png)
+![](home.png){: .normal width="60%"}
 
 Searching Google for "_HttpFileServer 2.3 exploit_" there are several results that point to [CVE-2014-6287](https://nvd.nist.gov/vuln/detail/CVE-2014-6287):
 
-![](google_search.png)
+![](google_search.png){: .normal width="60%"}
 
 We can launch Metasploit and search if there is a module associated with this CVE:
 
@@ -359,4 +359,4 @@ type c:\users\administrator\desktop\root.txt
 <SNIP>
 ```
 
-![](machine_pwned.png){: width="65%" .normal}
+![](machine_pwned.png){: width="75%" .normal}
