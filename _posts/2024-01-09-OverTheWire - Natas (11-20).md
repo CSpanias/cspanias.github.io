@@ -31,7 +31,9 @@ This level mentions that the "_Cookies are protected with **XOR encryption**_" a
     $defaultdata = array( "showpassword"=>"no", "bgcolor"=>"#ffffff");
     ```
 
-2. The `xor_encrypt` method, as the name suggests, XOR encrypts an input. The key is _censored_, so finding this will be our main goal:
+2. The `xor_encrypt` method, as the name suggests, XOR encrypts an input. The key is _censored_, so finding this will be our main goal. What it actually does is declaring a predefined key, assigning the input to the `text` variable, and store the result of the XOR bitwise operation (`text ^ key`) in the `outText` variable:
+
+    > [PHP bitwise operators](https://www.geeksforgeeks.org/php-bitwise-operators/).
 
     ```php
     function xor_encrypt($in) {
@@ -111,11 +113,11 @@ We can use a [PHP compiler](https://www.w3schools.com/php/phptryit.asp?filename=
 We have the cookie value of `eyJzaG93cGFzc3dvcmQiOiJubyIsImJnY29sb3IiOiIjZmZmZmZmIn0=`, while the XOR encoded cookie is `MGw7JCQ5OC04PT8jOSpqdmkgJ25nbCorKCEkIzlscm5oKC4qLSgubjY=`. 
 
 The former is generated with the same exact values as the latter: ` showpassword: no, bgColor: #ffffff`. Because of the [associative property of XOR](https://accu.org/journals/overload/20/109/lewin_1915/?ref=learnhacking.io), it does not matter what order we do XOR in, we should get the same answer:
-- We can do plaintext XOR'd with the key to get the ciphertext.
-- We can XOR the ciphertext with the key to get the plaintext.
-- We can XOR the ciphertext (which we have: `MGw7JCQ5OC04PT8jOSpqdmkgJ25nbCorKCEkIzlscm5oKC4qLSgubjY=`) with the plaintext (which we also now have: `eyJzaG93cGFzc3dvcmQiOiJubyIsImJnY29sb3IiOiIjZmZmZmZmIn0=`) to get the key.
+1. plaintext XOR key = ciphertext
+2. ciphertext XOR key = plaintext
+3. **ciphertext XOR plaintext = key**
 
-As a result, we can XOR the two cookies together to get the XOR key, and then use this to create a new cookie and encrypt it:
+We have both the ciphertext (`MGw7JCQ5OC04PT8jOSpqdmkgJ25nbCorKCEkIzlscm5oKC4qLSgubjY=`) and then plaintext (`eyJzaG93cGFzc3dvcmQiOiJubyIsImJnY29sb3IiOiIjZmZmZmZmIn0=`), so by performing a XOR operation between them we can get the key, and then use it to create a new cookie value and encrypt it:
 
 ![](natas11_xorDecoding.png)
 
