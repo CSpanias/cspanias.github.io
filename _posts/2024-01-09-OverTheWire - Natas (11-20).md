@@ -19,7 +19,7 @@ image:
 
 > Password: 1KFqoJXi6hRaPluAmk8ESDW4fSysRoIg
 
-![](natas11_home.png)
+![](natas11_home.png){: .normal width="60%"}
 
 This level mentions that the "_Cookies are protected with **XOR encryption**_" and gives us the ability to customize the background colour. The source code involves five functions:
 
@@ -52,7 +52,7 @@ This level mentions that the "_Cookies are protected with **XOR encryption**_" a
 
 3. The `loadData` method takes the **cookie value**, decodes it, and then uses it to set web page values, such as the background color and the visibility of the password. If there is a `data` array from the browser cookie, its value is **base64** decoded, then **XOR encrypted**, and then **JSON** decoded. Then the `bgcocol` is read out of the array and checked against a hex color regex. If the `showpassword` key exists, it is also copied over to the `mydata` value:
 
-> **XOR encryption** is the same with **XOR decryption** since XOR is reversible with the same mathematical function.
+    > **XOR encryption** is the same with **XOR decryption** since XOR is reversible with the same mathematical function.
 
     ```php
     function loadData($def) {

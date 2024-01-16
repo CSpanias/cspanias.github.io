@@ -2,7 +2,7 @@
 title: HTB - Optimum
 date: 2024-01-12
 categories: [CTF, Fullpwn]
-tags: [htb, hackthebox, optimum, nmap, metasploit]
+tags: [htb, hackthebox, optimum, nmap, ]
 img_path: /assets/htb/fullpwn/optimum/
 published: true
 image:
