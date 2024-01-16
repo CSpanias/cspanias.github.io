@@ -46,7 +46,7 @@ Nmap info:
 
 Upon visiting the webserver on our browser we find a Nagios XI interface:
 
-![](home.png)
+![](home.png){: .normal width="60%"}
 
 We have encountered Nagios XI before on the Try Hack Me's [Nax](https://cspanias.github.io/posts/THM-Nax/) room. Let's remind ourselves [what Nagios XI is](https://cspanias.github.io/posts/THM-Nax/#21-nagios-xi):
 
@@ -79,7 +79,7 @@ So it seems that `/nagios` is some sort of another login portal:
 
 Unfortunately, we don't have any credentials at the moment. We can always try searching for default credentials used in Nagios XI:
 
-![](nagios_def_creds.png)
+![](nagios_def_creds.png){: .normal width="75%"}
 
 Unfortunately, that did not work! Next, we can try perform a **Hail Mary** scan using [incursore](https://github.com/wirzka/incursore) and see what we get back:
 
@@ -270,7 +270,7 @@ From those, we can further explore:
 
 The `/terminal` directory requires credentials, and the ones we currently have do not work:
 
-![](terminal_login.png)
+![](terminal_login.png){: .normal width="80%"}
 
 Next, we can recursively scan with the `/api` directory. It turns out that `/api/includes` does not have other subdirectories, but when it starts scanning the `/api/v1` subdirectory it returns the following:
 
