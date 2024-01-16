@@ -4,7 +4,7 @@ date: 2024-01-16
 categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, monitored, nmap, nagiosxi]
 img_path: /assets/htb/fullpwn/monitored/
-published: true
+published: false
 image:
     path: room_banner.png
 ---
@@ -42,6 +42,7 @@ Nmap info:
 - SSH open, but we need creds.
 - HTTP redirects to HTTPS --> add to `/etc/hosts`
 - Find more about LDAP `389`
+
 ## Web enumeration
 
 Upon visiting the webserver on our browser we find a Nagios XI interface:
