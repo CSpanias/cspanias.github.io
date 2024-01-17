@@ -12,7 +12,7 @@ image:
 > CONTENT HIDDEN - ACTIVE MACHINE!
 {: .prompt-warning}
 
-## Overview
+<!-- ## Overview
 
 TBA
 
@@ -48,7 +48,7 @@ Nmap info:
 - HTTP redirects to HTTPS -> add to `/etc/hosts`
 - Find more about LDAP `389`
 
-## Web enumeration
+## Initial foothold
 
 Upon visiting the webserver on our browser we find a Nagios XI interface:
 
@@ -710,6 +710,6 @@ bash: no job control in this shell
 root@monitored:/# cat /root/root.txt
 cat /root/root.txt
 <SNIP>
-```
+``` -->
 
 ![](machine_pwned.png){: width="75%" .normal}
