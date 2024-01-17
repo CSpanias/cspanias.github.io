@@ -4,7 +4,7 @@ date: 2024-01-16
 categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, monitored, nmap, nagiosxi]
 img_path: /assets/htb/fullpwn/monitored/
-published: false
+published: true
 image:
     path: room_banner.png
 ---
