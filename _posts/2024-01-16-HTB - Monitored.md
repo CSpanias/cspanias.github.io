@@ -12,7 +12,7 @@ image:
 > CONTENT HIDDEN - ACTIVE MACHINE!
 {: .prompt-warning}
 
-<!-- ## Overview
+## Overview
 
 TBA
 
@@ -710,6 +710,6 @@ bash: no job control in this shell
 root@monitored:/# cat /root/root.txt
 cat /root/root.txt
 <SNIP>
-``` -->
+```
 
 ![](machine_pwned.png){: width="75%" .normal}
