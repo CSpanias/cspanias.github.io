@@ -9,14 +9,14 @@ image:
     path: room_banner.png
 ---
 
-## Overview
-
-TBA
-
 > CONTENT HIDDEN - ACTIVE MACHINE!
 {: .prompt-warning}
 
-<!-- ## Info gathering
+<!-- ## Overview
+
+TBA
+
+## Info gathering
 
 Let's start with a port-scanning:
 
@@ -45,7 +45,7 @@ Service Info: Hosts: nagios.monitored.htb, 127.0.0.1; OS: Linux; CPE: cpe:/o:lin
 
 Nmap info:
 - SSH open, but we need creds.
-- HTTP redirects to HTTPS --> add to `/etc/hosts`
+- HTTP redirects to HTTPS -> add to `/etc/hosts`
 - Find more about LDAP `389`
 
 ## Web enumeration
