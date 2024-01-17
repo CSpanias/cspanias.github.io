@@ -345,7 +345,7 @@ That actually worked, we managed to use the token to authenticate!
 
 ![](token_login_browser.png)
 
-We found this [post](https://outpost24.com/blog/nagios-xi-vulnerabilities/) before which mentions 3 SQLi and one XSS privilege escalation attacks. We can try the first one, [CVE-2023-40931](https://nvd.nist.gov/vuln/detail/CVE-2023-40931) using `sqlmap`:
+<!-- We found this [post](https://outpost24.com/blog/nagios-xi-vulnerabilities/) before which mentions 3 SQLi and one XSS privilege escalation attacks. We can try the first one, [CVE-2023-40931](https://nvd.nist.gov/vuln/detail/CVE-2023-40931) using `sqlmap`:
 
 ```bash
 # enumerate databases
@@ -709,4 +709,4 @@ cat /root/root.txt
 <SNIP>
 ```
 
-![](machine_pwned.png){: width="75%" .normal}
+![](machine_pwned.png){: width="75%" .normal} -->
