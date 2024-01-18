@@ -25,4 +25,4 @@ image:
 
     ![](flag.png)
 
-    ![](flag_browser.png)
+    ![](flag_browser.png){: .normal width="70%"}
