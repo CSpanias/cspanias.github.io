@@ -649,7 +649,7 @@ Based on this info, we could:
 1. Replace the `/usr/local/nagios/bin/npcd` executable, since we have write access with a reverse shell bash script.
 2. Use the `manage_services.sh` script to restart the service, so the replaced executable can be run.
 
-Since the latter is run as `root`, we should receive a `root` shell back. Let's start by create a reverse shell script and transfer it to the target:
+Since the latter is run as `root`, we should receive a `root` shell back. Let's start by creating a reverse shell script and transfer it to the target:
 
 ```bash
 # create the reverse shell script

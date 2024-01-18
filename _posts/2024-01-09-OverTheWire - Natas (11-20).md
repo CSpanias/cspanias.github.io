@@ -137,6 +137,53 @@ We can finally change our session cookie and get the password for the next level
 
 > Password: YWqo0pjpcXzSIl5NMAVxg12QxeC1w9QG
 
+![](natas12_home.png){: .normal width="60%"}
+
+This time the web server has an option for uploading an image. This level is focused on [**file upload vulnerabilities**](https://portswigger.net/web-security/file-upload) and how to bypass an extension change. Our goal is to upload a webshell from which we can execute a command to read the next level's password. Let's start by creating the webshell:
+
+```bash
+# create the websehll
+$ nano webshell.php
+# give execute permissions to the file
+$ sudo chmod +x webshell.php
+# display the file's contents
+$ cat webshell.php
+<?php echo system($_GET['command']); ?>
+# confirm permissions
+$ ls -l webshell.php
+-rwxr-xr-x 1 kali kali 40 Jan 17 21:26 webshell.php
+```
+
+Let's try to upload it:
+
+![](natas12_webshell_upload.png)
+
+Our `webshell.php` was renamed to `jsflwp41if.jpg`! We don't care much about the first part, but we need to find a way to keep the `.php` extension, so we can execute it. We can intercept the `POST` request when uploading the file to see what it looks like:
+
+![](natas12_burp_repeater1.png)
+
+Since the extension change happens on our `POST` request, we can simply manually change it back to `.php` and then send the request again:
+
+![](natas12_burp_repeater2.png)
+
+![](natas12_webshell_upload_php.png)
+
+That seemed to have worked! Upon clicking the link, we get some warnings. This is because our webshell expects a `command` parameter and it is not there yet:
+
+![](natas12_webshell_error.png)
+
+We can now test our webshell by passing any command, such as `id`, and see if we get back any output:
+
+![](natas12_id.png)
+
+Since it worked fine, we can now pass a command for reading the next level's password:
+
+![](natas12_pass.png)
+
+## [Level 11 &rarr; 12](https://overthewire.org/wargames/natas/natas12.html)
+
+> Password: lW3jYRI02ZKDBb8VtQBU1f6eDRo6WEj9
+
 <!--
 ---
 
