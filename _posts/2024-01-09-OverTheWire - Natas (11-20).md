@@ -180,7 +180,7 @@ Since it worked fine, we can now pass a command for reading the next level's pas
 
 ![](natas12_pass.png)
 
-## [Level 11 &rarr; 12](https://overthewire.org/wargames/natas/natas12.html)
+## [Level 12 &rarr; 13](https://overthewire.org/wargames/natas/natas13.html)
 
 > Password: lW3jYRI02ZKDBb8VtQBU1f6eDRo6WEj9
 
