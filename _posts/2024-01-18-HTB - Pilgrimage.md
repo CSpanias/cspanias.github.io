@@ -25,7 +25,7 @@ Let's start with a port-scanning:
 sudo incursore.sh -H 10.10.11.219 --type All
 ```
 
-[`incursore`](https://github.com/wirzka/incursore) produces a lot of output, but it neatly organized them into files and directories for us:
+[`incursore`](https://github.com/wirzka/incursore) produces a lot of output, but it neatly organizes them into files and directories for us:
 
 ```bash
 $ tree 10.10.11.219/
