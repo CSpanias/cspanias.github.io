@@ -80,7 +80,7 @@ We are interested mostly on the **commits** included within the log, and in part
 2. `git log | grep commit | cut -d " " -f2` Separate each line using space as the delimiter, and keep only the second field.
 3. `git log | grep commit | cut -d " " -f2 | xargs` Converts standard input into arguments for a command.
 4. `git log | grep commit | cut -d " " -f2 | xargs | cut -d " " -f1 | git show` Separate arguments using space as the delimiter, keep only the first field, and show the corresponding commit.
-5. `git log | grep commig | cut -d " " -f2 | xargs git show > commits` Use the arguments generated as an input to `git show`, and write them to the `commits` file. 
+5. `git log | grep commit | cut -d " " -f2 | xargs git show > commits` Use the arguments generated as an input to `git show`, and write them to the `commits` file. 
 
 Finally, we can use `subl commits` to open the file we just created with the **sublime editor**, and search for the word "_password_" by pressing `CTRL+F`. We can see a discussion regarding the password's security all the way from its creation in plaintext format.
 

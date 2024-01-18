@@ -2,7 +2,7 @@
 title: OverTheWire - Bandit (21-33)
 date: 2024-01-02
 categories: [OverTheWire, Bandit]
-tags: [overthewire, bandit, linux]
+tags: [overthewire, bandit, linux, git]
 img_path: /assets/overthewire/bandit
 published: true
 image:
