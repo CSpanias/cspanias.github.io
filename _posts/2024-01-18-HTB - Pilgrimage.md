@@ -204,7 +204,7 @@ $ wc -l commits
 
 After searching for things of interest in our `commits` file, nothing pops up. Exploring the different scripts, we can see that the site's functionality, i.e., how it uploads and shrinks the images, is defined within the `index.php` file:
 
-![](index_source.png)
+![](index_code.png)
 
 What's of interest here, is that we can see that the `magick` binary is used, which is also inside the `git` repo:
 
