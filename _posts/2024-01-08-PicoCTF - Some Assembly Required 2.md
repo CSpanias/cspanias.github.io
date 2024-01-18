@@ -11,7 +11,7 @@ image:
 
 ![](room_banner.png){: width="70%"}
 
-> **Description**: _The web project was rushed and no security assessment was done. Can you read the `/etc/passwd` file?_
+> **Description**: -
 
 1. The homepage looks like this: 
 
