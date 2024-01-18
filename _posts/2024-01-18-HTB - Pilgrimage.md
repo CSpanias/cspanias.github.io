@@ -254,7 +254,7 @@ We can now download a random image, poison it, and then upload it:
 $ sudo python3 CVE-2022-44268.py --image ../dog.jpeg --file-to-read /etc/passwd --output poisoned_dog.jpeg
 ```
 
-![](uploaded_image.png)
+![](uploaded_image.png){: .normal width="65%"}
 
 Next, we can check if the exploit was successful:
 
@@ -320,7 +320,7 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0x91 in position 99: invalid
 
 The above process does not work. However, we can copy the uploaded image's link and download it using `wget`:
 
-![](copy_image_link.png)
+![](copy_image_link.png){: .normal width="65%"}
 
 ```bash
 $ wget http://pilgrimage.htb/shrunk/65a921159fba8.png
