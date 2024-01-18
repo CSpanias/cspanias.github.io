@@ -19,7 +19,7 @@ image:
 
 > Password: 1KFqoJXi6hRaPluAmk8ESDW4fSysRoIg
 
-![](natas11_home.png){: .normal width="60%"}
+![](natas11_home.png){: .normal width="80%"}
 
 This level mentions that the "_Cookies are protected with **XOR encryption**_" and gives us the ability to customize the background colour. The source code involves five functions:
 
@@ -137,7 +137,7 @@ We can finally change our session cookie and get the password for the next level
 
 > Password: YWqo0pjpcXzSIl5NMAVxg12QxeC1w9QG
 
-![](natas12_home.png){: .normal width="60%"}
+![](natas12_home.png){: .normal width="80%"}
 
 This time the web server has an option for uploading an image. This level is focused on [**file upload vulnerabilities**](https://portswigger.net/web-security/file-upload) and how to bypass an extension change. Our goal is to upload a webshell from which we can execute a command to read the next level's password. Let's start by creating the webshell:
 
@@ -156,7 +156,7 @@ $ ls -l webshell.php
 
 Let's try to upload it:
 
-![](natas12_webshell_upload.png)
+![](natas12_webshell_upload.png){: .normal}
 
 Our `webshell.php` was renamed to `jsflwp41if.jpg`! We don't care much about the first part, but we need to find a way to keep the `.php` extension, so we can execute it. We can intercept the `POST` request when uploading the file to see what it looks like:
 
@@ -166,7 +166,7 @@ Since the extension change happens on our `POST` request, we can simply manually
 
 ![](natas12_burp_repeater2.png)
 
-![](natas12_webshell_upload_php.png)
+![](natas12_webshell_upload_php.png){: .normal}
 
 That seemed to have worked! Upon clicking the link, we get some warnings. This is because our webshell expects a `command` parameter and it is not there yet:
 
