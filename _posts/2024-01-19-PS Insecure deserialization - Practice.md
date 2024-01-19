@@ -160,6 +160,11 @@ This simple scenario is not common in the wild. However, editing an attribute va
 
     ![](lab1_hackvertor2.png)  
 
+#### Modifying data types
+
+
+
+
 ## Futher practice
 
 - [picoCTF: Super Serial](https://cspanias.github.io/posts/PicoCTF-Super-Serial/)
