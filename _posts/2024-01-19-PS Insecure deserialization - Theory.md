@@ -60,3 +60,9 @@ The impact of an insecure deserialization can be very severe, as it provides **a
 **Deserialization of user input should be avoided unless absolutely necessary**. If it is necessary, incorporate robust measures to make sure that the data has not been tampered with, such as a digital signature to check its integrity. However, remember that **any checks must take place before beginning the deserialization process**.
 
 If possible, **avoid using generic deserialization features altogether**. These contain all attributes of the original object, including private fields that potentially include sensitive data. Instead, **create you own class-specific serialization methods**, so that you can at least control which fields are exposed.
+
+---
+
+<center> <a href="https://cspanias.github.io/posts/OverTheWire-Natas-(0-10)">[Insecure deserialization - Practice]</a> </center>
+
+---
