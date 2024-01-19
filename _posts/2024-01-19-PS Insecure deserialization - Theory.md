@@ -63,6 +63,6 @@ If possible, **avoid using generic deserialization features altogether**. These 
 
 ---
 
-<center> <a href="https://cspanias.github.io/posts/OverTheWire-Natas-(0-10)">[Insecure deserialization - Practice]</a> </center>
+<center> <a href="https://cspanias.github.io/posts/PS-Insecure-deserialization-Practice/">[Insecure deserialization - Practice]</a> </center>
 
 ---
