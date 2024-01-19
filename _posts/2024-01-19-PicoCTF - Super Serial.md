@@ -104,3 +104,9 @@ image:
 12. If we now pass that string as the value of the cookie `login`, we will get the flag back:
 
     ![](flag.png)
+
+
+## Resources
+
+- [Insecure deserialization - Theory](https://cspanias.github.io/posts/PS-Insecure-deserialization-Theory/)
+- [Insecure deserialization - Practice](https://cspanias.github.io/posts/PS-Insecure-deserialization-Practice/)
