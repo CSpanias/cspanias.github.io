@@ -15,7 +15,7 @@ image:
 
 1. The homepage looks like this: 
 
-    ![](home.png){: .normal width="70%"}
+    ![](home.png){: .normal width="60%"}
 
 2. When visiting `robots.txt` we get the following:
 
@@ -23,7 +23,7 @@ image:
 
 3. Strangely enough, if we visit `/admin.phps` we get an error:
 
-    ![](admin_phps.png)
+    ![](admin_phps.png){: .normal}
 
 4. After searching what exactly `.phps` files are, we find [this] article:
 
