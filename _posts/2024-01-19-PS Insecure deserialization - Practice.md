@@ -102,7 +102,7 @@ This simple scenario is not common in the wild. However, editing an attribute va
 
     ![](lab1_login_cookie.png)
 
-2. We can write a short script using a [PHP Online Compiler](https://www.programiz.com/php/online-compiler/) that will:
+2. We can write a [short script](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/portswigger/insecure_deserialization/lab1_deserialize_serialize_cookie.php) using a [PHP Online Compiler](https://www.programiz.com/php/online-compiler/) that will:
     1. Decode the cookie.
     2. Modify the desired value.
     3. Encode the cookie.
@@ -151,6 +151,14 @@ This simple scenario is not common in the wild. However, editing an attribute va
     ![](lab1_inspector_cookie.png)
 
     ![](lab1_solved.png)
+
+4. Alternatively, we can let **Hackvertor** decode it for us, change the desired attribute, and then delete user `carlos`:
+
+    ![](lab1_hackvertor.png)
+
+    ![](lab1_hackvertor1.png)   
+
+    ![](lab1_hackvertor2.png)  
 
 ## Futher practice
 
