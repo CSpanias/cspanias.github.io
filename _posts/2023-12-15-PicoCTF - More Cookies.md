@@ -35,7 +35,7 @@ image:
     di��x�]zZR�!��?ۖq�⸮/��q�=OV��yW�!ٓkr�K�s�
     ```
 
-6. It's time to look up the first hint which is just a [Wikipedia article](https://en.wikipedia.org/wiki/Homomorphic_encryption), but after searching a bit more about it, I found this Brilliant article about [Homomorphic Encryption](https://brilliant.org/wiki/homomorphic-encryption/#:~:text=Homomorphic%20encryption%20is%20malleable%20by,plain%20text%20that%20makes%20sense.):
+6. It's time to look up the first hint which is just a [Wikipedia article](https://en.wikipedia.org/wiki/Homomorphic_encryption), but after searching a bit more about it, I found this brilliant article about [Homomorphic Encryption](https://brilliant.org/wiki/homomorphic-encryption/#:~:text=Homomorphic%20encryption%20is%20malleable%20by,plain%20text%20that%20makes%20sense.):
 
     _**Homomorphic encryption is a cryptographic method that allows mathematical operations on data to be carried out on cipher text, instead of on the actual data itself**. The cipher text is an encrypted version of the input data (also called plain text). It is operated on and then decrypted to obtain the desired output. The critical property of homomorphic encryption is that the same output should be obtained from decrypting the operated cipher text as from simply operating on the initial plain text._
 

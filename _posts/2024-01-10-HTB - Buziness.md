@@ -151,7 +151,7 @@ linpeas.sh          100%[===================>] 828.05K  2.51MB/s    in 0.3s
 ```
 
 ```bash
-# confirming that the target is reaching oir local server
+# confirming that the target is reaching our local server
 $ python3 -m http.server 8888
 Serving HTTP on 0.0.0.0 port 8888 (http://0.0.0.0:8888/) ...
 10.10.11.252 - - [10/Jan/2024 18:05:39] "GET /linpeas.sh HTTP/1.1" 200 -
