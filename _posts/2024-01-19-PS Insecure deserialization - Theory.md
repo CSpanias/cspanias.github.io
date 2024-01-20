@@ -2,7 +2,7 @@
 title: Insecure deserialization - Theory
 date: 2024-01-19
 categories: [PortSwigger, Insecure deserialization]
-tags: [portswigger, lab, serialization, deserialization, burp]
+tags: [portswigger, lab, serialization, deserialization, burp, insecure-deserialisation]
 img_path: /assets/portswigger/insecure_deserialization/
 published: true
 image:
