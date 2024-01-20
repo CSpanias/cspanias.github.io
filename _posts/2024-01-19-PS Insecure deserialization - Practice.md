@@ -214,6 +214,29 @@ Be aware that when modifying data types in any serialized object format, it is i
 
     ![](lab2_solved.png)
 
+### Using application functionality
+
+A website's functionality might perform dangerous operations on data from a deserialized object. This would allow an attacker to pass in unexpected data and maliciously leverage the related functionality.
+
+For example, as part of a website's "*Delete user*" functionality, the user's profile is deleted by accessing the file path in the `$user->image_location` attribute. If the `$user` attribute was created from a serialized object, an attacker could pass in a modified object with the `image_location` set to an arbitrary file path. Deleting their own user acc would then delete this arbitrary file as well.
+
+### Lab: Using application functionality to exploit insecure deserialization
+
+> **Objective**: _This lab uses a serialization-based session mechanism. A certain feature invokes a dangerous method on data provided in a serialized object. To solve the lab, edit the serialized object in the session cookie and use it to delete the `morale.txt` file from Carlos's home directory. You can log in to your own account using the following credentials: `wiener:peter`. You also have access to a backup account: `gregg:rosebud`._
+
+1. After logging in as `wiener`, we can see that there is a "*Delete account*" functionality, and if we click on the button this is what the request looks like:
+
+    ![](lab3_deleteAccount.png)
+
+    ![](lab3_deleteAccount_burp.png)
+
+2. We notice that there is a path pointing to the current user's avatar (`users/wieners/avatar`); if we simply change that and make point to the `morale.txt` file located within the home directory of user `carlos` (`/home/carlos/morale.txt`) and send the request, then both will be deleted:  
+
+    ![](lab3_delete_file.png)
+
+    If we now click on "*Follow redirection*":
+
+    ![](lab3_solved.png)
 
 ## Futher practice
 
