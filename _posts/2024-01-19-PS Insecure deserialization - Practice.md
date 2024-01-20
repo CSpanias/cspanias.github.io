@@ -2,7 +2,7 @@
 title: Insecure deserialization - Practice
 date: 2024-01-19
 categories: [PortSwigger, Insecure deserialization]
-tags: [portswigger, lab, serialization, deserialization, burp, insecure-deserialisation]
+tags: [portswigger, lab, serialization, deserialization, burp, insecure-deserialisation, serialization, php]
 img_path: /assets/portswigger/insecure_deserialization/
 published: true
 image:
@@ -162,8 +162,59 @@ This simple scenario is not common in the wild. However, editing an attribute va
 
 #### Modifying data types
 
+PHP-based logic is vulnerable to data type manipulation due to the behavior of its **loose comparison operator** (`==`) when comparing different data types. For instance, when performing a loose comparison between an integer and a string, PHP will attempt to convert the string to an integer, meaning that `5 == "5"` will evaluate to `true`!
 
+Unusually, **this also works for any alphanumeric string that starts with a number**. In this case, PHP will effectively convert the entire string to an integer value based on the initial number and the rest of it will be completely ignored. For example, `5 == "5 test"` will be treated as `5 == 5`!
 
+This becomes even stranger when comparing a string to the integer `0`: if there is no initial number on the string, PHP will treat the entire string as the integer `0`. Therefore, `0 == "test"` will evaluate to `true`!
+
+Consider a case where this loose comparison operator is used in conjuction with user-controllable data from a deserialized object. This could potentially result in dangerous **logic flaws**:
+
+```php
+$login = unserialize($_COOKIE)
+if ($login['password'] == $password) {
+    // log in successfully
+}
+```
+
+Let's say that an attacker modified the `password` attribute so that it contained the integer `0` instead of the expected string. As long as the stored password does not start with a number, the condition would always return `true`, enabling **authentication bypass**! 
+
+> _This is only possible, because **deserialization preserves the data type**. If the code fetched the password from the request directly, the `0` would be converted to a string and the condition would evaluate to `false`._
+
+Be aware that when modifying data types in any serialized object format, it is important to **remember to update any type labels and length indicators** in the serialized data too. Otherwise, the serialized object will be corrupted and won't be deserialized.
+
+#### Lab: Modifying serialized data types
+
+> **Objective**: _This lab uses a serialization-based session mechanism and is vulnerable to authentication bypass as a result. To solve the lab, edit the serialized object in the session cookie to access the administrator account. Then, delete the user `carlos`. You can log in to your own account using the following credentials: `wiener:peter`._
+
+1. We can repeat the process we did for the previous lab:
+    1. Login as the user `wiener`.
+    2. Grab the serialized cookie.
+    3. Use the same PHP script to decode it.
+    4. Modify the required attributes.
+    5. Encode it back and send it.
+
+2. Let's start by logging in and grabbing the cookie:
+
+    ![](lab2_cookie.png)
+
+3. Upon decoding it, we see that there is the `username` attribute which we should change to `administrator`. Then there is the `access_token` attribute with a value of `"lgymn9ziqyobkgcckos0e3d8vpnxgccy"`:
+
+    ![](lab2_accessToken.png)
+
+4. To bypass authentication, we need to make `if ($login['access_token'] == $access_token)` evaluate to `true`. Therefore, we need the stored token to match the token that we will pass. We know that PHP will treat any string that **do not start with a number** as of equal data type with `0`. Thus, if we change the value of the `access_token` attribute to `0`, the following comparison `if ($login['access_token'] == $access_token)` will be converted into `0 == "<storedToken>"`, and if the `storedToken` does not start with a number, it will evaluate to `true`:
+
+    ![](lab2_phpScript.png)
+
+5. We can now send the modified cookie and delete user `carlos`:
+
+    ![](lab2_burp_redirection.png)
+
+    ![](lab2_adminPanel.png)
+
+    ![](lab2_deleteCarlos.png)
+
+    ![](lab2_solved.png)
 
 ## Futher practice
 
