@@ -485,6 +485,6 @@ end
 In most cases, this means that the script will **ONLY** search within the same directory that itself resides, in this case, `/opt/`. But it was able to read it from the `/tmp` directory! After some reading, I ended up making a [StackOverFlow post](https://stackoverflow.com/questions/77850419/file-referencing-using-relative-paths-on-ruby) and that was the answer from [Casper](https://stackoverflow.com/users/823617/casper):
 
 
-![](casper_answer.png)
+![](casper_answer.png){: .normal}
 
 > [_Can a Ruby script tell what directory it’s in?_](https://stackoverflow.com/questions/2206714/can-a-ruby-script-tell-what-directory-it-s-in)
