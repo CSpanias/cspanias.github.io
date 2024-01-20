@@ -13,7 +13,7 @@ image:
 
 > **Description**: Alright, enough of using my own encryption. Flask session cookies should be plenty secure! `server.py http://mercury.picoctf.net:53700/`.
 
-1. This challenge includes both a link and a Python script called `server.py`: 
+1. This challenge is a continuation of [Cookies](https://cspanias.github.io/posts/PicoCTF-Cookies/) and [More Cookies](https://cspanias.github.io/posts/PicoCTF-More-Cookies/). The difference is that it includes both a link and a Python script called `server.py`: 
 
     ![](home.png){: .normal width="60%"}
 
@@ -77,3 +77,5 @@ image:
         app.run()
     ```
 
+eyJ2ZXJ5X2F1dGgiOiJibGFuayJ9.ZawTtg.9oqnwbmC-fHJr0Qho7dEWar9s2c
+eyJ2ZXJ5X2F1dGgiOiJzbmlja2VyZG9vZGxlIn0.ZawUxg.SXd-NQ3AjxwvwA-yqAuwDfpB6BE
