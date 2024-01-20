@@ -2,7 +2,7 @@
 title: Insecure deserialization - Practice
 date: 2024-01-19
 categories: [PortSwigger, Insecure deserialization]
-tags: [portswigger, lab, serialization, deserialization, burp]
+tags: [portswigger, lab, serialization, deserialization, burp, insecure-deserialisation]
 img_path: /assets/portswigger/insecure_deserialization/
 published: true
 image:
@@ -168,3 +168,4 @@ This simple scenario is not common in the wild. However, editing an attribute va
 ## Futher practice
 
 - [picoCTF: Super Serial](https://cspanias.github.io/posts/PicoCTF-Super-Serial/)
+- [HTB: Precious](https://app.hackthebox.com/machines/Precious/)
