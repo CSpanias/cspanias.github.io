@@ -485,22 +485,6 @@ end
 In most cases, this means that the script will **ONLY** search within the same directory that itself resides, in this case, `/opt/`. But it was able to read it from the `/tmp` directory! After some reading, I ended up making a [StackOverFlow post](https://stackoverflow.com/questions/77850419/file-referencing-using-relative-paths-on-ruby) and that was the answer from [Casper](https://stackoverflow.com/users/823617/casper):
 
 
-> **Relative paths in Ruby are always dependent on the current working directory**. The current working directory is not necessarily the same as the directory in which the script resides, but rather in which directory you are at the moment when you launch Ruby.
+![](casper_answer.png)
 
-    Example:
-
-    ```bash
-    > cd /tmp
-    > ruby /some/path/somewhere/to/my/script.rb
-    ```
-
-    What is the current working directory of `script.rb` in this case?
-
-    **Answer**: it is `/tmp`, because that is the directory you were in when you launched the script.
-
-    To display the current working directory from the script itself, you can add a line puts `Dir.pwd`, and the script will print out in which folder it is running at that moment. To change the current working directory of the script, you can use `Dir.chdir`.
-
-    You can see why using relative paths can easily lead to confusion, because it all depends on from which directory the launch of the Ruby executable was. It could be anywhere. This is why most scripts use either absolute paths, or paths relative to the script file itself. To use paths relative to the script file itself, you can use `__dir__` as the starting point and build your script-relative paths from there.
-
-    See more discussion here:
-    [Can a Ruby script tell what directory it’s in?](https://stackoverflow.com/questions/2206714/can-a-ruby-script-tell-what-directory-it-s-in)
+> [_Can a Ruby script tell what directory it’s in?_](https://stackoverflow.com/questions/2206714/can-a-ruby-script-tell-what-directory-it-s-in)
