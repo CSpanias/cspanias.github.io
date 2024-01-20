@@ -2,7 +2,7 @@
 title: Insecure deserialization - Practice
 date: 2024-01-19
 categories: [PortSwigger, Insecure deserialization]
-tags: [portswigger, lab, serialization, deserialization, burp, insecure-deserialisation, serialization, php, type-juggling]
+tags: [portswigger, lab, serialization, deserialization, burp, insecure-deserialisation, serialization, php, type-juggling, hackvertor]
 img_path: /assets/portswigger/insecure_deserialization/
 published: true
 image:
@@ -192,17 +192,19 @@ Be aware that when modifying data types in any serialized object format, it is i
     2. Decode the cookie using Hackvertor.
     4. Modify the required attributes and send the request.
 
-2. Let's start by logging in, sending the request to Repeater, and decode the cookie with Hackvertor:
+2. Let's start by log in, send the request to Repeater, and decode the cookie with Hackvertor:
 
     ![](lab2_hackvertor.png)
 
-3. Upon decoding it, we see that there is the `username` attribute which should be changed to `administrator`. Then there is the `access_token` attribute with a value of `"tx6mwgc00s1475itu4br7ohv7zffdjg2"`:
+3. Upon decoding it, we see that there is the `username` attribute which should be changed to `administrator`. Then there is the `access_token` attribute with a value of `"tx6mwgc00s1475itu4br7ohv7zffdjg2"`.
 
     To bypass authentication, we need to make `if ($login['access_token'] == $access_token)` evaluate to `true`, that is, we need the stored token to match the token that we will pass. 
     
     We know that PHP will treat any string that **do not start with a number** as of equal to `0`. Thus, if we change the value of the `access_token` attribute to `0`, the following comparison `if ($login['access_token'] == $access_token)` will be converted into `0 == "<storedToken>"`, and if the `storedToken` does not start with a number, it will evaluate to `true`:
 
     ![](lab2_burp_redirection.png)
+
+    > Remember to update the **type label**  for the `access_token` (`s` to `i`) as well as the length indicators for both `username` (`6` to `13`) and `access_token` (`32` to `0`).
 
 4. If we click on "*Follow redirection*", we will see that we have access to the "*Admin panel*", and we can now delete user `carlos`:
 
