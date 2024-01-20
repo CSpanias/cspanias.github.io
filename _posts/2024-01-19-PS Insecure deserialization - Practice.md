@@ -164,6 +164,11 @@ This simple scenario is not common in the wild. However, editing an attribute va
 
 PHP-based logic is vulnerable to data type manipulation due to the behavior of its **loose comparison operator** (`==`) when comparing different data types. For instance, when performing a loose comparison between an integer and a string, PHP will attempt to convert the string to an integer, meaning that `5 == "5"` will evaluate to `true`!
 
+This is known as [**Type Juggling**](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Type%20Juggling/README.md#type-juggling): 
+
+> _PHP is a loosely typed language, which means it tries to predict the programmer's intent and automatically converts variables to different types whenever it seems necessary. For example, a string containing only numbers can be treated as an integer or a float. However, this automatic conversion (or **type juggling**) can lead to unexpected results, especially when comparing variables using the `==` operator, which only checks for value equality (**loose comparison**), and not the `===` operator, which checks for both type and value equality (**strict comparison**)._
+
+
 Unusually, **this also works for any alphanumeric string that starts with a number**. In this case, PHP will effectively convert the entire string to an integer value based on the initial number and the rest of it will be completely ignored. For example, `5 == "5 test"` will be treated as `5 == 5`!
 
 This becomes even stranger when comparing a string to the integer `0`: if there is no initial number on the string, PHP will treat the entire string as the integer `0`. Therefore, `0 == "test"` will evaluate to `true`!
@@ -238,7 +243,16 @@ For example, as part of a website's "*Delete user*" functionality, the user's pr
 
     ![](lab3_solved.png)
 
-## Futher practice
+### Magic methods
 
-- [picoCTF: Super Serial](https://cspanias.github.io/posts/PicoCTF-Super-Serial/)
-- [HTB: Precious](https://app.hackthebox.com/machines/Precious/)
+The previous example relies on the attacker **manually invoking the dangerous method via user-accessible functionality**. However, insecure deserialization becomes much more interesting when you create exploits that **pass data into dangerous methods automatically**. This is enabled by the use of "**magic methods**".
+
+
+
+
+## Related resources
+
+- [Type Juggling](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Type%20Juggling/README.md).
+- [PHP Magic Tricks: Type Juggling](https://owasp.org/www-pdf-archive/PHPMagicTricks-TypeJuggling.pdf).
+- [picoCTF: Super Serial](https://cspanias.github.io/posts/PicoCTF-Super-Serial/).
+- [HTB: Precious](https://app.hackthebox.com/machines/Precious/).

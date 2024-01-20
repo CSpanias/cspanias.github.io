@@ -370,7 +370,7 @@ Traceback (most recent call last):
 <SNIP>
 ```
 
-The exploit seems to work just fine! We can now inject some Ruby reverse shell code instead of the `id` command. After some unsuccessful attempt to catch the shell, we can try base64 encode our payload before sending it. We can do that using [revshellgen](https://github.com/t0thkr1s/revshellgen): 
+The exploit seems to work just fine since its output includes `uid=0(root) gid=0(root) groups=0(root)`! We can now inject some Ruby reverse shell code instead of the `id` command. After some unsuccessful attempts to catch the shell, we can try base64 encode our payload before sending it. We can easily do that using [revshellgen](https://github.com/t0thkr1s/revshellgen): 
 
 ```bash
 $ /opt/revshellgen/revshellgen.py
@@ -454,7 +454,7 @@ henry@precious:/tmp$ cat dependencies.yml
          method_id: :resolve
 ```
 
-Next, we need to open a listener:
+If we re-run the command now, `henry@precious:/tmp$ sudo /usr/bin/ruby /opt/update_dependencies.rb`, we should see a connection back to our listener:
 
 ```bash
 ---------- [ SETUP LISTENER ] ----------
@@ -467,7 +467,40 @@ Ncat: Listening on 0.0.0.0:1337
 Ncat: Connection from 10.10.11.189:35420.
 root@precious:/tmp# cat /root/root.txt
 cat /root/root.txt
-2b84d43041671a48ac9b4f53c774ec7e
+<SNIP>
 ```
 
 ![](machine_pwned.png){: width="75%" .normal}
+
+## Extra 
+
+I was quite buffled as of why the `/opt/update_dependencies.rb` script was able to pick up the `dependencies.yml` file from the `/tmp` directory. The latter file is referenced **relatively** within the script:
+
+```ruby
+def list_from_file
+    YAML.load(File.read("dependencies.yml"))
+end
+```
+
+In most cases, this means that the script will **ONLY** search within the same directory that itself resides, in this case, `/opt/`. But it was able to read it from the `/tmp` directory! After some reading, I ended up making a [StackOverFlow post](https://stackoverflow.com/questions/77850419/file-referencing-using-relative-paths-on-ruby) and that was the answer from [Casper](https://stackoverflow.com/users/823617/casper):
+
+
+**Relative paths in Ruby are always dependent on the current working directory**. The current working directory is not necessarily the same as the directory in which the script resides, but rather in which directory you are at the moment when you launch Ruby.
+
+Example:
+
+```bash
+> cd /tmp
+> ruby /some/path/somewhere/to/my/script.rb
+```
+
+What is the current working directory of `script.rb` in this case?
+
+**Answer**: it is `/tmp`, because that is the directory you were in when you launched the script.
+
+To display the current working directory from the script itself, you can add a line puts `Dir.pwd`, and the script will print out in which folder it is running at that moment. To change the current working directory of the script, you can use `Dir.chdir`.
+
+You can see why using relative paths can easily lead to confusion, because it all depends on from which directory the launch of the Ruby executable was. It could be anywhere. This is why most scripts use either absolute paths, or paths relative to the script file itself. To use paths relative to the script file itself, you can use `__dir__` as the starting point and build your script-relative paths from there.
+
+See more discussion here:
+[Can a Ruby script tell what directory it’s in?](https://stackoverflow.com/questions/2206714/can-a-ruby-script-tell-what-directory-it-s-in)
