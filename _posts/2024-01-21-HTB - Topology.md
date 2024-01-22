@@ -318,15 +318,15 @@ Before doing that, let's find out what <a href="http://gnuplot.info/docs_5.5/loc
 
 > _**Gnuplot** is a portable command-line driven graphing utility for Linux, OS/2, MS Windows, OSX, VMS, and many other platforms._
 
-Upon looking at the [**Commands**](http://gnuplot.info/docs_5.5/Commands.html) section, we see this:
+Upon looking at the <a href="http://gnuplot.info/docs_5.5/Commands.html" data-proofer-ignore>**Commands**</a> section, we see this:
 
 ![](gnuplot_commands.png)
 
-The [**shell**](http://gnuplot.info/docs_5.5/loc17674.html) command's descriptions mentions: 
+The <a href="http://gnuplot.info/docs_5.5/loc17674.html" data-proofer-ignore>**shell**</a> command's descriptions mentions: 
 
-> _The **shell** command ignores anything else on the gnuplot command line. If instead you want to pass a command string to a shell for immediate execution, use the [system](http://gnuplot.info/docs_5.5/loc2298.html) function or the shortcut **!**_
+> _The **shell** command ignores anything else on the gnuplot command line. If instead you want to pass a command string to a shell for immediate execution, use the <a href="http://gnuplot.info/docs_5.5/loc2298.html" data-proofer-ignore>**system**</a> function or the shortcut **!**_
 
-The [**system**](http://gnuplot.info/docs_5.5/loc18483.html) seems more appropriate for getting a reverse shell:
+The <a href="http://gnuplot.info/docs_5.5/loc18483.html" data-proofer-ignore>**system**</a> seems more appropriate for getting a reverse shell:
 
 > _**system "command"** executes "command" in a subprocess by invoking the operating system's default shell. If called as a function, **system("command")** returns the character stream from the subprocess's stdout as a string. One trailing newline is stripped from the resulting string if present._
 
