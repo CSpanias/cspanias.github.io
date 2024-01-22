@@ -314,7 +314,7 @@ drwx-wx-wx 2 root root 4096 Jun 14  2023 /opt/gnuplot
 
 It seems that this directory's permissions are misconfigured: we don't have `read` access, but we have both `write` and `execute`! As a result, if we manage to create a `.plt` file containing reverse shell code within the `/opt/gnuplot`, we will be able to get a `root` shell back. 
 
-Before doing that, let's find out what [gnuplot](http://gnuplot.info/docs_5.5/loc68.html) is:
+Before doing that, let's find out what <a href="http://gnuplot.info/docs_5.5/loc68.html" data-proofer-ignore>**gnuplot**</a> is:
 
 > _**Gnuplot** is a portable command-line driven graphing utility for Linux, OS/2, MS Windows, OSX, VMS, and many other platforms._
 
