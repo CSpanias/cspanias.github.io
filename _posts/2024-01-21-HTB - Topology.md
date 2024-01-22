@@ -388,7 +388,7 @@ cat /root/root.txt
 <SNIP>
 ```
 
-![](machine_pwned){: width="75%" .normal}
+![](machine_pwned.png){: width="75%" .normal}
 
 ## Extra
 
