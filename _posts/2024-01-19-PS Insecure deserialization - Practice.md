@@ -292,6 +292,10 @@ If an attacker has source code access, they can study all the available classes 
 
     ![](lab4_solved.png){: .normal}
 
+### Gadget chains
+
+Classes containing these deserialization magic methods can also be used to initiate more complex attacks involving a **long series of method invocations**, known as a "**gadget chain**".
+
 
 ## Related resources
 
