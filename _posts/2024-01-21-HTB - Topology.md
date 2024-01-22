@@ -124,11 +124,7 @@ Another way of finding out the version is intercepting the packet via Burp:
 
 ![](burp_request.png)
 
-We have the `Pfd Version`: `PDF-1.5`; we can start searching for any known vulnerability.
-
-> Learn more about [LaTeX Injection](https://salmonsec.com/cheatsheets/exploitation/latex_injection).
-
-The app is hosted in the `/equation.php` directory, and not on `/index.php` where usually the homepage is. If we remove the file, we get the whole site's directory:
+Since we now have the tool's version: `Pfd Version`: `PDF-1.5`, we can start searching for any known vulnerability; unfortunately, this does not get us anywhere. Upon furthor inspection, we notice that the app is hosted in the `/equation.php` directory, and not on `/index.php` where usually the homepage is. If we remove the file, we get the whole site's directory:
 
 ![](root_dir.png){: .normal width="65%"}
 
@@ -172,7 +168,9 @@ An interesting [article](https://www1.cmc.edu/pages/faculty/aaksoy/latex/latexth
 |\begin{equation} \end{equation}|Goes to a newline and center equation with label|Equations|
 |\\[ ....\\] |Goes to a newline and center equation|Equations with no label|
 
-Apparently, LaTeX's inline math mode needs to be enclosed with the `$` symbol. If we now try the following payload: `$\lstinputlisting{/etc/passwd}$`, we get the file back:
+There is also a [Hacktricks article](https://book.hacktricks.xyz/pentesting-web/formula-csv-doc-latex-ghostscript-injection#latex-injection) which includes a lit of payloads for reading files, including the `\lstinputlisting` method. Apparently, LaTeX's inline math mode needs to be enclosed with the `$` symbol. 
+
+If we now try the following payload: `$\lstinputlisting{/etc/passwd}$`, we get the file back:
 
 ![](passwd_file.png){: .normal width="75%"}
 
