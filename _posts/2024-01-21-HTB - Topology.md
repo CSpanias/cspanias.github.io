@@ -314,19 +314,19 @@ drwx-wx-wx 2 root root 4096 Jun 14  2023 /opt/gnuplot
 
 It seems that this directory's permissions are misconfigured: we don't have `read` access, but we have both `write` and `execute`! As a result, if we manage to create a `.plt` file containing reverse shell code within the `/opt/gnuplot`, we will be able to get a `root` shell back. 
 
-Before doing that, let's find out what [gnuplot](gnuplot.info/docs_5.5/loc68.html) is:
+Before doing that, let's find out what [gnuplot](http://gnuplot.info/docs_5.5/loc68.html) is:
 
 > _**Gnuplot** is a portable command-line driven graphing utility for Linux, OS/2, MS Windows, OSX, VMS, and many other platforms._
 
-Upon looking at the [**Commands**](gnuplot.info/docs_5.5/Commands.html) section, we see this:
+Upon looking at the [**Commands**](http://gnuplot.info/docs_5.5/Commands.html) section, we see this:
 
 ![](gnuplot_commands.png)
 
-The [**shell**](gnuplot.info/docs_5.5/loc17674.html) command's descriptions mentions: 
+The [**shell**](http://gnuplot.info/docs_5.5/loc17674.html) command's descriptions mentions: 
 
-> _The **shell** command ignores anything else on the gnuplot command line. If instead you want to pass a command string to a shell for immediate execution, use the [system](gnuplot.info/docs_5.5/loc2298.html) function or the shortcut **!**_
+> _The **shell** command ignores anything else on the gnuplot command line. If instead you want to pass a command string to a shell for immediate execution, use the [system](http://gnuplot.info/docs_5.5/loc2298.html) function or the shortcut **!**_
 
-The [**system**](gnuplot.info/docs_5.5/loc18483.html) seems more appropriate for getting a reverse shell:
+The [**system**](http://gnuplot.info/docs_5.5/loc18483.html) seems more appropriate for getting a reverse shell:
 
 > _**system "command"** executes "command" in a subprocess by invoking the operating system's default shell. If called as a function, **system("command")** returns the character stream from the subprocess's stdout as a string. One trailing newline is stripped from the resulting string if present._
 
