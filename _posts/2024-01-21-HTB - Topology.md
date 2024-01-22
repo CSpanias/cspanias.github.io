@@ -2,7 +2,7 @@
 title: HTB - Topology
 date: 2024-01-21
 categories: [CTF, Fullpwn]
-tags: [htb, hackthebox, topology, nmap, apache, htaccess, htpasswd, latex, pspy, cron, gnuplot, revshellgen]
+tags: [htb, hackthebox, topology, nmap, apache, htaccess, htpasswd, latex, pspy, cron, gnuplot, revshellgen, subdomain, vhost]
 img_path: /assets/htb/fullpwn/topology/
 published: true
 image:
@@ -69,27 +69,6 @@ http://10.10.11.217 [200 OK] Apache[2.4.41], Country[RESERVED][ZZ], Email[lklein
 ![](wappa.png){: .normal width="65%"}
 
 ## Initial foothold
-
-We can start performing some scan for virtual hosts and subdomains while enumerating the project's page:
-
-> **Subdomain:** _A subdomain is a **part of a larger domain**. It is a way to organize and structure a website's content hierarchy. Subdomains are created by adding a prefix to the main domain, forming a new address. For example, if `example.com` is the main domain, `blog.example.com` and `shop.example.com` could be subdomains. Subdomains are often **used to divide a website into distinct sections**, each with its own content or purpose._
-
-> **Virtual Host:** _A vhost, is a **configuration method used by web servers** (like Apache or Nginx) to host **multiple domain names on a single server**. With virtual hosting, a single physical server can serve content for multiple domains, and **each domain is treated as if it has its own server instance**. Vhosts are defined in the web server's configuration files, and they allow different websites to coexist on the same server, each with its own settings, files, and configurations._
-
-> In summary:
-> 	- A subdomain is a way to structure the content within a domain.
-> 	- A vhost is a configuration setting that allows a single server to host multiple domains. 
-> 
-> _You can have subdomains within a vhost, meaning that a server configured with virtual hosts can serve content for multiple domains and their respective subdomains._
-
-
-```bash
-$ ffuf -u http://topology.htb -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt -ac -H "HOST: FUZZ.topology.htb"
-```
-
-```bash
-$ gobuster vhost -u http://topology.htb -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt --append-domain
-```
 
 Latex project homepage:
 
@@ -411,3 +390,45 @@ cat /root/root.txt
 75767b0bf7f675efb539256549a87b4f
 ```
 
+## Extra
+
+We can perform a scan for virtual hosts and subdomains right at the start of our web server enumeration. Let's remind ourselves what's the difference between a subdomain and a vhost is:
+
+_A **subdomain** is a **part of a larger domain**. It is a way to organize and structure a website's content hierarchy. Subdomains are created by adding a prefix to the main domain, forming a new address. For example, if `example.com` is the main domain, `blog.example.com` and `shop.example.com` could be subdomains. Subdomains are often **used to divide a website into distinct sections**, each with its own content or purpose._
+
+_A **vhost**, is a **configuration method used by web servers** (like Apache or Nginx) to host **multiple domain names on a single server**. With virtual hosting, a single physical server can serve content for multiple domains, and **each domain is treated as if it has its own server instance**. Vhosts are defined in the web server's configuration files, and they allow different websites to coexist on the same server, each with its own settings, files, and configurations._
+
+In summary:
+- A subdomain is a way to structure the content within a domain.
+- A vhost is a configuration setting that allows a single server to host multiple domains. 
+
+> _You can have subdomains within a vhost, meaning that a server configured with virtual hosts can serve content for multiple domains and their respective subdomains._
+
+We can use `ffuf` for our scan:
+
+```bash
+# subdomain enumeration with ffuf
+$ ffuf -u http://topology.htb -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt -ac -H "HOST: FUZZ.topology.htb"
+
+ :: Method           : GET
+ :: URL              : http://topology.htb
+ :: Wordlist         : FUZZ: /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt
+ :: Header           : Host: FUZZ.topology.htb
+ :: Follow redirects : false
+ :: Calibration      : true
+ :: Timeout          : 10
+ :: Threads          : 40
+ :: Matcher          : Response status: 200-299,301,302,307,401,403,405,500
+________________________________________________
+
+dev                     [Status: 401, Size: 463, Words: 42, Lines: 15, Duration: 3873ms]
+latex                   [Status: 200, Size: 2828, Words: 171, Lines: 26, Duration: 3179ms]
+stats                   [Status: 200, Size: 108, Words: 5, Lines: 6, Duration: 3203ms]
+```
+
+We can also use `gobuster` in a similar fashion:
+
+```bash
+# subdomain enumeration with gobuster
+$ gobuster vhost -u http://topology.htb -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt --append-domain
+```
