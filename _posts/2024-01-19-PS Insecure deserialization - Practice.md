@@ -247,7 +247,50 @@ For example, as part of a website's "*Delete user*" functionality, the user's pr
 
 The previous example relies on the attacker **manually invoking the dangerous method via user-accessible functionality**. However, insecure deserialization becomes much more interesting when you create exploits that **pass data into dangerous methods automatically**. This is enabled by the use of "**magic methods**".
 
+**Magic methods** are a special subset of methods that are invoked automatically whenever a particular event occurs. They are sometimes indicated by prefixing or surrounding the method name with **double-underscores**, for example, `__construct()` (PHP) and `__init__` (Python). These are similar methods that are invoked whenever an object of the class is instantiated.
 
+Magic methods can become dangerous when the code that they execute handles attacker-controllable data, for example, from a deserialized object. This can be exploited by an attacker to automatically invoke methods on the deserialized data when the required conditions are met. Most importantly, **some languages have magic methods that are invoked automatically during the deserialization process**. For example, PHP's `unserialize()` methods looks for and invokes an object's `__wakeup()` magic method.
+
+In Java deserialization, the same applies to the `ObjectInputStream.readObject()` method, which is used to read data from the initial byte stream and essentially acts like a constructor for "re-initializing" a serialized object. However, serializable classes can also declare their own `readObject()` method as follows:
+
+```java
+private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException
+{
+    // implementation
+}
+```
+
+A `readObject()` method declared in exactly this way acts as a magic method that is invoked during deserialization and allows the class to control the deserialization of its own fields more closely. 
+
+You should pay close attention to any classes that contain these types of magic methods. They allow you to pass data from a serialized object into the website's code before the object is fully deserialized, which is often the starting point for creating more advanced exploits.
+
+### Injecting arbitrary objects
+
+In object-oriented programming, the methods available to an object are determined by its class. Therefore, if an attacker can manipulate which object class is being passed in as serialized data, they can influence what code is executed after, and even during, deserialization.
+
+**Deserialization methods do not typically check what they are deserializing**, thus, you can pass in objects of any serializable class that is available to the webiste; this allows an attacker to create instances of arbitrary classes. **The fact that this object is not of the expected class does not matter**. The unexpected object migh cause an exception in the app logic, but the malicious object will already be instantiated by then!
+
+If an attacker has source code access, they can study all the available classes in detail. To construct a simple exploit, they would **look for classes containing deserialization magic methods**, then check whether any of them perform dangerous operations on controllable data. The attacker can then pass in a serialized object of this class to use its magic method for an exploit.
+
+### Lab: Arbitrary object injection in PHP
+
+> **Objective**: _This lab uses a serialization-based session mechanism and is vulnerable to arbitrary object injection as a result. To solve the lab, create and inject a malicious serialized object to delete the `morale.txt` file from Carlos's home directory. You will need to obtain source code access to solve this lab. You can log in to your own account using the following credentials: `wiener:peter`._
+
+> _**Hint**: You can sometimes read source code by appending a tilde (`~`) to a filename to retrieve an editor-generated backup file._
+
+1. Logging in as `wiener` and checking the page's source code we see a refence to `CustomTemplate.php`:
+
+    ![](lab4_source_code.png){: .normal}
+
+2. If we append the `~` and send a `GET` request to `/libs/CustomTemplate.php` we will get the source code back. This contains two magic methods: `__construct()` and `__destruct()`:
+
+    ![](lab4_magic_methods.png)
+
+3. The `__destruct()` method invoked the [`unlink()`](https://www.php.net/manual/en/function.unlink.php) method on the `lock_file_path` attribute, which deletes the file on this path. What we need to do, is to create an object of class `CustomTemplate` containing just one attribute, `lock_file_path`, and set's the attribute's value to the desired file path, in this case, `/home/carlos/morale.txt`:
+
+    ![](lab4_objectInjection.png)
+
+    ![](lab4_solved.png){: .normal}
 
 
 ## Related resources
