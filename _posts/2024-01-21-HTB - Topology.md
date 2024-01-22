@@ -44,11 +44,11 @@ Homepage:
 ![](home.png)
 
 Things to note down:
-1. Staff names
+1. Staff names:
 	- Lilian Klein, *Head of Topology Group*
 	- **Vajramani Daisley, *Software Developer*** --> Interesting
 	- **Derek Abrahams, *Sysadmin*** --> Interesting
-2. **LaTeX Equation Generator** project.
+2. **LaTeX Equation Generator** project:
 	- Link redirects to `http://latex.topology.htb/equation.php`. --> Add domain to local DNS file
 3. Site powered by **w3.css**. --> not much
 
@@ -66,7 +66,7 @@ $ whatweb http://10.10.11.217
 http://10.10.11.217 [200 OK] Apache[2.4.41], Country[RESERVED][ZZ], Email[lklein@topology.htb], HTML5, HTTPServer[Ubuntu Linux][Apache/2.4.41 (Ubuntu)], IP[10.10.11.217], Title[Miskatonic University | Topology Group]
 ```
 
-![](wappa.png)
+![](wappa.png){: .normal width="65%"}
 
 ## Initial foothold
 
@@ -103,11 +103,12 @@ My mind went directly into the [Precious](https://cspanias.github.io/posts/HTB-P
 
 If we copy a random equation from the ***Examples*** section and click ***Generate***, an image will be generated where we can right-click > Save As and check its metadata:
 
-![](equation.png)
+![](equation.png){: .normal width="65%"}
 
-![](png_file.png)
+![](png_file.png){: .normal width="65%"}
 
 ```bash
+# check file's metadata
 $ exiftool equation.png
 ExifTool Version Number         : 12.70
 File Name                       : equation.png
@@ -150,7 +151,7 @@ We have the `Pfd Version`: `PDF-1.5`; we can start searching for any known vulne
 
 The app is hosted in the `/equation.php` directory, and not on `/index.php` where usually the homepage is. If we remove the file, we get the whole site's directory:
 
-![](root_dir.png)
+![](root_dir.png){: .normal width="65%"}
 
 Among the files, we find two `tex` files: `equationtest.tex` and `header.tex`. According to [Lifewire](https://www.lifewire.com/tex-file-4153927#:~:text=A%20file%20with%20the%20TEX,format%2C%20letter%20format%2C%20etc.):  
 
@@ -172,11 +173,11 @@ The `header.tex` contain an interesting package called `listings` which seems to
 
 After reading the [official documentation](https://anorien.csc.warwick.ac.uk/mirrors/CTAN/macros/latex/contrib/listings/listings.pdf) of the package, we notice an interesting functionality:
 
-![](listing_functionality.png)
+![](listing_functionality.png){: .normal}
 
 Playing around with it, we get back an error:
 
-![](listing_payload.png)
+![](listing_payload.png){: .normal}
 
 ![](error_msg.png)
 
@@ -194,15 +195,15 @@ An interesting [article](https://www1.cmc.edu/pages/faculty/aaksoy/latex/latexth
 
 Apparently, LaTeX's inline math mode needs to be enclosed with the `$` symbol. If we now try the following payload: `$\lstinputlisting{/etc/passwd}$`, we get the file back:
 
-![](passwd_file.png)
+![](passwd_file.png){: .normal width="75%"}
 
 We can target for more interesting files, like the web server's configuration file. Let's find out where that is:
 
-![](google_config_file.png)
+![](google_config_file.png){: .normal width="75%"}
 
 Sending the payload `$\lstinputlisting{/etc/apache2/httpd.conf}$` results in an error. After trying different file paths, we find out [this](https://ubuntu.com/server/docs/how-to-configure-apache2-settings) article which mentions that the default location of the vhost config file is: `/etc/apache2/sites-available/000-default.conf`. Let's try that by passing `$\lstinputlisting{/etc/apache2/sites-available/000-default.conf}$` as our payload:
 
-![](vhosts.png)
+![](vhosts.png){: .normal width="65%"}
 
 This config file lists two other vhosts apart from `latex`: `stats` and `dev`! Let's first add them to `/etc/hosts` and then browse to them:
 
@@ -229,7 +230,7 @@ A bit [later](https://www.digitalocean.com/community/tutorials/how-to-use-the-ht
 
 We can therefore trying to see if we can locate the `.htaccess` file and then search for the `.htpasswd` file. We can do that by passing the following payload: `$\lstinputlisting{/var/www/dev/.htaccess}$`.
 
-![](htaccess.png)
+![](htaccess.png){: .normal width="65%"}
 
 Not only we found the `.htaccess` file, but it seems that the `.htpasswd` is also within the root directory! Let's pass `$\lstinputlisting{/var/www/dev/.htpasswd}$` as our payload:
 
