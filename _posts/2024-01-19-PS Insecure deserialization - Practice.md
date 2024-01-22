@@ -231,7 +231,7 @@ For example, as part of a website's "*Delete user*" functionality, the user's pr
 
 1. After logging in as `wiener`, we can see that there is a "*Delete account*" functionality, and if we click on the button this is what the request looks like:
 
-    ![](lab3_deleteAccount.png)
+    ![](lab3_deleteAccount.png){: .normal width="60%"}
 
     ![](lab3_deleteAccount_burp.png)
 
