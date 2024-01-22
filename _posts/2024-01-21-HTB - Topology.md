@@ -2,7 +2,7 @@
 title: HTB - Topology
 date: 2024-01-21
 categories: [CTF, Fullpwn]
-tags: [htb, hackthebox, topology, nmap, apache, htaccess, htpasswd, latex, pspy, cron, gnuplot, revshellgen, subdomain, vhost]
+tags: [htb, hackthebox, topology, nmap, apache, htaccess, htpasswd, latex, pspy, cron, gnuplot, revshellgen, subdomain, vhost, ffuf]
 img_path: /assets/htb/fullpwn/topology/
 published: true
 image:
@@ -238,7 +238,7 @@ $ ssh vdaisley@10.10.11.217
 vdaisley@topology:~$ ls
 user.txt
 vdaisley@topology:~$ cat user.txt
-8eda57d8e732e9a2d28917a56a0f5aa1
+<SNIP>
 ```
 
 ## Privilege escalation
@@ -385,8 +385,10 @@ bash: cannot set terminal process group (4236): Inappropriate ioctl for device
 bash: no job control in this shell
 root@topology:~# cat /root/root.txt
 cat /root/root.txt
-75767b0bf7f675efb539256549a87b4f
+<SNIP>
 ```
+
+![](machine_pwned){: width="75%" .normal}
 
 ## Extra
 
@@ -422,11 +424,4 @@ ________________________________________________
 dev                     [Status: 401, Size: 463, Words: 42, Lines: 15, Duration: 3873ms]
 latex                   [Status: 200, Size: 2828, Words: 171, Lines: 26, Duration: 3179ms]
 stats                   [Status: 200, Size: 108, Words: 5, Lines: 6, Duration: 3203ms]
-```
-
-We can also use `gobuster` in a similar fashion:
-
-```bash
-# subdomain enumeration with gobuster
-$ gobuster vhost -u http://topology.htb -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt --append-domain
 ```
