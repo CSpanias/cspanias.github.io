@@ -4,8 +4,8 @@ date: 2024-01-23
 categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, analysis, ldap, ffuf, dir-busting, subdomain, virtual-host]
 img_path: /assets/htb/fullpwn/analysis/
-#published: true
-draft: true
+published: true
+hidden: true
 image:
     path: machine_info.png
 ---
@@ -425,6 +425,10 @@ An **LDAP query is a command that asks a directory service for some information*
 ### What is an LDAP Injection
 
 [**LDAP Injection**](https://book.hacktricks.xyz/pentesting-web/ldap-injection) is an attack used to exploit web based applications that construct LDAP queries based on user input.
+
+To read:
+1. [Complete Guide to LDAP Injection: Types, Examples, and Prevention](https://brightsec.com/blog/ldap-injection/)
+2. [Testing for LDAP Injection](https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/07-Input_Validation_Testing/06-Testing_for_LDAP_Injection)
 
 > [PayloadsAllTheThings: LDAP Injection](https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/LDAP%20Injection)
 
