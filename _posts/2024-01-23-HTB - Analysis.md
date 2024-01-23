@@ -11,7 +11,7 @@ image:
 
 ## Information gathering
 
-Let's start with an Nmap scan:
+Nmap port-scan:
 
 ```bash
 # port-scanning
@@ -43,24 +43,7 @@ PORT      STATE SERVICE       VERSION
 <SNIP>
 ```
 
-Nmap notes:
-- `389 ldap`, `Domain: analysis.htb0.`
-	- Add to local DNS.
-- `445` 
-	- Enumerate.
-- `53 Simple DNS Plus`
-	- Check version.
-- `3306` -> `MySQL (unauthorized)`.
-- `464 kpasswd5?`
-	- Find more.
-- `33060 mysqlx?`
-	- Find more.
-- `9389 adws?`
-	- Find more.
-- `593 ncacn_http RCP over HTTP 1.0` 
-	- Find more.
-
-Let's get to work by adding the domain to our local DNS file:
+Add domain to local DNS file:
 
 ```bash
 $ cat /etc/hosts | grep ana
