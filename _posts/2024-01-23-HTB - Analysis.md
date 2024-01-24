@@ -533,7 +533,7 @@ d-----       23/05/2023     10:10                wsmith
 
 1. [**Snort**](https://www.crowdstrike.com/cybersecurity-101/threat-intelligence/snort-rules/) is used on the target:
 
-	_**Snort** is an open-source network **intrusion detection and prevention system (IDS/IPS)** that monitors network traffic and identifies potentially malicious activities on Internet Protocol (IP) networks.
+	_**Snort** is an open-source network **intrusion detection and prevention system (IDS/IPS)** that monitors network traffic and identifies potentially malicious activities on Internet Protocol (IP) networks._
 
 2. There are multiple users: `Administrateur`, `jdoe`, `soc_analyst`, `wsmith`, and `webservice`, and we have access to none of them.
 
@@ -573,8 +573,11 @@ As we noticed earlier, **Snort** is used on this machine.
 
 > How to check snort's version?
 
-[CVE-2016-1417](https://nvd.nist.gov/vuln/detail/CVE-2016-1417)
+> [CVE-2016-1417](https://nvd.nist.gov/vuln/detail/CVE-2016-1417)
 
+> [Snort 2.9.7.0-WIN32 DLL Hijacking](https://packetstormsecurity.com/files/138915/Snort-2.9.7.0-WIN32-DLL-Hijacking.html)
+
+> [DLL Hijacking Practical](https://www.cs.toronto.edu/~arnold/427/16s/csc427_16s/tutorials/DLLHijacking/DLL%20Hijacking%20Practical.pdf)
 
 ```bash
 # creating a malicious DLL
@@ -651,7 +654,6 @@ Exploit target:
    Id  Name
    --  ----
    0   Wildcard Target
-
 
 View the full module info with the info, or info -d command.
 
