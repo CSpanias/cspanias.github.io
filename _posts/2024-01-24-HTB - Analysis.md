@@ -4,8 +4,8 @@ date: 2024-01-24
 categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, analysis, ldap, ffuf, dir-busting, subdomain, virtual-host]
 img_path: /assets/htb/fullpwn/analysis/
-published: true
-hidden: true
+published: false
+hidden: false
 image:
     path: machine_info.png
 ---
