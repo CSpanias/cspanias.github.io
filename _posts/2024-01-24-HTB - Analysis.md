@@ -613,6 +613,8 @@ d-----       23/05/2023     10:10                wsmith
 
 We can start seaching for locations that might contain interesting info, for example, looking for the "*password*" keyword in the Windows registry. Skimming across the output, we see this:
 
+> [THM Red Teaming path: Active Directory - Credentials Harvesting](https://tryhackme.com/paths).
+
 ```powershell
 *Evil-WinRM* PS C:\Users\jdoe\Documents> reg query HKLM /f password /t REG_SZ /s
 
