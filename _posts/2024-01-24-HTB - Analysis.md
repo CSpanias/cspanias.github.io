@@ -577,9 +577,9 @@ $ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(obje
                         [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 70ms]
 ```
 
-While fuzzing using the string `97NTtlFUZZ*` it outputs nothing. That means either that the password is this, i.e, `97NTtl`, or there is a special character that cannot be interpreterted as a "simple" character. For instance, [asterisk (`*`)](https://lgfang.github.io/computer/2021/12/15/ldap-search-wildcard) is used as a wildcard almost everywhere, such as regex, bash, and LDAP search filter, among others. 
+While fuzzing using the string `97NTtlFUZZ*` it outputs nothing. That means either that the password is what we already have, i.e, `97NTtl`, or there is a special character that cannot be interpreterted as a "simple" character.
 
-So we can try putting manually such characters, until we get something back. In this case, `*` seems to do the trick:
+For instance, [asterisk (`*`)](https://lgfang.github.io/computer/2021/12/15/ldap-search-wildcard) is used as a wildcard almost everywhere, such as regex, bash, and **LDAP search filters**, among others. Knowing that, we can try placing such characters manually, until we get something back. In this case, the `*` char seems to do the trick:
 
 ```bash
 $ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=97NTtl*FUZZ*)' -w /usr/share/seclists/Fuzzing/alphanum-case-extra.txt -ac -c -fs 8
