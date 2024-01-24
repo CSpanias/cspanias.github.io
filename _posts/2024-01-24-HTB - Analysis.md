@@ -737,7 +737,9 @@ snort.exe :
 
 > [DLL Hijacking Practical](https://www.cs.toronto.edu/~arnold/427/16s/csc427_16s/tutorials/DLLHijacking/DLL%20Hijacking%20Practical.pdf)
 
-Snort's version is: `2.9.20-WIN64`, but the vulneratiblity we found is for `2.9.7.0-WIN32`. Since we don't have much else to try and `winPEAS` highlighted it, let's give a try anyway! Looking at Snort's configuration file, it seems like it uses `sf_engine.dll` (instead of `tcapi.dll`) and picking it up from `C:\Snort\lib\snort_dynamicpreprocessor`:
+Snort's version is: `2.9.20-WIN64`, but the vulneratiblity we found is for `2.9.7.0-WIN32`. Since we don't have much else to try and `winPEAS` highlighted it, let's give a try anyway! 
+
+Looking at Snort's configuration file, it seems like it uses `sf_engine.dll` (instead of `tcapi.dll`) and picking it up from `C:\Snort\lib\snort_dynamicpreprocessor`:
 
 ```bash
 # reading snort's configuration file
@@ -843,9 +845,6 @@ Exploit target:
 
 View the full module info with the info, or info -d command.
 
-msf6 exploit(multi/handler) > run
-
-[*] Started reverse TCP handler on 10.10.14.16:9999
 msf6 exploit(multi/handler) > run
 
 [*] Started reverse TCP handler on 10.10.14.16:9999
