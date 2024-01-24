@@ -726,11 +726,18 @@ In our case `snort` is already up and running:
 Handles  NPM(K)    PM(K)      WS(K)     CPU(s)     Id  SI ProcessName
 -------  ------    -----      -----     ------     --  -- -----------
     154      16    38560      18784              4912   0 snort
+
+# getting snort's version
+*Evil-WinRM* PS C:\Users\jdoe\Documents> C:\Snort\bin\snort.exe -V
+snort.exe :
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+   ,,_     -*> Snort! <*-  o"  )~   Version 2.9.20-WIN64 GRE (Build 82)    ''''    By Martin Roesch & The Snort Team: http://www.snort.org/contact#team           Copyright (C) 2014-2022 Cisco and/or its affiliates. All rights reserved.           Copyright (C) 1998-2013 Sourcefire, Inc., et al.           Using PCRE version: 8.10 2010-06-25           Using ZLIB version: 1.2.11
 ```
 
 > [DLL Hijacking Practical](https://www.cs.toronto.edu/~arnold/427/16s/csc427_16s/tutorials/DLLHijacking/DLL%20Hijacking%20Practical.pdf)
 
-Looking at Snort's configuration file, it seems like it uses `sf_engine.dll` (instead of `tcapi.dll`) and picking it up from `C:\Snort\lib\snort_dynamicpreprocessor`:
+Snort's version is: `2.9.20-WIN64`, but the vulneratiblity we found is for `2.9.7.0-WIN32`. Since we don't have much else to try and `winPEAS` highlighted it, let's give a try anyway! Looking at Snort's configuration file, it seems like it uses `sf_engine.dll` (instead of `tcapi.dll`) and picking it up from `C:\Snort\lib\snort_dynamicpreprocessor`:
 
 ```bash
 # reading snort's configuration file
