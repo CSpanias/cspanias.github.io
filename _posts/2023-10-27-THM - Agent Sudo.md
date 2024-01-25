@@ -45,7 +45,7 @@ Personally, I knew what steganography was, but I had only used **steghide** befo
 
     This can be answered by simply visiting the web server via our browser:
 
-    ![homepage](homepage.png)
+    ![homepage](homepage.png){: .normal width="70%"}
 
 3. The last question of this task wants us to find out the agent's name and provides the following hint:
 
@@ -118,15 +118,15 @@ In this section we are expected to find and crack 4 passwords as well as find an
 
 1. We have a new pair of credentials, so let's use them right away:
 
-    ![user-flag](user-flag.jpg)
+    ![user-flag](user-flag.jpg){: .normal width="70%"}
 
     That was easy 🚩!
 
 2. Next, we are asked the name of the photo's incident. Along with the `user_flag.txt` file, there was also the `Alien_autospy.jpg` file. Let's get a copy that file to our machine using `scp`:
 
-    ![scp](scp.png)
+    ![scp](scp.png){: .normal width="70%"}
 
-    ![alien-photo](alien-photo.png)
+    ![alien-photo](alien-photo.png){: .normal width="70%"}
 
     The hint for this question mentions "*Fox news*", so we can use google and hack our way to the answer:
 
@@ -150,11 +150,11 @@ We reached the final task of this room 🎉, but this time there are no hints av
 
 2. The above page contains details on how to use this exploit:
 
-    ![sudo-exploit](sudo-exploit.png)
+    ![sudo-exploit](sudo-exploit.png){: .normal width="75%"}
 
     Executing the above command results in us getting a root shell 🍾!
 
-    ![root-exploit](root-exploit.png)
+    ![root-exploit](root-exploit.png){: .normal width="70%"}
 
     Now, we can simply search for the root flag:
 
