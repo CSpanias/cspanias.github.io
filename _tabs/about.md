@@ -12,7 +12,7 @@ order: 4
 
 ### Who Am I?
 
-A [Strength & Conditioning (MSc)](https://scholar.google.com/citations?user=NEcbEUYAAAAJ&hl=en) coach turned Penetration Tester with a short stop to Software Engineering. A [Cybersecurity (BSc)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60) student trying to improve his pentesting and CTF skills through variosu platforms.
+A [Strength & Conditioning (MSc)](https://scholar.google.com/citations?user=NEcbEUYAAAAJ&hl=en) coach turned Penetration Tester with a short stop to Software Engineering. A [Cybersecurity (BSc)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60) student trying to improve his pentesting and CTF skills through various platforms.
 
 I have also been an Esports athlete in the game of ([Dota](https://en.wikipedia.org/wiki/Defense_of_the_Ancients)/[Dota2](https://www.dota2.com/home)) for over a decade where I was always deeply involved in various local and international communities. As a result, I am also trying to be as involved as possible in CTF communities and you will find me lurking around in various Discord servers, such as [HackTheBox](https://discord.com/invite/hackthebox), [OUCSS](https://oucss.rocks/), and [WorkSmarter](https://www.linkedin.com/company/work-smarter-community/).
 
@@ -25,8 +25,6 @@ Fancy a game of chess [<i class="fa-solid fa-chess"></i>](https://www.chess.com/
 I will be writing write ups for all the completed CTFs for reviewing the process myself as well as digging into the nitty-gritty of each room. Hopefully, aside from my own benefit, people who are complete beginners, like me, might find these posts helpful.
 
 Additionally, I am currently studying for HTB's [CPTS](https://academy.hackthebox.com/preview/certifications/htb-certified-penetration-testing-specialist) certification, and after completing it, I plan to make a review of the [Penetration Tester Job Role Path](https://academy.hackthebox.com/path/preview/penetration-tester) as well as the exam itself.
-
-I also have my eyes on TMC's [PNPT](https://certifications.tcm-sec.com/pnpt/) certification, and if I eventually sit for it, I aim to document my experience through TMC's training, and how it compares with THM's and HTB's resources in terms of quality, difficulty, subjects covered, and, of course, enjoyment.
 
 ### Projects
 
@@ -51,3 +49,5 @@ I also have my eyes on TMC's [PNPT](https://certifications.tcm-sec.com/pnpt/) ce
 ### Ongoing
 
 <i class="fa-solid fa-graduation-cap"></i> [CPTS](https://academy.hackthebox.com/preview/certifications/htb-certified-penetration-testing-specialist), [Technologies In Practice (TM129)](https://www.open.ac.uk/courses/qualifications/details/tm129?orig=r60), [Cyber Security (TM256)](https://www.open.ac.uk/courses/qualifications/details/tm256?orig=r60)
+
+<i class="fa-solid fa-book"></i> [Black Hat Bash](https://nostarch.com/black-hat-bash)
