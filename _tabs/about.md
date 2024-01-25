@@ -12,7 +12,9 @@ order: 4
 
 ### Who Am I?
 
-A [Strength & Conditioning (MSc)](https://scholar.google.com/citations?user=NEcbEUYAAAAJ&hl=en) coach turned Penetration Tester with a short stop to Software Engineering. A [Cybersecurity (BSc)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60) student trying to improve his pentesting and CTF skills through [HackTheBox](https://www.hackthebox.com/), [TryHackMe](https://tryhackme.com/), and [PicoCTF](https://picoctf.org/).
+A [Strength & Conditioning (MSc)](https://scholar.google.com/citations?user=NEcbEUYAAAAJ&hl=en) coach turned Penetration Tester with a short stop to Software Engineering. A [Cybersecurity (BSc)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60) student trying to improve his pentesting and CTF skills through variosu platforms.
+
+I have also been an Esports athlete in the game of ([Dota](https://en.wikipedia.org/wiki/Defense_of_the_Ancients)/[Dota2](https://www.dota2.com/home)) for over a decade where I was always deeply involved in various local and international communities. As a result, I am also trying to be as involved as possible in CTF communities and you will find me lurking around in various Discord servers, such as [HackTheBox](https://discord.com/invite/hackthebox), [OUCSS](https://oucss.rocks/), and [WorkSmarter](https://www.linkedin.com/company/work-smarter-community/).
 
 Up-to-date resume: [<i class="fa-solid fa-file"></i>](https://drive.google.com/file/d/10_o6X0mdp6ivJW7FZl-7LnuP01U0OtPI/view?usp=sharing).
 
@@ -48,4 +50,4 @@ I also have my eyes on TMC's [PNPT](https://certifications.tcm-sec.com/pnpt/) ce
 
 ### Ongoing
 
-<i class="fa-solid fa-graduation-cap"></i> [CPTS](https://academy.hackthebox.com/preview/certifications/htb-certified-penetration-testing-specialist), [Technologies In Practice](https://www.open.ac.uk/courses/qualifications/details/tm129?orig=r60), [Cyber Security](https://www.open.ac.uk/courses/qualifications/details/tm256?orig=r60)  
+<i class="fa-solid fa-graduation-cap"></i> [CPTS](https://academy.hackthebox.com/preview/certifications/htb-certified-penetration-testing-specialist), [Technologies In Practice (TM129)](https://www.open.ac.uk/courses/qualifications/details/tm129?orig=r60), [Cyber Security (TM256)](https://www.open.ac.uk/courses/qualifications/details/tm256?orig=r60)
