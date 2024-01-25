@@ -60,7 +60,7 @@ The scan results reveals the `/panel` directory, and with that, we are ready to 
 
 If we visit the subdirectory `/panel` via our browser, we see that it is an upload page:
 
-![Panel subdirectory](panel-dir.png)
+![Panel subdirectory](panel-dir.png){: .normal width="70%"}
 
 1. Since the task asks us to get a shell, we can try using the popular [PentestMonkey's PHP reverse shell](https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php). We can simpy copy and paste it on a file using `nano`, changing only the `IP` and `port` variables:
 
@@ -68,13 +68,13 @@ If we visit the subdirectory `/panel` via our browser, we see that it is an uplo
 
 2. When we try to upload our shell, the server makes it clear that `.php` extension files are not allowed:
 
-    ![php-ext](php-ext.png){: width="60%"}
+    ![php-ext](php-ext.png){: width="40%"}
 
     A simple way to bypass this **server-side filtering** is to change to extension to something else that would still work, such as `.php5`. This concept is explained thoroughly in the THM's [Upload Vulnerabilities](https://tryhackme.com/room/uploadvulns) room.
 
     When we try to upload `revshell.php5` the server now accepts it:
 
-    ![php5-ext](php5-ext.png){: width="60%"}
+    ![php5-ext](php5-ext.png){: width="40%"}
 
 3. Next, we open a listener at the port we specified before, and upon visiting the URL hosting our script, `http://MACHINE-IP/revshell.php5`, we should receive our reverse shell. We can get our first 🚩 by searching for the `user.txt` file:
 
@@ -106,7 +106,7 @@ The last task asks us to find a "weird" file with the SUID permission set as wel
 
     This is almost identical as the previous `find` command, but we are now searching for SUID files instead of a specific file as before. As a result, we replaced `-iname user.txt` with `-perm -u=s`. The latter specifies the **permission pattern** to search for. In this case, it's looking for files with the setuid permission, where `-u=s` indicates files where the setuid bit is set. The `u` stands for the user's permissions (owner), and `s` indicates that the setuid bit is set.
 
-    ![SUID Files](python-suid.png)
+    ![SUID Files](python-suid.png){: .normal width="60%"}
 
     From the resulting list, there is only one obvious culprit: `/usr/bin/python`.
 

