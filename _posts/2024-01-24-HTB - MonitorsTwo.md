@@ -47,11 +47,11 @@ Info from Nmap's output:
 
 Homepage:
 
-![](home.png)
+![](home.png){: .normal width="65%"}
 
 We have the app's version: `Cacti 1.2.22`, so before doing anything else let's search for known vulnerabilities:
 
-![](cacti_cve.png)
+![](cacti_cve.png){: .normal width="60%"}
 
 We have 4/4 references for the same RCE vulnerability: [CVE-2022-46169](https://nvd.nist.gov/vuln/detail/CVE-2022-46169)! 
 
@@ -129,7 +129,7 @@ find / -type f -perm -u=s 2>/dev/null
 
 There is the binary `capsh` which stands out. Doing a quick search on [GTFOBins](https://gtfobins.github.io/gtfobins/capsh/#suid) we get this:
 
-![](gtfobins.png)
+![](gtfobins.png){: .normal width="60%"}
 
 Let's follow GFTO's guidance:
 
@@ -277,15 +277,17 @@ So what we need to is:
 3. Clone CVE-2021-41091's PoC on our attack host and transfer the bash script (`exp.sh`) on the target using `marcus` account via the SSH.
 4. Execute `exp.sh` using the `marcus` user.
 
-```bash
-# gaining root access within the container
-whoami
-root
-id
-uid=0(root) gid=0(root) groups=0(root),33(www-data)
-# assigning suid permission to the bash binary
-chmod u+s /bin/bash
-```
+1. Repeat our foothold and gain root within the container:
+
+  ```bash
+  # gaining root access within the container
+  whoami
+  root
+  id
+  uid=0(root) gid=0(root) groups=0(root),33(www-data)
+  # assigning suid permission to the bash binary
+  chmod u+s /bin/bash
+  ```
 
 2. From our attack host:
 
