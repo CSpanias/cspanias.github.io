@@ -10,7 +10,10 @@ image:
     path: machine_info.png
 ---
 
-## Information gathering
+> CONTENT HIDDEN - ACTIVE MACHINE!
+{: .prompt-warning}
+
+<!-- ## Information gathering
 
 Nmap port-scan:
 
@@ -319,8 +322,10 @@ list.php                [Status: 200, Size: 17, Words: 2, Lines: 1, Duration: 80
 ### Findings recap and next steps
 
 1. `internal.analysis.htb` seems the most crucial subdomain to explore.
-2. `users/list.php` --> parameter-scan
-3. `employees` has the login portal and we already have a user list --> brute-force?
+2. `users/list.php`
+    - Do a parameter-scan.
+3. `employees` has the login portal and we already have a user list
+    - brute-force portal?
 
 ### Parameter enumeration: `internal.analysis.htb/users/list.php`
 
@@ -1021,6 +1026,6 @@ Microsoft Windows [Version 10.0.17763.5329]
 C:\Windows\system32>type c:\users\administrateur\desktop\root.txt
 type c:\users\administrateur\desktop\root.txt
 <SNIP>
-```
+``` -->
 
 ![](machine_pwned.png){: width="75%" .normal}
