@@ -402,7 +402,7 @@ This time, we did not get a `FATAL` error, but a `Validation error` regarding th
 
 We get no errors back, but the payload did not work either. That makes sense because based on the vulnerability's descrition:
 
-  If a valid combination is found, the module will use these to attempt exploitation. 
+  > If a valid combination is found, the module will use these to attempt exploitation. 
 
 Thus, we need to brute force the `local_data_id` and `host_id` parameters, until we we find a valid combination of values that will make our payload to work. We can do that using Intruder:
 
@@ -487,7 +487,7 @@ www-data@50bca5e748b0:/var/www/html$ stty rows 51 cols 209
 www-data@50bca5e748b0:/var/www/html$ export TERM=xterm
 ```
 
-And success, we have our initial foothold with a proper bash shell! Since this is a web app server, we should probably check for database configuration files:
+We now have our initial foothold with a proper bash shell! Since this is a web app server, we should probably check for database configuration files:
 
 ```bash
 # searching for configuration files
@@ -724,7 +724,7 @@ Security Team
 
 The above email let us know about 3 CVEs, so let's check them in sequence:
 
-1. [CVE-2021-33033](https://nvd.nist.gov/vuln/detail/CVE-2021-33033) refers to a kernel vulnerability, so first we need to see our target's kernel:
+[CVE-2021-33033](https://nvd.nist.gov/vuln/detail/CVE-2021-33033) refers to a kernel vulnerability, so first we need to see our target's kernel:
 
 ```bash
 marcus@monitorstwo:~$ uname -a
@@ -733,11 +733,11 @@ Linux monitorstwo 5.4.0-147-generic #164-Ubuntu SMP Tue Mar 21 14:23:17 UTC 2023
 
 This is a `2021` vulnerability for versions before `5.11.14`. Our version a more recent one (although `5.4.0-147` seems older than `5.11.14`, but that's due to conventions) and we can also see from the output that the email was compiled 2 years after the discovery of this vulnerability, i.e., `UTC 2023`!
 
-2. [CVE-2020-25706](https://nvd.nist.gov/vuln/detail/CVE-2020-25706) is an XSS vulnerability for `Cacti 1.2.13` and the target app's version is `Cacti 1.2.22`. What's more, we have already exploited this service!
+[CVE-2020-25706](https://nvd.nist.gov/vuln/detail/CVE-2020-25706) is an XSS vulnerability for `Cacti 1.2.13` and the target app's version is `Cacti 1.2.22`. What's more, we have already exploited this service!
 
 ![](home.png){: .normal width="60%"}
 
-3. We have left with just the last one: [CVE-2021-41091](https://nvd.nist.gov/vuln/detail/CVE-2021-41091), which refers to `docker`'s engine `Moby 20.10.9` version.
+We have left with just the last one: [CVE-2021-41091](https://nvd.nist.gov/vuln/detail/CVE-2021-41091), which refers to `docker`'s engine `Moby 20.10.9` version.
 
 ```bash
 # checking docker's verion
@@ -785,7 +785,9 @@ marcus@monitorstwo:~$ ls -l /var/lib/docker/overlay2/c41d5854e43bd996e128d647cb5
 -rw-r--r-- 1 www-data www-data 0 Jan 26 08:00 /var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged/tmp/test
 ```
 
-The container associated with the Capti app is: `c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1`. Now, we need to assign `SUID` permissions to `/bin/bash`, so `marcus` can access it from outside. In order to do that, we need to escalate our privileges within the container. Let's search for `SUID` files:
+The Cacti container is: `c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1`. Now, we need to assign `SUID` permissions to `/bin/bash`, so `marcus` can execute it from outside and gain a `root` shell. In order to do that, we need to first escalate our privileges within the container. 
+
+Let's search for `SUID` files:
 
 ```bash
 www-data@50bca5e748b0:/tmp$ find / -perm -4000 2>/dev/null
@@ -812,7 +814,7 @@ root@50bca5e748b0:/tmp# id
 uid=0(root) gid=0(root) groups=0(root),33(www-data)
 ```
 
-And we got root! Now, we give `SUID` permissions to the bash binary:
+And we got root! Now, we can assign `SUID` permissions to the bash binary:
 
 ```bash
 # assign suid perms to bash binary
