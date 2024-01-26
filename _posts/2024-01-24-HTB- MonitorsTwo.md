@@ -2,7 +2,7 @@
 title: HTB - MonitorsTwo
 date: 2024-01-24
 categories: [CTF, Fullpwn]
-tags: [htb, hackthebox, monitorstwo, nmap]
+tags: [htb, hackthebox, monitorstwo, nmap, docker, container, cacti, suid, mysql, cve-2022-46169, gtfobins, hash, hashcat, cve-2021-41091, burp, burp-intruder, brute-force, script]
 img_path: /assets/htb/fullpwn/monitorsTwo
 published: true
 image:
