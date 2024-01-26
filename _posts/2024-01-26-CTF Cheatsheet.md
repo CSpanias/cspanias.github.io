@@ -11,31 +11,31 @@ image:
 
 > _Image taken from [CTF-CheatSheet](https://github.com/Rajchowdhury420/CTF-CheatSheet)._
 
-## Port scanning
+## portScanning
 
-Hailmary scan
+### hailmaryScan
 ```bash
 sudo incursore.sh --type All -H $IP
 ```
-TCP SYN common ports scanning
+### tcpSynCommonPorts
 ```bash
 sudo nmap -sS -A -Pn --min-rate 10000 $IP
 ```
-TCP SYN all ports scanning
+### tcpSynAllPorts
 ```bash
 sudo nmap -sS -A -Pn --min-rate 10000 -p- $IP
 ```
 
-## Vulnerability scanning
+## vulnerabilityScanning
 
-Start nessus on WSL2
+### startNessusWSL2
 ```bash
 sudo /opt/nessus/sbin/nessus-service
 ```
 
 ## Web server enumeration
 
-Check for WAF
+### WAF
 ```shell
 nmap -Pn -p 443 --script http-waf-detect,http-waf-fingerprint $IP
 ```
@@ -43,12 +43,12 @@ nmap -Pn -p 443 --script http-waf-detect,http-waf-fingerprint $IP
 wafw00f https://$IP
 ```
 
-Check for tech used (similar to Wappalyzer)
+### tech
 ```bash
 whatweb https://$IP
 ```
 
-Check for robots file
+### robots
 ```bash
 curl https://$IP/robots
 ```
@@ -56,12 +56,15 @@ curl https://$IP/robots
 curl https://$IP/robots.txt
 ```
 
-Banner grabbing
+### bannerGrabbing
 ```bash
 curl -IL https://$IP/
 ```
+```bash
+netcat $IP $PORT
+```
 
-Dir-busting and file search
+### dirBustingAndFileSearch
 ```bash
 ffuf -u http://$domain/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -recursion -e .aspx,.html,.php,.txt,.jsp -c -ac
 ```
@@ -78,40 +81,37 @@ nikto -h http://$IP
 feroxbuster -u $URL
 ```
 
-Subdomain-busting
+### subdomainBusting
 ```bash
 gobuster dns -d $IP -w /usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-20000.txt
 ```
 ```bash
 ffuf -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt -u http://$IP -H "HOST: FUZZ.$domain" -ac -c
 ```
-
-Vhost-busting
-```bash
-gobuster vhost -u $URL -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt --append-domain
-```
-With local DNS as a resolver
+### subdomainBustingWithLocalDnsAsResolver
 ```bash
 gobuster dns -d $domain -w /usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-20000.txt -r $IP:53
 ```
 
-Parameter enum
+### vhostBusting
+```bash
+gobuster vhost -u $URL -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt --append-domain
+```
+
+### parameterSearch
 ```bash
 ffuf -u http://internal.analysis.htb/users/list.php?FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/burp-parameter-names.txt -ac
 ```
 
-## Kernel vulns
+## kernelVersion
 
-kernel's version
 ```bash
 uname -a
 ```
 
-## File enumeration
+## fileEnumLinux
 
-### Linux
-
-SUIDS
+### SUIDS
 ```bash
 find / -perm -4000 2>/dev/null
 ```
@@ -119,25 +119,39 @@ find / -perm -4000 2>/dev/null
 find / -perm -u=s 2>/dev/null
 ```
 
-If web server --> check for database config files:
-
+### configFiles
 ```bash
 /var/www/html$ find . | grep config
 ```
 
-Searching for db-related strings within config file
+### dbStringsWithinConfigFiles
 ```bash
 /var/www/html$ grep database <filePath>
 ```
 
+## fileEnumWindows
+
+### RegistryFilesPasswordString
+```powershell
+reg query HKLM /f password /t REG_SZ /s
+```
+```powershell
+reg query HKCU /f password /t REG_SZ /s
+```
+
+### powershellHistory
+```powershell
+type C:\Users\USER\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt
+```
+
 ## FTP
 
-Bounce attack
+### bounceAttack
 ```shell
 nmap -Pn -v -n -p80 -b <username>:<pass>@<IP> <target2scan>
 ```
 
-Brute-force
+### bruteForce
 ```bash
 medusa -u <username> -P <passList> -h <IP> -M ftp
 ```
@@ -147,50 +161,50 @@ hydra -l <username> -P <passList> ftp://<IP> -t 48
 
 ## SSH
 
-Check for SSH vulns
+### sshAudit
 ```shell
 python3 /opt/ssh-audit/ssh-audit.py $IP
 ```
 
-Brute-force creds
+### bruteForce
 ```bash
 hydra -L <userList> -P <passwordList> ssh://$IP
 ```
 
-## Hash cracking
+## hashCracking
 
 > [Hashcat-examples](https://hashcat.net/wiki/doku.php?id=example_hashes)
 
-Autodetect mode ('--username' if hashes are in <name:hash> format)
+### autodetectMode
 ```bash
 hashcat <hashes> /usr/share/wordlists/rockyou.txt --username
 ```
 
-Brute-force hashes using the mode found above
+### bruteForce
 ```bash
 hashcat -m 3200 hashes /usr/share/wordlists/rockyou.txt --username
 ```
 
-Show cracked hashes:
+### crackedHashes
 ```bash
 hashcat -m 3200 --username --show hashes
 ```
 
 > [John hash formats](https://pentestmonkey.net/cheat-sheet/john-the-ripper-hash-formats)
 
-List formats
+### formatList
 ```bash
 john --list=formats
 ```
 
-Brute-force
+### bruteForce
 ```bash
 john <hashes> --wordlist=/usr/share/wordlists/rockyou.txt
 ```
 
-## Shell stabilization
+## shellStabilization
 
-Using `script`
+### withScript
 ```bash
 script -O /dev/null -q /bin/bash
 ```
@@ -198,12 +212,12 @@ script -O /dev/null -q /bin/bash
 bash
 ```
 
-Using Python
+### withPython
 ```bash
 python3 -c 'import.pty;pty.spawn("/bin/bash")'
 ```
 
-Config shell
+### shellConfig
 ```bash
 ^Z
 [1]+  Stopped                 nc -lvnp 1337
@@ -212,18 +226,17 @@ Config shell
 stty raw -echo; fg
 ```
 
-Get values for the `rows` and `cols` variables from our attack host
+#### attackHostrowsAndCols
 ```bash
 stty -a
 ```
 
-Set values on target
-
+### targetRowsAndCols
 ```bash
 www-data@50bca5e748b0:/var/www/html$ stty rows 51 cols 209
 ```
 
-Export TERM
+### termExport
 ```bash
 www-data@50bca5e748b0:/var/www/html$ export TERM=xterm
 ```
