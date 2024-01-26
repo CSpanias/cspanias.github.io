@@ -13,165 +13,217 @@ image:
 
 ## Port scanning
 
+Hailmary scan
 ```bash
-# HailMary port-scanning
 sudo incursore.sh --type All -H $IP
-# TCP SYN common ports scanning
+```
+TCP SYN common ports scanning
+```bash
 sudo nmap -sS -A -Pn --min-rate 10000 $IP
-# TCP SYN all ports scanning
+```
+TCP SYN all ports scanning
+```bash
 sudo nmap -sS -A -Pn --min-rate 10000 -p- $IP
 ```
 
 ## Vulnerability scanning
 
+Start nessus on WSL2
 ```bash
-# start nessus on WSL2
 sudo /opt/nessus/sbin/nessus-service
 ```
 
 ## Web server enumeration
 
+Check for WAF
 ```shell
-# view page-source
-# check site's structure with ZAP/Burp
-
-# check for WAF
 nmap -Pn -p 443 --script http-waf-detect,http-waf-fingerprint $IP
+```
+```bash
 wafw00f https://$IP
+```
 
-# check tech used (similar to Wappalyzer)
+Check for tech used (similar to Wappalyzer)
+```bash
 whatweb https://$IP
+```
 
-# check for robots file
+Check for robots file
+```bash
 curl https://$IP/robots
+```
+```bash
 curl https://$IP/robots.txt
+```
 
-# banner grabbing
+Banner grabbing
+```bash
 curl -IL https://$IP/
+```
 
-# dir-busting and file search
+Dir-busting and file search
+```bash
 ffuf -u http://$domain/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -recursion -e .aspx,.html,.php,.txt,.jsp -c -ac
+```
+```bash
 gobuster dir -u http://$IP -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x .aspx,.html,.php,.txt,.jsp
+```
+```bash
 dirsearch -u http://$IP
+```
+```bash
 nikto -h http://$IP
+```
+```bash
 feroxbuster -u $URL
+```
 
-# subdomain-busting
-gobuster dns -d $IP -w /usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-20000.txt 
-ffuf -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt -u http://$IP -H "HOST: FUZZ.$domain" -ac -c 
-# vhost-busting
+Subdomain-busting
+```bash
+gobuster dns -d $IP -w /usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-20000.txt
+```
+```bash
+ffuf -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt -u http://$IP -H "HOST: FUZZ.$domain" -ac -c
+```
+
+Vhost-busting
+```bash
 gobuster vhost -u $URL -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt --append-domain
-# with local DNS as a resolver
-$ gobuster dns -d $domain -w /usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-20000.txt -r $IP:53
+```
+With local DNS as a resolver
+```bash
+gobuster dns -d $domain -w /usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-20000.txt -r $IP:53
+```
 
-# parameter enum
-$ ffuf -u http://internal.analysis.htb/users/list.php?FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/burp-parameter-names.txt -ac
+Parameter enum
+```bash
+ffuf -u http://internal.analysis.htb/users/list.php?FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/burp-parameter-names.txt -ac
+```
+
+## Kernel vulns
+
+kernel's version
+```bash
+uname -a
 ```
 
 ## File enumeration
 
 ### Linux
 
+SUIDS
 ```bash
-# search for SUID files
-$ find / -perm -4000 2>/dev/null
-$ find / -perm -u=s 2>/dev/null
+find / -perm -4000 2>/dev/null
+```
+```bash
+find / -perm -u=s 2>/dev/null
 ```
 
-If machine has a web server, check for database configuration files:
+If web server --> check for database config files:
 
 ```bash
-# searching for configuration files
 /var/www/html$ find . | grep config
-# searching for database-related strings within the configuration file
+```
+
+Searching for db-related strings within config file
+```bash
 /var/www/html$ grep database <filePath>
 ```
 
 ## FTP
 
+Bounce attack
 ```shell
-# bounce attack
-$ nmap -Pn -v -n -p80 -b <username>:<pass>@<IP> <target2scan>
+nmap -Pn -v -n -p80 -b <username>:<pass>@<IP> <target2scan>
+```
 
-# brute-force
-$ medusa -u <username> -P <passList> -h <IP> -M ftp
-$ hydra -l <username> -P <passList> ftp://<IP> -t 48
+Brute-force
+```bash
+medusa -u <username> -P <passList> -h <IP> -M ftp
+```
+```bash
+hydra -l <username> -P <passList> ftp://<IP> -t 48
 ```
 
 ## SSH
 
+Check for SSH vulns
 ```shell
-# check SSH for vulns
-$ python3 /opt/ssh-audit/ssh-audit.py $IP
-# brute-force creds
-$ hydra -L <userList> -P <passwordList> ssh://$IP
+python3 /opt/ssh-audit/ssh-audit.py $IP
+```
+
+Brute-force creds
+```bash
+hydra -L <userList> -P <passwordList> ssh://$IP
 ```
 
 ## Hash cracking
 
 > [Hashcat-examples](https://hashcat.net/wiki/doku.php?id=example_hashes)
 
+Autodetect mode ('--username' if hashes are in <name:hash> format)
 ```bash
-# using hashcat's autodetect mode ('--username' if hashes are in <name:hash> format)
-$ hashcat <hashes> /usr/share/wordlists/rockyou.txt --username
-# brute-force hashes using the mode found
-$ hashcat -m 3200 hashes /usr/share/wordlists/rockyou.txt --username
-# show cracked hashes
-$ hashcat -m 3200 --username --show hashes
+hashcat <hashes> /usr/share/wordlists/rockyou.txt --username
+```
+
+Brute-force hashes using the mode found above
+```bash
+hashcat -m 3200 hashes /usr/share/wordlists/rockyou.txt --username
+```
+
+Show cracked hashes:
+```bash
+hashcat -m 3200 --username --show hashes
 ```
 
 > [John hash formats](https://pentestmonkey.net/cheat-sheet/john-the-ripper-hash-formats)
 
+List formats
 ```bash
-# list formats
-$ john --list=formats
-# brute-force
+john --list=formats
+```
+
+Brute-force
+```bash
 john <hashes> --wordlist=/usr/share/wordlists/rockyou.txt
 ```
 
 ## Shell stabilization
 
+Using `script`
 ```bash
-# shell stabilization using script
-$ which script
-which script
-/usr/bin/script
-$ script -O /dev/null -q /bin/bash
 script -O /dev/null -q /bin/bash
-$ bash
+```
+```bash
 bash
-$ ^Z
-[1]+  Stopped                 nc -lvnp 1337
-
-┌──(kali㉿CSpanias)-[~]
-└─$ stty raw -echo; fg
-nc -lvnp 1337
-
-www-data@50bca5e748b0:/var/www/html$
 ```
 
+Using Python
 ```bash
-# shell stabilization with Python
-$ python3 -c 'import.pty;pty.spawn("/bin/bash")'
-$ ^Z
-[1]+  Stopped                 nc -lvnp 1337
-# background shell
-┌──(kali㉿CSpanias)-[~]
-└─$ stty raw -echo; fg
+python3 -c 'import.pty;pty.spawn("/bin/bash")'
 ```
 
-Get values for the `rows` and `cols` variables from our attack host:
-
+Config shell
 ```bash
-# get attack host's shell rows and cols values
-$ stty -a
-speed 38400 baud; rows 51; columns 209; line = 0;
-<SNIP>
+^Z
+[1]+  Stopped                 nc -lvnp 1337
+```
+```bash
+stty raw -echo; fg
 ```
 
-Set the same values on target:
+Get values for the `rows` and `cols` variables from our attack host
+```bash
+stty -a
+```
+
+Set values on target
 
 ```bash
 www-data@50bca5e748b0:/var/www/html$ stty rows 51 cols 209
+```
+
+Export TERM
+```bash
 www-data@50bca5e748b0:/var/www/html$ export TERM=xterm
 ```
