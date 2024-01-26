@@ -372,6 +372,8 @@ From `marcus`'s terminal:
 
 ## Extra - Manual exploitation
 
+> Based on IppSec's [video walkthrough](https://www.youtube.com/watch?v=dJfbogs8Yz0&t=8s).
+
 ### Initial foothold
 
 We can manually perform [CVE-2022-46169](https://www.rapid7.com/db/modules/exploit/linux/http/cacti_unauthenticated_cmd_injection/). Let's remember what needs to be done (based on [Rapid7's post](https://www.rapid7.com/db/modules/exploit/linux/http/cacti_unauthenticated_cmd_injection/)):
