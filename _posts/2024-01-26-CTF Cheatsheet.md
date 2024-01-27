@@ -356,9 +356,9 @@ locate winpeas
 /usr/share/peass/winpeas/winPEASx86.exe
 ```
 
-## Cryptography
+## cryptography
 
-### Encryption
+### encryption
 
 > `alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"`
 
@@ -418,14 +418,14 @@ done
 echo "$d"
 ```
 
-### Encoding
+### encoding
 
 ```bash
 base64 $text
 base64 -d $text
 ```
 
-### Hashing
+### hashing
 
 ```bash
 openssl md5 $text
