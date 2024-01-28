@@ -107,15 +107,30 @@ gobuster dns -d $domain -w /usr/share/wordlists/seclists/Discovery/DNS/subdomain
 
 ### vhostBusting
 ```bash
-ffuf -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt -u http://$IP -H "HOST: FUZZ.$domain" -ac -c -ic
+ffuf -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt -u http://$domain -H "HOST: FUZZ.$domain" -ac -c -ic
 ```
 ```bash
 gobuster vhost -u $URL -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt --append-domain
 ```
 
-### parameterSearch
+### parameterFuzzing
+
+#### getRequests
 ```bash
-ffuf -u http://internal.analysis.htb/users/list.php?FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/burp-parameter-names.txt -ac -ic
+ffuf -u http://internal.analysis.htb/users/list.php?FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/burp-parameter-names.txt -ic
+```
+```bash
+ffuf -w /usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u  http://$domain/$file.php?FUZZ=key -fs xxx
+```
+
+#### postRequests
+```bash
+ffuf -w /usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u http://$domain/$file -X POST -d 'FUZZ=key' -H 'Content-Type: application/x-www-form-urlencoded' -fs xxx
+```
+
+#### phpFiles
+```bash
+ffuf -w $wordlist -u http://$url/$file -X POST -d '$param=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded' -fs xxx
 ```
 
 ## kernelVersion
