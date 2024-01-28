@@ -35,6 +35,12 @@ sudo /opt/nessus/sbin/nessus-service
 
 ## webServerEnum
 
+### Tools
+
+[ZAP](https://www.zaproxy.org/docs/)  
+[Burp Suite](https://portswigger.net/burp/documentation)  
+[Postman](https://learning.postman.com/docs/introduction/overview/)  
+
 ### WAF
 ```shell
 nmap -Pn -p 443 --script http-waf-detect,http-waf-fingerprint $IP
