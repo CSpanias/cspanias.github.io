@@ -70,9 +70,14 @@ curl -IL https://$IP/
 netcat $IP $PORT
 ```
 
+### fileExtensionSearch
+```bash
+ffuf -w /usr/share/seclists/Discovery/Web-Content/web-extensions.txt:FUZZ -u http://$IP/$dir/indexFUZZ -c -ac -ic
+```
+
 ### dirBustingAndFileSearch
 ```bash
-ffuf -u http://$domain/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -recursion -e .aspx,.html,.php,.txt,.jsp -c -ac
+ffuf -u http://$domain/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -recursion -recursion-depth 1 -e .aspx,.html,.php,.txt,.jsp -c -ac -ic -v
 ```
 ```bash
 gobuster dir -u http://$IP -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x .aspx,.html,.php,.txt,.jsp
@@ -89,11 +94,12 @@ feroxbuster -u $URL
 
 ### subdomainBusting
 ```bash
-gobuster dns -d $IP -w /usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-20000.txt
+gobuster dns -d $domain -w /usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-20000.txt
 ```
 ```bash
-ffuf -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt -u http://$IP -H "HOST: FUZZ.$domain" -ac -c
+ffuf -u http://FUZZ.$domain -w /usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-20000.txt -ac -c -ic
 ```
+
 ### subdomainBustingWithLocalDnsAsResolver
 ```bash
 gobuster dns -d $domain -w /usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-20000.txt -r $IP:53
@@ -101,12 +107,15 @@ gobuster dns -d $domain -w /usr/share/wordlists/seclists/Discovery/DNS/subdomain
 
 ### vhostBusting
 ```bash
+ffuf -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt -u http://$IP -H "HOST: FUZZ.$domain" -ac -c -ic
+```
+```bash
 gobuster vhost -u $URL -w /usr/share/wordlists/seclists/Discovery/DNS/namelist.txt --append-domain
 ```
 
 ### parameterSearch
 ```bash
-ffuf -u http://internal.analysis.htb/users/list.php?FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/burp-parameter-names.txt -ac
+ffuf -u http://internal.analysis.htb/users/list.php?FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/burp-parameter-names.txt -ac -ic
 ```
 
 ## kernelVersion
