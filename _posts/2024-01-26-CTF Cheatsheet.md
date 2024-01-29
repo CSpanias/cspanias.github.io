@@ -11,6 +11,11 @@ image:
 
 > _Image taken from [CTF-CheatSheet](https://github.com/Rajchowdhury420/CTF-CheatSheet)._
 
+## Wikis
+
+[HackTricks](https://book.hacktricks.xyz/welcome/readme)  
+[PentestBook](https://pentestbook.six2dez.com/)  
+
 ## portScanning
 
 ### hailmaryScan
