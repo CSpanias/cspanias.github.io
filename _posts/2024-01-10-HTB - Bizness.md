@@ -1,5 +1,5 @@
 ---
-title: HTB - Buziness
+title: HTB - Bizness
 date: 2024-01-10
 categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, nmap, http, webserver, apache, apache-ofbiz, ofbiz, hash]

