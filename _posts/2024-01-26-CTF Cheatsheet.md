@@ -473,5 +473,5 @@ sha256sum $text
 
 ### Dictionary Attack
 ```bash
-hydra -C /usr/share/seclists/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt $ip -s $port http-get /
+hydra -C /usr/share/seclists/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt $ip -s $port http-get / -f -u
 ```
