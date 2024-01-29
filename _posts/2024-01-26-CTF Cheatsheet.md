@@ -468,3 +468,10 @@ md5sum $text
 sha1sum $text
 sha256sum $text
 ```
+
+## Basic HTTP Authentication
+
+### Dictionary Attack
+```bash
+hydra -C /usr/share/seclists/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt $ip -s $port http-get /
+```
