@@ -3,7 +3,7 @@ title: HTB - Busqueda
 date: 2024-01-29
 categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, busqueda, nmap]
-img_path: /assets/htb/fullpwn/monitorsbusqueda
+img_path: /assets/htb/fullpwn/busqueda
 published: true
 image:
     path: machine_info.png
