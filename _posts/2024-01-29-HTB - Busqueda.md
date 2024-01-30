@@ -13,10 +13,10 @@ image:
 
 [**Busqueda**](https://app.hackthebox.com/machines/Busqueda) is an Easy Difficulty Linux machine that involves exploiting a command injection (CI) vulnerability, finding credentials in a configuration file and Docker containers. 
 
-**Initial foothold**:
+**Initial foothold**:  
 	By leveraging a CI vulnerability present in a `Python` module, we gain user-level access to the machine. 
 
-**Privilege escalation**:
+**Privilege escalation**:  
 	To escalate privileges to `root`, we discover credentials within a `Git` config file, allowing us to log into a local `Gitea` service. Additionally, we uncover that a system check-up script can be executed with `root` privileges by a specific user. By utilizing this script, we enumerate `Docker` containers that reveal credentials for the `administrator` user's `Gitea` account. Further analysis of the system check-up script's source code in a `Git` repository reveals a means to exploit a relative path reference, granting us Remote Code Execution (RCE) with `root` privileges.
 
 ## Information gathering
@@ -34,12 +34,12 @@ PORT   STATE SERVICE VERSION
 ```
 
  To-do: 
-	 1. Add domain to local DNS
-	 2. Visit domain via browser
-	 3. Rescan port `80`
-	 4. Directory fuzzing
-	 5. Sub-domain fuzzing
-	 6. Vhost fuzzing
+  1. Add domain to local DNS
+  2. Visit domain via browser
+  3. Rescan port `80`
+  4. Directory fuzzing
+  5. Sub-domain fuzzing
+  6. Vhost fuzzing
 
 ## Step 1
 
@@ -52,8 +52,6 @@ $ grep htb /etc/hosts
 ```
 
 ### Visit domain via browser
-
-![](home.png)
 
 ![](searchorVersion.png)
 
