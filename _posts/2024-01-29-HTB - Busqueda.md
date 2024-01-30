@@ -192,15 +192,15 @@ Let's try to perform a brute force attack (BFA) against the login form. In order
 	- We can find this by looking the page source code after a failed login attempt.
 
 
-1. When we attempt to login with random creds, no parameters are added to the URL address bar, such as `username` and `password`, which indicates that this is a `POST` login form:
+When we attempt to login with random creds, no parameters are added to the URL address bar, such as `username` and `password`, which indicates that this is a `POST` login form:
 
 	![](testLogin.png)
 
-2. The fail login message is `Username or password is incorrect.`:
+The fail login message is `Username or password is incorrect.`:
 
 	![](errorMsg.png){: .normal}
 
-3. The `POST` request parameters are `user_name` and `password`: 
+The `POST` request parameters are `user_name` and `password`: 
 
 	![](postData.png)
 
