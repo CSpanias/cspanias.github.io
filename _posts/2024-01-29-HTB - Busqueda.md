@@ -522,7 +522,7 @@ d2feae7ce4475771813e67abcb2da871
 
 In case we did not know `Searchor`'s version or a PoC was not available for us, we could try exploring and exploiting the app's functionality manually. First, we can intercept a random search request with Burp and output it into a file:
 
-![](random_search_searcher.png)
+![](random_search_searcher.png){: .normal width="65%"}
 
 ![](burp_cp2file.png)
 
@@ -660,3 +660,5 @@ bash: cannot set terminal process group (1645): Inappropriate ioctl for device
 bash: no job control in this shell
 svc@busqueda:/var/www/app$
 ```
+
+> _Searchor's [source code](https://github.com/ArjunSharda/Searchor/pull/130/commits/29d5b1f28d29d6a282a5e860d456fab2df24a16b) that caused the injection vulneratiblity._
