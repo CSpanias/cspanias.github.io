@@ -536,3 +536,41 @@ d2feae7ce4475771813e67abcb2da871
 
 > IppSec's [video walkthrough](https://www.youtube.com/watch?v=5dHgfviJWmg).
 
+In case we did not know `Searchor`'s version or a PoC was not available for us, we could try exploring and exploiting the app's functionality manually. First, we can intercept a random search request with Burp and output it into a file:
+
+![](random_search_searcher.png)
+
+![](burp_cp2file.png)
+
+Next, we need to add the fuzzing location, indicated by the `FUZZ` keyword, so we can use it with `ffuf`. In this case, we want to fuzz the end of our input string with special characters (`query=randomFUZZ`):
+
+```bash
+$ cat searchRequest
+POST /search HTTP/1.1
+Host: searcher.htb
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 26
+Origin: http://searcher.htb
+Connection: close
+Referer: http://searcher.htb/
+Upgrade-Insecure-Requests: 1
+
+engine=Google&query=randomFUZZ
+```
+
+Now, we can pass the file to `ffuf` and match every response that has `Content-Length: 0`:
+
+```bash
+$ ffuf -request searchRequest -request-proto http -w /usr/share/seclists/Fuzzing/special-chars.txt -c -ms 0
+
+'                       [Status: 200, Size: 0, Words: 1, Lines: 1, Duration: 2656ms]
+\                       [Status: 200, Size: 0, Words: 1, Lines: 1, Duration: 2813ms]
+:: Progress: [32/32] :: Job [1/1] :: 40 req/sec :: Duration: [0:00:02] :: Errors: 0 ::
+```
+
+![](burp_contentLength.png)
+
