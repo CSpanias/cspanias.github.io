@@ -2,7 +2,7 @@
 title: HTB - Busqueda
 date: 2024-01-29
 categories: [CTF, Fullpwn]
-tags: [htb, hackthebox, busqueda, nmap]
+tags: [htb, hackthebox, busqueda, nmap, apache, python, searchor, suid, burp, ffuf, hydra, brute-force, dictionary-attack, mysql]
 img_path: /assets/htb/fullpwn/busqueda
 published: true
 image:
@@ -531,3 +531,8 @@ d2feae7ce4475771813e67abcb2da871
 ```
 
 ![](machine_pwned.png){: width="75%" .normal}
+
+## Extra
+
+> IppSec's [video walkthrough](https://www.youtube.com/watch?v=5dHgfviJWmg).
+
