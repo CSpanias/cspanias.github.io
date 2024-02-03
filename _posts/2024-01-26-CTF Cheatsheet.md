@@ -15,6 +15,8 @@ image:
 
 [HackTricks](https://book.hacktricks.xyz/welcome/readme)  
 [PentestBook](https://pentestbook.six2dez.com/)  
+[SQLMap](https://github.com/sqlmapproject/sqlmap/wiki/Usage)  
+[Fuff](http://ffuf.me/)  
 
 ## portScanning
 
@@ -482,4 +484,10 @@ openssl sha256 $text
 md5sum $text
 sha1sum $text
 sha256sum $text
+```
+
+### SQLMap
+
+```bash
+sqlmap -u "$URL" --batch
 ```
