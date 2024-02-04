@@ -16,7 +16,7 @@ image:
 [HackTricks](https://book.hacktricks.xyz/welcome/readme)  
 [PentestBook](https://pentestbook.six2dez.com/)  
 [SQLMap](https://github.com/sqlmapproject/sqlmap/wiki/Usage)  
-[Fuff](http://ffuf.me/)  
+<a href="http://ffuf.me/" data-proofer-ignore>Fuff</a>  
 
 ## portScanning
 
