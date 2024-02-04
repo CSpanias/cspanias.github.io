@@ -275,7 +275,9 @@ stty raw -echo; fg
 
 #### attackHostrowsAndCols
 ```bash
-stty -a
+echo $TERM
+stty size # rows and cols
+
 ```
 
 ### targetRowsAndCols
