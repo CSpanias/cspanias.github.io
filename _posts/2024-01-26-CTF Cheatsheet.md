@@ -277,7 +277,6 @@ stty raw -echo; fg
 ```bash
 echo $TERM
 stty size # rows and cols
-
 ```
 
 ### targetRowsAndCols
