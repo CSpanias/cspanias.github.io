@@ -24,6 +24,8 @@ image:
 
 ## Information gathering
 
+>_IppSec's [video walkthrough](https://www.youtube.com/watch?v=3VuIaUvHsTI)._
+
 Port scanning:
 
 ```bash
@@ -380,6 +382,8 @@ crontab -l
 ![](machine_pwned.png){: width="75%" .normal}
 
 ## Extra - Removing Bad Characters
+
+>_Based on IppSec's [video walkthrough](https://youtu.be/3VuIaUvHsTI?t=868)._
 
 Getting initial foothold without dropping a file on the target:
 
