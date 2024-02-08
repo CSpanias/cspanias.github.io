@@ -127,7 +127,7 @@ Since Tomcat is a Java web application server, we can get directory listing with
 
 The `pom.xml` contains a listing of all the libs that JavaScript uses:
 
-![](pom_xml)
+![](pom_xml.png)
 
 ![](pom_xml_content.png)
 
