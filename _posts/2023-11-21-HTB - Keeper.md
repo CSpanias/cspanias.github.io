@@ -17,10 +17,7 @@ image:
 |Time|3h19m|
 |Focus|Default credentials, CVEs|
 
-> CONTENT HIDDEN - ACTIVE MACHINE!
-{: .prompt-warning}
-
-<!-- ## Information Gathering
+## Information Gathering
 
 ```shell
 # live host discovery
@@ -271,7 +268,7 @@ You have new mail.
 Last login: Tue Aug  8 19:00:06 2023 from 10.10.14.41
 root@keeper:~# ls
 root.txt  RT30000.zip  SQL
-``` -->
+```
 
 <figure>
     <img src="keeper_pwned.png"
