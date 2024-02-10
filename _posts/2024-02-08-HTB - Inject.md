@@ -2,7 +2,7 @@
 title: HTB - Inject
 date: 2024-02-08
 categories: [CTF, Fullpwn]
-tags: [htb, hackthebox, inject, nmap]
+tags: [htb, hackthebox, inject, nmap, lfi, cve-2022-22963, cronjob, ansible, tomcat, java, burp]
 img_path: /assets/htb/fullpwn/inject
 published: true
 image:
