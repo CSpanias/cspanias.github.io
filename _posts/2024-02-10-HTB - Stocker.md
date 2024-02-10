@@ -2,7 +2,7 @@
 title: HTB - Stocker
 date: 2024-02-10
 categories: [CTF, Fullpwn]
-tags: [htb, hackthebox, stocker, nmap]
+tags: [htb, hackthebox, stocker, nmap, nodejs, java, nosqli, directory-traversal, burp, vhost, ffuf, mongodb, html-injection, htmli, nosql-injection, mongodump, bsondump]
 img_path: /assets/htb/fullpwn/stocker
 published: true
 image:
