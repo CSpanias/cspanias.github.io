@@ -76,4 +76,4 @@ featured: true
 - [AWS Certified Security - Specialty](https://aws.amazon.com/certification/certified-security-specialty/)
 - [Bug Bounty Hunter (HTB)](https://academy.hackthebox.com/path/preview/bug-bounty-hunter)
 - [Postman Classroom Program](https://www.postman.com/postman/workspace/postman-classroom-program/overview)
-- [Pwnedlabs](https://pwnedlabs.io/dashboard) 
+- [Pwnedlabs](https://pwnedlabs.io/dashboard)
