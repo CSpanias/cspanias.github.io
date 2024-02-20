@@ -54,13 +54,13 @@ featured: true
 ## OU Studies Tracker 📋
 
 - [BSc (Honours) Cyber Security (OU)](https://www.open.ac.uk/courses/computing-it/degrees/bsc-cyber-security-r60):
-    - [The computing and IT project](https://msds.open.ac.uk/module-chooser/module-description.aspx?mod=TM470) (2027) 🎯
-    - [Cisco networking (CCNA) part 2](https://www.open.ac.uk/courses/modules/tm357) (2027) 🎯
-    - [Information security](https://msds.open.ac.uk/module-chooser/module-description.aspx?mod=TM311) (2026) 🎯
-    - [Systems penetration testing](https://msds.open.ac.uk/module-chooser/module-description.aspx?mod=TM359) (2026) 🎯
-    - [Communication and information technologies](https://www.open.ac.uk/courses/modules/tm255) (2026) 🎯
-    - [Cisco networking (CCNA) part 1](https://www.open.ac.uk/courses/modules/tm257) (2025) 🎯
-    - [Web technologies](https://www.open.ac.uk/courses/modules/tt284) (2025)* 🎯
+    - [The computing and IT project](https://msds.open.ac.uk/module-chooser/module-description.aspx?mod=TM470) (02/2027) 🎯
+    - [Cisco networking (CCNA) part 2](https://www.open.ac.uk/courses/modules/tm357) (10/2027) 🎯
+    - [Information security](https://msds.open.ac.uk/module-chooser/module-description.aspx?mod=TM311) (10/2026) 🎯
+    - [Systems penetration testing](https://msds.open.ac.uk/module-chooser/module-description.aspx?mod=TM359) (02/2026) 🎯
+    - [Communication and information technologies](https://www.open.ac.uk/courses/modules/tm255) (10/2026) 🎯
+    - [Cisco networking (CCNA) part 1](https://www.open.ac.uk/courses/modules/tm257) (10/2025) 🎯
+    - [Web technologies](https://www.open.ac.uk/courses/modules/tt284) (02/2025)* 🎯
     - [TM256 Cyber security](https://msds.open.ac.uk/students/module.aspx?c=TM256_2024B&cr=1) (2024) ✍️
     - [TM129 Technologies in practice](https://www.open.ac.uk/courses/modules/tm129) (2024) ✍️
     - [Mathematical methods (MST224)](https://www.open.ac.uk/courses/modules/mst224) (2022) ✅
