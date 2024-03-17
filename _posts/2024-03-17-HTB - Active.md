@@ -9,7 +9,7 @@ image:
     path: machine_info.png
 ---
 
-## HTB: Sauna
+## HTB: Active
 
 >[Active Box](https://app.hackthebox.com/machines/148)
 
