@@ -13,19 +13,19 @@ image:
 
 >[Forest Box](https://app.hackthebox.com/machines/212)
 
-![](forest_htb_diagram.png)
+![](forest_htb_diagram.png){: .normal}
 
 ## Walkthrough Summary
 
 |Step|Action|Tool|Achieved|
 |-|-|-|-|
-|1|[[cpts:ad:asreproasting|ASREPRoasting]]|[[https://github.com/fortra/impacket/blob/master/examples/GetNPUsers.py|GetNPUsers.py]]|Obtained the TGT ticket of //svc-alfresco//|
-|2|Hash cracked|[[https://github.com/hashcat/hashcat|Hashcat]]|Obtained clear text password|
-|3|Logged into the domain via WinRM|[[https://github.com/Hackplayers/evil-winrm|evil-winrm]]|Obtained initial foothold|
-|4|Credentialed domain enumeration|[[https://github.com/BloodHoundAD/SharpHound|SharpHound.py]], [[https://github.com/BloodHoundAD/BloodHound|BloodHound]]|Enumerated privilege escalation path|
+|1|ASREPRoasting|[GetNPUsers.py](https://github.com/fortra/impacket/blob/master/examples/GetNPUsers.py)|Obtained the TGT ticket of _svc-alfresco_|
+|2|Hash cracked|[Hashcat](https://github.com/hashcat/hashcat)|Obtained clear text password|
+|3|Logged into the domain via WinRM|[evil-winrm](https://github.com/Hackplayers/evil-winrm)|Obtained initial foothold|
+|4|Credentialed domain enumeration|[SharpHound.py](https://github.com/BloodHoundAD/SharpHound), [BloodHound](https://github.com/BloodHoundAD/BloodHound)|Enumerated privilege escalation path|
 |5|Executed privileged escalation path|LOTL*|Created & added a domain user to the required groups|
-|6|Assiged user DCSync rights|[[https://github.com/n00py/DCSync|DCSync.py]]|Obtained //administrator//'s NTLMv2 hash|
-|7|[[cpts:ad:acl#dcsync_attack|DCSync attack]]|[[https://github.com/fortra/impacket/blob/master/examples/secretsdump.py|secretsdump.py]]|Compromised domain|
+|6|Assiged user DCSync rights|[DCSync.py](https://github.com/n00py/DCSync)|Obtained //administrator//'s NTLMv2 hash|
+|7|DCSync attack|[secretsdump.py](https://github.com/fortra/impacket/blob/master/examples/secretsdump.py)|Compromised domain|
 
 *_[Living Off The Land](https://encyclopedia.kaspersky.com/glossary/lotl-living-off-the-land/)_
 
