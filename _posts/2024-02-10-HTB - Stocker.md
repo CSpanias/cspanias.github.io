@@ -14,7 +14,7 @@ image:
 [**Stocker**](https://app.hackthebox.com/machines/Stocker) is a medium difficulty Linux machine that features a website running on port 80 that advertises various house furniture.
 
 **Initial foothold**:  
-	Through vHost enumeration the hostname `dev.stocker.htb` is identified and upon accessing it a login page is loaded that seems to be built with `NodeJS`. By sending JSON data and performing a `NoSQL` injection, the login page is bypassed and access to an e-shop is granted. Enumeration of this e-shop reveals that upon submitting a purchase order, a PDF is crafted that contains details about the items purchased. This functionality is vulnerable to HTML injection and can be abused to read system files through the usage of iframes. The `index.js` file is then read to acquire database credentials and owed to password re-use users can log into the system over `SSH`. 
+	Through vHost enumeration the hostname `dev.stocker.htb` is identified and upon accessing it a login page is loaded that seems to be built with `NodeJS`. By sending JSON data and performing a `NoSQL` injection, the login page is bypassed and access to an e-shop is granted. Enumeration of this e-shop reveals that upon submitting a purchase order, a PDF is crafted that contains details about the items purchased. This functionality is vulnerable to HTML injection and can be abused to read system files through the usage of iframes. The `index.js` file is then read to acquire database credentials and owed to password re-use users can log into the system over `SSH`.
 
 **Privilege escalation**:  
 	Privileges can then be escalated by performing a path traversal attack on a command defined in the sudoers file, which contains a wildcard for executing `JavaScript` files.
