@@ -26,7 +26,7 @@ image:
 |5|Hash cracked|[Hashcat](https://github.com/hashcat/hashcat)|Obtained clear text password|
 |6|Logged into the DC as _administrator_|[psexec.py](https://github.com/fortra/impacket/blob/master/examples/psexec.py)|Compromised domain|
 
-## Detailed attack chain reproduction steps
+## Attack Chain Reproduction Steps
 
 TCP all-ports scan:
 

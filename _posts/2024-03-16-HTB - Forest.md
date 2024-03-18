@@ -29,7 +29,7 @@ image:
 
 *_[Living Off The Land](https://encyclopedia.kaspersky.com/glossary/lotl-living-off-the-land/)_
 
-## Detailed attack chain reproduction steps
+## Attack Chain Reproduction Steps
 
 Obtained the TGT ticket of **_svc-alfresco_** via **ASREPRoasting**:
 
