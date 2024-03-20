@@ -251,7 +251,7 @@ $ tree
 
 In the email below, the account `TempAdmin` is mentioned, but no such user was enumerated so far. That is because the Cascade box was created on 2020, but the account was deleted at the end of 2018:
 
-![](cascade-email.png)
+![](cascade_email.png)
 
 We can see that the `TempAdmin` account was indeed deleted by `ArkSvc` at the end of 2018 in recycle bin log below. There is also a password in hexadecimal format within the `Install.reg` file:
 
