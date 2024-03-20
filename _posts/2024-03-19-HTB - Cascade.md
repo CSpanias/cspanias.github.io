@@ -321,16 +321,7 @@ Check user's information:
 ```bash
 *Evil-WinRM* PS C:\Users\s.smith\Documents> whoami /all
 
-USER INFORMATION
-----------------
-
-User Name       SID
-=============== ==============================================
-cascade\s.smith S-1-5-21-3332504370-1206983947-1165150453-1107
-
-
-GROUP INFORMATION
------------------
+<SNIP>
 
 Group Name                                  Type             SID                                            Attributes
 =========================================== ================ ============================================== ===============================================================
@@ -338,16 +329,6 @@ Group Name                                  Type             SID                
 CASCADE\Data Share                          Alias            S-1-5-21-3332504370-1206983947-1165150453-1138 Mandatory group, Enabled by default, Enabled group, Local Group
 CASCADE\Audit Share                         Alias            S-1-5-21-3332504370-1206983947-1165150453-1137 Mandatory group, Enabled by default, Enabled group, Local Group
 <SNIP>
-
-
-PRIVILEGES INFORMATION
-----------------------
-
-Privilege Name                Description                    State
-============================= ============================== =======
-SeMachineAccountPrivilege     Add workstations to domain     Enabled
-SeChangeNotifyPrivilege       Bypass traverse checking       Enabled
-SeIncreaseWorkingSetPrivilege Increase a process working set Enabled
 ```
 
 This user seems to have access to the `Audit` share:
@@ -487,16 +468,7 @@ $ evil-winrm -i 10.10.10.182 -u ArkSvc -p w<REDACTED>d
 <SNIP>
 *Evil-WinRM* PS C:\Users\arksvc\Documents> whoami /all
 
-USER INFORMATION
-----------------
-
-User Name      SID
-============== ==============================================
-cascade\arksvc S-1-5-21-3332504370-1206983947-1165150453-1106
-
-
-GROUP INFORMATION
------------------
+<SNIP>
 
 Group Name                                  Type             SID                                            Attributes
 =========================================== ================ ============================================== ===============================================================
