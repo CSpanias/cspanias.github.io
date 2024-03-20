@@ -11,7 +11,7 @@ image:
 
 ## HTB: Cascade
 
->[Cascade Box](https://app.hackthebox.com/machines/220)
+>[Cascade Box](https://app.hackthebox.com/machines/235)
 
 <!-- ![](cascade_diagram.png){: .normal} -->
 
@@ -281,7 +281,7 @@ $ echo 6bcf2a4b6e5aca0f | xxd -r -p
 k�*KnZ�
 ```
 
-There is a [way](https://github.com/frizb/PasswordDecrypts) to decrypt TigerVNC password via Metasploit:
+There is a [way](https://github.com/frizb/PasswordDecrypts) to decrypt TigerVNC passwords via Metasploit:
 
 ```bash
 $ msfconsole -q
