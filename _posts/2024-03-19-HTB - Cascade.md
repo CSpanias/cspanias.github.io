@@ -13,7 +13,7 @@ image:
 
 >[Cascade Box](https://app.hackthebox.com/machines/235)
 
-<!-- ![](cascade_diagram.png){: .normal} -->
+![](cascade_diagram.png){: .normal}
 
 ## Walkthrough Summary
 
