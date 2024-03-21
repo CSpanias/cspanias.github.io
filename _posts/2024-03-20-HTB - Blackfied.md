@@ -21,7 +21,7 @@ image:
 |-|-|-|-|
 |1|SMB Enumeration|[NetExec](https://github.com/Pennyw0rth/NetExec)|Obtained usernames|
 |2|ASREPRoasting|[GetNPUsers](https://github.com/fortra/impacket/blob/master/examples/GetNPUsers.py)|Obtained password for *support*|
-|3|Domain Enumeration|[BloodHound.py](https://github.com/dirkjanm/BloodHound.py), [BloodHound](https://github.com/BloodHoundAD/BloodHound)|Obtained credentials for *audit2020* (lateral movement)|
+|3|Domain Enumeration|[BloodHound.py](https://github.com/dirkjanm/BloodHound.py), [BloodHound](https://github.com/BloodHoundAD/BloodHound)|Obtained credentials for *audit2020*|
 |4|SMB Enumeration|[NetExec](https://github.com/Pennyw0rth/NetExec), [pypykatz](https://github.com/skelsec/pypykatz)|Obtained hash for _svc\_backup_ (initial foothold)|
 |5|Privilege Exploitation|[diskshadow](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/diskshadow), [robocopy](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy)|Exfiltrated _ntds.dit_ & _system.hive_|
 |6|Hash Dump|[SecretsDump](https://github.com/fortra/impacket/blob/master/examples/secretsdump.py), [NetExec](https://github.com/Pennyw0rth/NetExec)|Compromised domain|
@@ -181,7 +181,7 @@ SMB         10.10.10.192    445    DC01             [+] BLACKFIELD.local\audit20
 
 >_We can also change the user's password using [`rpcclient`](https://malicious.link/posts/2017/reset-ad-user-password-with-linux/)._
 
-Check share access for `audit2020`:
+Check the conent of the **forensic** share:
 
 ```bash
 $ nxc smb 10.10.10.192 -u audit2020 -p 'p@ssw0rd!' --share forensic -M spider_plus
