@@ -2,7 +2,7 @@
 title: HTB - Blackfield
 date: 2024-03-20
 categories: [CTF, Fullpwn]
-tags: [htb, hackthebox, cascade, nmap, netexec, nxc, smb, null-session, active-directory, windows, winrm, evil-winrm, ntds, backup-operators]
+tags: [htb, hackthebox, cascade, nmap, netexec, nxc, smb, null-session, active-directory, windows, winrm, evil-winrm, ntds, backup-operators, diskshadow, robocopy, system-hive, bloodhound, bloodhound-py, secretsdump, impacket, asreproasting, getnpusers, pypykatz, forcechangepassword, sebackupprivilege]
 img_path: /assets/htb/fullpwn/blackfield
 published: true
 image:
@@ -13,21 +13,18 @@ image:
 
 >[Blackfield Box](https://app.hackthebox.com/machines/255)
 
-<!-- ![](cascade_diagram.png){: .normal} -->
+![](blackfield_diagram.png){: .normal}
 
 ## Walkthrough Summary
 
 |Step|Action|Tool|Achieved|
 |-|-|-|-|
 |1|SMB Enumeration|[NetExec](https://github.com/Pennyw0rth/NetExec)|Obtained usernames|
-|2|LDAP Enumeration|[ldapsearch](https://linux.die.net/man/1/ldapsearch)|Obtained password|
-|3|Password Spray|[NetExec](https://github.com/Pennyw0rth/NetExec)|Obtained credentials for _r.thompson_|
-|4|SMB Enumeration|[NetExec](https://github.com/Pennyw0rth/NetExec), [Metasploit](https://github.com/rapid7/metasploit-framework)|Obtained credentials for _s.smith_ (initial foothold)|
-|5|SMB Enumeration|[NetExec](https://github.com/Pennyw0rth/NetExec)|Obtained username and encrypted password|
-|6|Reverse Engineering|[dnspy](https://github.com/dnSpy/dnSpy)|Obtained credentials for _ArkSvc_|
-|7|System Enumeration|[LOTL*](https://encyclopedia.kaspersky.com/glossary/lotl-living-off-the-land/), [psexec](https://github.com/fortra/impacket/blob/master/examples/psexec.py)|Obtained credentials & compromised domain|
-
-*_Living Off The Land_
+|2|ASREPRoasting|[GetNPUsers](https://github.com/fortra/impacket/blob/master/examples/GetNPUsers.py)|Obtained password for *support*|
+|3|Domain Enumeration|[BloodHound.py](https://github.com/dirkjanm/BloodHound.py), [BloodHound](https://github.com/BloodHoundAD/BloodHound)|Obtained credentials for *audit2020* (lateral movement)|
+|4|SMB Enumeration|[NetExec](https://github.com/Pennyw0rth/NetExec), [pypykatz](https://github.com/skelsec/pypykatz)|Obtained hash for _svc\_backup_ (initial foothold)|
+|5|Privilege Exploitation|[diskshadow](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/diskshadow), [robocopy](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy)|Exfiltrated _ntds.dit_ & _system.hive_|
+|6|Hash Dump|[SecretsDump](https://github.com/fortra/impacket/blob/master/examples/secretsdump.py), [NetExec](https://github.com/Pennyw0rth/NetExec)|Compromised domain|
 
 ## Attack Chain Reproduction Steps
 
@@ -313,14 +310,14 @@ SeChangeNotifyPrivilege       Bypass traverse checking       Enabled
 SeIncreaseWorkingSetPrivilege Increase a process working set Enabled
 ```
 
-We can exploit the `SeBackupPrivilege` (*[Windows Privilege Escalation: SeBackupPrivilege](https://www.hackingarticles.in/windows-privilege-escalation-sebackupprivilege/)*) and dump the `ntds.dit` database by:
+We can exploit the **SeBackupPrivilege** (*[Windows Privilege Escalation: SeBackupPrivilege](https://www.hackingarticles.in/windows-privilege-escalation-sebackupprivilege/)*) and dump the **ntds.dit** database by:
 
 - Writing a small script for the ***[diskshadow](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/diskshadow)*** utility to expose the *c:* drive
 - Convert the script in a Windows-compatible format
 - Upload the script on the target
 - Move to a directory with write access
 - Expose the shadow copy
-- Download the `ntds.dit` database
+- Download the _ntds.dit_ database
 
 ```bash
 # write a diskshadow script
@@ -425,7 +422,7 @@ Info: Downloading C:\Windows\Temp\ntds.dit to ntds.dit
 Info: Download successful!
 ```
 
-We also need to exfiltrate the `system.hive` file:
+We also need to exfiltrate the _system.hive_ file:
 
 ```bash
 # make a copy of the file
