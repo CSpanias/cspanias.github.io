@@ -103,7 +103,7 @@ Info: Download successful!
 ```
 
 Upon review, two issues stood out:
-  - _svc-alfresco_ was member of the [**_Account Operators**_](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/understand-security-groups#account-operators) group as a result of [**group nesting**](https://learn.microsoft.com/en-us/windows/win32/ad/nesting-a-group-in-another-group) (Figure 1)
+  - _svc-alfresco_ was member of the ***[Account Operators](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/understand-security-groups#account-operators)*** group as a result of **[group nesting](https://learn.microsoft.com/en-us/windows/win32/ad/nesting-a-group-in-another-group)** (Figure 1)
   - The _Windows Exchange Permissions_ group had _**WriteDACL**_ permissions over the _HTB.LOCAL_ domain, which means that its members can obtain **DCSync rights** (Figure 2)
 
 ![Figure 1: svc-alfresco is a part of the Account Operators group.](forest_account_operators.png)
