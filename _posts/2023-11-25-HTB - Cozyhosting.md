@@ -17,10 +17,7 @@ image:
 |Time|3h14m|
 |Focus|Dir-busting, cookies|
 
-> CONTENT HIDDEN - ACTIVE MACHINE!
-{: .prompt-warning}
-
-<!-- ## 1. Enumeration
+## 1. Enumeration
 
 ```shell
 # port scanning
@@ -554,7 +551,7 @@ uid=0(root) gid=0(root) groups=0(root)
 
 5. JAR file manipulation
 
-    - [How to Open a JAR File Using the Command Line](https://www.makeuseof.com/jar-file-open-using-command-line/) -->
+    - [How to Open a JAR File Using the Command Line](https://www.makeuseof.com/jar-file-open-using-command-line/)
 
 <figure>
     <img src="cozy_pwned.png"
