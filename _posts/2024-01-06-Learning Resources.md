@@ -60,7 +60,7 @@ featured: true
     - [Systems penetration testing](https://msds.open.ac.uk/module-chooser/module-description.aspx?mod=TM359) (02/2026) 🎯
     - [Communication and information technologies](https://www.open.ac.uk/courses/modules/tm255) (10/2026) 🎯
     - [Web technologies](https://www.open.ac.uk/courses/modules/tt284) (02/2025) 🎯
-    - [Cisco networking (CCNA) part 1](https://www.open.ac.uk/courses/modules/tm257) (10/2024) 🎯
+    - [Cisco networking (CCNA) part 1](https://www.open.ac.uk/courses/modules/tm257) (10/2024) ✍️
     - [TM256 Cyber security](https://msds.open.ac.uk/students/module.aspx?c=TM256_2024B&cr=1) (2024) ✍️
     - [TM129 Technologies in practice](https://www.open.ac.uk/courses/modules/tm129) (2024) ✅
     - [Mathematical methods (MST224)](https://www.open.ac.uk/courses/modules/mst224) (2022) ✅
