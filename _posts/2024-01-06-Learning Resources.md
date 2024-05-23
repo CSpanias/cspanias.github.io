@@ -26,6 +26,7 @@ featured: true
 ## 2024 Goals 🎯
 
 - [Penetration Tester Job Role Path (HTB CPTS)](https://academy.hackthebox.com/path/preview/penetration-tester) ✅
+- [Bug Bounty Hunter (HTB)](https://academy.hackthebox.com/path/preview/bug-bounty-hunter) ✍️
 - [PostSwigger Academy](https://portswigger.net/web-security/all-topics) 🆓
     - [Server-side topics](https://portswigger.net/web-security/all-topics) ✍️
 - [OverTheWire (Bash)](https://overthewire.org/wargames/) 🆓
@@ -74,6 +75,5 @@ featured: true
 - [Hacker101](https://www.hacker101.com/videos)
 - [Hacking The Cloud](https://hackingthe.cloud/)
 - [AWS Certified Security - Specialty](https://aws.amazon.com/certification/certified-security-specialty/)
-- [Bug Bounty Hunter (HTB)](https://academy.hackthebox.com/path/preview/bug-bounty-hunter)
 - [Postman Classroom Program](https://www.postman.com/postman/workspace/postman-classroom-program/overview)
 - [Pwnedlabs](https://pwnedlabs.io/dashboard) 
