@@ -25,7 +25,7 @@ featured: true
 
 ## 2024 Goals 🎯
 
-- [Penetration Tester Job Role Path (HTB CPTS)](https://academy.hackthebox.com/path/preview/penetration-tester) ✍️
+- [Penetration Tester Job Role Path (HTB CPTS)](https://academy.hackthebox.com/path/preview/penetration-tester) ✅
 - [PostSwigger Academy](https://portswigger.net/web-security/all-topics) 🆓
     - [Server-side topics](https://portswigger.net/web-security/all-topics) ✍️
 - [OverTheWire (Bash)](https://overthewire.org/wargames/) 🆓
@@ -36,7 +36,7 @@ featured: true
 - [CREST CPSA/CRT Preparation (HTB)](https://academy.hackthebox.com/path/preview/crest-cpsacrt-preparation) 🎯
 - [APIsec University](https://www.apisecuniversity.com/#courses) 🆓
     - [API Security Fundamentals](https://www.apisecuniversity.com/courses/api-security-fundamentals) (2024) ✅
-    - [API Penetration Testing Course](https://www.apisecuniversity.com/courses/api-penetration-testing) 🎯
+    - [API Penetration Testing Course](https://www.apisecuniversity.com/courses/api-penetration-testing) ✍️
 - [Postman API Fundamentals Student Expert certification](https://academy.postman.com/postman-api-fundamentals-student-expert-certification-1) (2024) 🆓✅
 
 ## Recommended Platforms 👍
