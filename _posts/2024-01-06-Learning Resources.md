@@ -26,7 +26,7 @@ featured: true
 ## 2024 Goals 🎯
 
 - [Penetration Tester Job Role Path (HTB CPTS)](https://academy.hackthebox.com/path/preview/penetration-tester) ✅
-- [Bug Bounty Hunter (HTB)](https://academy.hackthebox.com/path/preview/bug-bounty-hunter) ✍️
+- [Bug Bounty Hunter Job Role Path (HTB CBBH)](https://academy.hackthebox.com/path/preview/bug-bounty-hunter) ✍️
 - [PostSwigger Academy](https://portswigger.net/web-security/all-topics) 🆓
     - [Server-side topics](https://portswigger.net/web-security/all-topics) ✍️
 - [OverTheWire (Bash)](https://overthewire.org/wargames/) 🆓
