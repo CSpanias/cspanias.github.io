@@ -28,21 +28,23 @@ featured: true
 - [OverTheWire (Bash)](https://overthewire.org/wargames/) 🆓
     - [Bandit](https://overthewire.org/wargames/bandit/) ✅
     - [Natas](https://overthewire.org/wargames/natas/) 🎯
-- [CREST CPSA/CRT Preparation (HTB)](https://academy.hackthebox.com/path/preview/crest-cpsacrt-preparation) 🎯
 - [picoCTF](https://picoctf.org/index.html#picogym) 🆓
     - [Web exploitation](https://play.picoctf.org/practice?category=1&page=1) ✍️
 - [PostSwigger Academy](https://portswigger.net/web-security/all-topics) 🆓
     - [Server-side topics](https://portswigger.net/web-security/all-topics) ✍️
-- [Bug Bounty Hunter Job Role Path (HTB CBBH)](https://academy.hackthebox.com/path/preview/bug-bounty-hunter) ✍️
-- [APIsec University](https://www.apisecuniversity.com/#courses) 🆓
+- [APISEC University](https://www.apisecuniversity.com/#courses) 🆓
     - [API Security Fundamentals](https://www.apisecuniversity.com/courses/api-security-fundamentals) ✅
     - [API Penetration Testing Course](https://www.apisecuniversity.com/courses/api-penetration-testing) ✅
-- [Penetration Tester Job Role Path (HTB CPTS)](https://academy.hackthebox.com/path/preview/penetration-tester) ✅
+    - [API Authentication](https://www.apisecuniversity.com/courses/api-authentication) ✍️
+- [Hack The Box Academy](https://academy.hackthebox.com/)
+    - [Penetration Tester Job Role Path (CPTS)](https://academy.hackthebox.com/path/preview/penetration-tester) ✅
+    - [Bug Bounty Hunter Job Role Path (CBBH)](https://academy.hackthebox.com/path/preview/bug-bounty-hunter) ✍️
+    - [CREST CPSA/CRT Preparation](https://academy.hackthebox.com/path/preview/crest-cpsacrt-preparation) 🎯
 - [Postman API Fundamentals Student Expert certification](https://academy.postman.com/postman-api-fundamentals-student-expert-certification-1) 🆓✅
 
 ## Recommended Platforms 👍
 
-- [APIsec University](https://www.apisecuniversity.com/#courses) 🆓
+- [APISEC University](https://www.apisecuniversity.com/#courses) 🆓
 - [PostSwigger Academy](https://portswigger.net/web-security/all-topics) 🆓
 - [UnderTheWire (PowerShell)](https://underthewire.tech/wargames) 🆓
 - [OverTheWire (Bash)](https://overthewire.org/wargames/) 🆓
