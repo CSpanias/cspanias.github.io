@@ -1,0 +1,1 @@
+var searchTerms = 'x7331';
