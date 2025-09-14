@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - master
   workflow_dispatch:
 
 permissions:
@@ -14,30 +15,48 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # Checkout repository
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
+      # Configure Pages
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v3
 
-      - uses: ruby/setup-ruby@v1
+      # Setup Ruby
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2.2
           bundler-cache: true
 
+      # Build the site
       - name: Build site
         run: bundle exec jekyll b -d "_site"
         env:
           JEKYLL_ENV: production
 
+      # Optional: test the built site
+      - name: Test site with HTMLProofer
+        run: |
+          bundle exec htmlproofer _site \
+            --disable-external=true \
+            --ignore-urls "/^http:\/\/127.0.0.1/,/^http:\/\/0.0.0.0/,/^http:\/\/localhost/"
+
+      # Upload built site as Pages artifact
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v4
         with:
           path: "_site"
 
+      # Deploy the artifact to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
 
+      # Show deployed URL
       - name: Show deployed URL
         run: echo "Published to ${{ steps.deployment.outputs.page_url }}"
